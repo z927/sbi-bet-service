@@ -13,7 +13,7 @@ import { initDb } from "./scraper/db.ts";
 const HERE = dirname(fileURLToPath(import.meta.url));
 const CONTRACT_PATH = resolve(HERE, "..", "openapi", "openapi.yaml");
 
-export async function buildServer(): Promise<FastifyInstance> {
+export const buildServer = async (): Promise<FastifyInstance> => {
   const settings = getSettings();
   const app = Fastify({
     logger: { level: settings.logLevel },

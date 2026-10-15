@@ -7,21 +7,21 @@ export const ENRICH_CHOICES = ["detail", "stats", "events", "lineups", "odds"] a
 type CacheKey = string;
 const cache = new Map<CacheKey, { at: number; matches: Match[] }>();
 
-export function ttlSeconds(): number {
+export const ttlSeconds = (): number => {
   return Number.parseFloat(process.env["DIRETTA_CACHE_TTL"] ?? "15");
 }
 
-function cacheKey(
+const cacheKey = (
   sport: number,
   scope: string,
   filterText: string | null,
   enrich: readonly string[],
   geo: string,
-): CacheKey {
+): CacheKey => {
   return JSON.stringify([sport, scope, filterText, [...enrich], geo]);
 }
 
-export async function getMatches(
+export const getMatches = async (
   sport = 1,
   scope = "live",
   filterText: string | null = null,
@@ -29,7 +29,7 @@ export async function getMatches(
   geo = "IT",
   workers = 8,
   refresh = false,
-): Promise<[Match[], boolean]> {
+): Promise<[Match[], boolean]> => {
   const key = cacheKey(sport, scope, filterText, enrich, geo);
   const current = Date.now() / 1000;
 
@@ -46,22 +46,22 @@ export async function getMatches(
   return [matches, false];
 }
 
-export async function getMatch(
+export const getMatch = async (
   matchId: string,
   sport = 1,
   enrich: readonly string[] = ["detail"],
   geo = "IT",
-): Promise<Match | null> {
+): Promise<Match | null> => {
   const match = await scraper.singleMatch(matchId, sport, new Set(enrich), geo);
   db.upsertMatches([match]);
   return match;
 }
 
-export function clearCache(): void {
+export const clearCache = (): void => {
   cache.clear();
 }
 
-export async function testScrape(sport = 1, scope = "live", sampleLimit = 3): Promise<ScrapeTestResponse> {
+export const testScrape = async (sport = 1, scope = "live", sampleLimit = 3): Promise<ScrapeTestResponse> => {
   const feed = scraper.feedName(sport);
   const started = Date.now();
   try {

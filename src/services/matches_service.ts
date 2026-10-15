@@ -3,21 +3,21 @@ import type { BaseResponse, MatchModel } from "../types.ts";
 
 let matches: MatchModel[] = [];
 
-export function getScheduledFixtures(): BaseResponse {
+export const getScheduledFixtures = (): BaseResponse => {
   return baseResponse("Scheduled fixtures refresh triggered", 200);
 }
 
-export function getMatches(day?: string): MatchModel[] {
+export const getMatches = (day?: string): MatchModel[] => {
   if (day === undefined) {
     return [...matches];
   }
   return matches.filter((m) => (m.startTime ?? "").startsWith(day));
 }
 
-export function setMatches(next: MatchModel[]): void {
+export const setMatches = (next: MatchModel[]): void => {
   matches = [...next];
 }
 
-export function reset(): void {
+export const reset = (): void => {
   matches = [];
 }

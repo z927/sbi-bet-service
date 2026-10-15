@@ -8,6 +8,6 @@ export class ValidationError extends Error {
   override readonly name = "ValidationError";
 }
 
-export function baseResponse(message: string, statusCode: number): BaseResponse {
+export const baseResponse = (message: string, statusCode: number): BaseResponse => {
   return { message, statusCode };
 }

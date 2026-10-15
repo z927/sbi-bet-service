@@ -1,6 +1,6 @@
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 
-export function isIsoDate(value: string): boolean {
+export const isIsoDate = (value: string): boolean => {
   if (!ISO_DATE.test(value)) {
     return false;
   }

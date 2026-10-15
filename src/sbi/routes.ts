@@ -108,13 +108,13 @@ const dateQuerySchema = {
   properties: { date: { type: "string" } },
 } as const;
 
-function assertIsoDate(value: string | undefined, field: string): void {
+const assertIsoDate = (value: string | undefined, field: string): void => {
   if (value !== undefined && !isIsoDate(value)) {
     throw new ValidationError(`${field} must be a valid ISO date (YYYY-MM-DD)`);
   }
 }
 
-export function sbiRoutes(app: FastifyInstance): void {
+export const sbiRoutes = (app: FastifyInstance): void => {
   app.post<{ Body: ScheduleRequest; Querystring: { day?: string } }>(
     "/api/v1/schedule",
     {

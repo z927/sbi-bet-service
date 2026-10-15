@@ -17,7 +17,7 @@ let app: FastifyInstance;
 let calls = 0;
 const originalFetch = globalThis.fetch;
 
-function makeResponse(body: string): Response {
+const makeResponse = (body: string): Response => {
   return {
     ok: true,
     status: 200,
@@ -46,10 +46,11 @@ beforeEach(() => {
   service.clearCache();
 });
 
-test("GET /sports returns the sport mapping", async () => {
+test("GET /sports returns only the calcio mapping", async () => {
   const response = await app.inject({ method: "GET", url: "/sports" });
   assert.equal(response.statusCode, 200);
-  assert.equal(response.json().sports["1"], "calcio");
+  const sports = response.json().sports;
+  assert.deepEqual(sports, { 1: "calcio" });
 });
 
 test("GET /health reports ok with the configured database", async () => {
@@ -159,6 +160,19 @@ test("GET /test/scrape reports feed failures without throwing", async () => {
 test("GET /test/scrape rejects an unsupported sport with 422", async () => {
   const response = await app.inject({ method: "GET", url: "/test/scrape?sport=99" });
   assert.equal(response.statusCode, 422);
+});
+
+test("routes reject non-calcio sports with 422", async () => {
+  const urls = [
+    "/matches?sport=2",
+    "/matches/m1?sport=2",
+    "/db/matches?sport=2",
+    "/test/scrape?sport=2",
+  ];
+  for (const url of urls) {
+    const response = await app.inject({ method: "GET", url });
+    assert.equal(response.statusCode, 422, url);
+  }
 });
 
 test("GET /test/scrape rejects an invalid scope with 422", async () => {

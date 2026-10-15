@@ -20,21 +20,28 @@ interface MatchDetailQuery {
   geo?: string;
 }
 
-function toList(value: string | string[] | undefined): string[] {
+const toList = (value: string | string[] | undefined): string[] => {
   if (value === undefined) {
     return [];
   }
   return Array.isArray(value) ? value : [value];
 }
 
-function assertEnrich(enrich: string[]): void {
+const assertEnrich = (enrich: string[]): void => {
   const invalid = enrich.filter((e) => !service.ENRICH_CHOICES.includes(e as (typeof service.ENRICH_CHOICES)[number]));
   if (invalid.length > 0) {
     throw new ValidationError(`Valori enrich non validi: ${invalid.join(", ")}`);
   }
 }
 
-export function scraperRoutes(app: FastifyInstance): void {
+const assertSport = (sport: number): number => {
+  if (!(sport in scraper.SPORTS)) {
+    throw new ValidationError(`Sport non supportato: ${sport}`);
+  }
+  return sport;
+}
+
+export const scraperRoutes = (app: FastifyInstance): void => {
   app.get("/health", () => ({
     status: "ok",
     db: db.dbPath(),
@@ -66,7 +73,7 @@ export function scraperRoutes(app: FastifyInstance): void {
       const enrich = toList(q.enrich);
       assertEnrich(enrich);
       const [matches, cached] = await service.getMatches(
-        q.sport ?? 1,
+        assertSport(q.sport ?? 1),
         q.scope ?? "live",
         q.filter ?? null,
         enrich,
@@ -96,7 +103,7 @@ export function scraperRoutes(app: FastifyInstance): void {
       const q = request.query;
       const enrich = q.enrich === undefined ? ["detail"] : toList(q.enrich);
       assertEnrich(enrich);
-      const match = await service.getMatch(request.params.matchId, q.sport ?? 1, enrich, q.geo ?? "IT");
+      const match = await service.getMatch(request.params.matchId, assertSport(q.sport ?? 1), enrich, q.geo ?? "IT");
       if (match === null) {
         return reply.code(404).send({ detail: "Partita non trovata" });
       }
@@ -136,7 +143,8 @@ export function scraperRoutes(app: FastifyInstance): void {
     },
     (request) => {
       const q = request.query;
-      const matches = db.getMatches(q.sport ?? null, q.scope ?? "live", q.filter ?? null, q.limit ?? 500);
+      const sport = q.sport === undefined ? null : assertSport(q.sport);
+      const matches = db.getMatches(sport, q.scope ?? "live", q.filter ?? null, q.limit ?? 500);
       return { count: matches.length, cached: true, matches };
     },
   );
@@ -162,10 +170,7 @@ export function scraperRoutes(app: FastifyInstance): void {
     },
     async (request) => {
       const q = request.query;
-      const sport = q.sport ?? 1;
-      if (!(sport in scraper.SPORTS)) {
-        throw new ValidationError(`Sport non supportato: ${sport}`);
-      }
+      const sport = assertSport(q.sport ?? 1);
       return service.testScrape(sport, q.scope ?? "live", q.sample ?? 3);
     },
   );

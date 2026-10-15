@@ -45,11 +45,11 @@ CREATE TABLE IF NOT EXISTS snapshots (
 CREATE INDEX IF NOT EXISTS idx_snapshots_match ON snapshots (match_id);
 `;
 
-export function dbPath(): string {
+export const dbPath = (): string => {
   return resolve(process.env["DIRETTA_DB"] ?? DEFAULT_DB);
 }
 
-function connect(): DatabaseSync {
+const connect = (): DatabaseSync => {
   const path = dbPath();
   mkdirSync(dirname(path), { recursive: true });
   const conn = new DatabaseSync(path);
@@ -58,7 +58,7 @@ function connect(): DatabaseSync {
   return conn;
 }
 
-export function initDb(): void {
+export const initDb = (): void => {
   const conn = connect();
   try {
     conn.exec(SCHEMA);
@@ -67,11 +67,11 @@ export function initDb(): void {
   }
 }
 
-function now(): string {
+const now = (): string => {
   return new Date().toISOString();
 }
 
-function asInt(value: unknown): number | null {
+const asInt = (value: unknown): number | null => {
   if (value === null || value === undefined) {
     return null;
   }
@@ -81,7 +81,7 @@ function asInt(value: unknown): number | null {
 
 type SqlValue = string | number | null;
 
-export function upsertMatches(matches: Match[]): number {
+export const upsertMatches = (matches: Match[]): number => {
   if (matches.length === 0) {
     return 0;
   }
@@ -165,12 +165,12 @@ export function upsertMatches(matches: Match[]): number {
   return stored;
 }
 
-export function getMatches(
+export const getMatches = (
   sport: number | null = null,
   scope = "live",
   filterText: string | null = null,
   limit = 500,
-): Match[] {
+): Match[] => {
   const clauses: string[] = [];
   const params: SqlValue[] = [];
   if (sport !== null) {
@@ -197,7 +197,7 @@ export function getMatches(
   }
 }
 
-export function getMatch(matchId: string): Match | null {
+export const getMatch = (matchId: string): Match | null => {
   const conn = connect();
   try {
     const row = conn.prepare("SELECT data FROM matches WHERE id = ?").get(matchId) as
@@ -209,7 +209,7 @@ export function getMatch(matchId: string): Match | null {
   }
 }
 
-export function getSnapshots(matchId: string, limit = 200): MatchSnapshot[] {
+export const getSnapshots = (matchId: string, limit = 200): MatchSnapshot[] => {
   const conn = connect();
   try {
     return conn
@@ -222,7 +222,7 @@ export function getSnapshots(matchId: string, limit = 200): MatchSnapshot[] {
   }
 }
 
-export function countMatches(): number {
+export const countMatches = (): number => {
   const conn = connect();
   try {
     const row = conn.prepare("SELECT COUNT(*) AS n FROM matches").get() as { n: number };
@@ -232,7 +232,7 @@ export function countMatches(): number {
   }
 }
 
-export function deleteAll(): void {
+export const deleteAll = (): void => {
   const conn = connect();
   try {
     conn.exec("DELETE FROM snapshots");

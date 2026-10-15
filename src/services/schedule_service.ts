@@ -4,7 +4,7 @@ import type { BaseResponse, ScheduleRequest } from "../types.ts";
 const schedules = new Map<string, ScheduleRequest>();
 let autoScheduled = false;
 
-function localToday(): string {
+const localToday = (): string => {
   const now = new Date();
   const y = now.getFullYear();
   const m = String(now.getMonth() + 1).padStart(2, "0");
@@ -12,7 +12,7 @@ function localToday(): string {
   return `${y}-${m}-${d}`;
 }
 
-export function scheduleEvents(request: ScheduleRequest, day?: string): BaseResponse {
+export const scheduleEvents = (request: ScheduleRequest, day?: string): BaseResponse => {
   const targetDay = day ?? localToday();
   if (schedules.has(targetDay)) {
     throw new ConflictError(`Schedule already exists for ${targetDay}`);
@@ -26,7 +26,7 @@ export function scheduleEvents(request: ScheduleRequest, day?: string): BaseResp
   );
 }
 
-export function autoScheduleEvents(): BaseResponse {
+export const autoScheduleEvents = (): BaseResponse => {
   if (autoScheduled) {
     throw new ConflictError("Auto-schedule already executed");
   }
@@ -34,7 +34,7 @@ export function autoScheduleEvents(): BaseResponse {
   return baseResponse("Auto-schedule completed", 200);
 }
 
-export function reset(): void {
+export const reset = (): void => {
   schedules.clear();
   autoScheduled = false;
 }

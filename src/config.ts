@@ -11,7 +11,7 @@ export interface Settings {
 
 const DEFAULT_UPSTREAM = "https://bet-service-658489904938.europe-west6.run.app";
 
-function asLogLevel(value: string | undefined): LogLevel {
+const asLogLevel = (value: string | undefined): LogLevel => {
   const normalized = (value ?? "info").toLowerCase();
   if (
     normalized === "debug" ||
@@ -25,7 +25,7 @@ function asLogLevel(value: string | undefined): LogLevel {
   return "info";
 }
 
-export function getSettings(env: NodeJS.ProcessEnv = process.env): Settings {
+export const getSettings = (env: NodeJS.ProcessEnv = process.env): Settings => {
   return {
     appName: env.APP_NAME ?? "SBI Backend APIs",
     appVersion: env.APP_VERSION ?? "0.1.5",

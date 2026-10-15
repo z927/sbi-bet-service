@@ -85,7 +85,7 @@ parameters return `422`.
 | Method | Path | Description |
 | --- | --- | --- |
 | GET | `/health` | Health + stored matches count. |
-| GET | `/sports` | Supported sport IDs. |
+| GET | `/sports` | Supported sport IDs (calcio only). |
 | GET | `/matches` | Collect matches (`sport`, `scope=live|today`, `enrich`, `filter`, `geo`, `workers`, `refresh`). |
 | GET | `/matches/:matchId` | Match detail (`sport`, `enrich`, `geo`). |
 | GET | `/matches/:matchId/snapshots` | Persisted state-change snapshots (`limit`). |
@@ -94,6 +94,9 @@ parameters return `422`.
 | GET | `/test/scrape` | **Testing only**: forces a live feed fetch and reports diagnostics (`sport`, `scope`, `sample`). |
 
 `enrich` accepts any of `detail`, `stats`, `events`, `lineups`, `odds`.
+
+Scraping is enabled for **calcio only** (`sport=1`): every other `sport` value
+returns `422` on all scraper routes.
 
 `GET /test/scrape` bypasses the TTL cache, always calls diretta.it and returns
 `{ ok, sport, scope, feed, elapsed_ms, matches_parsed, live_matches, stored,

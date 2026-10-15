@@ -14,11 +14,6 @@ const KV_SEP = "\u00f7";
 
 export const SPORTS: Record<number, string> = {
   1: "calcio",
-  2: "tennis",
-  3: "basket",
-  4: "hockey",
-  6: "handball",
-  7: "volley",
 };
 
 const STATUS_NAMES: Record<number, string> = {
@@ -70,19 +65,19 @@ export class FeedError extends Error {
   override readonly name = "FeedError";
 }
 
-function normHandicap(value: unknown): unknown {
+const normHandicap = (value: unknown): unknown => {
   if (value !== null && typeof value === "object") {
     return (value as Record<string, unknown>)["value"];
   }
   return value;
 }
 
-function selectionLabel(
+const selectionLabel = (
   betType: string,
   count: number,
   item: Record<string, unknown>,
   index: number,
-): string | null {
+): string | null => {
   if (betType === "HOME_DRAW_AWAY") {
     if (item["eventParticipantId"] === null || item["eventParticipantId"] === undefined) {
       return "X";
@@ -107,7 +102,7 @@ function selectionLabel(
   return null;
 }
 
-async function httpGet(url: string, headers: Record<string, string> = {}, timeoutMs = 15000): Promise<string> {
+const httpGet = async (url: string, headers: Record<string, string> = {}, timeoutMs = 15000): Promise<string> => {
   const baseHeaders: Record<string, string> = {
     "x-fsign": FSIGN,
     "User-Agent": USER_AGENT,
@@ -129,7 +124,7 @@ async function httpGet(url: string, headers: Record<string, string> = {}, timeou
   return text;
 }
 
-function toRecords(text: string): Record_[] {
+const toRecords = (text: string): Record_[] => {
   const records: Record_[] = [];
   for (const chunk of text.split(RECORD_SEP)) {
     const fields: Record_ = {};
@@ -148,7 +143,7 @@ function toRecords(text: string): Record_[] {
   return records;
 }
 
-function toInt(value: string | null | undefined): number | null {
+const toInt = (value: string | null | undefined): number | null => {
   if (value === null || value === undefined) {
     return null;
   }
@@ -156,22 +151,22 @@ function toInt(value: string | null | undefined): number | null {
   return Number.isNaN(parsed) ? null : parsed;
 }
 
-export async function fetchFeed(feed: string): Promise<Record_[]> {
+export const fetchFeed = async (feed: string): Promise<Record_[]> => {
   return toRecords(await httpGet(FEED_URL.replace("{feed}", feed)));
 }
 
-export function feedName(sport: number): string {
+export const feedName = (sport: number): string => {
   return `f_${sport}_0_3_it_1`;
 }
 
-function logo(value: string | undefined): string | null {
+const logo = (value: string | undefined): string | null => {
   if (!value) {
     return null;
   }
   return `https://static.flashscore.com/res/image/data/${value}`;
 }
 
-export function liveMinute(match: Match, now?: number): string | null {
+export const liveMinute = (match: Match, now?: number): string | null => {
   if (!match.is_live) {
     return null;
   }
@@ -204,7 +199,7 @@ export function liveMinute(match: Match, now?: number): string | null {
   return `${minute}'`;
 }
 
-export async function fetchMatches(sport = 1): Promise<Match[]> {
+export const fetchMatches = async (sport = 1): Promise<Match[]> => {
   const records = await fetchFeed(feedName(sport));
   const matches: Match[] = [];
   let tournament: Record_ | null = null;
@@ -255,7 +250,7 @@ export async function fetchMatches(sport = 1): Promise<Match[]> {
   return matches;
 }
 
-export async function fetchDetail(matchId: string): Promise<Record<string, unknown>> {
+export const fetchDetail = async (matchId: string): Promise<Record<string, unknown>> => {
   const records = await fetchFeed(`dc_1_${matchId}`);
   const rec = records[0];
   if (!rec) {
@@ -277,7 +272,7 @@ export async function fetchDetail(matchId: string): Promise<Record<string, unkno
   };
 }
 
-export async function fetchStatistics(matchId: string): Promise<{ groups: unknown[] }> {
+export const fetchStatistics = async (matchId: string): Promise<{ groups: unknown[] }> => {
   const records = await fetchFeed(`df_st_1_${matchId}`);
   const groups: Array<{ period: string; stats: unknown[] }> = [];
   let current: { period: string; stats: unknown[] } | null = null;
@@ -302,7 +297,7 @@ export async function fetchStatistics(matchId: string): Promise<{ groups: unknow
   return { groups };
 }
 
-export async function fetchEvents(matchId: string): Promise<unknown[]> {
+export const fetchEvents = async (matchId: string): Promise<unknown[]> => {
   const raw = await httpGet(FEED_URL.replace("{feed}", `df_sui_1_${matchId}`));
   const events: unknown[] = [];
   let period: string | null = null;
@@ -364,7 +359,7 @@ export async function fetchEvents(matchId: string): Promise<unknown[]> {
   return events;
 }
 
-export async function fetchLineups(matchId: string): Promise<Record<string, unknown>> {
+export const fetchLineups = async (matchId: string): Promise<Record<string, unknown>> => {
   const records = await fetchFeed(`df_li_1_${matchId}`);
   const result: Record<string, unknown> = {
     formation: {},
@@ -411,11 +406,11 @@ export async function fetchLineups(matchId: string): Promise<Record<string, unkn
   return result;
 }
 
-export async function fetchOdds(
+export const fetchOdds = async (
   matchId: string,
   geo = "IT",
   projectId = 2,
-): Promise<{ bookmakers: string[]; markets: unknown[] }> {
+): Promise<{ bookmakers: string[]; markets: unknown[] }> => {
   const params = new URLSearchParams({
     _hash: "oce",
     eventId: matchId,
@@ -474,7 +469,7 @@ export async function fetchOdds(
   return { bookmakers: activeBooks, markets };
 }
 
-export async function enrichMatch(match: Match, options: Set<string>, geo: string): Promise<void> {
+export const enrichMatch = async (match: Match, options: Set<string>, geo: string): Promise<void> => {
   const matchId = match.id;
   try {
     if (options.has("stats")) {
@@ -514,7 +509,7 @@ export async function enrichMatch(match: Match, options: Set<string>, geo: strin
   }
 }
 
-async function mapPool<T>(items: T[], workers: number, fn: (item: T) => Promise<void>): Promise<void> {
+const mapPool = async <T>(items: T[], workers: number, fn: (item: T) => Promise<void>): Promise<void> => {
   let index = 0;
   const size = Math.max(1, Math.min(workers, items.length));
   const run = async (): Promise<void> => {
@@ -526,14 +521,14 @@ async function mapPool<T>(items: T[], workers: number, fn: (item: T) => Promise<
   await Promise.all(Array.from({ length: size }, run));
 }
 
-export async function collect(
+export const collect = async (
   sport: number,
   scope: string,
   filterText: string | null,
   options: Set<string>,
   geo: string,
   workers: number,
-): Promise<Match[]> {
+): Promise<Match[]> => {
   let matches = await fetchMatches(sport);
   if (scope === "live") {
     matches = matches.filter((m) => m.is_live);
@@ -553,12 +548,12 @@ export async function collect(
   return matches;
 }
 
-export async function singleMatch(
+export const singleMatch = async (
   matchId: string,
   sport: number,
   options: Set<string>,
   geo: string,
-): Promise<Match> {
+): Promise<Match> => {
   let match: Match | null = null;
   try {
     for (const candidate of await fetchMatches(sport)) {

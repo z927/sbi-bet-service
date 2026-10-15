@@ -3,7 +3,7 @@ import type { BaseResponse, FixtureDto } from "../types.ts";
 
 const monitored = new Map<number, FixtureDto>();
 
-export function monitorFixtures(fixtures: FixtureDto[]): BaseResponse {
+export const monitorFixtures = (fixtures: FixtureDto[]): BaseResponse => {
   for (const fixture of fixtures) {
     if (fixture.fixtureId !== undefined && fixture.fixtureId !== null) {
       monitored.set(fixture.fixtureId, fixture);
@@ -12,15 +12,15 @@ export function monitorFixtures(fixtures: FixtureDto[]): BaseResponse {
   return baseResponse(`Monitoring ${monitored.size} fixtures`, 200);
 }
 
-export function restoreFixtures(day?: string): BaseResponse {
+export const restoreFixtures = (day?: string): BaseResponse => {
   const suffix = day ? ` for ${day}` : "";
   return baseResponse(`Restore requested${suffix}`, 200);
 }
 
-export function getMonitoredFixtures(): FixtureDto[] {
+export const getMonitoredFixtures = (): FixtureDto[] => {
   return [...monitored.values()];
 }
 
-export function reset(): void {
+export const reset = (): void => {
   monitored.clear();
 }
