@@ -87,7 +87,9 @@ parameters return `422`.
 | GET | `/health` | Health + stored matches count. |
 | GET | `/sports` | Supported sport IDs (calcio only). |
 | GET | `/matches` | Collect matches (`sport`, `scope=live|today`, `enrich`, `filter`, `geo`, `workers`, `refresh`). |
+| GET | `/live` | All live matches (`sport`, `enrich`, `geo`, `workers`, `refresh`) — alias of `/matches?scope=live`. |
 | GET | `/matches/:matchId` | Match detail (`sport`, `enrich`, `geo`). |
+| GET | `/matches/:matchId/statistics` | Live statistics for a match id, straight from diretta.it (`sport`). |
 | GET | `/matches/:matchId/snapshots` | Persisted state-change snapshots (`limit`). |
 | GET | `/db/matches` | Matches stored in SQLite (`sport`, `scope`, `filter`, `limit`). |
 | POST | `/cache/clear` | Clear the in-memory TTL cache. |
@@ -97,6 +99,15 @@ parameters return `422`.
 
 Scraping is enabled for **calcio only** (`sport=1`): every other `sport` value
 returns `422` on all scraper routes.
+
+`GET /live` and `GET /matches/:matchId/statistics` are the dedicated endpoints
+for the two core live flows: listing every live match and reading a single
+match's statistics. `GET /matches/:matchId/statistics` returns
+`{ match_id, statistics }` where `statistics` is divided into `all` (whole
+match), `first_half` and `second_half`. Each period maps a category key
+(`top`, `shots`, `attack`, `passing`, `defense`, `goalkeeper`) to an array of
+stats (`id`, `name`, `home`, `away`). Upstream failures from diretta.it are
+mapped to `502` with `{ detail }`.
 
 `GET /test/scrape` bypasses the TTL cache, always calls diretta.it and returns
 `{ ok, sport, scope, feed, elapsed_ms, matches_parsed, live_matches, stored,

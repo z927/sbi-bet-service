@@ -1,8 +1,22 @@
 import type { FastifyInstance } from "fastify";
 import { ValidationError } from "../errors.ts";
+import type { RouteMetadata } from "../sbi/routes.ts";
 import { SPORTS } from "./client/index.ts";
 import * as db from "./db.ts";
 import * as service from "./service.ts";
+
+export const SCRAPER_ROUTES: readonly RouteMetadata[] = [
+  { method: "GET", path: "/health", operationId: "health" },
+  { method: "GET", path: "/sports", operationId: "getSports" },
+  { method: "GET", path: "/matches", operationId: "getScraperMatches" },
+  { method: "GET", path: "/live", operationId: "getLive" },
+  { method: "GET", path: "/matches/{matchId}", operationId: "getMatchDetail" },
+  { method: "GET", path: "/matches/{matchId}/statistics", operationId: "getMatchStatistics" },
+  { method: "GET", path: "/matches/{matchId}/snapshots", operationId: "getSnapshots" },
+  { method: "GET", path: "/db/matches", operationId: "getDbMatches" },
+  { method: "POST", path: "/cache/clear", operationId: "clearCache" },
+  { method: "GET", path: "/test/scrape", operationId: "testScrape" },
+];
 
 interface MatchesQuery {
   sport?: number;
@@ -18,6 +32,18 @@ interface MatchDetailQuery {
   sport?: number;
   enrich?: string | string[];
   geo?: string;
+}
+
+interface LiveQuery {
+  sport?: number;
+  enrich?: string | string[];
+  geo?: string;
+  workers?: number;
+  refresh?: boolean;
+}
+
+interface StatisticsQuery {
+  sport?: number;
 }
 
 const toList = (value: string | string[] | undefined): string[] => {
@@ -85,6 +111,37 @@ export const scraperRoutes = (app: FastifyInstance): void => {
     },
   );
 
+  app.get<{ Querystring: LiveQuery }>(
+    "/live",
+    {
+      schema: {
+        querystring: {
+          type: "object",
+          properties: {
+            sport: { type: "integer" },
+            enrich: { type: "array", items: { type: "string" } },
+            geo: { type: "string" },
+            workers: { type: "integer", minimum: 1, maximum: 32 },
+            refresh: { type: "boolean" },
+          },
+        },
+      },
+    },
+    async (request) => {
+      const q = request.query;
+      const enrich = toList(q.enrich);
+      assertEnrich(enrich);
+      const [matches, cached] = await service.getLiveMatches(
+        assertSport(q.sport ?? 1),
+        enrich,
+        q.geo ?? "IT",
+        q.workers ?? 8,
+        q.refresh ?? false,
+      );
+      return { count: matches.length, cached, matches };
+    },
+  );
+
   app.get<{ Params: { matchId: string }; Querystring: MatchDetailQuery }>(
     "/matches/:matchId",
     {
@@ -108,6 +165,25 @@ export const scraperRoutes = (app: FastifyInstance): void => {
         return reply.code(404).send({ detail: "Partita non trovata" });
       }
       return match;
+    },
+  );
+
+  app.get<{ Params: { matchId: string }; Querystring: StatisticsQuery }>(
+    "/matches/:matchId/statistics",
+    {
+      schema: {
+        querystring: {
+          type: "object",
+          properties: {
+            sport: { type: "integer" },
+          },
+        },
+      },
+    },
+    async (request) => {
+      assertSport(request.query.sport ?? 1);
+      const statistics = await service.getMatchStatistics(request.params.matchId);
+      return { match_id: request.params.matchId, statistics };
     },
   );
 

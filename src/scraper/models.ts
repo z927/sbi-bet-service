@@ -22,7 +22,7 @@ export interface Match {
   is_live?: boolean;
   minute?: string | null;
   start_time?: number | null;
-  statistics?: { groups: unknown[] };
+  statistics?: Statistics;
   events?: unknown[];
   lineups?: Record<string, unknown>;
   odds?: { bookmakers: string[]; markets: unknown[] };
@@ -45,6 +45,27 @@ export interface MatchesResponse {
   count: number;
   cached: boolean;
   matches: Match[];
+}
+
+export interface StatItem {
+  id: number | null;
+  name: string;
+  home: string;
+  away: string;
+}
+
+export type StatCategory = Record<string, StatItem[]>;
+
+export interface Statistics {
+  all: StatCategory;
+  first_half: StatCategory;
+  second_half: StatCategory;
+  [period: string]: StatCategory;
+}
+
+export interface StatisticsResponse {
+  match_id: string;
+  statistics: Statistics;
 }
 
 export interface HealthResponse {

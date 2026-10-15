@@ -5,6 +5,7 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse } from "yaml";
 import { SBI_ROUTES } from "../src/sbi/routes.ts";
+import { SCRAPER_ROUTES } from "../src/scraper/routes.ts";
 import { buildServer } from "../src/server.ts";
 import { removeDb, useTempDb } from "./support.ts";
 
@@ -21,8 +22,10 @@ const contract = parse(readFileSync(CONTRACT_PATH, "utf8")) as {
   paths: Record<string, Record<string, { operationId?: string }>>;
 };
 
-test("SBI routes match the contract paths, methods and operationIds", () => {
-  for (const route of SBI_ROUTES) {
+const ROUTES = [...SBI_ROUTES, ...SCRAPER_ROUTES];
+
+test("implemented routes match the contract paths, methods and operationIds", () => {
+  for (const route of ROUTES) {
     const pathItem = contract.paths[route.path];
     assert.ok(pathItem, `contract is missing path ${route.path}`);
     const operation = pathItem[route.method.toLowerCase()];
@@ -31,8 +34,8 @@ test("SBI routes match the contract paths, methods and operationIds", () => {
   }
 });
 
-test("contract paths are fully covered by implemented SBI routes", () => {
-  const implemented = new Set(SBI_ROUTES.map((r) => `${r.method} ${r.path}`));
+test("contract paths are fully covered by implemented routes", () => {
+  const implemented = new Set(ROUTES.map((r) => `${r.method} ${r.path}`));
   const declared: string[] = [];
   for (const [path, item] of Object.entries(contract.paths)) {
     for (const method of ["get", "post"]) {

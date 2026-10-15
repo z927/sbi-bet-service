@@ -13,6 +13,20 @@ const FIXTURE = [
   "AA\u00f7m1\u00acAB\u00f72\u00acAC\u00f712\u00acAD\u00f71700000000\u00acAE\u00f7Inter\u00acAF\u00f7Milan\u00acAG\u00f71\u00acAH\u00f70\u00acAI\u00f7y\u00acAO\u00f71700000000",
 ].join("~");
 
+const STATS_FIXTURE = [
+  "SE\u00f7Partita",
+  "SF\u00f7Statistiche Top",
+  "SD\u00f712\u00acSG\u00f7Possesso palla\u00acSH\u00f755%\u00acSI\u00f745%",
+  "SF\u00f7Tiri",
+  "SD\u00f713\u00acSG\u00f7Tiri in porta\u00acSH\u00f74\u00acSI\u00f72",
+  "SE\u00f71 Tempo",
+  "SF\u00f7Statistiche Top",
+  "SD\u00f712\u00acSG\u00f7Possesso palla\u00acSH\u00f748%\u00acSI\u00f752%",
+  "SE\u00f72 Tempo",
+  "SF\u00f7Tiri",
+  "SD\u00f713\u00acSG\u00f7Tiri in porta\u00acSH\u00f73\u00acSI\u00f71",
+].join("~");
+
 let app: FastifyInstance;
 let calls = 0;
 const originalFetch = globalThis.fetch;
@@ -25,9 +39,9 @@ const makeResponse = (body: string): Response => {
   } as unknown as Response;
 }
 
-const fixtureFetch = (async () => {
+const fixtureFetch = (async (url: string) => {
   calls += 1;
-  return makeResponse(FIXTURE);
+  return makeResponse(String(url).includes("df_st_") ? STATS_FIXTURE : FIXTURE);
 }) as unknown as typeof fetch;
 
 before(async () => {
@@ -76,6 +90,73 @@ test("GET /matches parses the feed and caches subsequent calls", async () => {
   const second = await app.inject({ method: "GET", url: "/matches?sport=1&scope=today" });
   assert.equal(second.json().cached, true);
   assert.equal(calls, 1);
+});
+
+test("GET /live returns only the live matches and caches them", async () => {
+  const first = await app.inject({ method: "GET", url: "/live" });
+  assert.equal(first.statusCode, 200);
+  const firstBody = first.json();
+  assert.equal(firstBody.count, 1);
+  assert.equal(firstBody.cached, false);
+  assert.equal(firstBody.matches[0].id, "m1");
+  assert.equal(firstBody.matches[0].is_live, true);
+  assert.equal(calls, 1);
+
+  const second = await app.inject({ method: "GET", url: "/live" });
+  assert.equal(second.json().cached, true);
+  assert.equal(calls, 1);
+});
+
+test("GET /live rejects invalid enrich and sport with 422", async () => {
+  const enrich = await app.inject({ method: "GET", url: "/live?enrich=bogus" });
+  assert.equal(enrich.statusCode, 422);
+  const sport = await app.inject({ method: "GET", url: "/live?sport=99" });
+  assert.equal(sport.statusCode, 422);
+});
+
+test("GET /matches/:id/statistics divides stats by period and category", async () => {
+  const response = await app.inject({ method: "GET", url: "/matches/m1/statistics" });
+  assert.equal(response.statusCode, 200);
+  const body = response.json();
+  assert.equal(body.match_id, "m1");
+  assert.deepEqual(body.statistics.all.top[0], {
+    id: 12,
+    name: "Possesso palla",
+    home: "55%",
+    away: "45%",
+  });
+  assert.equal(body.statistics.all.shots[0].name, "Tiri in porta");
+  assert.deepEqual(body.statistics.first_half.top[0], {
+    id: 12,
+    name: "Possesso palla",
+    home: "48%",
+    away: "52%",
+  });
+  assert.deepEqual(body.statistics.second_half.shots[0], {
+    id: 13,
+    name: "Tiri in porta",
+    home: "3",
+    away: "1",
+  });
+  assert.deepEqual(Object.keys(body.statistics.first_half), ["top"]);
+});
+
+test("GET /matches/:id/statistics rejects an unsupported sport with 422", async () => {
+  const response = await app.inject({ method: "GET", url: "/matches/m1/statistics?sport=99" });
+  assert.equal(response.statusCode, 422);
+});
+
+test("GET /matches/:id/statistics reports feed failures as 502", async () => {
+  globalThis.fetch = (async () => {
+    throw new TypeError("network down");
+  }) as unknown as typeof fetch;
+  try {
+    const response = await app.inject({ method: "GET", url: "/matches/m1/statistics" });
+    assert.equal(response.statusCode, 502);
+    assert.match(response.json().detail, /network down/);
+  } finally {
+    globalThis.fetch = fixtureFetch;
+  }
 });
 
 test("POST /cache/clear invalidates the cache", async () => {
@@ -165,7 +246,9 @@ test("GET /test/scrape rejects an unsupported sport with 422", async () => {
 test("routes reject non-calcio sports with 422", async () => {
   const urls = [
     "/matches?sport=2",
+    "/live?sport=2",
     "/matches/m1?sport=2",
+    "/matches/m1/statistics?sport=2",
     "/db/matches?sport=2",
     "/test/scrape?sport=2",
   ];

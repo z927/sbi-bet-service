@@ -129,6 +129,365 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/MatchModel'
+  /health:
+    get:
+      tags:
+        - Scraper
+      operationId: health
+      summary: Health check
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  db:
+                    type: string
+                  matches_stored:
+                    type: integer
+                required:
+                  - status
+  /sports:
+    get:
+      tags:
+        - Scraper
+      operationId: getSports
+      summary: Available sports
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sports:
+                    $ref: '#/components/schemas/SportsMap'
+                required:
+                  - sports
+  /matches:
+    get:
+      tags:
+        - Scraper
+      operationId: getScraperMatches
+      summary: Get matches (scraper)
+      parameters:
+        - name: sport
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: scope
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: ["live", "today"]
+        - name: enrich
+          in: query
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: filter
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: geo
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: workers
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 32
+        - name: refresh
+          in: query
+          required: false
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScraperMatchesResponse'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+  /live:
+    get:
+      tags:
+        - Scraper
+      operationId: getLive
+      summary: Get live matches
+      parameters:
+        - name: sport
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: enrich
+          in: query
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: geo
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: workers
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 32
+        - name: refresh
+          in: query
+          required: false
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScraperMatchesResponse'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+  /matches/{matchId}:
+    get:
+      tags:
+        - Scraper
+      operationId: getMatchDetail
+      summary: Get match detail
+      parameters:
+        - name: matchId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: sport
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: enrich
+          in: query
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: geo
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScraperMatch'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+  /matches/{matchId}/statistics:
+    get:
+      tags:
+        - Scraper
+      operationId: getMatchStatistics
+      summary: Get match statistics
+      parameters:
+        - name: matchId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: sport
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatchStatistics'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+  /matches/{matchId}/snapshots:
+    get:
+      tags:
+        - Scraper
+      operationId: getSnapshots
+      summary: Get snapshots
+      parameters:
+        - name: matchId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 2000
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+  /db/matches:
+    get:
+      tags:
+        - Scraper
+      operationId: getDbMatches
+      summary: Get matches from DB
+      parameters:
+        - name: sport
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: scope
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: ["live", "today"]
+        - name: filter
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 5000
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScraperMatchesResponse'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+  /cache/clear:
+    post:
+      tags:
+        - Scraper
+      operationId: clearCache
+      summary: Clear cache
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                required:
+                  - status
+  /test/scrape:
+    get:
+      tags:
+        - Scraper
+      operationId: testScrape
+      summary: Test scrape
+      parameters:
+        - name: sport
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: scope
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: ["live", "today"]
+        - name: sample
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 20
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+
 components:
   schemas:
     BaseResponse:
@@ -247,3 +606,89 @@ components:
           type: boolean
         favouriteStrategyUsed:
           type: boolean
+
+    SportsMap:
+      type: object
+      additionalProperties:
+        type: object
+        properties:
+          id:
+            type: integer
+          name:
+            type: string
+          slug:
+            type: string
+    ScraperMatchesResponse:
+      type: object
+      properties:
+        count:
+          type: integer
+        cached:
+          type: boolean
+        matches:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScraperMatch'
+      required:
+        - count
+        - cached
+        - matches
+    ScraperMatch:
+      type: object
+      additionalProperties: true
+    MatchStatistics:
+      type: object
+      properties:
+        match_id:
+          type: string
+        statistics:
+          $ref: '#/components/schemas/StatisticsPeriods'
+      required:
+        - match_id
+        - statistics
+    StatisticsPeriods:
+      type: object
+      properties:
+        all:
+          $ref: '#/components/schemas/StatisticsCategories'
+        first_half:
+          $ref: '#/components/schemas/StatisticsCategories'
+        second_half:
+          $ref: '#/components/schemas/StatisticsCategories'
+      required:
+        - all
+        - first_half
+        - second_half
+    StatisticsCategories:
+      type: object
+      description: Statistics grouped by category key (e.g. top, shots, attack, passing, defense, goalkeeper).
+      additionalProperties:
+        type: array
+        items:
+          $ref: '#/components/schemas/StatItem'
+    StatItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          nullable: true
+        name:
+          type: string
+        home:
+          type: string
+        away:
+          type: string
+    ValidationError:
+      type: object
+      properties:
+        detail:
+          type: string
+      required:
+        - detail
+    NotFoundError:
+      type: object
+      properties:
+        detail:
+          type: string
+      required:
+        - detail

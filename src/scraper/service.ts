@@ -1,6 +1,6 @@
 import { client, FeedError, feedName, liveMinute } from "./client/index.ts";
 import * as db from "./db.ts";
-import type { Match, ScrapeTestResponse } from "./models.ts";
+import type { Match, ScrapeTestResponse, Statistics } from "./models.ts";
 
 export const ENRICH_CHOICES = ["detail", "stats", "events", "lineups", "odds"] as const;
 
@@ -173,6 +173,20 @@ export const getMatch = async (
   const match = await singleMatch(matchId, sport, new Set(enrich), geo);
   db.upsertMatches([match]);
   return match;
+}
+
+export const getLiveMatches = async (
+  sport = 1,
+  enrich: readonly string[] = [],
+  geo = "IT",
+  workers = 8,
+  refresh = false,
+): Promise<[Match[], boolean]> => {
+  return getMatches(sport, "live", null, enrich, geo, workers, refresh);
+}
+
+export const getMatchStatistics = async (matchId: string): Promise<Statistics> => {
+  return client.getStatistics(matchId);
 }
 
 export const clearCache = (): void => {

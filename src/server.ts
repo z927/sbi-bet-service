@@ -6,6 +6,7 @@ import swaggerUi from "@fastify/swagger-ui";
 import type { FastifyError, FastifyReply, FastifyRequest } from "fastify";
 import { getSettings } from "./config.ts";
 import { ConflictError, ValidationError, baseResponse } from "./errors.ts";
+import { FeedError } from "./scraper/client/index.ts";
 import { sbiRoutes } from "./sbi/routes.ts";
 import { scraperRoutes } from "./scraper/routes.ts";
 import { initDb } from "./scraper/db.ts";
@@ -27,6 +28,9 @@ export const buildServer = async (): Promise<FastifyInstance> => {
     }
     if (error instanceof ValidationError) {
       return reply.code(422).send({ detail: error.message });
+    }
+    if (error instanceof FeedError) {
+      return reply.code(502).send({ detail: error.message });
     }
     if (error.validation) {
       return reply.code(422).send({ detail: error.message });
