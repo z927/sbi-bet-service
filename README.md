@@ -1,76 +1,163 @@
-# SBI Backend APIs — FastAPI implementation
+# diretta-scraper — Node/TypeScript backend
 
-API-first implementation of the scoped **Schedule**, **Monitoring** and **Matches**
-endpoints from *SBI Backend APIs v0.1.5*. The maintained contract lives in
-`openapi/openapi.yaml` and is the source of truth.
+A single Fastify/TypeScript service exposing:
 
-> This package (`app/`) is separate from the existing diretta.it scraper in `src/`.
-> The scoped SBI contract is implemented only here to avoid route collisions
-> (for example `GET /matches` has a different shape in each app).
+1. The scoped **SBI Backend APIs v0.1.5** — *Schedule*, *Monitoring* and *Matches*.
+2. A **diretta.it live scraper** REST API (matches, statistics, events, lineups, odds)
+   with SQLite persistence and a TTL cache.
 
-## Endpoints
+The maintained OpenAPI contract for the SBI endpoints lives in
+`openapi/openapi.yaml` and is the source of truth for their shape.
 
-| Method | Path | Operation ID |
-| --- | --- | --- |
-| POST | `/schedule` | `scheduleEvents` |
-| GET | `/auto-schedule` | `autoScheduleEvents` |
-| POST | `/monitor` | `monitorFixtures` |
-| GET | `/restore` | `restoreFixtures` (deprecated) |
-| GET | `/v3/scheduled-fixtures` | `getScheduledFixtures` |
-| GET | `/monitored` | `getMonitoredFixtures` |
-| GET | `/matches` | `getMatches` |
+## Requirements
+
+- Node.js `>= 22.6` (runs TypeScript natively via type stripping — no build step needed to run).
 
 ## Setup
 
 ```bash
-python -m venv .venv
-.venv/bin/pip install -e ".[dev]"
-cp .env.example .env  # non-secret placeholders only
+npm install
+cp .env.example .env   # non-secret placeholders only
 ```
+
+> `.npmrc` points npm at the public registry because the configured private
+> registry does not mirror the required packages. Remove/override it once the
+> packages are available internally.
+
+## npm scripts
+
+| Script | Description |
+| --- | --- |
+| `npm run generate` | Regenerate `src/sbi/generated/api-types.ts` from `openapi/openapi.yaml` (openapi-typescript). |
+| `npm run typecheck` | Type-check the project with `tsc --noEmit`. |
+| `npm run build` | **Build command**: `generate` + `typecheck`. |
+| `npm run dev` | Run with `node --watch` (auto-restart). |
+| `npm start` | Run the server. |
+| `npm test` | Run the test suite (`node --test`). |
 
 ## Run
 
 ```bash
-.venv/bin/uvicorn app.main:app --reload
+npm run dev      # http://127.0.0.1:8000
 ```
 
-- OpenAPI: `http://127.0.0.1:8000/openapi.json`
+- OpenAPI document: `http://127.0.0.1:8000/openapi.json`
 - Swagger UI: `http://127.0.0.1:8000/docs`
+
+## Code generation
+
+The SBI request/response **types** are generated from the contract:
+
+- Output: `src/sbi/generated/api-types.ts` (do not edit by hand).
+
+The running server **serves the contract file itself** at `/openapi.json`
+(via `@fastify/swagger` static mode), so the published document can never drift
+from `openapi/openapi.yaml`. The hand-written Fastify routes are checked against
+the contract by `test/contract.test.ts`.
+
+Regenerate after changing the contract:
+
+```bash
+npm run generate
+```
+
+## Endpoints
+
+### SBI (contract in `openapi/openapi.yaml`)
+
+| Method | Path | Operation ID |
+| --- | --- | --- |
+| POST | `/api/v1/schedule` | `scheduleEvents` |
+| GET | `/api/v1/auto-schedule` | `autoScheduleEvents` |
+| POST | `/api/v1/monitor` | `monitorFixtures` |
+| GET | `/api/v1/scheduled-fixtures` | `getScheduledFixtures` |
+| GET | `/api/v1/monitored` | `getMonitoredFixtures` |
+| GET | `/api/v1/matches` | `getMatches` |
+
+> `/restore` is documented in `AGENTS.md` as deprecated but is **not** part of
+> `openapi/openapi.yaml`, so it is not exposed.
+
+Conflicts return `409` with a `BaseResponse`. Invalid request bodies and query
+parameters return `422`.
+
+### diretta.it scraper
+
+| Method | Path | Description |
+| --- | --- | --- |
+| GET | `/health` | Health + stored matches count. |
+| GET | `/sports` | Supported sport IDs. |
+| GET | `/matches` | Collect matches (`sport`, `scope=live|today`, `enrich`, `filter`, `geo`, `workers`, `refresh`). |
+| GET | `/matches/:matchId` | Match detail (`sport`, `enrich`, `geo`). |
+| GET | `/matches/:matchId/snapshots` | Persisted state-change snapshots (`limit`). |
+| GET | `/db/matches` | Matches stored in SQLite (`sport`, `scope`, `filter`, `limit`). |
+| POST | `/cache/clear` | Clear the in-memory TTL cache. |
+
+`enrich` accepts any of `detail`, `stats`, `events`, `lineups`, `odds`.
+
+## Layout
+
+```
+openapi/openapi.yaml        maintained contract (source of truth)
+src/
+  main.ts                   entrypoint
+  server.ts                 Fastify assembly, error handling, Swagger
+  config.ts                 env-driven settings
+  validation.ts             ISO date validation
+  types.ts                  re-exported contract types
+  sbi/
+    generated/api-types.ts  openapi-typescript output
+    routes.ts               /api/v1 routes + route metadata
+    services/               in-memory business logic
+  scraper/
+    feed.ts                 diretta.it HTTP client + feed parsing
+    db.ts                   node:sqlite persistence
+    service.ts              TTL cache + orchestration
+    routes.ts               scraper routes
+    models.ts               response types
+test/
+  contract.test.ts          routes vs contract, served /openapi.json
+  sbi.test.ts               SBI endpoint behavior
+  scraper.test.ts           scraper routes, parsing, cache, persistence (mocked fetch)
+```
+
+Dependency direction: `router -> service -> db/feed`.
+
+## Configuration
+
+Read from environment variables via `src/config.ts`:
+
+- `HOST`, `PORT` — bind address/port (default `127.0.0.1:8000`).
+- `LOG_LEVEL` — `debug|info|warn|error|silent` (default `info`).
+- `UPSTREAM_BASE_URL` — SBI upstream base URL (defaults to the HTTPS host).
+- `APP_NAME`, `APP_VERSION` — metadata.
+- `DIRETTA_DB` — SQLite file (default `data/diretta.db`).
+- `DIRETTA_CACHE_TTL` — matches cache TTL in seconds (default `15`).
+
+Secrets must never be committed.
 
 ## Test
 
 ```bash
-.venv/bin/python -m pytest
+npm test
 ```
 
-`tests/contract/` checks the FastAPI-generated schema against `openapi/openapi.yaml`
-for paths, methods, operation IDs, query parameters, status codes, schema property
-names/required flags and undocumented routes. `tests/api/` covers request/response
-shapes and status codes; `tests/services/` covers service behavior. No live
-upstream calls are made.
-
-## Configuration
-
-Read from environment variables via `app/core/config.py`:
-
-- `UPSTREAM_BASE_URL` — upstream SBI Backend base URL (defaults to the HTTPS host).
-- `LOG_LEVEL` — logging level (default `INFO`).
-
-Secrets must never be committed. `.env` is not required for local runs.
+`test/contract.test.ts` verifies the implemented routes cover the contract
+(paths, methods, operation IDs) and that `/openapi.json` equals
+`openapi/openapi.yaml`. `test/sbi.test.ts` and `test/scraper.test.ts` cover
+status codes, wire field names and service behavior. Scraper tests mock
+`fetch`; no live sports APIs are called.
 
 ## Scope and behavior notes
 
 - All schema properties are optional, matching the source specification.
-- JSON wire names keep camelCase (`fixtureId`, `firstHalfScore`, `startTime`, …)
-  via explicit aliases.
-- Services keep state **in memory only** (no repository, DB, queue or cache) until
-  persistence requirements are agreed. There are no upstream integrations yet.
-- `409` is returned by an application exception handler mapped to `BaseResponse`.
+- JSON wire names keep camelCase (`fixtureId`, `firstHalfScore`, `startTime`, …).
+- SBI services keep state **in memory only**; no upstream integration is wired yet.
+- The scraper persists to SQLite and caches collected matches in memory.
 
 ## Open questions (from AGENTS.md, not guessed)
 
 1. Is this service a drop-in replacement, a façade/proxy, or an independent backend?
-2. Should `/v3/scheduled-fixtures` return `BaseResponse`, or an updated contract with fixture data?
+2. Should `/api/v1/scheduled-fixtures` return `BaseResponse`, or an updated contract with fixture data?
 3. What is the expected `BaseResponse` content on success and failure?
 4. Which request fields are semantically required despite not being marked required?
 5. What are the intended scheduling/monitoring rules, duplicate handling and persistence needs?
@@ -78,5 +165,5 @@ Secrets must never be committed. `.env` is not required for local runs.
 
 Provisional conflict rules currently implemented (in-memory, pending answers to Q1/Q5):
 
-- `POST /schedule` returns `409` if the target day already has a schedule.
-- `GET /auto-schedule` returns `409` if it already ran in the current process.
+- `POST /api/v1/schedule` returns `409` if the target day already has a schedule.
+- `GET /api/v1/auto-schedule` returns `409` if it already ran in the current process.
