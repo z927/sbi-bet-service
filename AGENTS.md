@@ -95,9 +95,9 @@ src/
     routes.ts               /api/v1 routes + route metadata
     services/               in-memory business logic
   scraper/
-    feed.ts                 diretta.it HTTP client + feed parsing
+    client/                 diretta.it client, una risorsa per file (transport, matches, match, statistics, events, lineups, odds, index)
     db.ts                   node:sqlite persistence
-    service.ts              TTL cache + orchestration
+    service.ts              TTL cache + orchestration (collect/enrich)
     routes.ts               scraper routes
     models.ts               response types
 test/
@@ -107,7 +107,7 @@ test/
 openapi/
   openapi.yaml
 Keep dependency direction clear:
-router -> service -> db/feed
+router -> service -> db/client
 Types should not contain business logic. Routes should handle HTTP concerns and delegate operations to services. Do not introduce a repository, database, queue, cache, or provider integration for the SBI scope until the intended behavior and persistence requirements are known.
 TypeScript and Fastify conventions
 - Use a supported Node.js version (>= 22.6, which runs TypeScript via native type stripping). Declare it in package.json engines.

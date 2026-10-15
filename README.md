@@ -118,9 +118,17 @@ src/
     generated/api-types.ts  openapi-typescript output
     routes.ts               /api/v1 routes + route metadata
   scraper/
-    feed.ts                 diretta.it HTTP client + feed parsing
+    client/                 diretta.it client, una risorsa per file
+      transport.ts          HTTP + parsing del feed delimited (~ ¬ ÷)
+      matches.ts            elenco gare (+ minuto live)
+      match.ts              dettaglio match
+      statistics.ts         statistiche
+      events.ts             incidenti (gol, cartellini, ...)
+      lineups.ts            formazioni
+      odds.ts               quote (GraphQL)
+      index.ts              oggetto `client` aggregato
     db.ts                   node:sqlite persistence
-    service.ts              TTL cache + orchestration
+    service.ts              TTL cache + orchestrazione (collect/enrich)
     routes.ts               scraper routes
     models.ts               response types
 test/
@@ -129,7 +137,7 @@ test/
   scraper.test.ts           scraper routes, parsing, cache, persistence (mocked fetch)
 ```
 
-Dependency direction: `router -> service -> db/feed`.
+Dependency direction: `router -> service -> db/client`.
 
 ## Configuration
 

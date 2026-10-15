@@ -1,6 +1,6 @@
 import type { FastifyInstance } from "fastify";
 import { ValidationError } from "../errors.ts";
-import * as scraper from "./feed.ts";
+import { SPORTS } from "./client/index.ts";
 import * as db from "./db.ts";
 import * as service from "./service.ts";
 
@@ -35,7 +35,7 @@ const assertEnrich = (enrich: string[]): void => {
 }
 
 const assertSport = (sport: number): number => {
-  if (!(sport in scraper.SPORTS)) {
+  if (!(sport in SPORTS)) {
     throw new ValidationError(`Sport non supportato: ${sport}`);
   }
   return sport;
@@ -48,7 +48,7 @@ export const scraperRoutes = (app: FastifyInstance): void => {
     matches_stored: db.countMatches(),
   }));
 
-  app.get("/sports", () => ({ sports: scraper.SPORTS }));
+  app.get("/sports", () => ({ sports: SPORTS }));
 
   app.get<{ Querystring: MatchesQuery }>(
     "/matches",
