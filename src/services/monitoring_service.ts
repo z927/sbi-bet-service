@@ -1,5 +1,5 @@
-import { baseResponse } from "../../errors.ts";
-import type { BaseResponse, FixtureDto } from "../../types.ts";
+import { baseResponse } from "../errors.ts";
+import type { BaseResponse, FixtureDto } from "../types.ts";
 
 const monitored = new Map<number, FixtureDto>();
 

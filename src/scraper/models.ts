@@ -52,3 +52,16 @@ export interface HealthResponse {
   db: string;
   matches_stored: number;
 }
+
+export interface ScrapeTestResponse {
+  ok: boolean;
+  sport: number;
+  scope: string;
+  feed: string;
+  elapsed_ms: number;
+  matches_parsed: number;
+  live_matches: number;
+  stored: number;
+  sample: Match[];
+  error: string | null;
+}

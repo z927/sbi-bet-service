@@ -160,6 +160,10 @@ export async function fetchFeed(feed: string): Promise<Record_[]> {
   return toRecords(await httpGet(FEED_URL.replace("{feed}", feed)));
 }
 
+export function feedName(sport: number): string {
+  return `f_${sport}_0_3_it_1`;
+}
+
 function logo(value: string | undefined): string | null {
   if (!value) {
     return null;
@@ -201,7 +205,7 @@ export function liveMinute(match: Match, now?: number): string | null {
 }
 
 export async function fetchMatches(sport = 1): Promise<Match[]> {
-  const records = await fetchFeed(`f_${sport}_0_3_it_1`);
+  const records = await fetchFeed(feedName(sport));
   const matches: Match[] = [];
   let tournament: Record_ | null = null;
   for (const rec of records) {

@@ -2,9 +2,9 @@ import { test, before, after, beforeEach } from "node:test";
 import assert from "node:assert/strict";
 import { buildServer } from "../src/server.ts";
 import type { FastifyInstance } from "fastify";
-import * as schedule from "../src/sbi/services/schedule_service.ts";
-import * as monitoring from "../src/sbi/services/monitoring_service.ts";
-import * as matches from "../src/sbi/services/matches_service.ts";
+import * as schedule from "../src/services/schedule_service.ts";
+import * as monitoring from "../src/services/monitoring_service.ts";
+import * as matches from "../src/services/matches_service.ts";
 import { removeDb, useTempDb } from "./support.ts";
 
 process.env["LOG_LEVEL"] = "silent";

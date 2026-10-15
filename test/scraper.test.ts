@@ -25,11 +25,13 @@ function makeResponse(body: string): Response {
   } as unknown as Response;
 }
 
+const fixtureFetch = (async () => {
+  calls += 1;
+  return makeResponse(FIXTURE);
+}) as unknown as typeof fetch;
+
 before(async () => {
-  globalThis.fetch = (async () => {
-    calls += 1;
-    return makeResponse(FIXTURE);
-  }) as unknown as typeof fetch;
+  globalThis.fetch = fixtureFetch;
   app = await buildServer();
 });
 
@@ -110,4 +112,56 @@ test("GET /matches/:id/snapshots returns captured state changes", async () => {
   const body = response.json();
   assert.ok(body.length >= 1);
   assert.equal(body[0].match_id, "m1");
+});
+
+test("GET /test/scrape reports a successful scrape and always hits the feed", async () => {
+  const first = await app.inject({ method: "GET", url: "/test/scrape?scope=today" });
+  assert.equal(first.statusCode, 200);
+  const body = first.json();
+  assert.equal(body.ok, true);
+  assert.equal(body.sport, 1);
+  assert.equal(body.scope, "today");
+  assert.equal(body.feed, "f_1_0_3_it_1");
+  assert.equal(body.matches_parsed, 1);
+  assert.equal(body.live_matches, 1);
+  assert.equal(body.stored, 1);
+  assert.equal(body.sample.length, 1);
+  assert.equal(body.sample[0].home, "Inter");
+  assert.equal(body.sample[0].away, "Milan");
+  assert.equal(body.error, null);
+  assert.ok(typeof body.elapsed_ms === "number");
+  assert.equal(calls, 1);
+
+  const second = await app.inject({ method: "GET", url: "/test/scrape?scope=today" });
+  assert.equal(second.statusCode, 200);
+  assert.equal(calls, 2);
+});
+
+test("GET /test/scrape reports feed failures without throwing", async () => {
+  globalThis.fetch = (async () => {
+    throw new TypeError("network down");
+  }) as unknown as typeof fetch;
+  try {
+    const response = await app.inject({ method: "GET", url: "/test/scrape" });
+    assert.equal(response.statusCode, 200);
+    const body = response.json();
+    assert.equal(body.ok, false);
+    assert.equal(body.matches_parsed, 0);
+    assert.equal(body.stored, 0);
+    assert.equal(body.sample.length, 0);
+    assert.match(body.error, /network down/);
+    assert.ok(typeof body.elapsed_ms === "number");
+  } finally {
+    globalThis.fetch = fixtureFetch;
+  }
+});
+
+test("GET /test/scrape rejects an unsupported sport with 422", async () => {
+  const response = await app.inject({ method: "GET", url: "/test/scrape?sport=99" });
+  assert.equal(response.statusCode, 422);
+});
+
+test("GET /test/scrape rejects an invalid scope with 422", async () => {
+  const response = await app.inject({ method: "GET", url: "/test/scrape?scope=whatever" });
+  assert.equal(response.statusCode, 422);
 });

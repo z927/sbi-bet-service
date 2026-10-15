@@ -91,8 +91,14 @@ parameters return `422`.
 | GET | `/matches/:matchId/snapshots` | Persisted state-change snapshots (`limit`). |
 | GET | `/db/matches` | Matches stored in SQLite (`sport`, `scope`, `filter`, `limit`). |
 | POST | `/cache/clear` | Clear the in-memory TTL cache. |
+| GET | `/test/scrape` | **Testing only**: forces a live feed fetch and reports diagnostics (`sport`, `scope`, `sample`). |
 
 `enrich` accepts any of `detail`, `stats`, `events`, `lineups`, `odds`.
+
+`GET /test/scrape` bypasses the TTL cache, always calls diretta.it and returns
+`{ ok, sport, scope, feed, elapsed_ms, matches_parsed, live_matches, stored,
+sample, error }`. `ok: false` with `error` set means the scrape failed; results
+are still persisted to SQLite when the scrape succeeds.
 
 ## Layout
 
@@ -104,10 +110,10 @@ src/
   config.ts                 env-driven settings
   validation.ts             ISO date validation
   types.ts                  re-exported contract types
+  services/                 SBI in-memory business logic
   sbi/
     generated/api-types.ts  openapi-typescript output
     routes.ts               /api/v1 routes + route metadata
-    services/               in-memory business logic
   scraper/
     feed.ts                 diretta.it HTTP client + feed parsing
     db.ts                   node:sqlite persistence

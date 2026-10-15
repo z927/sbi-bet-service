@@ -1,6 +1,6 @@
 import * as scraper from "./feed.ts";
 import * as db from "./db.ts";
-import type { Match } from "./models.ts";
+import type { Match, ScrapeTestResponse } from "./models.ts";
 
 export const ENRICH_CHOICES = ["detail", "stats", "events", "lineups", "odds"] as const;
 
@@ -59,4 +59,38 @@ export async function getMatch(
 
 export function clearCache(): void {
   cache.clear();
+}
+
+export async function testScrape(sport = 1, scope = "live", sampleLimit = 3): Promise<ScrapeTestResponse> {
+  const feed = scraper.feedName(sport);
+  const started = Date.now();
+  try {
+    const matches = await scraper.collect(sport, scope, null, new Set(), "IT", 4);
+    const stored = db.upsertMatches(matches);
+    return {
+      ok: true,
+      sport,
+      scope,
+      feed,
+      elapsed_ms: Date.now() - started,
+      matches_parsed: matches.length,
+      live_matches: matches.filter((m) => m.is_live).length,
+      stored,
+      sample: matches.slice(0, sampleLimit),
+      error: null,
+    };
+  } catch (error) {
+    return {
+      ok: false,
+      sport,
+      scope,
+      feed,
+      elapsed_ms: Date.now() - started,
+      matches_parsed: 0,
+      live_matches: 0,
+      stored: 0,
+      sample: [],
+      error: error instanceof Error ? error.message : String(error),
+    };
+  }
 }

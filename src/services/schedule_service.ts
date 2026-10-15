@@ -1,5 +1,5 @@
-import { ConflictError, baseResponse } from "../../errors.ts";
-import type { BaseResponse, ScheduleRequest } from "../../types.ts";
+import { ConflictError, baseResponse } from "../errors.ts";
+import type { BaseResponse, ScheduleRequest } from "../types.ts";
 
 const schedules = new Map<string, ScheduleRequest>();
 let autoScheduled = false;

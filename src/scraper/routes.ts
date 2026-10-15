@@ -145,4 +145,28 @@ export function scraperRoutes(app: FastifyInstance): void {
     service.clearCache();
     return { status: "cleared" };
   });
+
+  app.get<{ Querystring: { sport?: number; scope?: string; sample?: number } }>(
+    "/test/scrape",
+    {
+      schema: {
+        querystring: {
+          type: "object",
+          properties: {
+            sport: { type: "integer" },
+            scope: { type: "string", enum: ["live", "today"] },
+            sample: { type: "integer", minimum: 0, maximum: 20 },
+          },
+        },
+      },
+    },
+    async (request) => {
+      const q = request.query;
+      const sport = q.sport ?? 1;
+      if (!(sport in scraper.SPORTS)) {
+        throw new ValidationError(`Sport non supportato: ${sport}`);
+      }
+      return service.testScrape(sport, q.scope ?? "live", q.sample ?? 3);
+    },
+  );
 }
