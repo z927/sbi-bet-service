@@ -1,0 +1,249 @@
+openapi: 3.1.0
+info:
+  title: SBI Backend APIs
+  version: 0.0.1
+  description: >-
+    Scoped contract for Schedule, Monitoring and Matches endpoints.
+    Extracted from SBI Backend APIs v0.0.1. No property is marked required
+    in the source specification; optionality is preserved here.
+servers:
+  - url: http://localhost:8080
+    description: Upstream server listed in the source specification (HTTP; verify deployed scheme)
+paths:
+  /api/v1/schedule:
+    post:
+      tags: 
+        - Schedule
+      operationId: scheduleEvents
+      summary: Schedule events
+      parameters:
+        - name: day
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScheduleRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+  /api/v1/auto-schedule:
+    get:
+      tags: 
+        - Schedule
+      operationId: autoScheduleEvents
+      summary: Auto schedule events
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+  /api/v1/monitor:
+    post:
+      operationId: monitorFixtures
+      summary: Start monitoring fixtures
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/FixtureDto'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+  /api/v1/scheduled-fixtures:
+    get:
+      operationId: getScheduledFixtures
+      summary: Get scheduled fixtures
+      description: >-
+        Retrieves events from Sofascore and fixtures from API-Football, and
+        saves them. The source contract documents a BaseResponse body despite
+        the description; the documented contract is preserved pending
+        clarification.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+  /api/v1/monitored:
+    get:
+      operationId: getMonitoredFixtures
+      summary: Get monitored fixtures
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FixtureDto'
+  /api/v1/matches:
+    get:
+      operationId: getMatches
+      summary: Get matches
+      parameters:
+        - name: date
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MatchModel'
+components:
+  schemas:
+    BaseResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        statusCode:
+          type: integer
+    ScheduleRequest:
+      type: object
+      properties:
+        defaultFixtures:
+          type: array
+          items:
+            $ref: '#/components/schemas/DefaultItem'
+        favouriteFixtures:
+          type: array
+          items:
+            $ref: '#/components/schemas/FavouriteItem'
+    DefaultItem:
+      type: object
+      properties:
+        fixtureId:
+          type: integer
+        match:
+          type: string
+    FavouriteItem:
+      type: object
+      properties:
+        fixtureId:
+          type: integer
+        match:
+          type: string
+        homeTeam:
+          type: boolean
+        awayTeam:
+          type: boolean
+    FixtureDto:
+      type: object
+      properties:
+        fixtureId:
+          type: integer
+        league:
+          $ref: '#/components/schemas/LeagueDto'
+        home:
+          $ref: '#/components/schemas/SingleItemDto'
+        away:
+          $ref: '#/components/schemas/SingleItemDto'
+        info:
+          $ref: '#/components/schemas/InfoDto'
+        time:
+          $ref: '#/components/schemas/TimeDto'
+        period:
+          type: string
+    LeagueDto:
+      type: object
+      properties:
+        name:
+          type: string
+        country:
+          type: string
+        leagueId:
+          type: integer
+    SingleItemDto:
+      type: object
+      properties:
+        team:
+          type: string
+        teamId:
+          type: integer
+        score:
+          type: integer
+        favourite:
+          type: boolean
+    InfoDto:
+      type: object
+      properties:
+        statusDescription:
+          type: string
+        monitored:
+          type: boolean
+        elapsed:
+          type: integer
+        favouriteStrategyUsed:
+          type: boolean
+    TimeDto:
+      type: object
+      properties:
+        startTime:
+          type: string
+        beginMonitoringTime:
+          type: string
+        endMonitoringTime:
+          type: string
+    MatchModel:
+      type: object
+      properties:
+        id:
+          type: integer
+        league:
+          type: string
+        match:
+          type: string
+        score:
+          type: string
+        firstHalfScore:
+          type: string
+        startTime:
+          type: string
+        slug:
+          type: string
+        favouriteTeam:
+          type: string
+        monitored:
+          type: boolean
+        favouriteStrategyUsed:
+          type: boolean
