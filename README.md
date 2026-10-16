@@ -175,6 +175,32 @@ npm test
 status codes, wire field names and service behavior. Scraper tests mock
 `fetch`; no live sports APIs are called.
 
+## Container and CI/CD
+
+`Dockerfile` (production: `npm ci --omit=dev`, `HOST=0.0.0.0`,
+`DIRETTA_DB=/tmp/diretta.db`, `node src/main.ts`):
+
+```bash
+docker build -t sbi-bet-service .
+docker run -p 8080:8080 sbi-bet-service
+```
+
+`.github/workflows/ci.yml` runs on every push/PR:
+
+| Job | Trigger | What it does |
+| --- | --- | --- |
+| `release` | push/PR | commitlint on PRs, semantic-release on `main` |
+| `test` | push/PR | `npm ci`, generate + typecheck, OpenAPI drift check, `npm test` |
+| `build` | push/PR | builds the image; pushes `ghcr.io/<owner>/<repo>` (`latest` + `sha-<sha>`) **only on `main`** |
+| `deploy` | push to `main` only | `gcloud run deploy bet-service` with the pushed image **pinned by digest** |
+
+One-time setup:
+
+1. After the first successful push to `main`, make the GHCR package **public**
+   (package → Settings → Visibility), otherwise Cloud Run cannot pull it.
+2. Required repository secrets: `GCP_PROJECT_ID`, `GCP_EMAIL`, `GCP_CREDENTIALS`
+   (service account JSON), `GCP_APP_NAME` (legacy, unused by the new flow).
+
 ## Scope and behavior notes
 
 - All schema properties are optional, matching the source specification.
