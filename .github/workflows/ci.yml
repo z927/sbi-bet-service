@@ -21,6 +21,7 @@ jobs:
           fetch-depth: 0
 
       - name: Ensure initial tag v0.0.0
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |

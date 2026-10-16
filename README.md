@@ -189,7 +189,7 @@ docker run -p 8080:8080 sbi-bet-service
 
 | Job | Trigger | What it does |
 | --- | --- | --- |
-| `release` | push/PR | commitlint on PRs, semantic-release on `main` |
+| `release` | push/PR | commitlint on PRs, semantic-release on `main` (seeds the `v0.0.1` baseline tag only on `main` pushes) |
 | `test` | push/PR | `npm ci`, generate + typecheck, OpenAPI drift check, `npm test` |
 | `build` | push/PR | builds the image; pushes `ghcr.io/<owner>/<repo>` (`latest` + `sha-<sha>`) **only on `main`** |
 | `deploy` | push to `main` only | `gcloud run deploy bet-service` with the pushed image **pinned by digest** |
