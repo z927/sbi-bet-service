@@ -133,7 +133,7 @@ jobs:
 
       - name: Deploy Cloud Run service
         run: |
-          gcloud run deploy bet-service \
+          gcloud run deploy sbi-bet-service \
             --image "${{ needs.build.outputs.image }}@${{ needs.build.outputs.digest }}" \
             --cpu 1 \
             --region=europe-west6 \
