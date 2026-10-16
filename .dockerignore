@@ -1,0 +1,15 @@
+node_modules/
+data/
+dist/
+.git/
+.github/
+.githooks/
+.opencode/
+test/
+.env
+.env.*
+*.db
+*.db-wal
+*.db-shm
+.DS_Store
+*.md
