@@ -142,7 +142,7 @@ export const sbiRoutes = (app: FastifyInstance): void => {
         body: { type: "array", items: fixtureDtoSchema },
       },
     },
-    (request) => monitoring.monitorFixtures(request.body ?? []),
+    async (request) => monitoring.monitorFixtures(request.body ?? []),
   );
 
   app.get("/api/v1/scheduled-fixtures", { schema: { operationId: "getScheduledFixtures" } }, () =>

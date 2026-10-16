@@ -10,13 +10,29 @@ import { removeDb, useTempDb } from "./support.ts";
 process.env["LOG_LEVEL"] = "silent";
 const DB_FILE = useTempDb("sbi");
 
+const originalFetch = globalThis.fetch;
+const FIXTURE = [
+  "ZA\u00f7ITALIA: Serie A\u00acZY\u00f7Italia\u00acZEE\u00f7COuk57Ci\u00acZC\u00f71\u00acZL\u00f7/calcio/italia/serie-a/",
+  "AA\u00f7m1\u00acAB\u00f72\u00acAC\u00f712\u00acAD\u00f71700000000\u00acAE\u00f7Inter\u00acAF\u00f7Milan\u00acAG\u00f71\u00acAH\u00f70\u00acAI\u00f7y\u00acAO\u00f71700000000",
+].join("~");
+const STATS_FIXTURE = ["SE\u00f7Partita", "SF\u00f7Tiri", "SD\u00f713\u00acSG\u00f7Tiri in porta\u00acSH\u00f74\u00acSI\u00f72"].join("~");
+
+const makeResponse = (body: string): Response => {
+  return { ok: true, status: 200, text: async () => body } as unknown as Response;
+}
+
+const fixtureFetch = (async (url: string) =>
+  makeResponse(String(url).includes("df_st_") ? STATS_FIXTURE : FIXTURE)) as unknown as typeof fetch;
+
 let app: FastifyInstance;
 
 before(async () => {
+  globalThis.fetch = fixtureFetch;
   app = await buildServer();
 });
 
 after(async () => {
+  globalThis.fetch = originalFetch;
   await app.close();
   removeDb(DB_FILE);
 });
@@ -73,7 +89,7 @@ test("GET /api/v1/auto-schedule returns 200 then 409", async () => {
   assert.equal(second.statusCode, 409);
 });
 
-test("POST /api/v1/monitor stores fixtures and GET /monitored returns them", async () => {
+test("POST /api/v1/monitor runs the live strategy and returns BaseResponse", async () => {
   const fixtures = [
     {
       fixtureId: 10,
@@ -87,13 +103,13 @@ test("POST /api/v1/monitor stores fixtures and GET /monitored returns them", asy
   ];
   const response = await app.inject({ method: "POST", url: "/api/v1/monitor", payload: fixtures });
   assert.equal(response.statusCode, 200);
+  const body = response.json();
+  assert.equal(typeof body.message, "string");
+  assert.equal(body.statusCode, 200);
 
   const monitored = await app.inject({ method: "GET", url: "/api/v1/monitored" });
   assert.equal(monitored.statusCode, 200);
-  const body = monitored.json();
-  assert.equal(body.length, 1);
-  assert.equal(body[0].fixtureId, 10);
-  assert.equal(body[0].league.name, "Serie A");
+  assert.deepEqual(monitored.json(), []);
 });
 
 test("POST /api/v1/monitor rejects non-array body with 422", async () => {
