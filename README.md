@@ -125,6 +125,10 @@ src/
   validation.ts             ISO date validation
   types.ts                  re-exported contract types
   services/                 SBI in-memory business logic
+    strategies/             monitor orchestration (isolated, testable)
+      strategy.ts           Strategy interface + result types
+      major_leagues.ts      env allowlist of major leagues
+      live_matches_strategy.ts  live (major) matches -> statistics
   sbi/
     generated/api-types.ts  openapi-typescript output
     routes.ts               /api/v1 routes + route metadata
@@ -146,6 +150,7 @@ test/
   contract.test.ts          routes vs contract, served /openapi.json
   sbi.test.ts               SBI endpoint behavior
   scraper.test.ts           scraper routes, parsing, cache, persistence (mocked fetch)
+  strategies.test.ts        monitor strategy: major-league filter, stats, failures
 ```
 
 Dependency direction: `router -> service -> db/client`.
@@ -160,6 +165,12 @@ Read from environment variables via `src/config.ts`:
 - `APP_NAME`, `APP_VERSION` — metadata.
 - `DIRETTA_DB` — SQLite file (default `data/diretta.db`).
 - `DIRETTA_CACHE_TTL` — matches cache TTL in seconds (default `15`).
+- `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` — if both set, the monitor signal
+  sends alerts via Telegram; otherwise it’s a no-op.
+- `MONITOR_SIGNAL_TOUCHES_THRESHOLD` — threshold for touch-ratio signal (default
+  `0.4`, touches in opponent box / minutes in first half ≥ threshold). The alert
+  text is fixed: `Alert goal Over 0.5 HT`. Each alert is sent at most once per
+  match per rule.
 
 Secrets must never be committed.
 
@@ -205,7 +216,11 @@ One-time setup:
 
 - All schema properties are optional, matching the source specification.
 - JSON wire names keep camelCase (`fixtureId`, `firstHalfScore`, `startTime`, …).
-- SBI services keep state **in memory only**; no upstream integration is wired yet.
+- SBI services keep state **in memory only**; only `/api/v1/monitor` calls the
+  diretta scraper: it selects live matches from major leagues
+  (`MONITOR_MAJOR_LEAGUES`) and prints their statistics to the console for now.
+  The request body is still required by the contract but ignored.
+- Monitor does not feed other endpoints (`/monitored`, `/matches` stay empty).
 - The scraper persists to SQLite and caches collected matches in memory.
 
 ## Open questions (from AGENTS.md, not guessed)
