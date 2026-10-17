@@ -1,10 +1,4 @@
 export {
-  DEFAULT_MAJOR_LEAGUES,
-  MAJOR_LEAGUES_ENV,
-  configuredMajorLeagues,
-  isMajorLeague,
-} from "./major_leagues.ts";
-export {
   LIVE_MATCHES_STRATEGY,
   liveMatchesStrategy,
   runLiveMatchesStrategy,
@@ -16,3 +10,9 @@ export type {
   StrategyMatchResult,
   StrategyResult,
 } from "./strategy.ts";
+export {
+  DEFAULT_MAJOR_LEAGUES,
+  MAJOR_LEAGUES_ENV,
+  configuredMajorLeagues,
+  isMajorLeague,
+} from "./major_leagues.ts";

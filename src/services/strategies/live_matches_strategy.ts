@@ -1,7 +1,13 @@
 import { client } from "../../scraper/client/index.ts";
 import type { Match, Statistics } from "../../scraper/models.ts";
+import { dispatchAlerts, evaluateSignals } from "../signals/index.ts";
 import { configuredMajorLeagues, isMajorLeague } from "./major_leagues.ts";
-import type { Strategy, StrategyContext, StrategyMatchResult, StrategyResult } from "./strategy.ts";
+import type {
+  Strategy,
+  StrategyContext,
+  StrategyMatchResult,
+  StrategyResult,
+} from "./strategy.ts";
 
 export const LIVE_MATCHES_STRATEGY = "live-matches-statistics";
 
@@ -12,7 +18,7 @@ export interface LiveMatchesStrategyHooks {
 
 const defaultHooks = (): LiveMatchesStrategyHooks => ({
   allowlist: configuredMajorLeagues(),
-  log: (match, statistics) => {
+  log: (match: Match, statistics: Statistics) => {
     console.log(`[${LIVE_MATCHES_STRATEGY}] ${match.home} - ${match.away} (${match.id})`, statistics);
   },
 });
@@ -36,10 +42,12 @@ export const runLiveMatchesStrategy = async (
     try {
       const statistics = await client.getStatistics(match.id);
       hooks.log(match, statistics);
-      results.push({ ...base, statistics, error: null });
+      const alerts = evaluateSignals(match, statistics);
+      await dispatchAlerts(alerts);
+      results.push({ ...base, statistics, alerts, error: null });
     } catch (exc) {
       const error = exc instanceof Error ? exc.message : String(exc);
-      results.push({ ...base, statistics: null, error });
+      results.push({ ...base, statistics: null, alerts: [], error });
     }
   }
 
@@ -55,5 +63,5 @@ export const runLiveMatchesStrategy = async (
 
 export const liveMatchesStrategy: Strategy = {
   name: LIVE_MATCHES_STRATEGY,
-  run: (context) => runLiveMatchesStrategy(context),
+  run: (context: StrategyContext = {}) => runLiveMatchesStrategy(context),
 };

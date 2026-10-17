@@ -165,10 +165,12 @@ Read from environment variables via `src/config.ts`:
 - `APP_NAME`, `APP_VERSION` — metadata.
 - `DIRETTA_DB` — SQLite file (default `data/diretta.db`).
 - `DIRETTA_CACHE_TTL` — matches cache TTL in seconds (default `15`).
-- `MONITOR_MAJOR_LEAGUES` — comma-separated allowlist of major leagues for the
-  monitor strategy. Each entry matches exactly either the full tournament name
-  (`ITALIA: Serie A`) or its diretta.it id (`COuk57Ci`); empty/unset uses the
-  built-in top-5 leagues. Cups use stage-specific names/ids, so add them explicitly.
+- `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` — if both set, the monitor signal
+  sends alerts via Telegram; otherwise it’s a no-op.
+- `MONITOR_SIGNAL_TOUCHES_THRESHOLD` — threshold for touch-ratio signal (default
+  `0.4`, touches in opponent box / minutes in first half ≥ threshold). The alert
+  text is fixed: `Alert goal Over 0.5 HT`. Each alert is sent at most once per
+  match per rule.
 
 Secrets must never be committed.
 
