@@ -1,3 +1,5 @@
+import packageJson from "../package.json" with { type: "json" };
+
 export type LogLevel = "debug" | "info" | "warn" | "error" | "silent";
 
 export interface Settings {
@@ -37,7 +39,8 @@ export const getSettings = (env: NodeJS.ProcessEnv = process.env): Settings => {
   const step = Number.parseInt(env.SCHEDULER_CRON_STEP_MINUTES ?? "10", 10);
   return {
     appName: env.APP_NAME ?? "SBI Backend APIs",
-    appVersion: env.APP_VERSION ?? "0.1.5",
+    // package.json è la source of truth; APP_VERSION resta solo un override.
+    appVersion: env.APP_VERSION || packageJson.version,
     upstreamBaseUrl: env.UPSTREAM_BASE_URL ?? DEFAULT_UPSTREAM,
     logLevel: asLogLevel(env.LOG_LEVEL),
     host: env.HOST ?? "127.0.0.1",
