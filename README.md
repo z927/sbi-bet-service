@@ -80,6 +80,36 @@ npm run generate
 Conflicts return `409` with a `BaseResponse`. Invalid request bodies and query
 parameters return `422`.
 
+#### Auto-schedule flow
+
+`GET /api/v1/auto-schedule` orchestrates the day's monitoring window:
+
+1. Fetches today's matches from the diretta.it feed (calcio only).
+2. Keeps only **major leagues** (`MONITOR_MAJOR_LEAGUES`, exact name or diretta id)
+   with a start time still in the future.
+3. Enriches each kept match with the detail feed to read its `end_time`
+   (fallback: start + 2h), sets `monitored: true` and persists everything to
+   SQLite. Each match carries `begin_monitoring_time`
+   (start − `MONITOR_LEAD_MINUTES`) and `end_monitoring_time`.
+4. Builds a **single aggregated cron expression** in the GCP 5-field format
+   `*/{step} {hour-ranges} {dom} {mon} {DOW}` — e.g. `*/10 15-17,18-20 18 10 SUN`:
+   the job fires every `SCHEDULER_CRON_STEP_MINUTES` (default 10) minutes during
+   the monitoring windows (`beginMonitoringTime` → `endMonitoringTime`) of the
+   day's matches, one hour range per match, in timezone `SCHEDULER_TIME_ZONE`.
+   Day-of-month/month and the day-of-week name are pinned to today. Then it
+   creates/updates **one** Cloud Scheduler job (`GCP_JOB_ID`) targeting
+   `POST {MONITOR_JOB_TARGET_BASE_URL}/api/v1/monitor` via ADC auth.
+   (GCP evaluates day-of-month and day-of-week with OR; the daily upsert keeps
+   the extra weekday occurrences harmless in practice.)
+5. `409` when the existing job already fires today; `200` otherwise. When no
+   upcoming major-league matches exist, the job is deleted and `200` returned.
+   If `MONITOR_JOB_TARGET_BASE_URL` is unset, matches are still persisted and the
+   scheduler step is skipped (local dev).
+
+Required GCP setup: the Cloud Run runtime service account needs
+`roles/cloud.scheduler.admin` (create/update/delete jobs) and the service URL
+must be set in `MONITOR_JOB_TARGET_BASE_URL` at deploy time.
+
 ### diretta.it scraper
 
 | Method | Path | Description |
@@ -124,7 +154,12 @@ src/
   config.ts                 env-driven settings
   validation.ts             ISO date validation
   types.ts                  re-exported contract types
-  services/                 SBI in-memory business logic
+  cloud_scheduler/
+    client.ts               GCP Cloud Scheduler REST client (ADC auth)
+  services/
+    schedule_service.ts     POST /api/v1/schedule state
+    auto_schedule_service.ts  GET /api/v1/auto-schedule orchestration
+    cron.ts                 GCP cron builder (aggregated daily slots)
     strategies/             monitor orchestration (isolated, testable)
       strategy.ts           Strategy interface + result types
       major_leagues.ts      env allowlist of major leagues
@@ -151,6 +186,8 @@ test/
   sbi.test.ts               SBI endpoint behavior
   scraper.test.ts           scraper routes, parsing, cache, persistence (mocked fetch)
   strategies.test.ts        monitor strategy: major-league filter, stats, failures
+  cron.test.ts              GCP cron builder + day matching (pure)
+  auto_schedule.test.ts     auto-schedule orchestration (stubbed scheduler, mocked feed)
 ```
 
 Dependency direction: `router -> service -> db/client`.
@@ -165,6 +202,25 @@ Read from environment variables via `src/config.ts`:
 - `APP_NAME`, `APP_VERSION` — metadata.
 - `DIRETTA_DB` — SQLite file (default `data/diretta.db`).
 - `DIRETTA_CACHE_TTL` — matches cache TTL in seconds (default `15`).
+- `MONITOR_MAJOR_LEAGUES` — comma-separated major-league allowlist (exact full
+  diretta.it tournament name like `"ITALIA: Serie A"`, or diretta.it id);
+  empty/unset falls back to the built-in list of major European leagues and UEFA
+  competitions in `src/services/strategies/major_leagues.ts` (~46 entries,
+  translated to the names the diretta.it feed actually uses — e.g.
+  `"SPAGNA: LaLiga"`, `"ROMANIA: Superliga"`, `"EUROPA: Champions League"`).
+  A few entries are documented backups for names that cannot be verified
+  off-season (cups, Nations League, World Cup qualifiers); prune them after a
+  matchday if the primary name is confirmed (`GET /test/scrape` shows the
+  feed's tournament names). Setting the env **replaces** the whole list.
+- `GCP_PROJECT_ID`, `GCP_REGION`, `GCP_JOB_ID` — Cloud Scheduler location of the
+  auto-schedule job (injected at deploy time by CI).
+- `MONITOR_JOB_TARGET_BASE_URL` — public base URL of this service; the scheduler
+  job POSTs `/api/v1/monitor` to it. Empty disables scheduler creation.
+- `SCHEDULER_TIME_ZONE` — timezone for the scheduler cron (default `Europe/Rome`).
+- `MONITOR_LEAD_MINUTES` — minutes subtracted from each match start to compute
+  `beginMonitoringTime` (default `0`).
+- `SCHEDULER_CRON_STEP_MINUTES` — minute step of the scheduler cron
+  (`*/N` during the match windows; default `10`).
 - `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` — if both set, the monitor signal
   sends alerts via Telegram; otherwise it’s a no-op.
 - `MONITOR_SIGNAL_TOUCHES_THRESHOLD` — threshold for touch-ratio signal (default
@@ -216,11 +272,14 @@ One-time setup:
 
 - All schema properties are optional, matching the source specification.
 - JSON wire names keep camelCase (`fixtureId`, `firstHalfScore`, `startTime`, …).
-- SBI services keep state **in memory only**; only `/api/v1/monitor` calls the
+- SBI schedule state is kept **in memory only**; `/api/v1/monitor` calls the
   diretta scraper: it selects live matches from major leagues
   (`MONITOR_MAJOR_LEAGUES`) and prints their statistics to the console for now.
   The request body is still required by the contract but ignored.
-- Monitor does not feed other endpoints (`/monitored`, `/matches` stay empty).
+- `GET /api/v1/auto-schedule` persists the day's upcoming major-league matches
+  to SQLite with `monitored: true` and manages the Cloud Scheduler job described
+  above. Monitor still does not feed the other endpoints (`/monitored`,
+  `/matches` stay empty).
 - The scraper persists to SQLite and caches collected matches in memory.
 
 ## Open questions (from AGENTS.md, not guessed)
@@ -232,7 +291,8 @@ One-time setup:
 5. What are the intended scheduling/monitoring rules, duplicate handling and persistence needs?
 6. Which upstream integrations are needed, and their timeouts/retries/failure semantics?
 
-Provisional conflict rules currently implemented (in-memory, pending answers to Q1/Q5):
+Provisional conflict rules currently implemented (pending answers to Q1/Q5):
 
 - `POST /api/v1/schedule` returns `409` if the target day already has a schedule.
-- `GET /api/v1/auto-schedule` returns `409` if it already ran in the current process.
+- `GET /api/v1/auto-schedule` returns `409` if the Cloud Scheduler job already
+  fires today (state is derived from Cloud Scheduler, so it survives restarts).

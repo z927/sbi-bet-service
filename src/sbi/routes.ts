@@ -3,6 +3,7 @@ import { ValidationError } from "../errors.ts";
 import { isIsoDate } from "../validation.ts";
 import type { FixtureDto, ScheduleRequest } from "../types.ts";
 import * as schedule from "../services/schedule_service.ts";
+import * as autoSchedule from "../services/auto_schedule_service.ts";
 import * as monitoring from "../services/monitoring_service.ts";
 import * as matches from "../services/matches_service.ts";
 
@@ -131,7 +132,7 @@ export const sbiRoutes = (app: FastifyInstance): void => {
   );
 
   app.get("/api/v1/auto-schedule", { schema: { operationId: "autoScheduleEvents" } }, () =>
-    schedule.autoScheduleEvents(),
+    autoSchedule.autoScheduleEvents(),
   );
 
   app.post<{ Body: FixtureDto[] }>(

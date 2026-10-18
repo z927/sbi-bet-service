@@ -82,11 +82,13 @@ test("POST /api/v1/schedule rejects invalid body with 422", async () => {
   assert.equal(response.statusCode, 422);
 });
 
-test("GET /api/v1/auto-schedule returns 200 then 409", async () => {
+test("GET /api/v1/auto-schedule returns BaseResponse (scheduler unconfigured: 200 twice)", async () => {
   const first = await app.inject({ method: "GET", url: "/api/v1/auto-schedule" });
   assert.equal(first.statusCode, 200);
+  assert.equal(typeof first.json().message, "string");
+  assert.equal(first.json().statusCode, 200);
   const second = await app.inject({ method: "GET", url: "/api/v1/auto-schedule" });
-  assert.equal(second.statusCode, 409);
+  assert.equal(second.statusCode, 200);
 });
 
 test("POST /api/v1/monitor runs the live strategy and returns BaseResponse", async () => {

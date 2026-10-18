@@ -116,6 +116,37 @@ test("isMajorLeague matches by full tournament name or id, not by loose name", (
   assert.equal(isMajorLeague(match, ["Serie A"]), false);
 });
 
+test("default major leagues cover the top competitions with diretta names", () => {
+  const defaults = [...DEFAULT_MAJOR_LEAGUES];
+  for (const entry of [
+    "ITALIA: Serie A",
+    "ITALIA: Serie B",
+    "INGHILTERRA: Premier League",
+    "INGHILTERRA: Championship",
+    "GERMANIA: Bundesliga",
+    "AUSTRIA: Bundesliga",
+    "GERMANIA: 2. Bundesliga",
+    "SPAGNA: LaLiga",
+    "SPAGNA: LaLiga2",
+    "FRANCIA: Ligue 1",
+    "OLANDA: Eredivisie",
+    "PORTOGALLO: Liga Portugal",
+    "ROMANIA: Superliga",
+    "SERBIA: Super Liga",
+    "DANIMARCA: Superliga",
+    "TURCHIA: 1. Lig",
+    "EUROPA: Champions League",
+    "EUROPA: Europa League",
+  ]) {
+    assert.ok(defaults.includes(entry), `missing ${entry}`);
+  }
+  // Loose generic names are never allowlisted: matching stays exact on the full
+  // diretta name to avoid collisions (Algeria Ligue 1, Greece Super League, ...).
+  assert.ok(!defaults.includes("Ligue 1"));
+  assert.ok(!defaults.includes("Serie A"));
+  assert.ok(!defaults.includes("Super League"));
+});
+
 test("strategy is exposed as a named Strategy", () => {
   assert.equal(liveMatchesStrategy.name, LIVE_MATCHES_STRATEGY);
   assert.equal(typeof liveMatchesStrategy.run, "function");

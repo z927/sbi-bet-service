@@ -2,7 +2,6 @@ import { ConflictError, baseResponse } from "../errors.ts";
 import type { BaseResponse, ScheduleRequest } from "../types.ts";
 
 const schedules = new Map<string, ScheduleRequest>();
-let autoScheduled = false;
 
 const localToday = (): string => {
   const now = new Date();
@@ -26,15 +25,6 @@ export const scheduleEvents = (request: ScheduleRequest, day?: string): BaseResp
   );
 }
 
-export const autoScheduleEvents = (): BaseResponse => {
-  if (autoScheduled) {
-    throw new ConflictError("Auto-schedule already executed");
-  }
-  autoScheduled = true;
-  return baseResponse("Auto-schedule completed", 200);
-}
-
 export const reset = (): void => {
   schedules.clear();
-  autoScheduled = false;
 }
