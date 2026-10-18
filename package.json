@@ -13,7 +13,9 @@
     "build": "npm run generate && npm run typecheck",
     "dev": "node --watch src/main.ts",
     "start": "node src/main.ts",
-    "test": "node --test \"test/**/*.test.ts\""
+    "test": "node --test \"test/**/*.test.ts\"",
+    "bump": "node scripts/bump-version.mjs",
+    "hooks": "git config core.hooksPath .githooks"
   },
   "dependencies": {
     "@fastify/swagger": "^9.9.2",

@@ -54,3 +54,8 @@ Analyze the current Git changes and create a safe, focused commit.
 - commit hash;
 - commit message;
 - final Git status.
+
+## Examples:
+
+- feat(app): added new feature
+- fix(ci): fix ci

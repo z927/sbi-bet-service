@@ -18,6 +18,7 @@ The maintained OpenAPI contract for the SBI endpoints lives in
 ```bash
 npm install
 cp .env.example .env   # non-secret placeholders only
+npm run hooks          # una tantum: attiva gli hook git in .githooks/
 ```
 
 > `.npmrc` points npm at the public registry because the configured private
@@ -34,6 +35,8 @@ cp .env.example .env   # non-secret placeholders only
 | `npm run dev` | Run with `node --watch` (auto-restart). |
 | `npm start` | Run the server. |
 | `npm test` | Run the test suite (`node --test`). |
+| `npm run bump` | Bump patch di `package.json`/`package-lock.json`, commit `chore(release): X.Y.Z [skip ci]` e tag `vX.Y.Z`. Con `-- --push` spinge anche commit e tag. |
+| `npm run hooks` | Una tantum: imposta `core.hooksPath=.githooks` così gli hook (`commit-msg`, `post-merge`) diventano attivi. |
 
 ## Run
 
@@ -199,7 +202,9 @@ Read from environment variables via `src/config.ts`:
 - `HOST`, `PORT` — bind address/port (default `127.0.0.1:8000`).
 - `LOG_LEVEL` — `debug|info|warn|error|silent` (default `info`).
 - `UPSTREAM_BASE_URL` — SBI upstream base URL (defaults to the HTTPS host).
-- `APP_NAME`, `APP_VERSION` — metadata.
+- `APP_NAME` — metadata (default `SBI Backend APIs`).
+- `APP_VERSION` — **override opzionale** della versione applicativa: il valore
+  di default è la `version` di `package.json`, che è la source of truth.
 - `DIRETTA_DB` — SQLite file (default `data/diretta.db`).
 - `DIRETTA_CACHE_TTL` — matches cache TTL in seconds (default `15`).
 - `MONITOR_MAJOR_LEAGUES` — comma-separated major-league allowlist (exact full
@@ -256,7 +261,7 @@ docker run -p 8080:8080 sbi-bet-service
 
 | Job | Trigger | What it does |
 | --- | --- | --- |
-| `release` | push/PR | commitlint on PRs, semantic-release on `main` (seeds the `v0.0.1` baseline tag only on `main` pushes) |
+| `release` | push/PR | commitlint on PRs; su `main` semantic-release bumpa `package.json`/`package-lock.json`, committa `chore(release): X.Y.Z [skip ci]`, tagga `vX.Y.Z` e crea la GitHub Release (semina il tag baseline `v0.0.1`) |
 | `test` | push/PR | `npm ci`, generate + typecheck, OpenAPI drift check, `npm test` |
 | `build` | push/PR | builds the image; pushes `ghcr.io/<owner>/<repo>` (`latest` + `sha-<sha>`) **only on `main`** |
 | `deploy` | push to `main` only | `gcloud run deploy bet-service` with the pushed image **pinned by digest** |
@@ -267,6 +272,41 @@ One-time setup:
    (package → Settings → Visibility), otherwise Cloud Run cannot pull it.
 2. Required repository secrets: `GCP_PROJECT_ID`, `GCP_EMAIL`, `GCP_CREDENTIALS`
    (service account JSON), `GCP_APP_NAME` (legacy, unused by the new flow).
+
+## Versioning and releases
+
+**Source of truth: `package.json` → `version`.** `src/config.ts` la legge a
+runtime, quindi `APP_VERSION` (env) è solo un override opzionale e non può più
+disallinearsi: `test/config.test.ts` lo verifica.
+
+Regole semver (`.releaserc.json`): ogni release incrementa di **patch**; solo un
+commit con breaking change (`!` o `BREAKING CHANGE:`) passa a **major**.
+
+Come viene incrementata:
+
+| Caso | Chi bumpa |
+| --- | --- |
+| Merge su `main` con CI attivo | **semantic-release** (job `release`): scrive `package.json` + `package-lock.json`, crea il commit `chore(release): X.Y.Z [skip ci]`, il tag `vX.Y.Z` e la GitHub Release. |
+| Merge su `main` con `[skip ci]` (il CI non parte) | **Hook locale `post-merge`**: fa lo stesso in locale e spinge commit + tag con `npm run bump -- --push`. |
+
+Dettagli:
+
+- I commit di release contengono `[skip ci]` (e quelli spinti dal CI usano il
+  `GITHUB_TOKEN`, che non riattiva le workflow): il bump non fa partire build né
+  deploy.
+- Un merge con `[skip ci]` salta **tutte** le job (test/build/deploy): il bump lo
+  recupera l'hook in locale, mentre build e deploy partono solo dai push senza
+  `[skip ci]`.
+- L'hook si aggancia a `git pull`/`git merge` su `main` e **non ribumpa** se il
+  range già contiene un commit `chore(release)` senza lavoro successivo (caso
+  "il CI ha già rilasciato").
+- Setup una tantum: `npm run hooks` (senza, git ignora `.githooks/post-merge` e
+  `.githooks/commit-msg`).
+- Manuale: `npm run bump` (solo locale) oppure `npm run bump -- --push`.
+- **Requisito CI**: il job `release` deve poter pushare su `main`
+  (`permissions: contents: write` già presente). Se il branch è protetto con
+  required reviews, il push del commit di release va autorizzato (ruleset/bypass)
+  altrimenti semantic-release fallirà.
 
 ## Scope and behavior notes
 

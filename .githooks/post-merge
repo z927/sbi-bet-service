@@ -1,0 +1,32 @@
+#!/usr/bin/env sh
+
+# Bump della versione dopo un merge/pull su main.
+# Copre i merge fatti su GitHub con [skip ci]: lì il CI non gira, quindi la
+# source of truth (package.json) viene aggiornata in locale e spinta.
+# Se nel range entrato c'è già un commit "chore(release)" (bump fatto dal CI),
+# non si ribumpa per il lavoro già rilasciato.
+
+set -eu
+
+branch=$(git rev-parse --abbrev-ref HEAD)
+[ "$branch" = "main" ] || exit 0
+
+old=$(git rev-parse ORIG_HEAD 2>/dev/null || true)
+new=$(git rev-parse HEAD)
+[ -n "$old" ] || exit 0
+[ "$old" != "$new" ] || exit 0
+
+range="$old..$new"
+
+last_release=$(git log --format='%H %s' "$range" | grep -E '^[0-9a-f]+ chore\(release\):' | head -n 1 | cut -d' ' -f1 || true)
+if [ -n "$last_release" ]; then
+  pending=$(git rev-list --count "$last_release".."$new")
+  [ "$pending" -gt 0 ] || exit 0
+fi
+
+root=$(git rev-parse --show-toplevel)
+if ! node "$root/scripts/bump-version.mjs" --push; then
+  echo "post-merge: bump non completato; esegui a mano: npm run bump -- --push" >&2
+fi
+
+exit 0
