@@ -1,3 +1,5 @@
+import { inspect } from "node:util";
+
 import { client } from "../../scraper/client/index.ts";
 import type { Match, Statistics } from "../../scraper/models.ts";
 import { dispatchAlerts, evaluateSignals } from "../signals/index.ts";
@@ -19,7 +21,10 @@ export interface LiveMatchesStrategyHooks {
 const defaultHooks = (): LiveMatchesStrategyHooks => ({
   allowlist: configuredMajorLeagues(),
   log: (match: Match, statistics: Statistics) => {
-    console.log(`[${LIVE_MATCHES_STRATEGY}] ${match.home} - ${match.away} (${match.id})`, statistics);
+    console.log(
+      `[${LIVE_MATCHES_STRATEGY}] ${match.home} - ${match.away} (${match.id})`,
+      inspect(statistics, { depth: null, breakLength: 120 }),
+    );
   },
 });
 
@@ -39,6 +44,7 @@ export const runLiveMatchesStrategy = async (
   const results: StrategyMatchResult[] = [];
   for (const match of liveMatches) {
     const base = { matchId: match.id, home: match.home ?? "", away: match.away ?? "" };
+
     try {
       const statistics = await client.getStatistics(match.id);
       hooks.log(match, statistics);
