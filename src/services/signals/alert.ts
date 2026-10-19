@@ -7,4 +7,9 @@ export interface Alert {
   value: number | null;
   threshold: number;
   text: string;
+  tournament?: string;
+  country?: string;
+  homeScore?: number | null;
+  awayScore?: number | null;
+  touches?: number | null;
 }

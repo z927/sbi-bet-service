@@ -10,7 +10,7 @@ export const DEFAULT_TOUCHES_THRESHOLD = 0.4;
 const STAT_NAME = "Palloni toccati nell'area avversaria";
 const PERIOD = "first_half";
 const CATEGORY = "attack";
-const ALERT_TEXT = "Alert goal Over 0.5 HT";
+const ALERT_TEXT = "Alert over 0.5 HT!";
 
 const getThreshold = (env: NodeJS.ProcessEnv = process.env): number => {
   const raw = env[TOUCHES_ENV];
@@ -68,6 +68,11 @@ export const touchRatioSignal: Signal = {
       value: ratio,
       threshold,
       text: ALERT_TEXT,
+      tournament: match.tournament ?? "",
+      country: match.country ?? "",
+      homeScore: match.home_score ?? null,
+      awayScore: match.away_score ?? null,
+      touches: total,
     };
   },
 }
