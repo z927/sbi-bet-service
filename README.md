@@ -230,8 +230,10 @@ Read from environment variables via `src/config.ts`:
   sends alerts via Telegram; otherwise it’s a no-op.
 - `MONITOR_SIGNAL_TOUCHES_THRESHOLD` — threshold for touch-ratio signal (default
   `0.4`, touches in opponent box / minutes in first half ≥ threshold). The alert
-  text is fixed: `Alert goal Over 0.5 HT`. Each alert is sent at most once per
+  text is fixed: `Alert over 0.5 HT!`. Each alert is sent at most once per
   match per rule.
+- `MONITOR_SIGNAL_WIN_RATE` — win rate percentage shown in the Telegram message
+  (default `80`).
 
 Secrets must never be committed.
 

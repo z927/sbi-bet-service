@@ -48,7 +48,7 @@ export const resetSignalState = (): void => {
 
 export { touchRatioSignal, TOUCH_RATIO_SIGNAL, TOUCHES_ENV, DEFAULT_TOUCHES_THRESHOLD } from "./touch_ratio_signal.ts";
 export { firstHalfMinutes } from "./match_minutes.ts";
-export { getTelegramConfig, sendTelegram, countryFlag, TELEGRAM_BOT_TOKEN_ENV, TELEGRAM_CHAT_ID_ENV } from "./telegram.ts";
+export { getTelegramConfig, sendTelegram, countryFlag, getWinRate, TELEGRAM_BOT_TOKEN_ENV, TELEGRAM_CHAT_ID_ENV, WIN_RATE_ENV, DEFAULT_WIN_RATE } from "./telegram.ts";
 export type { Alert } from "./alert.ts";
 export type { Signal } from "./signal.ts";
 export type { TelegramConfig } from "./telegram.ts";

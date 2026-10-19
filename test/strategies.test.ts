@@ -12,6 +12,7 @@ import {
   TELEGRAM_BOT_TOKEN_ENV,
   TELEGRAM_CHAT_ID_ENV,
   TOUCHES_ENV,
+  WIN_RATE_ENV,
   resetSignalState,
 } from "../src/services/signals/index.ts";
 
@@ -184,10 +185,12 @@ test("strategy dispatches signal alerts through Telegram", async () => {
     [TELEGRAM_BOT_TOKEN_ENV]: process.env.TELEGRAM_BOT_TOKEN,
     [TELEGRAM_CHAT_ID_ENV]: process.env.TELEGRAM_CHAT_ID,
     [TOUCHES_ENV]: process.env.TOUCHES_ENV,
+    [WIN_RATE_ENV]: process.env[WIN_RATE_ENV],
   };
   process.env.TELEGRAM_BOT_TOKEN = "test-token";
   process.env.TELEGRAM_CHAT_ID = "-10042";
   delete process.env[TOUCHES_ENV];
+  delete process.env[WIN_RATE_ENV];
   statsBody = ALERT_STATS_FIXTURE;
   try {
     const result = await runLiveMatchesStrategy({}, silentHooks());
@@ -198,10 +201,13 @@ test("strategy dispatches signal alerts through Telegram", async () => {
     assert.deepEqual(telegramBodies[0], {
       chat_id: "-10042",
       text: [
-        "⚽ Alert goal Over 0.5 HT",
+        "⚽ Alert over 0.5 HT!",
         "🏆 ITALIA: Serie A 🇮🇹",
-        "⏱ 45'",
+        "💹 Live, Win Rate: ➡️ 80%",
+        "⏱ 45°",
         "🎽 Inter vs Milan [1-0]",
+        "ℹ️ Tocchi area: 30",
+        "ℹ️ Rapporto: 0.67",
       ].join("\n"),
     });
   } finally {
@@ -214,10 +220,12 @@ test("strategy does not fail the match when the Telegram dispatch errors", async
     [TELEGRAM_BOT_TOKEN_ENV]: process.env.TELEGRAM_BOT_TOKEN,
     [TELEGRAM_CHAT_ID_ENV]: process.env.TELEGRAM_CHAT_ID,
     [TOUCHES_ENV]: process.env.TOUCHES_ENV,
+    [WIN_RATE_ENV]: process.env[WIN_RATE_ENV],
   };
   process.env.TELEGRAM_BOT_TOKEN = "test-token";
   process.env.TELEGRAM_CHAT_ID = "-10042";
   delete process.env[TOUCHES_ENV];
+  delete process.env[WIN_RATE_ENV];
   statsBody = ALERT_STATS_FIXTURE;
   telegramFail = true;
   const originalError = console.error;

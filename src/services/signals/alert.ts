@@ -11,4 +11,5 @@ export interface Alert {
   country?: string;
   homeScore?: number | null;
   awayScore?: number | null;
+  touches?: number | null;
 }

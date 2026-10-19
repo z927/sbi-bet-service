@@ -6,11 +6,13 @@ import {
   TELEGRAM_CHAT_ID_ENV,
   TOUCH_RATIO_SIGNAL,
   TOUCHES_ENV,
+  WIN_RATE_ENV,
   countryFlag,
   dispatchAlerts,
   evaluateSignals,
   firstHalfMinutes,
   getTelegramConfig,
+  getWinRate,
   resetSignalState,
   sendTelegram,
   touchRatioSignal,
@@ -27,11 +29,12 @@ const makeAlert = (overrides: Partial<Alert> = {}): Alert => ({
   minute: 23,
   value: 0.5333,
   threshold: 0.4,
-  text: "Alert goal Over 0.5 HT",
+  text: "Alert over 0.5 HT!",
   tournament: "Serie A",
   country: "Italia",
   homeScore: 1,
   awayScore: 0,
+  touches: 30,
   ...overrides,
 });
 
@@ -82,7 +85,7 @@ beforeEach(() => {
   globalThis.fetch = mockFetch;
   captured = null;
   nextResponse = makeResponse("{}");
-  captureEnv(TELEGRAM_BOT_TOKEN_ENV, TELEGRAM_CHAT_ID_ENV, TOUCHES_ENV);
+  captureEnv(TELEGRAM_BOT_TOKEN_ENV, TELEGRAM_CHAT_ID_ENV, TOUCHES_ENV, WIN_RATE_ENV);
   resetSignalState();
 });
 
@@ -124,23 +127,43 @@ test("sendTelegram posts the formatted alert to the bot endpoint", async () => {
   assert.deepEqual(JSON.parse(String(captured.init?.body)), {
     chat_id: "-100",
     text: [
-      "⚽ Alert goal Over 0.5 HT",
+      "⚽ Alert over 0.5 HT!",
       "🏆 Serie A 🇮🇹",
-      "⏱ 23'",
+      "💹 Live, Win Rate: ➡️ 80%",
+      "⏱ 23°",
       "🎽 Inter vs Milan [1-0]",
+      "ℹ️ Tocchi area: 30",
+      "ℹ️ Rapporto: 0.53",
     ].join("\n"),
   });
 });
 
-test("sendTelegram falls back to n/a without a minute or score", async () => {
+test("sendTelegram falls back to n/a for missing minute, score and touches", async () => {
   await sendTelegram(
-    makeAlert({ minute: null, homeScore: null, awayScore: null }),
+    makeAlert({ minute: null, homeScore: null, awayScore: null, touches: null, value: null }),
     { token: "t", chatId: "c" },
   );
 
   const body = JSON.parse(String(captured?.init?.body));
   assert.match(body.text, /⏱ n\/a/);
   assert.match(body.text, /🎽 Inter vs Milan$/m);
+  assert.match(body.text, /ℹ️ Tocchi area: n\/a/);
+  assert.match(body.text, /ℹ️ Rapporto: n\/a/);
+});
+
+test("getWinRate defaults to 80 and honours the env override", () => {
+  assert.equal(getWinRate({}), 80);
+  assert.equal(getWinRate({ [WIN_RATE_ENV]: "72.5" }), 72);
+  assert.equal(getWinRate({ [WIN_RATE_ENV]: "abc" }), 80);
+});
+
+test("sendTelegram reads the win rate from the env", async () => {
+  process.env[WIN_RATE_ENV] = "95";
+
+  await sendTelegram(makeAlert(), { token: "t", chatId: "c" });
+
+  const body = JSON.parse(String(captured?.init?.body));
+  assert.match(body.text, /💹 Live, Win Rate: ➡️ 95%/);
 });
 
 test("countryFlag maps known countries and ignores unknown ones", () => {
@@ -210,13 +233,14 @@ test("touchRatioSignal fires when the ratio meets the default threshold", () => 
 
   assert.ok(alert);
   assert.equal(alert.rule, TOUCH_RATIO_SIGNAL);
-  assert.equal(alert.text, "Alert goal Over 0.5 HT");
+  assert.equal(alert.text, "Alert over 0.5 HT!");
   assert.equal(alert.minute, 45);
   assert.equal(alert.threshold, DEFAULT_TOUCHES_THRESHOLD);
   assert.equal(alert.tournament, "Serie A");
   assert.equal(alert.country, "Italia");
   assert.equal(alert.homeScore, 1);
   assert.equal(alert.awayScore, 0);
+  assert.equal(alert.touches, 30);
   assert.ok(Math.abs(alert.value! - 30 / 45) < 1e-9);
 });
 

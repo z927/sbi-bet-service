@@ -7,6 +7,8 @@ export interface TelegramConfig {
 
 export const TELEGRAM_BOT_TOKEN_ENV = "TELEGRAM_BOT_TOKEN";
 export const TELEGRAM_CHAT_ID_ENV = "TELEGRAM_CHAT_ID";
+export const WIN_RATE_ENV = "MONITOR_SIGNAL_WIN_RATE";
+export const DEFAULT_WIN_RATE = 80;
 
 const TELEGRAM_API = "https://api.telegram.org";
 
@@ -57,6 +59,15 @@ export const getTelegramConfig = (env: NodeJS.ProcessEnv = process.env): Telegra
   return { token, chatId };
 }
 
+export const getWinRate = (env: NodeJS.ProcessEnv = process.env): number => {
+  const raw = env[WIN_RATE_ENV]?.trim();
+  if (!raw) {
+    return DEFAULT_WIN_RATE;
+  }
+  const parsed = Number.parseFloat(raw);
+  return Number.isFinite(parsed) && parsed >= 0 ? Math.trunc(parsed) : DEFAULT_WIN_RATE;
+}
+
 const formatScore = (alert: Alert): string => {
   if (typeof alert.homeScore !== "number" || typeof alert.awayScore !== "number") {
     return "";
@@ -65,14 +76,19 @@ const formatScore = (alert: Alert): string => {
 }
 
 const formatAlert = (alert: Alert): string => {
-  const minute = alert.minute === null ? "n/a" : `${alert.minute}'`;
+  const minute = alert.minute === null ? "n/a" : `${alert.minute}°`;
   const flag = countryFlag(alert.country);
   const league = [alert.tournament, flag].filter((part) => part).join(" ");
+  const touches = alert.touches === null || alert.touches === undefined ? "n/a" : String(alert.touches);
+  const ratio = alert.value === null ? "n/a" : alert.value.toFixed(2);
   return [
     `⚽ ${alert.text}`,
     `🏆 ${league}`,
+    `💹 Live, Win Rate: ➡️ ${getWinRate()}%`,
     `⏱ ${minute}`,
     `🎽 ${alert.home} vs ${alert.away}${formatScore(alert)}`,
+    `ℹ️ Tocchi area: ${touches}`,
+    `ℹ️ Rapporto: ${ratio}`,
   ].join("\n");
 }
 
