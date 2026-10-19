@@ -33,7 +33,12 @@ export const dispatchAlerts = async (
   sender: (alert: Alert) => Promise<boolean> = sendTelegram,
 ): Promise<void> => {
   for (const alert of alerts) {
-    await sender(alert);
+    try {
+      await sender(alert);
+    } catch (exc) {
+      const error = exc instanceof Error ? exc.message : String(exc);
+      console.error(`[signals] dispatch failed for ${alert.rule} (match ${alert.matchId}): ${error}`);
+    }
   }
 }
 
@@ -43,7 +48,7 @@ export const resetSignalState = (): void => {
 
 export { touchRatioSignal, TOUCH_RATIO_SIGNAL, TOUCHES_ENV, DEFAULT_TOUCHES_THRESHOLD } from "./touch_ratio_signal.ts";
 export { firstHalfMinutes } from "./match_minutes.ts";
-export { getTelegramConfig, sendTelegram, TELEGRAM_BOT_TOKEN_ENV, TELEGRAM_CHAT_ID_ENV } from "./telegram.ts";
+export { getTelegramConfig, sendTelegram, countryFlag, TELEGRAM_BOT_TOKEN_ENV, TELEGRAM_CHAT_ID_ENV } from "./telegram.ts";
 export type { Alert } from "./alert.ts";
 export type { Signal } from "./signal.ts";
 export type { TelegramConfig } from "./telegram.ts";

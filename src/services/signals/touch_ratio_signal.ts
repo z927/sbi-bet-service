@@ -68,6 +68,10 @@ export const touchRatioSignal: Signal = {
       value: ratio,
       threshold,
       text: ALERT_TEXT,
+      tournament: match.tournament ?? "",
+      country: match.country ?? "",
+      homeScore: match.home_score ?? null,
+      awayScore: match.away_score ?? null,
     };
   },
 }
