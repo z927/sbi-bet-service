@@ -7,10 +7,15 @@ export const TOUCH_RATIO_SIGNAL = "touch-ratio-over-0.5-ht";
 export const TOUCHES_ENV = "MONITOR_SIGNAL_TOUCHES_THRESHOLD";
 export const DEFAULT_TOUCHES_THRESHOLD = 0.4;
 
-const STAT_NAME = "Palloni toccati nell'area avversaria";
-const PERIOD = "first_half";
-const CATEGORY = "attack";
+export const TOUCH_STAT_NAME = "Palloni toccati nell'area avversaria";
+export const TOUCH_PERIOD = "first_half";
+export const TOUCH_CATEGORY = "attack";
 const ALERT_TEXT = "Alert over 0.5 HT!";
+
+export interface TouchSnapshot {
+  touches: number;
+  ratio: number;
+}
 
 const getThreshold = (env: NodeJS.ProcessEnv = process.env): number => {
   const raw = env[TOUCHES_ENV];
@@ -37,26 +42,33 @@ const findStatItem = (
   return periodCategory.find((item) => item.name === name) ?? null;
 }
 
+export const touchSnapshot = (match: Match, statistics: Statistics): TouchSnapshot | null => {
+  const item = findStatItem(statistics, TOUCH_PERIOD, TOUCH_CATEGORY, TOUCH_STAT_NAME);
+  if (item === null) {
+    return null;
+  }
+  const home = Number.parseInt(item.home, 10);
+  const away = Number.parseInt(item.away, 10);
+  if (Number.isNaN(home) || Number.isNaN(away)) {
+    return null;
+  }
+  const minutes = firstHalfMinutes(match);
+  if (minutes === null || minutes <= 0) {
+    return null;
+  }
+  const touches = home + away;
+  return { touches, ratio: touches / minutes };
+}
+
 export const touchRatioSignal: Signal = {
   name: TOUCH_RATIO_SIGNAL,
   evaluate(match: Match, statistics: Statistics): Alert | null {
-    const item = findStatItem(statistics, PERIOD, CATEGORY, STAT_NAME);
-    if (item === null) {
+    const snapshot = touchSnapshot(match, statistics);
+    if (snapshot === null) {
       return null;
     }
-    const home = Number.parseInt(item.home, 10);
-    const away = Number.parseInt(item.away, 10);
-    if (Number.isNaN(home) || Number.isNaN(away)) {
-      return null;
-    }
-    const minutes = firstHalfMinutes(match);
-    if (minutes === null || minutes <= 0) {
-      return null;
-    }
-    const total = home + away;
-    const ratio = total / minutes;
     const threshold = getThreshold();
-    if (ratio < threshold) {
+    if (snapshot.ratio < threshold) {
       return null;
     }
     return {
@@ -64,15 +76,15 @@ export const touchRatioSignal: Signal = {
       matchId: match.id,
       home: match.home ?? "",
       away: match.away ?? "",
-      minute: minutes,
-      value: ratio,
+      minute: firstHalfMinutes(match),
+      value: snapshot.ratio,
       threshold,
       text: ALERT_TEXT,
       tournament: match.tournament ?? "",
       country: match.country ?? "",
       homeScore: match.home_score ?? null,
       awayScore: match.away_score ?? null,
-      touches: total,
+      touches: snapshot.touches,
     };
   },
 }

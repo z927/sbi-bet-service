@@ -232,6 +232,10 @@ Read from environment variables via `src/config.ts`:
   `0.4`, touches in opponent box / minutes in first half ≥ threshold). The alert
   text is fixed: `Alert over 0.5 HT!`. Each alert is sent at most once per
   match per rule.
+- Goal-over-0.5 signal — fires on a 0-0 score inside fixed windows: minute
+  10'-30' of the first half (`Alert Goal Over 0.5 HT`) and minute 50'-70'
+  (absolute clock) of the second half (`Alert Goal Over 0.5 FT`). Every other
+  score is ignored. Each alert is sent at most once per match per rule.
 - `MONITOR_SIGNAL_WIN_RATE` — win rate percentage shown in the Telegram message
   (default `80`).
 
