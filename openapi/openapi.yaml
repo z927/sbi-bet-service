@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: SBI Backend APIs
-  version: 0.2.7
+  version: 0.2.8
   description: >-
     Scoped contract for Schedule, Monitoring and Matches endpoints.
     Extracted from SBI Backend APIs v0.0.1. No property is marked required
