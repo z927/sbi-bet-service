@@ -44,7 +44,14 @@ export const buildServer = async (): Promise<FastifyInstance> => {
 
   await app.register(swagger, {
     mode: "static",
-    specification: { path: CONTRACT_PATH, baseDir: resolve(HERE, "..") },
+    specification: {
+      path: CONTRACT_PATH,
+      baseDir: resolve(HERE, ".."),
+      postProcessor: (document) => ({
+        ...document,
+        info: { ...document.info, version: settings.appVersion },
+      }),
+    },
   });
   await app.register(swaggerUi, { routePrefix: "/docs" });
 

@@ -3,10 +3,11 @@ import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { syncContractVersion } from "./sync-contract-version.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const PUSH = process.argv.includes("--push");
-const RELEASE_FILES = ["package.json", "package-lock.json"];
+const RELEASE_FILES = ["package.json", "package-lock.json", "openapi/openapi.yaml"];
 
 const git = (args) =>
   execFileSync("git", args, {
@@ -60,6 +61,12 @@ writeJson(lockPath, (lock) => {
   if (lock.packages && lock.packages[""]) lock.packages[""].version = next;
   return lock;
 });
+
+try {
+  syncContractVersion(next);
+} catch (error) {
+  fail(error instanceof Error ? error.message : String(error));
+}
 
 git(["add", ...RELEASE_FILES]);
 git(["commit", "-m", `chore(release): ${next} [skip ci]`]);

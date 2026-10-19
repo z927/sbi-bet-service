@@ -4,6 +4,7 @@ import { readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse } from "yaml";
+import packageJson from "../package.json" with { type: "json" };
 import { SBI_ROUTES } from "../src/sbi/routes.ts";
 import { SCRAPER_ROUTES } from "../src/scraper/routes.ts";
 import { buildServer } from "../src/server.ts";
@@ -19,6 +20,7 @@ after(() => {
 const HERE = dirname(fileURLToPath(import.meta.url));
 const CONTRACT_PATH = resolve(HERE, "..", "openapi", "openapi.yaml");
 const contract = parse(readFileSync(CONTRACT_PATH, "utf8")) as {
+  info: { version: string };
   paths: Record<string, Record<string, { operationId?: string }>>;
 };
 
@@ -56,5 +58,36 @@ test("served /openapi.json matches the maintained contract", async () => {
     assert.deepEqual(served.paths, contract.paths);
   } finally {
     await app.close();
+  }
+});
+
+test("contract file info.version equals the project version", () => {
+  assert.equal(contract.info.version, packageJson.version);
+});
+
+test("served /openapi.json info.version equals the project version", async () => {
+  const app = await buildServer();
+  try {
+    const response = await app.inject({ method: "GET", url: "/openapi.json" });
+    const served = response.json() as { info: { version: string } };
+    assert.equal(served.info.version, packageJson.version);
+  } finally {
+    await app.close();
+  }
+});
+
+test("served /openapi.json info.version follows APP_VERSION override", async () => {
+  process.env["APP_VERSION"] = "9.9.9";
+  try {
+    const app = await buildServer();
+    try {
+      const response = await app.inject({ method: "GET", url: "/openapi.json" });
+      const served = response.json() as { info: { version: string } };
+      assert.equal(served.info.version, "9.9.9");
+    } finally {
+      await app.close();
+    }
+  } finally {
+    delete process.env["APP_VERSION"];
   }
 });
