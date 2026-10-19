@@ -72,7 +72,7 @@ npm run generate
 | --- | --- | --- |
 | POST | `/api/v1/schedule` | `scheduleEvents` |
 | GET | `/api/v1/auto-schedule` | `autoScheduleEvents` |
-| POST | `/api/v1/monitor` | `monitorFixtures` |
+| GET | `/api/v1/monitor` | `monitorFixtures` |
 | GET | `/api/v1/scheduled-fixtures` | `getScheduledFixtures` |
 | GET | `/api/v1/monitored` | `getMonitoredFixtures` |
 | GET | `/api/v1/matches` | `getMatches` |
@@ -101,7 +101,7 @@ parameters return `422`.
    day's matches, one hour range per match, in timezone `SCHEDULER_TIME_ZONE`.
    Day-of-month/month and the day-of-week name are pinned to today. Then it
    creates/updates **one** Cloud Scheduler job (`GCP_JOB_ID`) targeting
-   `POST {MONITOR_JOB_TARGET_BASE_URL}/api/v1/monitor` via ADC auth.
+   `GET {MONITOR_JOB_TARGET_BASE_URL}/api/v1/monitor` via ADC auth.
    (GCP evaluates day-of-month and day-of-week with OR; the daily upsert keeps
    the extra weekday occurrences harmless in practice.)
 5. `409` when the existing job already fires today; `200` otherwise. When no
@@ -220,7 +220,7 @@ Read from environment variables via `src/config.ts`:
 - `GCP_PROJECT_ID`, `GCP_REGION`, `GCP_JOB_ID` — Cloud Scheduler location of the
   auto-schedule job (injected at deploy time by CI).
 - `MONITOR_JOB_TARGET_BASE_URL` — public base URL of this service; the scheduler
-  job POSTs `/api/v1/monitor` to it. Empty disables scheduler creation.
+  job GETs `/api/v1/monitor` to it. Empty disables scheduler creation.
 - `SCHEDULER_TIME_ZONE` — timezone for the scheduler cron (default `Europe/Rome`).
 - `MONITOR_LEAD_MINUTES` — minutes subtracted from each match start to compute
   `beginMonitoringTime` (default `0`).
@@ -312,10 +312,11 @@ Dettagli:
 
 - All schema properties are optional, matching the source specification.
 - JSON wire names keep camelCase (`fixtureId`, `firstHalfScore`, `startTime`, …).
-- SBI schedule state is kept **in memory only**; `/api/v1/monitor` calls the
+- SBI schedule state is kept **in memory only**; `GET /api/v1/monitor` calls the
   diretta scraper: it selects live matches from major leagues
   (`MONITOR_MAJOR_LEAGUES`) and prints their statistics to the console for now.
-  The request body is still required by the contract but ignored.
+  The endpoint takes no body (contract revision: it was POST with a
+  `FixtureDto` array body).
 - `GET /api/v1/auto-schedule` persists the day's upcoming major-league matches
   to SQLite with `monitored: true` and manages the Cloud Scheduler job described
   above. Monitor still does not feed the other endpoints (`/monitored`,

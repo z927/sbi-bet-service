@@ -112,10 +112,8 @@ export const autoScheduleEvents = async (
     schedule: cron,
     timeZone: settings.schedulerTimeZone,
     httpTarget: {
-      httpMethod: "POST",
+      httpMethod: "GET",
       uri: `${settings.monitorJobTargetBaseUrl.replace(/\/+$/, "")}/api/v1/monitor`,
-      headers: { "Content-Type": "application/json" },
-      body: Buffer.from("[]").toString("base64"),
     },
   };
 

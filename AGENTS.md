@@ -35,7 +35,7 @@ FavouriteItem:
 The OpenAPI schema does not mark the properties of ScheduleRequest, DefaultItem, or FavouriteItem as required. Do not make them mandatory without an explicit contract change.
 Monitoring
 Method	Path	Operation ID	Contract
-POST	/api/v1/monitor	monitorFixtures	Required JSON array of FixtureDto; documented response 200 with BaseResponse.
+GET	/api/v1/monitor	monitorFixtures	No request body; documented response 200 with BaseResponse. Contract revision: it was POST with a required JSON array of FixtureDto.
 GET	/restore	restoreFixtures	Optional query parameter day (date); documented response 200 with BaseResponse. Deprecated in the source specification.
 
 

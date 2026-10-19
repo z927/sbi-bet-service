@@ -45,10 +45,13 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /**
+         * Start monitoring fixtures
+         * @description Starts the live monitoring run. No request body; the operation is triggered by the call itself (contract revision: was POST with a FixtureDto array body).
+         */
+        get: operations["monitorFixtures"];
         put?: never;
-        /** Start monitoring fixtures */
-        post: operations["monitorFixtures"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -464,11 +467,7 @@ export interface operations {
             path?: never;
             cookie?: never;
         };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["FixtureDto"][];
-            };
-        };
+        requestBody?: never;
         responses: {
             /** @description OK */
             200: {

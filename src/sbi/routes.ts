@@ -1,7 +1,7 @@
 import type { FastifyInstance } from "fastify";
 import { ValidationError } from "../errors.ts";
 import { isIsoDate } from "../validation.ts";
-import type { FixtureDto, ScheduleRequest } from "../types.ts";
+import type { ScheduleRequest } from "../types.ts";
 import * as schedule from "../services/schedule_service.ts";
 import * as autoSchedule from "../services/auto_schedule_service.ts";
 import * as monitoring from "../services/monitoring_service.ts";
@@ -16,7 +16,7 @@ export interface RouteMetadata {
 export const SBI_ROUTES: readonly RouteMetadata[] = [
   { method: "POST", path: "/api/v1/schedule", operationId: "scheduleEvents" },
   { method: "GET", path: "/api/v1/auto-schedule", operationId: "autoScheduleEvents" },
-  { method: "POST", path: "/api/v1/monitor", operationId: "monitorFixtures" },
+  { method: "GET", path: "/api/v1/monitor", operationId: "monitorFixtures" },
   { method: "GET", path: "/api/v1/scheduled-fixtures", operationId: "getScheduledFixtures" },
   { method: "GET", path: "/api/v1/monitored", operationId: "getMonitoredFixtures" },
   { method: "GET", path: "/api/v1/matches", operationId: "getMatches" },
@@ -45,57 +45,6 @@ const scheduleRequestSchema = {
   properties: {
     defaultFixtures: { type: "array", items: defaultItemSchema },
     favouriteFixtures: { type: "array", items: favouriteItemSchema },
-  },
-} as const;
-
-const leagueDtoSchema = {
-  type: "object",
-  properties: {
-    name: { type: "string" },
-    country: { type: "string" },
-    leagueId: { type: "integer" },
-  },
-} as const;
-
-const singleItemDtoSchema = {
-  type: "object",
-  properties: {
-    team: { type: "string" },
-    teamId: { type: "integer" },
-    score: { type: "integer" },
-    favourite: { type: "boolean" },
-  },
-} as const;
-
-const infoDtoSchema = {
-  type: "object",
-  properties: {
-    statusDescription: { type: "string" },
-    monitored: { type: "boolean" },
-    elapsed: { type: "integer" },
-    favouriteStrategyUsed: { type: "boolean" },
-  },
-} as const;
-
-const timeDtoSchema = {
-  type: "object",
-  properties: {
-    startTime: { type: "string" },
-    beginMonitoringTime: { type: "string" },
-    endMonitoringTime: { type: "string" },
-  },
-} as const;
-
-const fixtureDtoSchema = {
-  type: "object",
-  properties: {
-    fixtureId: { type: "integer" },
-    league: leagueDtoSchema,
-    home: singleItemDtoSchema,
-    away: singleItemDtoSchema,
-    info: infoDtoSchema,
-    time: timeDtoSchema,
-    period: { type: "string" },
   },
 } as const;
 
@@ -135,15 +84,8 @@ export const sbiRoutes = (app: FastifyInstance): void => {
     autoSchedule.autoScheduleEvents(),
   );
 
-  app.post<{ Body: FixtureDto[] }>(
-    "/api/v1/monitor",
-    {
-      schema: {
-        operationId: "monitorFixtures",
-        body: { type: "array", items: fixtureDtoSchema },
-      },
-    },
-    async (request) => monitoring.monitorFixtures(request.body ?? []),
+  app.get("/api/v1/monitor", { schema: { operationId: "monitorFixtures" } }, async () =>
+    monitoring.monitorFixtures(),
   );
 
   app.get("/api/v1/scheduled-fixtures", { schema: { operationId: "getScheduledFixtures" } }, () =>
