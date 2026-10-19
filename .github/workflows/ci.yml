@@ -145,4 +145,7 @@ jobs:
             --cpu-throttling \
             --cpu-boost \
             --allow-unauthenticated \
-            --set-env-vars "GCP_PROJECT_ID=bet365-bot,GCP_REGION=europe-west6,GCP_JOB_ID=bet-monitoring-matches-scheduler,GCP_JOB_ID_STATS_DELAY=sbi-monitoring-matches-scheduler"
+            --set-env-vars "GCP_PROJECT_ID=bet365-bot" \
+            --set-env-vars "GCP_REGION=europe-west6" \
+            --set-env-vars "GCP_JOB_ID=bet-monitoring-matches-scheduler" \
+            --set-env-vars "GCP_JOB_ID_STATS_DELAY=sbi-monitoring-matches-scheduler"

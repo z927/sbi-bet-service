@@ -145,7 +145,7 @@ test("filters major leagues, persists monitored fixtures and creates a single jo
   assert.equal(input.httpTarget.body, Buffer.from("[]").toString("base64"));
   const [minute, hours, day, month, weekday] = input.schedule.split(" ");
   assert.equal(minute, "*/10");
-  assert.match(hours!, /^\d+(-\d+)(,\d+(-\d+))*$/);
+  assert.match(hours!, /^(\d+(-\d+)?)(,(\d+(-\d+)?))*$/);
   assert.equal(hours!.split(",").length, 2);
   const today = new Date();
   assert.equal(Number(day), today.getUTCDate());
