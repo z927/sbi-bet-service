@@ -91,19 +91,8 @@ test("GET /api/v1/auto-schedule returns BaseResponse (scheduler unconfigured: 20
   assert.equal(second.statusCode, 200);
 });
 
-test("POST /api/v1/monitor runs the live strategy and returns BaseResponse", async () => {
-  const fixtures = [
-    {
-      fixtureId: 10,
-      league: { name: "Serie A", country: "Italia", leagueId: 1 },
-      home: { team: "Inter", teamId: 1, score: 1, favourite: true },
-      away: { team: "Milan", teamId: 2, score: 0, favourite: false },
-      info: { statusDescription: "LIVE", monitored: true, elapsed: 30, favouriteStrategyUsed: false },
-      time: { startTime: "2026-01-01T12:00:00", beginMonitoringTime: "", endMonitoringTime: "" },
-      period: "1H",
-    },
-  ];
-  const response = await app.inject({ method: "POST", url: "/api/v1/monitor", payload: fixtures });
+test("GET /api/v1/monitor runs the live strategy and returns BaseResponse", async () => {
+  const response = await app.inject({ method: "GET", url: "/api/v1/monitor" });
   assert.equal(response.statusCode, 200);
   const body = response.json();
   assert.equal(typeof body.message, "string");
@@ -114,9 +103,9 @@ test("POST /api/v1/monitor runs the live strategy and returns BaseResponse", asy
   assert.deepEqual(monitored.json(), []);
 });
 
-test("POST /api/v1/monitor rejects non-array body with 422", async () => {
-  const response = await app.inject({ method: "POST", url: "/api/v1/monitor", payload: { fixtureId: 1 } });
-  assert.equal(response.statusCode, 422);
+test("POST /api/v1/monitor is not part of the contract", async () => {
+  const response = await app.inject({ method: "POST", url: "/api/v1/monitor", payload: [] });
+  assert.equal(response.statusCode, 404);
 });
 
 test("GET /api/v1/scheduled-fixtures returns BaseResponse", async () => {

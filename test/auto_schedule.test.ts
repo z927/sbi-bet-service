@@ -140,9 +140,10 @@ test("filters major leagues, persists monitored fixtures and creates a single jo
   assert.equal(created.jobId, "test-job");
   const input = created.input!;
   assert.equal(input.timeZone, "UTC");
-  assert.equal(input.httpTarget.httpMethod, "POST");
+  assert.equal(input.httpTarget.httpMethod, "GET");
   assert.equal(input.httpTarget.uri, "https://svc.example.run.app/api/v1/monitor");
-  assert.equal(input.httpTarget.body, Buffer.from("[]").toString("base64"));
+  assert.equal(input.httpTarget.body, undefined);
+  assert.equal(input.httpTarget.headers, undefined);
   const [minute, hours, day, month, weekday] = input.schedule.split(" ");
   assert.equal(minute, "*/10");
   assert.match(hours!, /^(\d+(-\d+)?)(,(\d+(-\d+)?))*$/);

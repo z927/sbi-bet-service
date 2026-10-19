@@ -4,7 +4,7 @@ import { runLiveMatchesStrategy } from "./strategies/index.ts";
 
 const monitored = new Map<number, FixtureDto>();
 
-export const monitorFixtures = async (_fixtures: FixtureDto[]): Promise<BaseResponse> => {
+export const monitorFixtures = async (): Promise<BaseResponse> => {
   const result = await runLiveMatchesStrategy();
   return baseResponse(
     `Monitored ${result.enriched}/${result.matches} live fixtures (${result.failures} failures)`,

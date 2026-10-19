@@ -64,19 +64,15 @@ paths:
               schema:
                 $ref: '#/components/schemas/BaseResponse'
   /api/v1/monitor:
-    post:
+    get:
       tags:
         - Monitoring
       operationId: monitorFixtures
       summary: Start monitoring fixtures
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/FixtureDto'
+      description: >-
+        Starts the live monitoring run. No request body; the operation is
+        triggered by the call itself (contract revision: was POST with a
+        FixtureDto array body).
       responses:
         '200':
           description: OK
