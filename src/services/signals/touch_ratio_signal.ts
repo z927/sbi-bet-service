@@ -1,7 +1,7 @@
 import type { Match, StatItem, Statistics } from "../../scraper/models.ts";
 import type { Signal } from "./signal.ts";
 import type { Alert } from "./alert.ts";
-import { firstHalfMinutes } from "./match_minutes.ts";
+import { firstHalfMinutes, secondHalfMinutes, type MatchPeriod } from "./match_minutes.ts";
 
 export const TOUCH_RATIO_SIGNAL = "touch-ratio-over-0.5-ht";
 export const TOUCHES_ENV = "MONITOR_SIGNAL_TOUCHES_THRESHOLD";
@@ -42,8 +42,12 @@ const findStatItem = (
   return periodCategory.find((item) => item.name === name) ?? null;
 }
 
-export const touchSnapshot = (match: Match, statistics: Statistics): TouchSnapshot | null => {
-  const item = findStatItem(statistics, TOUCH_PERIOD, TOUCH_CATEGORY, TOUCH_STAT_NAME);
+export const touchSnapshot = (
+  match: Match,
+  statistics: Statistics,
+  period: MatchPeriod = TOUCH_PERIOD,
+): TouchSnapshot | null => {
+  const item = findStatItem(statistics, period, TOUCH_CATEGORY, TOUCH_STAT_NAME);
   if (item === null) {
     return null;
   }
@@ -52,7 +56,7 @@ export const touchSnapshot = (match: Match, statistics: Statistics): TouchSnapsh
   if (Number.isNaN(home) || Number.isNaN(away)) {
     return null;
   }
-  const minutes = firstHalfMinutes(match);
+  const minutes = period === "second_half" ? secondHalfMinutes(match) : firstHalfMinutes(match);
   if (minutes === null || minutes <= 0) {
     return null;
   }

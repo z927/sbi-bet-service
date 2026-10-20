@@ -53,3 +53,15 @@ export const firstHalfMinutes = (match: Match, now = Date.now() / 1000): number 
   }
   return null;
 }
+
+export const secondHalfMinutes = (match: Match, now = Date.now() / 1000): number | null => {
+  if (match.stage_id !== SECOND_HALF_STAGE) {
+    return null;
+  }
+  const start = match.stage_start;
+  if (!start) {
+    return null;
+  }
+  const elapsed = Math.trunc((now - start) / 60) + 1;
+  return Math.min(FIRST_HALF_MINUTES, Math.max(1, elapsed));
+}

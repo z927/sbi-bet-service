@@ -59,10 +59,12 @@ export {
   GOAL_OVER_SIGNAL,
   GOAL_OVER_HT_TEXT,
   GOAL_OVER_FT_TEXT,
+  GOAL_RATIO_ENV,
+  DEFAULT_GOAL_RATIO_THRESHOLD,
   FIRST_HALF_WINDOW,
   SECOND_HALF_WINDOW,
 } from "./goal_over_signal.ts";
-export { firstHalfMinutes, matchMinute, matchPeriod } from "./match_minutes.ts";
+export { firstHalfMinutes, matchMinute, matchPeriod, secondHalfMinutes } from "./match_minutes.ts";
 export type { MatchPeriod } from "./match_minutes.ts";
 export { getTelegramConfig, sendTelegram, countryFlag, getWinRate, TELEGRAM_BOT_TOKEN_ENV, TELEGRAM_CHAT_ID_ENV, WIN_RATE_ENV, DEFAULT_WIN_RATE } from "./telegram.ts";
 export type { Alert } from "./alert.ts";

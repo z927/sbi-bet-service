@@ -1,11 +1,13 @@
 import { test, beforeEach, after } from "node:test";
 import assert from "node:assert/strict";
 import {
+  DEFAULT_GOAL_RATIO_THRESHOLD,
   DEFAULT_TOUCHES_THRESHOLD,
   FIRST_HALF_WINDOW,
   GOAL_OVER_FT_TEXT,
   GOAL_OVER_HT_TEXT,
   GOAL_OVER_SIGNAL,
+  GOAL_RATIO_ENV,
   SECOND_HALF_WINDOW,
   TELEGRAM_BOT_TOKEN_ENV,
   TELEGRAM_CHAT_ID_ENV,
@@ -22,6 +24,7 @@ import {
   matchMinute,
   matchPeriod,
   resetSignalState,
+  secondHalfMinutes,
   sendTelegram,
   touchRatioSignal,
   type Alert,
@@ -80,6 +83,14 @@ const touchStats = (home: string, away: string): Statistics => ({
   second_half: {},
 });
 
+const touchStatsSecondHalf = (home: string, away: string): Statistics => ({
+  all: {},
+  first_half: {},
+  second_half: {
+    attack: [{ id: 1, name: "Palloni toccati nell'area avversaria", home, away }],
+  },
+});
+
 const makeResponse = (body: string, ok = true, status = 200): Response => {
   return { ok, status, text: async () => body } as unknown as Response;
 }
@@ -106,7 +117,7 @@ beforeEach(() => {
   globalThis.fetch = mockFetch;
   captured = null;
   nextResponse = makeResponse("{}");
-  captureEnv(TELEGRAM_BOT_TOKEN_ENV, TELEGRAM_CHAT_ID_ENV, TOUCHES_ENV, WIN_RATE_ENV);
+  captureEnv(TELEGRAM_BOT_TOKEN_ENV, TELEGRAM_CHAT_ID_ENV, TOUCHES_ENV, WIN_RATE_ENV, GOAL_RATIO_ENV);
   resetSignalState();
 });
 
@@ -312,6 +323,22 @@ test("firstHalfMinutes returns null when minutes cannot be determined", () => {
   assert.equal(firstHalfMinutes(signalMatch({ stage_id: 20 })), null);
 });
 
+test("secondHalfMinutes derives elapsed minutes from stage_start", () => {
+  const now = 1700000000 + 7 * 60;
+  assert.equal(secondHalfMinutes(signalMatch({ stage_id: 13 }), now), 8);
+});
+
+test("secondHalfMinutes clamps elapsed minutes to 1..45", () => {
+  assert.equal(secondHalfMinutes(signalMatch({ stage_id: 13 }), 1700000000 - 600), 1);
+  assert.equal(secondHalfMinutes(signalMatch({ stage_id: 13 }), 1700000000 + 99 * 60), 45);
+});
+
+test("secondHalfMinutes returns null outside the second half", () => {
+  assert.equal(secondHalfMinutes(signalMatch({ stage_id: 12 })), null);
+  assert.equal(secondHalfMinutes(signalMatch({ stage_id: 20 })), null);
+  assert.equal(secondHalfMinutes(signalMatch({ stage_id: 13, stage_start: null })), null);
+});
+
 test("matchPeriod maps only first and second half stages", () => {
   assert.equal(matchPeriod(signalMatch({ stage_id: 12 })), "first_half");
   assert.equal(matchPeriod(signalMatch({ stage_id: 13 })), "second_half");
@@ -350,7 +377,7 @@ test("goalOverSignal fires a first-half alert on a 0-0 in the 10'-30' window", (
   assert.equal(alert.rule, GOAL_OVER_SIGNAL);
   assert.equal(alert.text, GOAL_OVER_HT_TEXT);
   assert.equal(alert.minute, 15);
-  assert.equal(alert.threshold, 0.5);
+  assert.equal(alert.threshold, DEFAULT_GOAL_RATIO_THRESHOLD);
   assert.equal(alert.tournament, "Serie A");
   assert.equal(alert.country, "Italia");
   assert.equal(alert.homeScore, 0);
@@ -359,18 +386,93 @@ test("goalOverSignal fires a first-half alert on a 0-0 in the 10'-30' window", (
   assert.ok(Math.abs(alert.value! - 25 / 15) < 1e-9);
 });
 
+test("goalOverSignal stays silent in the first-half window when the ratio is below the threshold", () => {
+  const midWindow = goalMatch();
+  const earlyWindow = goalMatch({ stage_start: Math.floor(Date.now() / 1000) - 9 * 60 });
+
+  assert.equal(goalOverSignal.evaluate(midWindow, touchStats("5", "4")), null);
+  assert.equal(goalOverSignal.evaluate(earlyWindow, touchStats("3", "2")), null);
+});
+
+test("goalOverSignal fires when the first-half ratio equals the threshold exactly", () => {
+  const earlyWindow = goalMatch({ stage_start: Math.floor(Date.now() / 1000) - 9 * 60 });
+
+  const alert = goalOverSignal.evaluate(earlyWindow, touchStats("4", "3"));
+
+  assert.ok(alert);
+  assert.equal(alert.minute, 10);
+  assert.ok(Math.abs(alert.value! - 0.7) < 1e-9);
+});
+
+test("goalOverSignal stays silent when the first-half touch stats are missing", () => {
+  assert.equal(
+    goalOverSignal.evaluate(goalMatch(), { all: {}, first_half: {}, second_half: {} }),
+    null,
+  );
+  assert.equal(goalOverSignal.evaluate(goalMatch(), touchStats("x%", "10")), null);
+});
+
 test("goalOverSignal fires a second-half alert on a 0-0 in the 50'-70' window", () => {
   const match = goalMatch({
     stage_id: 13,
     stage_start: Math.floor(Date.now() / 1000) - 9 * 60,
   });
-  const alert = goalOverSignal.evaluate(match, touchStats("0", "0"));
+  const alert = goalOverSignal.evaluate(match, touchStatsSecondHalf("12", "8"));
 
   assert.ok(alert);
   assert.equal(alert.text, GOAL_OVER_FT_TEXT);
   assert.equal(alert.minute, 55);
-  assert.equal(alert.touches, 0);
-  assert.equal(alert.value, 0);
+  assert.equal(alert.threshold, DEFAULT_GOAL_RATIO_THRESHOLD);
+  assert.equal(alert.touches, 20);
+  assert.ok(Math.abs(alert.value! - 20 / 10) < 1e-9);
+});
+
+test("goalOverSignal computes the second-half ratio on second-half minutes only", () => {
+  const match = goalMatch({
+    stage_id: 13,
+    stage_start: Math.floor(Date.now() / 1000) - 7 * 60,
+  });
+
+  const alert = goalOverSignal.evaluate(match, touchStatsSecondHalf("5", "3"));
+
+  assert.ok(alert);
+  assert.equal(alert.minute, 53);
+  assert.equal(alert.touches, 8);
+  assert.ok(Math.abs(alert.value! - 8 / 8) < 1e-9);
+});
+
+test("goalOverSignal ignores first-half stats in the second half", () => {
+  const match = goalMatch({
+    stage_id: 13,
+    stage_start: Math.floor(Date.now() / 1000) - 9 * 60,
+  });
+
+  assert.equal(goalOverSignal.evaluate(match, touchStats("30", "15")), null);
+});
+
+test("goalOverSignal stays silent in the second half when second-half stats are missing or low", () => {
+  const match = goalMatch({
+    stage_id: 13,
+    stage_start: Math.floor(Date.now() / 1000) - 9 * 60,
+  });
+
+  assert.equal(
+    goalOverSignal.evaluate(match, { all: {}, first_half: {}, second_half: {} }),
+    null,
+  );
+  assert.equal(goalOverSignal.evaluate(match, touchStatsSecondHalf("2", "2")), null);
+});
+
+test("goalOverSignal honors the ratio threshold env override", () => {
+  process.env[GOAL_RATIO_ENV] = "2";
+
+  assert.equal(goalOverSignal.evaluate(goalMatch(), touchStats("15", "10")), null);
+
+  process.env[GOAL_RATIO_ENV] = "0.1";
+
+  const alert = goalOverSignal.evaluate(goalMatch(), touchStats("1", "1"));
+  assert.ok(alert);
+  assert.equal(alert.threshold, 0.1);
 });
 
 test("goalOverSignal stays silent outside the configured windows", () => {
@@ -392,7 +494,7 @@ test("goalOverSignal stays silent outside the configured windows", () => {
 });
 
 test("evaluateSignals excludes every score that is not 0-0", () => {
-  const stats = touchStats("0", "0");
+  const stats = touchStats("15", "10");
 
   assert.equal(evaluateSignals(goalMatch({ home_score: 1 }), stats, [goalOverSignal]).length, 0);
   assert.equal(evaluateSignals(goalMatch({ away_score: 1 }), stats, [goalOverSignal]).length, 0);

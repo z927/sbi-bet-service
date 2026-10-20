@@ -232,12 +232,20 @@ Read from environment variables via `src/config.ts`:
   score) produces no alert, for every rule.
 - The only active live signal is goal-over-0.5 (below). The touch-ratio rule
   (`src/services/signals/touch_ratio_signal.ts`) is kept as an inactive signal
-  and its `MONITOR_SIGNAL_TOUCHES_THRESHOLD` env (default `0.4`) still tunes the
-  touch details shown in the goal alerts.
+  and its `MONITOR_SIGNAL_TOUCHES_THRESHOLD` env (default `0.4`) still tunes its
+  own threshold.
 - Goal-over-0.5 signal — fires on a 0-0 score inside fixed windows: minute
   10'-30' of the first half (`Alert Goal Over 0.5 HT`) and minute 50'-70'
-  (absolute clock) of the second half (`Alert Goal Over 0.5 FT`). Each alert is
-  sent at most once per match per rule.
+  (absolute clock) of the second half (`Alert Goal Over 0.5 FT`). An alert is
+  sent only when the touch ratio ("Palloni toccati nell'area avversaria" /
+  elapsed minutes) meets `MONITOR_SIGNAL_GOAL_RATIO_THRESHOLD` (default `0.7`,
+  comparison `>=`). The first half uses first-half touches over first-half
+  elapsed minutes; the second half uses only second-half touches over
+  second-half elapsed minutes (e.g. absolute 53' → 8 minutes). Missing or
+  non-numeric stats produce no alert. Each alert is sent at most once per match
+  per rule.
+- `MONITOR_SIGNAL_GOAL_RATIO_THRESHOLD` — minimum touch ratio for the
+  goal-over-0.5 alert (default `0.7`).
 - `MONITOR_SIGNAL_WIN_RATE` — win rate percentage shown in the Telegram message
   (default `80`).
 
