@@ -149,6 +149,6 @@ jobs:
             --set-env-vars "GCP_REGION=europe-west6" \
             --set-env-vars "GCP_JOB_ID=bet-monitoring-matches-scheduler" \
             --set-env-vars "GCP_JOB_ID_STATS_DELAY=sbi-monitoring-matches-scheduler" \
-            --set-env-vars "TELEGRAM_CHAT_ID=-1004338875499" \
+            --set-env-vars "TELEGRAM_CHAT_ID=-1001812889610" \
             --set-env-vars "TELEGRAM_BOT_TOKEN=6048174593:AAFsx-sm8lifb8pzXabPEkf16QiIcdy3edU" \
             --set-env-vars "MONITOR_SIGNAL_TOUCHES_THRESHOLD=0.7"
