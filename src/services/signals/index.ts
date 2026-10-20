@@ -2,10 +2,9 @@ import type { Match, Statistics } from "../../scraper/models.ts";
 import type { Alert } from "./alert.ts";
 import type { Signal } from "./signal.ts";
 import { goalOverSignal } from "./goal_over_signal.ts";
-import { touchRatioSignal } from "./touch_ratio_signal.ts";
 import { sendTelegram } from "./telegram.ts";
 
-export const SIGNALS: readonly Signal[] = [touchRatioSignal, goalOverSignal];
+export const SIGNALS: readonly Signal[] = [goalOverSignal];
 
 const fired = new Set<string>();
 
