@@ -28,9 +28,6 @@ const inWindow = (minute: number, window: MinuteWindow): boolean => {
 export const goalOverSignal: Signal = {
   name: GOAL_OVER_SIGNAL,
   evaluate(match: Match, statistics: Statistics): Alert | null {
-    if (match.home_score !== 0 || match.away_score !== 0) {
-      return null;
-    }
     const period = matchPeriod(match);
     if (period === null) {
       return null;

@@ -52,7 +52,7 @@ const signalMatch = (overrides: Partial<Match> = {}): Match => ({
   away: "Milan",
   tournament: "Serie A",
   country: "Italia",
-  home_score: 1,
+  home_score: 0,
   away_score: 0,
   stage_id: 12,
   stage_start: 1700000000,
@@ -259,7 +259,7 @@ test("touchRatioSignal fires when the ratio meets the default threshold", () => 
   assert.equal(alert.threshold, DEFAULT_TOUCHES_THRESHOLD);
   assert.equal(alert.tournament, "Serie A");
   assert.equal(alert.country, "Italia");
-  assert.equal(alert.homeScore, 1);
+  assert.equal(alert.homeScore, 0);
   assert.equal(alert.awayScore, 0);
   assert.equal(alert.touches, 30);
   assert.ok(Math.abs(alert.value! - 30 / 45) < 1e-9);
@@ -391,11 +391,31 @@ test("goalOverSignal stays silent outside the configured windows", () => {
   assert.equal(goalOverSignal.evaluate(secondLate, touchStats("0", "0")), null);
 });
 
-test("goalOverSignal excludes every score that is not 0-0", () => {
-  assert.equal(goalOverSignal.evaluate(goalMatch({ home_score: 1 }), touchStats("0", "0")), null);
-  assert.equal(goalOverSignal.evaluate(goalMatch({ away_score: 1 }), touchStats("0", "0")), null);
-  assert.equal(goalOverSignal.evaluate(goalMatch({ home_score: null }), touchStats("0", "0")), null);
-  assert.equal(goalOverSignal.evaluate(goalMatch({ home_score: 2, away_score: 1 }), touchStats("0", "0")), null);
+test("evaluateSignals excludes every score that is not 0-0", () => {
+  const stats = touchStats("0", "0");
+
+  assert.equal(evaluateSignals(goalMatch({ home_score: 1 }), stats, [goalOverSignal]).length, 0);
+  assert.equal(evaluateSignals(goalMatch({ away_score: 1 }), stats, [goalOverSignal]).length, 0);
+  assert.equal(evaluateSignals(goalMatch({ home_score: null }), stats, [goalOverSignal]).length, 0);
+  assert.equal(evaluateSignals(goalMatch({ home_score: 2, away_score: 1 }), stats, [goalOverSignal]).length, 0);
+  assert.equal(evaluateSignals(goalMatch(), stats, [goalOverSignal]).length, 1);
+});
+
+test("evaluateSignals keeps the touch-ratio signal silent when the score is not 0-0", () => {
+  const stats = touchStats("20", "10");
+
+  assert.equal(evaluateSignals(signalMatch({ home_score: 1 }), stats, [touchRatioSignal]).length, 0);
+  assert.equal(evaluateSignals(signalMatch({ away_score: 1 }), stats, [touchRatioSignal]).length, 0);
+  assert.equal(evaluateSignals(signalMatch({ home_score: null }), stats, [touchRatioSignal]).length, 0);
+  assert.equal(evaluateSignals(signalMatch(), stats, [touchRatioSignal]).length, 1);
+});
+
+test("evaluateSignals gates every signal on the 0-0 score", () => {
+  const fakeSignal: Signal = { name: "fake", evaluate: () => makeAlert({ rule: "fake" }) };
+  const stats = touchStats("1", "1");
+
+  assert.equal(evaluateSignals(signalMatch({ home_score: 3 }), stats, [fakeSignal]).length, 0);
+  assert.equal(evaluateSignals(signalMatch(), stats, [fakeSignal]).length, 1);
 });
 
 test("goalOverSignal reports the configured windows", () => {

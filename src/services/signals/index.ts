@@ -9,11 +9,18 @@ export const SIGNALS: readonly Signal[] = [touchRatioSignal, goalOverSignal];
 
 const fired = new Set<string>();
 
+export const isZeroZero = (match: Match): boolean => {
+  return match.home_score === 0 && match.away_score === 0;
+}
+
 export const evaluateSignals = (
   match: Match,
   statistics: Statistics,
   signals: readonly Signal[] = SIGNALS,
 ): Alert[] => {
+  if (!isZeroZero(match)) {
+    return [];
+  }
   const alerts: Alert[] = [];
   for (const signal of signals) {
     const key = `${match.id}:${signal.name}`;

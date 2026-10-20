@@ -18,7 +18,7 @@ import {
 
 const FIXTURE = [
   "ZA\u00f7ITALIA: Serie A\u00acZY\u00f7Italia\u00acZEE\u00f7COuk57Ci\u00acZC\u00f71\u00acZL\u00f7/calcio/italia/serie-a/",
-  "AA\u00f7m1\u00acAB\u00f72\u00acAC\u00f712\u00acAD\u00f71700000000\u00acAE\u00f7Inter\u00acAF\u00f7Milan\u00acAG\u00f71\u00acAH\u00f70\u00acAI\u00f7y\u00acAO\u00f71700000000",
+  "AA\u00f7m1\u00acAB\u00f72\u00acAC\u00f712\u00acAD\u00f71700000000\u00acAE\u00f7Inter\u00acAF\u00f7Milan\u00acAG\u00f70\u00acAH\u00f70\u00acAI\u00f7y\u00acAO\u00f71700000000",
   "AA\u00f7m2\u00acAB\u00f73\u00acAC\u00f73\u00acAD\u00f71700001000\u00acAE\u00f7Roma\u00acAF\u00f7Lazio\u00acAG\u00f72\u00acAH\u00f71",
   "ZA\u00f7ALBANIA: Abissnet Superiore\u00acZY\u00f7Albania\u00acZEE\u00f7nwPDBpVc\u00acZC\u00f75\u00acZL\u00f7/calcio/albania/",
   "AA\u00f7m3\u00acAB\u00f72\u00acAC\u00f712\u00acAD\u00f71700000000\u00acAE\u00f7Tirana\u00acAF\u00f7Partizani\u00acAG\u00f70\u00acAH\u00f70\u00acAI\u00f7y\u00acAO\u00f71700000000",
@@ -205,7 +205,7 @@ test("strategy dispatches signal alerts through Telegram", async () => {
         "🏆 ITALIA: Serie A 🇮🇹",
         "💹 Live, Win Rate: ➡️ 80%",
         "⏱ 45°",
-        "🎽 Inter vs Milan [1-0]",
+        "🎽 Inter vs Milan [0-0]",
         "ℹ️ Tocchi area: 30",
         "ℹ️ Rapporto: 0.67",
       ].join("\n"),

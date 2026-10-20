@@ -228,14 +228,16 @@ Read from environment variables via `src/config.ts`:
   (`*/N` during the match windows; default `10`).
 - `TELEGRAM_BOT_TOKEN`, `TELEGRAM_CHAT_ID` — if both set, the monitor signal
   sends alerts via Telegram; otherwise it’s a no-op.
+- All live signals evaluate only on a 0-0 score: any other score (or a missing
+  score) produces no alert, for every rule.
 - `MONITOR_SIGNAL_TOUCHES_THRESHOLD` — threshold for touch-ratio signal (default
-  `0.4`, touches in opponent box / minutes in first half ≥ threshold). The alert
-  text is fixed: `Alert over 0.5 HT!`. Each alert is sent at most once per
-  match per rule.
+  `0.4`, touches in opponent box / minutes in first half ≥ threshold, on a 0-0
+  score). The alert text is fixed: `Alert over 0.5 HT!`. Each alert is sent at
+  most once per match per rule.
 - Goal-over-0.5 signal — fires on a 0-0 score inside fixed windows: minute
   10'-30' of the first half (`Alert Goal Over 0.5 HT`) and minute 50'-70'
-  (absolute clock) of the second half (`Alert Goal Over 0.5 FT`). Every other
-  score is ignored. Each alert is sent at most once per match per rule.
+  (absolute clock) of the second half (`Alert Goal Over 0.5 FT`). Each alert is
+  sent at most once per match per rule.
 - `MONITOR_SIGNAL_WIN_RATE` — win rate percentage shown in the Telegram message
   (default `80`).
 
