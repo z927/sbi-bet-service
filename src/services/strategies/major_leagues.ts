@@ -62,10 +62,13 @@ export const DEFAULT_MAJOR_LEAGUES: readonly string[] = [
   "TURCHIA: 1. Lig",
   // UEFA / internazionali (verificato: prefisso EUROPA, non MONDO)
   "EUROPA: Champions League",
+  "EUROPA: Champions League - Prima fase", // verifica feed 20/10/2026: suffisso "Prima fase" in league phase
   "EUROPA: UEFA Champions League", // backup
   "EUROPA: Europa League",
+  "EUROPA: Europa League - Prima fase", // verifica feed 20/10/2026
   "EUROPA: UEFA Europa League", // backup
   "EUROPA: Conference League",
+  "EUROPA: Conference League - Prima fase", // verifica feed 20/10/2026
   "EUROPA: UEFA Europa Conference League", // backup
   "EUROPA: Nations League", // non verificabile (finestra internazionale)
   "MONDO: Nations League", // backup
