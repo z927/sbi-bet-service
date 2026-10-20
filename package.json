@@ -1,6 +1,6 @@
 {
   "name": "diretta-scraper",
-  "version": "0.2.11",
+  "version": "0.2.12",
   "description": "Node/TypeScript backend: SBI Schedule/Monitoring/Matches APIs + diretta.it live scraper",
   "type": "module",
   "private": true,
