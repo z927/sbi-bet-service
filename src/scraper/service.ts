@@ -81,9 +81,12 @@ export const collect = async (
   geo: string,
   workers: number,
 ): Promise<Match[]> => {
+  const feed = feedName(sport);
   let matches = await client.listMatches(sport);
+  console.log(`[scraper] diretta ${feed} ha restituito ${matches.length} partite`);
   if (scope === "live") {
     matches = matches.filter((m) => m.is_live);
+    console.log(`[scraper] dopo filtro live restano ${matches.length} partite live (sport=${sport})`);
   }
   if (filterText) {
     const needle = filterText.toLowerCase();
