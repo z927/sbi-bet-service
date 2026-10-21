@@ -75,10 +75,25 @@ const formatScore = (alert: Alert): string => {
   return ` [${alert.homeScore}-${alert.awayScore}]`;
 }
 
+export const stripCountryPrefix = (tournament: string, country: string | undefined): string => {
+  const trimmed = tournament.trim();
+  const separator = trimmed.indexOf(":");
+  if (separator <= 0) {
+    return trimmed;
+  }
+  const prefix = trimmed.slice(0, separator).trim();
+  const countryKey = country?.trim().toLowerCase() ?? "";
+  if (!prefix || !countryKey || prefix.toLowerCase() !== countryKey) {
+    return trimmed;
+  }
+  return trimmed.slice(separator + 1).trim();
+}
+
 const formatAlert = (alert: Alert): string => {
   const minute = alert.minute === null ? "n/a" : `${alert.minute}°`;
   const flag = countryFlag(alert.country);
-  const league = [alert.tournament, flag].filter((part) => part).join(" ");
+  const tournament = stripCountryPrefix(alert.tournament ?? "", alert.country);
+  const league = [tournament, flag].filter((part) => part).join(" ");
   const touches = alert.touches === null || alert.touches === undefined ? "n/a" : String(alert.touches);
   const ratio = alert.value === null ? "n/a" : alert.value.toFixed(2);
   return [
