@@ -53,7 +53,6 @@ export const resetSignalState = (): void => {
   fired.clear();
 }
 
-export { touchRatioSignal, TOUCH_RATIO_SIGNAL, TOUCHES_ENV, DEFAULT_TOUCHES_THRESHOLD } from "./touch_ratio_signal.ts";
 export {
   goalOverSignal,
   GOAL_OVER_SIGNAL,
@@ -66,7 +65,9 @@ export {
 } from "./goal_over_signal.ts";
 export { firstHalfMinutes, matchMinute, matchPeriod, secondHalfMinutes } from "./match_minutes.ts";
 export type { MatchPeriod } from "./match_minutes.ts";
-export { getTelegramConfig, sendTelegram, countryFlag, getWinRate, TELEGRAM_BOT_TOKEN_ENV, TELEGRAM_CHAT_ID_ENV, WIN_RATE_ENV, DEFAULT_WIN_RATE } from "./telegram.ts";
+export { touchSnapshot, TOUCH_STAT_NAME, TOUCH_CATEGORY } from "./touch_stats.ts";
+export type { TouchSnapshot } from "./touch_stats.ts";
+export { getTelegramConfig, sendTelegram, countryFlag, getWinRate, stripCountryPrefix, TELEGRAM_BOT_TOKEN_ENV, TELEGRAM_CHAT_ID_ENV, WIN_RATE_ENV, DEFAULT_WIN_RATE } from "./telegram.ts";
 export type { Alert } from "./alert.ts";
 export type { Signal } from "./signal.ts";
 export type { TelegramConfig } from "./telegram.ts";

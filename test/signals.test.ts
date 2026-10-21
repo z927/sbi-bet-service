@@ -2,7 +2,6 @@ import { test, beforeEach, after } from "node:test";
 import assert from "node:assert/strict";
 import {
   DEFAULT_GOAL_RATIO_THRESHOLD,
-  DEFAULT_TOUCHES_THRESHOLD,
   FIRST_HALF_WINDOW,
   GOAL_OVER_FT_TEXT,
   GOAL_OVER_HT_TEXT,
@@ -11,8 +10,6 @@ import {
   SECOND_HALF_WINDOW,
   TELEGRAM_BOT_TOKEN_ENV,
   TELEGRAM_CHAT_ID_ENV,
-  TOUCH_RATIO_SIGNAL,
-  TOUCHES_ENV,
   WIN_RATE_ENV,
   countryFlag,
   dispatchAlerts,
@@ -26,7 +23,6 @@ import {
   resetSignalState,
   secondHalfMinutes,
   sendTelegram,
-  touchRatioSignal,
   type Alert,
   type Signal,
 } from "../src/services/signals/index.ts";
@@ -117,7 +113,7 @@ beforeEach(() => {
   globalThis.fetch = mockFetch;
   captured = null;
   nextResponse = makeResponse("{}");
-  captureEnv(TELEGRAM_BOT_TOKEN_ENV, TELEGRAM_CHAT_ID_ENV, TOUCHES_ENV, WIN_RATE_ENV, GOAL_RATIO_ENV);
+  captureEnv(TELEGRAM_BOT_TOKEN_ENV, TELEGRAM_CHAT_ID_ENV, WIN_RATE_ENV, GOAL_RATIO_ENV);
   resetSignalState();
 });
 
@@ -258,47 +254,6 @@ test("evaluateSignals fires at most once per match and signal", () => {
 
   resetSignalState();
   assert.equal(evaluateSignals(signalMatch(), stats, [fakeSignal]).length, 1);
-});
-
-test("touchRatioSignal fires when the ratio meets the default threshold", () => {
-  const alert = touchRatioSignal.evaluate(signalMatch(), touchStats("20", "10"));
-
-  assert.ok(alert);
-  assert.equal(alert.rule, TOUCH_RATIO_SIGNAL);
-  assert.equal(alert.text, "Alert over 0.5 HT!");
-  assert.equal(alert.minute, 45);
-  assert.equal(alert.threshold, DEFAULT_TOUCHES_THRESHOLD);
-  assert.equal(alert.tournament, "Serie A");
-  assert.equal(alert.country, "Italia");
-  assert.equal(alert.homeScore, 0);
-  assert.equal(alert.awayScore, 0);
-  assert.equal(alert.touches, 30);
-  assert.ok(Math.abs(alert.value! - 30 / 45) < 1e-9);
-});
-
-test("touchRatioSignal stays silent below the threshold", () => {
-  assert.equal(touchRatioSignal.evaluate(signalMatch(), touchStats("5", "5")), null);
-});
-
-test("touchRatioSignal honors the threshold env override", () => {
-  process.env[TOUCHES_ENV] = "0.1";
-
-  const alert = touchRatioSignal.evaluate(signalMatch(), touchStats("5", "0"));
-
-  assert.ok(alert);
-  assert.equal(alert.threshold, 0.1);
-});
-
-test("touchRatioSignal stays silent on missing or non-numeric stats", () => {
-  assert.equal(
-    touchRatioSignal.evaluate(signalMatch(), { all: {}, first_half: {}, second_half: {} }),
-    null,
-  );
-  assert.equal(touchRatioSignal.evaluate(signalMatch(), touchStats("x%", "10")), null);
-});
-
-test("touchRatioSignal stays silent without first-half minutes", () => {
-  assert.equal(touchRatioSignal.evaluate(signalMatch({ stage_id: 20 }), touchStats("30", "10")), null);
 });
 
 test("firstHalfMinutes derives elapsed minutes from stage_start", () => {
@@ -503,15 +458,6 @@ test("evaluateSignals excludes every score that is not 0-0", () => {
   assert.equal(evaluateSignals(goalMatch(), stats, [goalOverSignal]).length, 1);
 });
 
-test("evaluateSignals keeps the touch-ratio signal silent when the score is not 0-0", () => {
-  const stats = touchStats("20", "10");
-
-  assert.equal(evaluateSignals(signalMatch({ home_score: 1 }), stats, [touchRatioSignal]).length, 0);
-  assert.equal(evaluateSignals(signalMatch({ away_score: 1 }), stats, [touchRatioSignal]).length, 0);
-  assert.equal(evaluateSignals(signalMatch({ home_score: null }), stats, [touchRatioSignal]).length, 0);
-  assert.equal(evaluateSignals(signalMatch(), stats, [touchRatioSignal]).length, 1);
-});
-
 test("evaluateSignals gates every signal on the 0-0 score", () => {
   const fakeSignal: Signal = { name: "fake", evaluate: () => makeAlert({ rule: "fake" }) };
   const stats = touchStats("1", "1");
@@ -525,7 +471,27 @@ test("goalOverSignal reports the configured windows", () => {
   assert.deepEqual({ ...SECOND_HALF_WINDOW }, { min: 50, max: 70 });
 });
 
-test("sendTelegram keeps the touch-ratio details for goal alerts", async () => {
+test("sendTelegram strips the country prefix from the tournament name", async () => {
+  await sendTelegram(
+    makeAlert({ tournament: "EUROPA: Champions League - Prima fase", country: "EUROPA" }),
+    { token: "t", chatId: "c" },
+  );
+
+  const text = JSON.parse(String(captured?.init?.body)).text as string;
+  assert.match(text, /^🏆 Champions League - Prima fase 🇪🇺$/m);
+});
+
+test("sendTelegram keeps the tournament name when the prefix does not match the country", async () => {
+  await sendTelegram(
+    makeAlert({ tournament: "ITALIA: Serie A", country: "Spagna" }),
+    { token: "t", chatId: "c" },
+  );
+
+  const text = JSON.parse(String(captured?.init?.body)).text as string;
+  assert.match(text, /^🏆 ITALIA: Serie A 🇪🇸$/m);
+});
+
+test("sendTelegram keeps the touch details for goal alerts", async () => {
   const alert = goalOverSignal.evaluate(goalMatch(), touchStats("15", "10"));
   assert.ok(alert);
 

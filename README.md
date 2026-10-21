@@ -230,10 +230,7 @@ Read from environment variables via `src/config.ts`:
   sends alerts via Telegram; otherwise it’s a no-op.
 - All live signals evaluate only on a 0-0 score: any other score (or a missing
   score) produces no alert, for every rule.
-- The only active live signal is goal-over-0.5 (below). The touch-ratio rule
-  (`src/services/signals/touch_ratio_signal.ts`) is kept as an inactive signal
-  and its `MONITOR_SIGNAL_TOUCHES_THRESHOLD` env (default `0.4`) still tunes its
-  own threshold.
+- The only active live signal is goal-over-0.5 (below).
 - Goal-over-0.5 signal — fires on a 0-0 score inside fixed windows: minute
   10'-30' of the first half (`Alert Goal Over 0.5 HT`) and minute 50'-70'
   (absolute clock) of the second half (`Alert Goal Over 0.5 FT`). An alert is

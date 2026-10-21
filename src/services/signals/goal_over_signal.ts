@@ -2,7 +2,7 @@ import type { Match, Statistics } from "../../scraper/models.ts";
 import type { Signal } from "./signal.ts";
 import type { Alert } from "./alert.ts";
 import { matchMinute, matchPeriod, type MatchPeriod } from "./match_minutes.ts";
-import { touchSnapshot } from "./touch_ratio_signal.ts";
+import { touchSnapshot } from "./touch_stats.ts";
 
 export const GOAL_OVER_SIGNAL = "goal-over-0.5";
 export const GOAL_OVER_HT_TEXT = "Alert Goal Over 0.5 HT";
