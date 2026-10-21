@@ -80,8 +80,8 @@ export const sbiRoutes = (app: FastifyInstance): void => {
     },
   );
 
-  app.get("/api/v1/auto-schedule", { schema: { operationId: "autoScheduleEvents" } }, () =>
-    autoSchedule.autoScheduleEvents(),
+  app.get("/api/v1/auto-schedule", { schema: { operationId: "autoScheduleEvents" } }, (request) =>
+    autoSchedule.autoScheduleEvents(undefined, request.log),
   );
 
   app.get("/api/v1/monitor", { schema: { operationId: "monitorFixtures" } }, async () =>
