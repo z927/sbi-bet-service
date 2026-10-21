@@ -24,12 +24,15 @@ export const buildServer = async (): Promise<FastifyInstance> => {
 
   app.setErrorHandler((error: FastifyError, request: FastifyRequest, reply: FastifyReply) => {
     if (error instanceof ConflictError) {
+      request.log.warn({ err: error }, "conflict");
       return reply.code(409).send(baseResponse(error.message, 409));
     }
     if (error instanceof ValidationError) {
+      request.log.warn({ err: error }, "validation error");
       return reply.code(422).send({ detail: error.message });
     }
     if (error instanceof FeedError) {
+      request.log.error({ err: error }, "upstream feed error");
       return reply.code(502).send({ detail: error.message });
     }
     if (error.validation) {

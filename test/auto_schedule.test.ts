@@ -9,6 +9,7 @@ import type {
 } from "../src/cloud_scheduler/client.ts";
 import { ConflictError } from "../src/errors.ts";
 import { FeedError } from "../src/scraper/client/transport.ts";
+import type { AppLogger } from "../src/logger.ts";
 import * as db from "../src/scraper/db.ts";
 import { removeDb, useTempDb } from "./support.ts";
 
@@ -44,6 +45,38 @@ interface RecordedCall {
   op: "get" | "create" | "update" | "delete";
   jobId: string;
   input?: JobScheduleInput;
+}
+
+type LogLevel = "debug" | "info" | "warn" | "error";
+
+interface LogEntry {
+  level: LogLevel;
+  obj: Record<string, unknown>;
+  msg?: string;
+}
+
+class RecordingLogger implements AppLogger {
+  entries: LogEntry[] = [];
+
+  debug(obj: object, msg?: string): void {
+    this.entries.push({ level: "debug", obj: obj as Record<string, unknown>, msg });
+  }
+
+  info(obj: object, msg?: string): void {
+    this.entries.push({ level: "info", obj: obj as Record<string, unknown>, msg });
+  }
+
+  warn(obj: object, msg?: string): void {
+    this.entries.push({ level: "warn", obj: obj as Record<string, unknown>, msg });
+  }
+
+  error(obj: object, msg?: string): void {
+    this.entries.push({ level: "error", obj: obj as Record<string, unknown>, msg });
+  }
+
+  find(level: LogLevel, msg: string): LogEntry | undefined {
+    return this.entries.find((entry) => entry.level === level && entry.msg === msg);
+  }
 }
 
 class StubScheduler implements SchedulerClient {
@@ -261,4 +294,155 @@ test("propagates feed failures from the matches list", async () => {
     assert.ok(error instanceof FeedError);
     return true;
   });
+});
+
+test("treats a zero end_time as missing and falls back to start + 2h", async () => {
+  globalThis.fetch = (async (url: string) => {
+    const target = String(url);
+    if (target.includes("dc_1_m1")) {
+      return makeResponse(detail(0));
+    }
+    if (target.includes("dc_1_m3")) {
+      return makeResponse(detail(0));
+    }
+    return makeResponse(buildFeed());
+  }) as unknown as typeof fetch;
+
+  const log = new RecordingLogger();
+  const result = await autoScheduleEvents(stub, log);
+  assert.equal(result.statusCode, 200);
+  assert.match(result.message ?? "", /job test-job scheduled at/);
+
+  const m1 = db.getMatch("m1")!;
+  assert.equal(m1["end_monitoring_time"], future(3600) + 7200);
+  assert.ok(log.find("warn", "match detail has no end_time: falling back to start + 2h"));
+
+  const created = stub.calls.find((call) => call.op === "create");
+  assert.ok(created);
+});
+
+test("logs the effective settings, the match selection and the scheduler outcome", async () => {
+  const log = new RecordingLogger();
+  const result = await autoScheduleEvents(stub, log);
+  assert.equal(result.statusCode, 200);
+
+  const started = log.find("info", "auto-schedule started");
+  assert.ok(started);
+  assert.equal(started.obj["gcpJobId"], "test-job");
+  assert.equal(started.obj["schedulerEnabled"], true);
+  assert.deepEqual(started.obj["missingSchedulerSettings"], []);
+  assert.equal(started.obj["schedulerTimeZone"], "UTC");
+  assert.equal(started.obj["monitorLeadMinutes"], 5);
+
+  const fetched = log.find("info", "match list fetched");
+  assert.ok(fetched);
+  assert.equal(fetched.obj["fetched"], 4);
+
+  const selection = log.find("info", "match selection completed");
+  assert.ok(selection);
+  assert.equal(selection.obj["upcoming"], 2);
+  assert.equal(selection.obj["rejectedByLeague"], 1);
+  assert.equal(selection.obj["alreadyStarted"], 1);
+  assert.equal(selection.obj["missingStartTime"], 0);
+
+  const created = log.find("info", "creating cloud scheduler job");
+  assert.ok(created);
+  assert.equal(created.obj["action"], "create");
+  assert.equal(created.obj["jobId"], "test-job");
+  assert.equal(created.obj["uri"], "https://svc.example.run.app/api/v1/monitor");
+
+  assert.ok(log.find("info", "auto-schedule completed"));
+});
+
+test("logs the rejection breakdown when no upcoming major-league match is found", async () => {
+  globalThis.fetch = (async () =>
+    makeResponse([
+      league("ITALIA: Serie C", "CzESFqCV", "Italia"),
+      fixture("m4", future(3600), "Padova", "Vicenza"),
+    ].join("~"))) as unknown as typeof fetch;
+
+  const log = new RecordingLogger();
+  const result = await autoScheduleEvents(stub, log);
+  assert.equal(result.statusCode, 200);
+
+  const warning = log.find("warn", "no upcoming major-league matches found: nothing to schedule");
+  assert.ok(warning);
+  assert.equal(warning.obj["rejectedByLeague"], 1);
+  assert.deepEqual(warning.obj["rejectedLeagues"], [{ tournament: "ITALIA: Serie C", count: 1 }]);
+  assert.deepEqual(warning.obj["allowlist"], ["ITALIA: Serie A", "INGHILTERRA: Premier League"]);
+});
+
+test("logs the fallback used when the match detail feed fails", async () => {
+  globalThis.fetch = (async (url: string) => {
+    const target = String(url);
+    if (target.includes("dc_1_m1")) {
+      throw new FeedError("mock detail failure");
+    }
+    if (target.includes("dc_1_m3")) {
+      return makeResponse(detail(null));
+    }
+    return makeResponse(buildFeed());
+  }) as unknown as typeof fetch;
+
+  const log = new RecordingLogger();
+  const result = await autoScheduleEvents(stub, log);
+  assert.equal(result.statusCode, 200);
+
+  const failure = log.find("warn", "match detail feed failed: falling back to start + 2h");
+  assert.ok(failure);
+  assert.equal(failure.obj["matchId"], "m1");
+  assert.ok(log.find("warn", "match detail has no end_time: falling back to start + 2h"));
+});
+
+test("logs the conflict before throwing it", async () => {
+  const now = new Date();
+  stub.jobs.set("test-job", {
+    name: "projects/test-project/locations/europe-west6/jobs/test-job",
+    schedule: buildCron([{ begin: future(3600), end: future(3600 + 7000) }], "UTC", now, 10)!,
+    timeZone: "UTC",
+  });
+
+  const log = new RecordingLogger();
+  await assert.rejects(autoScheduleEvents(stub, log), (error: unknown) => {
+    assert.ok(error instanceof ConflictError);
+    return true;
+  });
+  assert.ok(log.find("warn", "auto-schedule already executed today: conflict"));
+  assert.ok(log.find("warn", "auto-schedule aborted: conflict"));
+});
+
+test("logs the missing scheduler configuration", async () => {
+  const target = process.env["MONITOR_JOB_TARGET_BASE_URL"];
+  delete process.env["MONITOR_JOB_TARGET_BASE_URL"];
+  try {
+    const log = new RecordingLogger();
+    const result = await autoScheduleEvents(stub, log);
+    assert.equal(result.statusCode, 200);
+
+    const warning = log.find("warn", "cloud scheduler not configured: job not created");
+    assert.ok(warning);
+    assert.deepEqual(warning.obj["missing"], ["MONITOR_JOB_TARGET_BASE_URL"]);
+
+    const started = log.find("info", "auto-schedule started");
+    assert.ok(started);
+    assert.equal(started.obj["schedulerEnabled"], false);
+    assert.deepEqual(started.obj["missingSchedulerSettings"], ["MONITOR_JOB_TARGET_BASE_URL"]);
+  } finally {
+    process.env["MONITOR_JOB_TARGET_BASE_URL"] = target;
+  }
+});
+
+test("logs a failure raised while listing the matches", async () => {
+  globalThis.fetch = (async () => {
+    throw new FeedError("mock feed failure");
+  }) as unknown as typeof fetch;
+
+  const log = new RecordingLogger();
+  await assert.rejects(autoScheduleEvents(stub, log), (error: unknown) => {
+    assert.ok(error instanceof FeedError);
+    return true;
+  });
+  const failure = log.find("error", "auto-schedule failed");
+  assert.ok(failure);
+  assert.ok(failure.obj["err"] instanceof FeedError);
 });
