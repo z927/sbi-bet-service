@@ -9,6 +9,7 @@ import {
   runLiveMatchesStrategy,
 } from "../src/services/strategies/index.ts";
 import {
+  LIVE_ODDS_ENABLED_ENV,
   TELEGRAM_BOT_TOKEN_ENV,
   TELEGRAM_CHAT_ID_ENV,
   WIN_RATE_ENV,
@@ -37,7 +38,51 @@ const ALERT_STATS_FIXTURE = [
   "SD\u00f799\u00acSG\u00f7Palloni toccati nell'area avversaria\u00acSH\u00f720\u00acSI\u00f710",
 ].join("~");
 
+const LIVE_ODDS_MENU_FIXTURE = JSON.stringify({
+  data: {
+    getLiveOddsBettingTypeMenu: {
+      settings: {
+        bookmakers: [
+          { bookmaker: { id: 159, name: "Sisal" } },
+          { bookmaker: { id: 199, name: "SNAI" } },
+        ],
+      },
+      items: [
+        {
+          bettingType: "OVER_UNDER",
+          bettingScope: "FULL_TIME",
+          isActive: true,
+          isDefault: false,
+          bookmakerIds: [159, 199],
+        },
+      ],
+    },
+  },
+});
+
+const liveOddsFixture = (bookmakerId: number): string => {
+  const over = bookmakerId === 199 ? "1.52" : "1.38";
+  return JSON.stringify({
+    data: {
+      findLiveOddsForBookmaker: {
+        eventOddsOverview: {
+          bookmakerId,
+          type: "OVER_UNDER",
+          opportunities: [
+            {
+              over: { value: over, active: true },
+              under: { value: "2.75", active: true },
+              handicap: { value: "0.5" },
+            },
+          ],
+        },
+      },
+    },
+  });
+};
+
 const originalFetch = globalThis.fetch;
+const originalLiveOddsEnabled = process.env[LIVE_ODDS_ENABLED_ENV];
 let statsCalls = 0;
 let statsFail = false;
 let statsBody = STATS_FIXTURE;
@@ -60,6 +105,13 @@ const fixtureFetch = (async (url: string, init?: RequestInit) => {
     statsCalls += 1;
     return statsFail ? makeResponse("boom", false, 500) : makeResponse(statsBody);
   }
+  if (target.includes("_hash=lobtm")) {
+    return makeResponse(LIVE_ODDS_MENU_FIXTURE);
+  }
+  if (target.includes("_hash=ole2")) {
+    const bookmakerId = Number(new URL(target).searchParams.get("bookmakerId") ?? "0");
+    return makeResponse(liveOddsFixture(bookmakerId));
+  }
   return makeResponse(FIXTURE);
 }) as unknown as typeof fetch;
 
@@ -76,11 +128,17 @@ beforeEach(() => {
   telegramCalls = 0;
   telegramBodies = [];
   telegramFail = false;
+  delete process.env[LIVE_ODDS_ENABLED_ENV];
   resetSignalState();
 });
 
 after(() => {
   globalThis.fetch = originalFetch;
+  if (originalLiveOddsEnabled === undefined) {
+    delete process.env[LIVE_ODDS_ENABLED_ENV];
+  } else {
+    process.env[LIVE_ODDS_ENABLED_ENV] = originalLiveOddsEnabled;
+  }
 });
 
 test("strategy only enriches live matches from major leagues", async () => {
@@ -205,6 +263,7 @@ test("strategy dispatches signal alerts through Telegram", async () => {
         "💹 Live, Win Rate: ➡️ 80%",
         "⏱ 16°",
         "🎽 Inter vs Milan [0-0]",
+        "💰 Quota Over 0.5 FT: 1.52 (SNAI)",
         "ℹ️ Tocchi area: 30",
         "ℹ️ Rapporto: 1.88",
       ].join("\n"),

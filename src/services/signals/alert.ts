@@ -13,4 +13,6 @@ export interface Alert {
   awayScore?: number | null;
   touches?: number | null;
   odds?: number | null;
+  oddsBookmaker?: string | null;
+  oddsMarket?: string | null;
 }

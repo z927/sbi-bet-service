@@ -3,14 +3,21 @@ import assert from "node:assert/strict";
 import {
   DEFAULT_GOAL_RATIO_THRESHOLD,
   FIRST_HALF_WINDOW,
+  FT_ODDS_MARKET,
   GOAL_OVER_FT_TEXT,
+  GOAL_OVER_HANDICAP,
   GOAL_OVER_HT_TEXT,
   GOAL_OVER_SIGNAL,
   GOAL_RATIO_ENV,
+  HT_ODDS_MARKET,
+  LIVE_ODDS_BOOKMAKERS_ENV,
+  LIVE_ODDS_ENABLED_ENV,
   SECOND_HALF_WINDOW,
   TELEGRAM_BOT_TOKEN_ENV,
   TELEGRAM_CHAT_ID_ENV,
   WIN_RATE_ENV,
+  attachLiveOdds,
+  configuredBookmakers,
   countryFlag,
   dispatchAlerts,
   evaluateSignals,
@@ -18,14 +25,18 @@ import {
   getTelegramConfig,
   getWinRate,
   goalOverSignal,
+  liveOddsEnabled,
   matchMinute,
   matchPeriod,
+  pickBestOver,
   resetSignalState,
   secondHalfMinutes,
   sendTelegram,
   type Alert,
+  type LiveOddsFetcher,
   type Signal,
 } from "../src/services/signals/index.ts";
+import type { LiveOddsOffer } from "../src/scraper/client/odds.ts";
 import type { Match, Statistics } from "../src/scraper/models.ts";
 
 const makeAlert = (overrides: Partial<Alert> = {}): Alert => ({
@@ -71,6 +82,25 @@ const goalMatch = (overrides: Partial<Match> = {}): Match => ({
   ...overrides,
 });
 
+const liveOffer = (overrides: Partial<LiveOddsOffer> = {}): LiveOddsOffer => ({
+  bookmakerId: 159,
+  bookmaker: "Sisal",
+  betType: "OVER_UNDER",
+  betScope: "FULL_TIME",
+  home: null,
+  draw: null,
+  away: null,
+  none: null,
+  lines: [
+    {
+      handicap: GOAL_OVER_HANDICAP,
+      over: { value: 1.38, active: true },
+      under: { value: 2.75, active: true },
+    },
+  ],
+  ...overrides,
+});
+
 const touchStats = (home: string, away: string): Statistics => ({
   all: {},
   first_half: {
@@ -113,7 +143,14 @@ beforeEach(() => {
   globalThis.fetch = mockFetch;
   captured = null;
   nextResponse = makeResponse("{}");
-  captureEnv(TELEGRAM_BOT_TOKEN_ENV, TELEGRAM_CHAT_ID_ENV, WIN_RATE_ENV, GOAL_RATIO_ENV);
+  captureEnv(
+    TELEGRAM_BOT_TOKEN_ENV,
+    TELEGRAM_CHAT_ID_ENV,
+    WIN_RATE_ENV,
+    GOAL_RATIO_ENV,
+    LIVE_ODDS_ENABLED_ENV,
+    LIVE_ODDS_BOOKMAKERS_ENV,
+  );
   resetSignalState();
 });
 
@@ -192,6 +229,137 @@ test("sendTelegram reads the win rate from the env", async () => {
 
   const body = JSON.parse(String(captured?.init?.body));
   assert.match(body.text, /💹 Live, Win Rate: ➡️ 95%/);
+});
+
+test("sendTelegram includes the live odds line when present", async () => {
+  await sendTelegram(
+    makeAlert({ odds: 1.52, oddsBookmaker: "SNAI", oddsMarket: FT_ODDS_MARKET }),
+    { token: "t", chatId: "c" },
+  );
+
+  const text = JSON.parse(String(captured?.init?.body)).text as string;
+  assert.match(text, /💰 Quota Over 0\.5 FT: 1\.52 \(SNAI\)/);
+});
+
+test("live odds helpers read their env flags", () => {
+  assert.equal(liveOddsEnabled({}), true);
+  assert.equal(liveOddsEnabled({ [LIVE_ODDS_ENABLED_ENV]: "false" }), false);
+  assert.equal(liveOddsEnabled({ [LIVE_ODDS_ENABLED_ENV]: " OFF " }), false);
+  assert.equal(configuredBookmakers({}), undefined);
+  assert.deepEqual(
+    configuredBookmakers({ [LIVE_ODDS_BOOKMAKERS_ENV]: "159, x, 199" }),
+    [159, 199],
+  );
+});
+
+test("pickBestOver selects the highest active over price", () => {
+  const offers = [
+    liveOffer(),
+    liveOffer({
+      bookmakerId: 199,
+      bookmaker: "SNAI",
+      lines: [{ handicap: GOAL_OVER_HANDICAP, over: { value: 1.52, active: true }, under: null }],
+    }),
+    liveOffer({
+      bookmakerId: 322,
+      bookmaker: "Eurobet.it",
+      lines: [{ handicap: GOAL_OVER_HANDICAP, over: { value: 9, active: false }, under: null }],
+    }),
+    liveOffer({
+      bookmakerId: 335,
+      bookmaker: "Lottomatica",
+      lines: [{ handicap: "1.5", over: { value: 5, active: true }, under: null }],
+    }),
+  ];
+
+  assert.deepEqual(pickBestOver(offers, FT_ODDS_MARKET), {
+    odds: 1.52,
+    bookmaker: "SNAI",
+    bookmakerId: 199,
+    market: FT_ODDS_MARKET,
+  });
+  assert.equal(pickBestOver([], FT_ODDS_MARKET), null);
+});
+
+test("attachLiveOdds fills the best full-time over price", async () => {
+  const calls: string[] = [];
+  const fetcher: LiveOddsFetcher = async (_matchId, betType, scope) => {
+    calls.push(`${betType}:${scope}`);
+    return [
+      liveOffer(),
+      liveOffer({
+        bookmakerId: 199,
+        bookmaker: "SNAI",
+        lines: [{ handicap: GOAL_OVER_HANDICAP, over: { value: 1.52, active: true }, under: null }],
+      }),
+    ];
+  };
+  const alert = makeAlert({ rule: GOAL_OVER_SIGNAL, text: GOAL_OVER_FT_TEXT, odds: null });
+
+  await attachLiveOdds([alert], fetcher, {});
+
+  assert.deepEqual(calls, ["OVER_UNDER:FULL_TIME"]);
+  assert.equal(alert.odds, 1.52);
+  assert.equal(alert.oddsBookmaker, "SNAI");
+  assert.equal(alert.oddsMarket, FT_ODDS_MARKET);
+});
+
+test("attachLiveOdds prefers the first-half market when available", async () => {
+  const fetcher: LiveOddsFetcher = async () => [liveOffer({ betScope: "FIRST_HALF" })];
+  const alert = makeAlert({ rule: GOAL_OVER_SIGNAL, text: GOAL_OVER_HT_TEXT, odds: null });
+
+  await attachLiveOdds([alert], fetcher, {});
+
+  assert.equal(alert.odds, 1.38);
+  assert.equal(alert.oddsMarket, HT_ODDS_MARKET);
+});
+
+test("attachLiveOdds falls back to full time for first-half alerts", async () => {
+  const calls: string[] = [];
+  const fetcher: LiveOddsFetcher = async (_matchId, _betType, scope) => {
+    calls.push(scope);
+    return scope === "FULL_TIME" ? [liveOffer()] : [];
+  };
+  const alert = makeAlert({ rule: GOAL_OVER_SIGNAL, text: GOAL_OVER_HT_TEXT, odds: null });
+
+  await attachLiveOdds([alert], fetcher, {});
+
+  assert.deepEqual(calls, ["FIRST_HALF", "FULL_TIME"]);
+  assert.equal(alert.odds, 1.38);
+  assert.equal(alert.oddsMarket, FT_ODDS_MARKET);
+});
+
+test("attachLiveOdds skips disabled, non goal and already priced alerts", async () => {
+  let calls = 0;
+  const fetcher: LiveOddsFetcher = async () => {
+    calls += 1;
+    return [liveOffer()];
+  };
+  const alert = makeAlert({ rule: GOAL_OVER_SIGNAL, text: GOAL_OVER_FT_TEXT });
+
+  await attachLiveOdds([alert], fetcher, { [LIVE_ODDS_ENABLED_ENV]: "false" });
+  await attachLiveOdds([makeAlert({ rule: "other" })], fetcher, {});
+  await attachLiveOdds([makeAlert({ rule: GOAL_OVER_SIGNAL, text: GOAL_OVER_FT_TEXT, odds: 1.9 })], fetcher, {});
+
+  assert.equal(calls, 0);
+  assert.equal(alert.odds, undefined);
+});
+
+test("attachLiveOdds ignores lookup failures and leaves odds empty", async () => {
+  const originalError = console.error;
+  console.error = () => {};
+  const alert = makeAlert({ rule: GOAL_OVER_SIGNAL, text: GOAL_OVER_FT_TEXT, odds: null });
+  try {
+    await assert.doesNotReject(() =>
+      attachLiveOdds([alert], async () => {
+        throw new Error("boom");
+      }, {})
+    );
+  } finally {
+    console.error = originalError;
+  }
+
+  assert.equal(alert.odds, null);
 });
 
 test("countryFlag maps known countries and ignores unknown ones", () => {

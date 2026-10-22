@@ -76,6 +76,18 @@ export type { MatchPeriod } from "./match_minutes.ts";
 export { touchSnapshot, TOUCH_STAT_NAME, TOUCH_CATEGORY } from "./touch_stats.ts";
 export type { TouchSnapshot } from "./touch_stats.ts";
 export { getTelegramConfig, sendTelegram, countryFlag, getWinRate, stripCountryPrefix, TELEGRAM_BOT_TOKEN_ENV, TELEGRAM_CHAT_ID_ENV, WIN_RATE_ENV, DEFAULT_WIN_RATE } from "./telegram.ts";
+export {
+  attachLiveOdds,
+  liveOddsEnabled,
+  configuredBookmakers,
+  pickBestOver,
+  LIVE_ODDS_ENABLED_ENV,
+  LIVE_ODDS_BOOKMAKERS_ENV,
+  GOAL_OVER_HANDICAP,
+  HT_ODDS_MARKET,
+  FT_ODDS_MARKET,
+} from "./live_odds.ts";
+export type { LiveOddsFetcher, PickedLiveOdds } from "./live_odds.ts";
 export type { Alert } from "./alert.ts";
 export type { Signal } from "./signal.ts";
 export type { TelegramConfig } from "./telegram.ts";

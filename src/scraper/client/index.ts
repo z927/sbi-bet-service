@@ -6,7 +6,7 @@ import { getMatch } from "./match.ts";
 import { getStatistics } from "./statistics.ts";
 import { getEvents } from "./events.ts";
 import { getLineups } from "./lineups.ts";
-import { getOdds } from "./odds.ts";
+import { getOdds, getLiveOddsMenu, getLiveOdds, getLiveOddsOffers } from "./odds.ts";
 
 export const client = {
   listMatches,
@@ -15,4 +15,7 @@ export const client = {
   getEvents,
   getLineups,
   getOdds,
+  getLiveOddsMenu,
+  getLiveOdds,
+  getLiveOddsOffers,
 };

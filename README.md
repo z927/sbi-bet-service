@@ -245,6 +245,14 @@ Read from environment variables via `src/config.ts`:
   goal-over-0.5 alert (default `0.7`).
 - `MONITOR_SIGNAL_WIN_RATE` — win rate percentage shown in the Telegram message
   (default `80`).
+- `MONITOR_SIGNAL_LIVE_ODDS` — attach the live Over 0.5 odds to goal alerts
+  (default enabled; set `false`/`0`/`off` to skip the extra diretta.it lookups).
+- `MONITOR_SIGNAL_LIVE_ODDS_BOOKMAKERS` — optional comma-separated diretta.it
+  bookmaker ids to query (e.g. `159,199`); empty/unset uses every bookmaker in
+  the live menu. The alert shows the best active Over 0.5 price and its
+  bookmaker. First-half alerts try the first-half market and fall back to the
+  full-time market (labelled `Over 0.5 FT`) when no first-half line exists.
+  Odds lookup failures never block the alert.
 
 Secrets must never be committed.
 

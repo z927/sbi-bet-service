@@ -89,6 +89,15 @@ export const stripCountryPrefix = (tournament: string, country: string | undefin
   return trimmed.slice(separator + 1).trim();
 }
 
+const formatOdds = (alert: Alert): string | null => {
+  if (typeof alert.odds !== "number" || !Number.isFinite(alert.odds)) {
+    return null;
+  }
+  const market = alert.oddsMarket ?? "Over 0.5";
+  const bookmaker = alert.oddsBookmaker ? ` (${alert.oddsBookmaker})` : "";
+  return `💰 Quota ${market}: ${alert.odds.toFixed(2)}${bookmaker}`;
+}
+
 const formatAlert = (alert: Alert): string => {
   const minute = alert.minute === null ? "n/a" : `${alert.minute}°`;
   const flag = countryFlag(alert.country);
@@ -96,12 +105,14 @@ const formatAlert = (alert: Alert): string => {
   const league = [tournament, flag].filter((part) => part).join(" ");
   const touches = alert.touches === null || alert.touches === undefined ? "n/a" : String(alert.touches);
   const ratio = alert.value === null ? "n/a" : alert.value.toFixed(2);
+  const odds = formatOdds(alert);
   return [
     `⚽ ${alert.text}`,
     `🏆 ${league}`,
     `💹 Live, Win Rate: ➡️ ${getWinRate()}%`,
     `⏱ ${minute}`,
     `🎽 ${alert.home} vs ${alert.away}${formatScore(alert)}`,
+    ...(odds === null ? [] : [odds]),
     `ℹ️ Tocchi area: ${touches}`,
     `ℹ️ Rapporto: ${ratio}`,
   ].join("\n");
