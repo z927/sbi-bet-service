@@ -49,7 +49,7 @@ export const runLiveMatchesStrategy = async (
       const statistics = await client.getStatistics(match.id);
       hooks.log(match, statistics);
       const alerts = evaluateSignals(match, statistics);
-      await dispatchAlerts(alerts);
+      await dispatchAlerts(alerts, undefined, { match, statistics });
       results.push({ ...base, statistics, alerts, error: null });
     } catch (exc) {
       const error = exc instanceof Error ? exc.message : String(exc);

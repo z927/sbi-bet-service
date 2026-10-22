@@ -68,10 +68,10 @@ const assertSport = (sport: number): number => {
 }
 
 export const scraperRoutes = (app: FastifyInstance): void => {
-  app.get("/health", () => ({
+  app.get("/health", async () => ({
     status: "ok",
     db: db.dbPath(),
-    matches_stored: db.countMatches(),
+    matches_stored: await db.countMatches(),
   }));
 
   app.get("/sports", () => ({ sports: SPORTS }));
@@ -197,7 +197,7 @@ export const scraperRoutes = (app: FastifyInstance): void => {
         },
       },
     },
-    (request) => db.getSnapshots(request.params.matchId, request.query.limit ?? 200),
+    async (request) => db.getSnapshots(request.params.matchId, request.query.limit ?? 200),
   );
 
   app.get<{
@@ -217,10 +217,10 @@ export const scraperRoutes = (app: FastifyInstance): void => {
         },
       },
     },
-    (request) => {
+    async (request) => {
       const q = request.query;
       const sport = q.sport === undefined ? null : assertSport(q.sport);
-      const matches = db.getMatches(sport, q.scope ?? "live", q.filter ?? null, q.limit ?? 500);
+      const matches = await db.getMatches(sport, q.scope ?? "live", q.filter ?? null, q.limit ?? 500);
       return { count: matches.length, cached: true, matches };
     },
   );

@@ -139,9 +139,9 @@ before(() => {
   db.initDb();
 });
 
-beforeEach(() => {
+beforeEach(async () => {
   stub = new StubScheduler();
-  db.deleteAll();
+  await db.deleteAll();
   mockFeedFetch(buildFeed());
 });
 
@@ -155,18 +155,18 @@ test("filters major leagues, persists monitored fixtures and creates a single jo
   assert.equal(result.statusCode, 200);
   assert.match(result.message ?? "", /2 fixtures monitored/);
 
-  const stored = db.getMatches(null, "today", null, 100);
-  const ids = stored.map((match) => match.id).sort();
+  const stored = await db.getMatches(null, "today", null, 100);
+  const ids = stored.map((match: any) => match.id).sort();
   assert.deepEqual(ids, ["m1", "m3"]);
 
-  const m1 = db.getMatch("m1")!;
-  assert.equal(m1["monitored"], true);
-  assert.equal(m1["begin_monitoring_time"], future(3600) - 300);
-  assert.equal(m1["end_monitoring_time"], future(3600 + 7000));
+  const m1 = (await db.getMatch("m1"))!;
+  assert.equal((m1 as any)["monitored"], true);
+  assert.equal((m1 as any)["begin_monitoring_time"], future(3600) - 300);
+  assert.equal((m1 as any)["end_monitoring_time"], future(3600 + 7000));
 
-  const m3 = db.getMatch("m3")!;
-  assert.equal(m3["monitored"], true);
-  assert.equal(m3["end_monitoring_time"], future(7200) + 7200);
+  const m3 = (await db.getMatch("m3"))!;
+  assert.equal((m3 as any)["monitored"], true);
+  assert.equal((m3 as any)["end_monitoring_time"], future(7200) + 7200);
 
   const created = stub.calls.find((call) => call.op === "create");
   assert.ok(created);
@@ -201,8 +201,8 @@ test("continues when a detail feed fails and falls back to start + 2h", async ()
 
   const result = await autoScheduleEvents(stub);
   assert.equal(result.statusCode, 200);
-  const m1 = db.getMatch("m1")!;
-  assert.equal(m1["end_monitoring_time"], future(3600) + 7200);
+  const m1 = (await db.getMatch("m1"))!;
+  assert.equal((m1 as any)["end_monitoring_time"], future(3600) + 7200);
 });
 
 test("returns 409 when the existing job already fires today", async () => {
@@ -313,8 +313,8 @@ test("treats a zero end_time as missing and falls back to start + 2h", async () 
   assert.equal(result.statusCode, 200);
   assert.match(result.message ?? "", /job test-job scheduled at/);
 
-  const m1 = db.getMatch("m1")!;
-  assert.equal(m1["end_monitoring_time"], future(3600) + 7200);
+  const m1 = (await db.getMatch("m1"))!;
+  assert.equal((m1 as any)["end_monitoring_time"], future(3600) + 7200);
   assert.ok(log.find("warn", "match detail has no end_time: falling back to start + 2h"));
 
   const created = stub.calls.find((call) => call.op === "create");

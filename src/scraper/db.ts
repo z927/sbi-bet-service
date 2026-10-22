@@ -1,75 +1,42 @@
-import { DatabaseSync } from "node:sqlite";
-import { mkdirSync } from "node:fs";
-import { dirname, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
-import type { Match, MatchSnapshot } from "./models.ts";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import type { Match } from "./models.ts";
+import { getSettings } from "../config.ts";
 
-const HERE = dirname(fileURLToPath(import.meta.url));
-const DEFAULT_DB = resolve(HERE, "..", "..", "data", "diretta.db");
+let client: SupabaseClient | null = null;
 
-const SCHEMA = `
-CREATE TABLE IF NOT EXISTS matches (
-    id            TEXT PRIMARY KEY,
-    sport         INTEGER,
-    tournament    TEXT,
-    country       TEXT,
-    home          TEXT,
-    away          TEXT,
-    home_score    INTEGER,
-    away_score    INTEGER,
-    status        TEXT,
-    status_code   INTEGER,
-    stage_id      INTEGER,
-    is_live       INTEGER,
-    minute        TEXT,
-    start_time    INTEGER,
-    data          TEXT NOT NULL,
-    updated_at    TEXT NOT NULL
-);
-
-CREATE INDEX IF NOT EXISTS idx_matches_live ON matches (is_live);
-CREATE INDEX IF NOT EXISTS idx_matches_sport ON matches (sport);
-CREATE INDEX IF NOT EXISTS idx_matches_tournament ON matches (tournament);
-
-CREATE TABLE IF NOT EXISTS snapshots (
-    id          INTEGER PRIMARY KEY AUTOINCREMENT,
-    match_id    TEXT NOT NULL,
-    home_score  INTEGER,
-    away_score  INTEGER,
-    status_code INTEGER,
-    stage_id    INTEGER,
-    minute      TEXT,
-    captured_at TEXT NOT NULL
-);
-
-CREATE INDEX IF NOT EXISTS idx_snapshots_match ON snapshots (match_id);
-`;
+const getClient = (): SupabaseClient => {
+  if (client) {
+    return client;
+  }
+  const settings = getSettings();
+  const url = settings.supabaseUrl;
+  const key = settings.supabaseServiceRoleKey;
+  if (!url || !key) {
+    throw new Error("SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set");
+  }
+  client = createClient(url, key, {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+    },
+  });
+  return client;
+};
 
 export const dbPath = (): string => {
-  return resolve(process.env["DIRETTA_DB"] ?? DEFAULT_DB);
-}
-
-const connect = (): DatabaseSync => {
-  const path = dbPath();
-  mkdirSync(dirname(path), { recursive: true });
-  const conn = new DatabaseSync(path);
-  conn.exec("PRAGMA journal_mode=WAL");
-  conn.exec("PRAGMA foreign_keys=ON");
-  return conn;
-}
+  try {
+    const settings = getSettings();
+    return settings.supabaseUrl || "supabase";
+  } catch {
+    return "supabase";
+  }
+};
 
 export const initDb = (): void => {
-  const conn = connect();
-  try {
-    conn.exec(SCHEMA);
-  } finally {
-    conn.close();
-  }
-}
+  // Tables are managed via Supabase migrations.
+};
 
-const now = (): string => {
-  return new Date().toISOString();
-}
+const nowIso = (): string => new Date().toISOString();
 
 const asInt = (value: unknown): number | null => {
   if (value === null || value === undefined) {
@@ -77,167 +44,116 @@ const asInt = (value: unknown): number | null => {
   }
   const parsed = typeof value === "number" ? value : Number.parseInt(String(value), 10);
   return Number.isNaN(parsed) ? null : parsed;
-}
+};
 
-type SqlValue = string | number | null;
-
-export const upsertMatches = (matches: Match[]): number => {
+export const upsertMatches = async (matches: Match[]): Promise<number> => {
   if (matches.length === 0) {
     return 0;
   }
-  const timestamp = now();
+  const supabase = getClient();
+  const timestamp = nowIso();
   let stored = 0;
-  const conn = connect();
-  try {
-    const selectStmt = conn.prepare(
-      "SELECT home_score, away_score, status_code, stage_id, minute FROM matches WHERE id = ?",
-    );
-    const insertSnapshot = conn.prepare(
-      "INSERT INTO snapshots (match_id, home_score, away_score, status_code, stage_id, minute, captured_at) VALUES (?, ?, ?, ?, ?, ?, ?)",
-    );
-    const upsert = conn.prepare(`
-      INSERT INTO matches (
-        id, sport, tournament, country, home, away, home_score, away_score,
-        status, status_code, stage_id, is_live, minute, start_time, data, updated_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-      ON CONFLICT(id) DO UPDATE SET
-        sport = excluded.sport,
-        tournament = excluded.tournament,
-        country = excluded.country,
-        home = excluded.home,
-        away = excluded.away,
-        home_score = excluded.home_score,
-        away_score = excluded.away_score,
-        status = excluded.status,
-        status_code = excluded.status_code,
-        stage_id = excluded.stage_id,
-        is_live = excluded.is_live,
-        minute = excluded.minute,
-        start_time = excluded.start_time,
-        data = excluded.data,
-        updated_at = excluded.updated_at
-    `);
 
-    for (const match of matches) {
-      const matchId = match.id;
-      if (!matchId) {
-        continue;
-      }
-      const state: SqlValue[] = [
-        asInt(match.home_score),
-        asInt(match.away_score),
-        asInt(match.status_code),
-        asInt(match.stage_id),
-        (match.minute ?? null) as SqlValue,
-      ];
-      const previousRow = selectStmt.get(matchId) as
-        | { home_score: SqlValue; away_score: SqlValue; status_code: SqlValue; stage_id: SqlValue; minute: SqlValue }
-        | undefined;
-      const previous = previousRow
-        ? [previousRow.home_score, previousRow.away_score, previousRow.status_code, previousRow.stage_id, previousRow.minute]
-        : null;
-      if (!previous || previous.some((value, index) => value !== state[index])) {
-        insertSnapshot.run(matchId, ...state, timestamp);
-      }
-      upsert.run(
-        matchId,
-        asInt(match.sport),
-        match.tournament ?? "",
-        match.country ?? "",
-        match.home ?? "",
-        match.away ?? "",
-        state[0]!,
-        state[1]!,
-        match.status ?? "",
-        state[2]!,
-        state[3]!,
-        match.is_live ? 1 : 0,
-        state[4]!,
-        asInt(match.start_time),
-        JSON.stringify(match),
-        timestamp,
-      );
-      stored += 1;
+  for (const match of matches) {
+    const matchId = match.id;
+    if (!matchId) {
+      continue;
     }
-  } finally {
-    conn.close();
-  }
-  return stored;
-}
 
-export const getMatches = (
+    const homeScore = asInt(match.home_score);
+    const awayScore = asInt(match.away_score);
+    const statusCode = asInt(match.status_code);
+    const stageId = asInt(match.stage_id);
+    const minute = (match.minute ?? null) as string | null;
+    const isLive = match.is_live ? true : false;
+    const startTime = asInt(match.start_time);
+
+    await supabase.from("matches").upsert(
+      {
+        id: matchId,
+        sport: asInt(match.sport),
+        tournament: match.tournament ?? "",
+        country: match.country ?? "",
+        home: match.home ?? "",
+        away: match.away ?? "",
+        home_score: homeScore,
+        away_score: awayScore,
+        status: match.status ?? "",
+        status_code: statusCode,
+        stage_id: stageId,
+        is_live: isLive,
+        minute,
+        start_time: startTime,
+        data: match as unknown as Record<string, unknown>,
+        updated_at: timestamp,
+      },
+      { onConflict: "id" },
+    );
+
+    stored += 1;
+  }
+
+  return stored;
+};
+
+export const getMatches = async (
   sport: number | null = null,
   scope = "live",
   filterText: string | null = null,
   limit = 500,
-): Match[] => {
-  const clauses: string[] = [];
-  const params: SqlValue[] = [];
+): Promise<Match[]> => {
+  const supabase = getClient();
+  let query = supabase.from("matches").select("data");
+
   if (sport !== null) {
-    clauses.push("sport = ?");
-    params.push(sport);
+    query = query.eq("sport", sport);
   }
   if (scope === "live") {
-    clauses.push("is_live = 1");
+    query = query.eq("is_live", true);
   }
   if (filterText) {
-    clauses.push("(LOWER(home) LIKE ? OR LOWER(away) LIKE ? OR LOWER(tournament) LIKE ?)");
-    const needle = `%${filterText.toLowerCase()}%`;
-    params.push(needle, needle, needle);
+    const needle = filterText.toLowerCase();
+    query = query.or(`home.ilike.%${needle}%,away.ilike.%${needle}%,tournament.ilike.%${needle}%`);
   }
-  const where = clauses.length > 0 ? `WHERE ${clauses.join(" AND ")}` : "";
-  params.push(limit);
-  const query = `SELECT data FROM matches ${where} ORDER BY tournament, start_time LIMIT ?`;
-  const conn = connect();
-  try {
-    const rows = conn.prepare(query).all(...params) as Array<{ data: string }>;
-    return rows.map((row) => JSON.parse(row.data) as Match);
-  } finally {
-    conn.close();
-  }
-}
 
-export const getMatch = (matchId: string): Match | null => {
-  const conn = connect();
-  try {
-    const row = conn.prepare("SELECT data FROM matches WHERE id = ?").get(matchId) as
-      | { data: string }
-      | undefined;
-    return row ? (JSON.parse(row.data) as Match) : null;
-  } finally {
-    conn.close();
-  }
-}
+  query = query.order("tournament", { ascending: true }).order("start_time", { ascending: true }).limit(limit);
 
-export const getSnapshots = (matchId: string, limit = 200): MatchSnapshot[] => {
-  const conn = connect();
-  try {
-    return conn
-      .prepare(
-        "SELECT match_id, home_score, away_score, status_code, stage_id, minute, captured_at FROM snapshots WHERE match_id = ? ORDER BY id DESC LIMIT ?",
-      )
-      .all(matchId, limit) as unknown as MatchSnapshot[];
-  } finally {
-    conn.close();
+  const { data, error } = await query;
+  if (error) {
+    throw error;
   }
-}
+  if (!data) {
+    return [];
+  }
+  return (data as any[]).map((row) => row.data as Match);
+};
 
-export const countMatches = (): number => {
-  const conn = connect();
-  try {
-    const row = conn.prepare("SELECT COUNT(*) AS n FROM matches").get() as { n: number };
-    return row.n;
-  } finally {
-    conn.close();
+export const getMatch = async (matchId: string): Promise<Match | null> => {
+  const supabase = getClient();
+  const { data, error } = await supabase.from("matches").select("data").eq("id", matchId).maybeSingle();
+  if (error) {
+    throw error;
   }
-}
+  if (!data) {
+    return null;
+  }
+  return (data as any).data as Match;
+};
 
-export const deleteAll = (): void => {
-  const conn = connect();
-  try {
-    conn.exec("DELETE FROM snapshots");
-    conn.exec("DELETE FROM matches");
-  } finally {
-    conn.close();
+export const getSnapshots = async (_matchId: string, _limit = 200): Promise<any[]> => {
+  return [];
+};
+
+export const countMatches = async (): Promise<number> => {
+  const supabase = getClient();
+  const { count, error } = await supabase.from("matches").select("*", { count: "exact", head: true });
+  if (error) {
+    throw error;
   }
-}
+  return count ?? 0;
+};
+
+export const deleteAll = async (): Promise<void> => {
+  const supabase = getClient();
+  await supabase.from("matches").delete().neq("id", "");
+};

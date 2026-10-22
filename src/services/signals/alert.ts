@@ -12,4 +12,5 @@ export interface Alert {
   homeScore?: number | null;
   awayScore?: number | null;
   touches?: number | null;
+  odds?: number | null;
 }

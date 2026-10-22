@@ -3,6 +3,7 @@ import type { Alert } from "./alert.ts";
 import type { Signal } from "./signal.ts";
 import { goalOverSignal } from "./goal_over_signal.ts";
 import { sendTelegram } from "./telegram.ts";
+import { saveSignal } from "./repo.ts";
 
 export const SIGNALS: readonly Signal[] = [goalOverSignal];
 
@@ -38,6 +39,7 @@ export const evaluateSignals = (
 export const dispatchAlerts = async (
   alerts: readonly Alert[],
   sender: (alert: Alert) => Promise<boolean> = sendTelegram,
+  context?: { match?: Match; statistics?: Statistics },
 ): Promise<void> => {
   for (const alert of alerts) {
     try {
@@ -45,6 +47,12 @@ export const dispatchAlerts = async (
     } catch (exc) {
       const error = exc instanceof Error ? exc.message : String(exc);
       console.error(`[signals] dispatch failed for ${alert.rule} (match ${alert.matchId}): ${error}`);
+    }
+    try {
+      await saveSignal(alert, context);
+    } catch (exc) {
+      const error = exc instanceof Error ? exc.message : String(exc);
+      console.error(`[signals] failed to persist signal for ${alert.matchId} (${alert.rule}): ${error}`);
     }
   }
 }

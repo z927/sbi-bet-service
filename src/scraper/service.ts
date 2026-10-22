@@ -162,7 +162,7 @@ export const getMatches = async (
   }
 
   const matches = await collect(sport, scope, filterText, new Set(enrich), geo, workers);
-  db.upsertMatches(matches);
+  await db.upsertMatches(matches);
   cache.set(key, { at: current, matches });
   return [matches, false];
 }
@@ -174,7 +174,7 @@ export const getMatch = async (
   geo = "IT",
 ): Promise<Match | null> => {
   const match = await singleMatch(matchId, sport, new Set(enrich), geo);
-  db.upsertMatches([match]);
+  await db.upsertMatches([match]);
   return match;
 }
 
@@ -201,7 +201,7 @@ export const testScrape = async (sport = 1, scope = "live", sampleLimit = 3): Pr
   const started = Date.now();
   try {
     const matches = await collect(sport, scope, null, new Set(), "IT", 4);
-    const stored = db.upsertMatches(matches);
+    const stored = await db.upsertMatches(matches);
     return {
       ok: true,
       sport,

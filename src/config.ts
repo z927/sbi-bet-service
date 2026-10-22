@@ -16,6 +16,8 @@ export interface Settings {
   schedulerTimeZone: string;
   monitorLeadMinutes: number;
   schedulerCronStepMinutes: number;
+  supabaseUrl: string;
+  supabaseServiceRoleKey: string;
 }
 
 const DEFAULT_UPSTREAM = "https://bet-service-658489904938.europe-west6.run.app";
@@ -52,5 +54,7 @@ export const getSettings = (env: NodeJS.ProcessEnv = process.env): Settings => {
     schedulerTimeZone: env.SCHEDULER_TIME_ZONE ?? "Europe/Rome",
     monitorLeadMinutes: Number.isNaN(lead) || lead < 0 ? 0 : lead,
     schedulerCronStepMinutes: Number.isNaN(step) || step < 1 || step > 59 ? 10 : step,
+    supabaseUrl: env.SUPABASE_URL ?? "",
+    supabaseServiceRoleKey: env.SUPABASE_SERVICE_ROLE_KEY ?? "",
   };
 }
