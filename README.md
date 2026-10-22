@@ -221,7 +221,7 @@ Read from environment variables via `src/config.ts`:
   auto-schedule job (injected at deploy time by CI).
 - `MONITOR_JOB_TARGET_BASE_URL` — public base URL of this service; the scheduler
   job GETs `/api/v1/monitor` to it. Empty disables scheduler creation.
-- `SCHEDULER_TIME_ZONE` — timezone for the scheduler cron (default `Europe/Rome`).
+- `SCHEDULER_TIME_ZONE` — timezone for the scheduler cron (default `Africa/Freetown`).
 - `MONITOR_LEAD_MINUTES` — minutes subtracted from each match start to compute
   `beginMonitoringTime` (default `0`).
 - `SCHEDULER_CRON_STEP_MINUTES` — minute step of the scheduler cron

@@ -147,8 +147,12 @@ jobs:
             --allow-unauthenticated \
             --set-env-vars "GCP_PROJECT_ID=bet365-bot" \
             --set-env-vars "GCP_REGION=europe-west6" \
-            --set-env-vars "GCP_JOB_ID=bet-monitoring-matches-scheduler" \
-            --set-env-vars "GCP_JOB_ID_STATS_DELAY=sbi-monitoring-matches-scheduler" \
+            --set-env-vars "GCP_JOB_ID=sbi-bet-service-scheduler" \
+            --set-env-vars "SCHEDULER_CRON_STEP_MINUTES=5" \
+            --set-env-vars "SCHEDULER_TIME_ZONE=Africa/Freetown" \
             --set-env-vars "TELEGRAM_CHAT_ID=-1001812889610" \
             --set-env-vars "TELEGRAM_BOT_TOKEN=6048174593:AAFsx-sm8lifb8pzXabPEkf16QiIcdy3edU" \
-            --set-env-vars "MONITOR_SIGNAL_GOAL_RATIO_THRESHOLD=0.7"
+            --set-env-vars "MONITOR_SIGNAL_GOAL_RATIO_THRESHOLD=0.7" \
+            --set-env-vars "MONITOR_JOB_TARGET_BASE_URL=https://sbi-bet-service-658489904938.europe-west6.run.app/api/v1/monitor" \
+            --set-env-vars "SUPABASE_URL=https://qngakaacpeokqoibtqqn.supabase.co" \
+            --set-env-vars "SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFuZ2FrYWFjcGVva3FvaWJ0cXFuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc5MjY1NDYwMSwiZXhwIjoyMTA4MjMwNjAxfQ.BtYYA2phPexpQzko4thWndF5NCOv5MNq-mdFcd5Jxrc"
