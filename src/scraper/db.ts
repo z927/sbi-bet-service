@@ -1,6 +1,7 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import type { Match } from "./models.ts";
 import { getSettings } from "../config.ts";
+import { formatDateItalian } from "./date.ts";
 
 let client: SupabaseClient | null = null;
 
@@ -67,6 +68,7 @@ export const upsertMatches = async (matches: Match[]): Promise<number> => {
     const minute = (match.minute ?? null) as string | null;
     const isLive = match.is_live ? true : false;
     const startTime = asInt(match.start_time);
+    const matchDate = formatDateItalian(startTime);
 
     await supabase.from("matches").upsert(
       {
@@ -84,6 +86,7 @@ export const upsertMatches = async (matches: Match[]): Promise<number> => {
         is_live: isLive,
         minute,
         start_time: startTime,
+        date: matchDate,
         data: match as unknown as Record<string, unknown>,
         updated_at: timestamp,
       },
