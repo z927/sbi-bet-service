@@ -256,7 +256,7 @@ test("deletes the job and returns 200 when no upcoming major-league matches exis
   assert.equal(result.statusCode, 200);
   assert.match(result.message ?? "", /no upcoming major-league matches/);
   assert.ok(stub.calls.some((call) => call.op === "delete" && call.jobId === "test-job"));
-  assert.equal(db.countMatches(), 0);
+  assert.equal(await db.countMatches(), 0);
 });
 
 test("still persists matches and skips the scheduler when it is not configured", async () => {
@@ -266,7 +266,7 @@ test("still persists matches and skips the scheduler when it is not configured",
     const result = await autoScheduleEvents(stub);
     assert.equal(result.statusCode, 200);
     assert.match(result.message ?? "", /Cloud Scheduler not configured/);
-    assert.equal(db.countMatches(), 2);
+    assert.equal(await db.countMatches(), 2);
     assert.equal(stub.calls.length, 0);
   } finally {
     process.env["MONITOR_JOB_TARGET_BASE_URL"] = target;
