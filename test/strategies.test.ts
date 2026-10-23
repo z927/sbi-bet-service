@@ -37,8 +37,44 @@ const ALERT_STATS_FIXTURE = [
   "SD\u00f799\u00acSG\u00f7Palloni toccati nell'area avversaria\u00acSH\u00f720\u00acSI\u00f710",
 ].join("~");
 
+const ODDS_FIXTURE = JSON.stringify({
+  data: {
+    findOddsByEventId: {
+      settings: {
+        bookmakers: [
+          { bookmaker: { id: 1, name: "Book A" } },
+          { bookmaker: { id: 2, name: "Book B" } },
+        ],
+      },
+      odds: [
+        {
+          bookmakerId: 1,
+          bettingType: "OVER_UNDER",
+          bettingScope: "FIRST_HALF",
+          hasLiveBettingOffers: true,
+          odds: [
+            { value: "1.5", opening: "1.4", handicap: { value: "0.5" }, active: true },
+            { value: "2.9", opening: "2.8", handicap: { value: "0.5" }, active: true },
+          ],
+        },
+        {
+          bookmakerId: 2,
+          bettingType: "OVER_UNDER",
+          bettingScope: "FIRST_HALF",
+          hasLiveBettingOffers: true,
+          odds: [
+            { value: "1.8", opening: "1.7", handicap: { value: "0.5" }, active: true },
+            { value: "2.6", opening: "2.5", handicap: { value: "0.5" }, active: true },
+          ],
+        },
+      ],
+    },
+  },
+});
+
 const originalFetch = globalThis.fetch;
 let statsCalls = 0;
+let oddsCalls = 0;
 let statsFail = false;
 let statsBody = STATS_FIXTURE;
 let telegramCalls = 0;
@@ -60,6 +96,10 @@ const fixtureFetch = (async (url: string, init?: RequestInit) => {
     statsCalls += 1;
     return statsFail ? makeResponse("boom", false, 500) : makeResponse(statsBody);
   }
+  if (target.includes("pq_graphql")) {
+    oddsCalls += 1;
+    return makeResponse(ODDS_FIXTURE);
+  }
   return makeResponse(FIXTURE);
 }) as unknown as typeof fetch;
 
@@ -71,6 +111,7 @@ const silentHooks = (allowlist: string[] = [...DEFAULT_MAJOR_LEAGUES]) => ({
 beforeEach(() => {
   globalThis.fetch = fixtureFetch;
   statsCalls = 0;
+  oddsCalls = 0;
   statsFail = false;
   statsBody = STATS_FIXTURE;
   telegramCalls = 0;
@@ -97,6 +138,7 @@ test("strategy only enriches live matches from major leagues", async () => {
   assert.equal(result.results[0]!.error, null);
   assert.equal(result.results[0]!.statistics?.all["top"]?.length, 1);
   assert.equal(statsCalls, 1);
+  assert.equal(oddsCalls, 0);
 });
 
 test("strategy prints statistics through the log hook", async () => {
@@ -196,6 +238,8 @@ test("strategy dispatches signal alerts through Telegram", async () => {
 
     assert.equal(result.failures, 0);
     assert.equal(result.results[0]!.alerts.length, 1);
+    assert.equal(result.results[0]!.alerts[0]!.odds, 1.8);
+    assert.equal(oddsCalls, 1);
     assert.equal(telegramCalls, 1);
     assert.deepEqual(telegramBodies[0], {
       chat_id: "-10042",
@@ -203,6 +247,7 @@ test("strategy dispatches signal alerts through Telegram", async () => {
         "⚽ Alert Goal Over 0.5 HT",
         "🏆 Serie A 🇮🇹",
         "💹 Live, Win Rate: ➡️ 80%",
+        "💶 Quota live: 1.80",
         "⏱ 16°",
         "🎽 Inter vs Milan [0-0]",
         "ℹ️ Tocchi area: 30",

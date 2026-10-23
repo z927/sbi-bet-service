@@ -1,3 +1,4 @@
+import type { Odds, OddsMarketSelector } from "../models.ts";
 import { BASE_URL, httpGet } from "./transport.ts";
 
 const ODDS_URL = "https://global.ds.lsapp.eu/odds/pq_graphql";
@@ -43,7 +44,7 @@ export const getOdds = async (
   matchId: string,
   geo = "IT",
   projectId = 2,
-): Promise<{ bookmakers: string[]; markets: unknown[] }> => {
+): Promise<Odds> => {
   const params = new URLSearchParams({
     _hash: "oce",
     eventId: matchId,
@@ -74,7 +75,7 @@ export const getOdds = async (
     bookmakers[String(bookmaker["id"])] = (bookmaker["name"] as string | undefined) ?? "";
   }
 
-  const markets: Array<Record<string, unknown>> = [];
+  const markets: Odds["markets"] = [];
   for (const entry of (event["odds"] as Array<Record<string, unknown>> | undefined) ?? []) {
     const oddsItems = (entry["odds"] as Array<Record<string, unknown>> | undefined) ?? [];
     if (oddsItems.length === 0) {
@@ -98,6 +99,40 @@ export const getOdds = async (
       outcomes,
     });
   }
-  const activeBooks = [...new Set(markets.map((m) => m["bookmaker"] as string).filter((b) => b))].sort();
+  const activeBooks = [...new Set(markets.map((m) => m.bookmaker).filter((b) => b))].sort();
   return { bookmakers: activeBooks, markets };
+}
+
+const asOddsValue = (value: unknown): number | null => {
+  const parsed =
+    typeof value === "number" ? value : Number.parseFloat(String(value ?? ""));
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : null;
+}
+
+export const bestLiveOutcome = (
+  odds: Odds,
+  selector: OddsMarketSelector,
+): number | null => {
+  const values: number[] = [];
+  for (const market of odds.markets) {
+    if (market.live !== true) {
+      continue;
+    }
+    if (market.bet_type !== selector.betType || market.scope !== selector.scope) {
+      continue;
+    }
+    for (const outcome of market.outcomes) {
+      if (outcome.label !== selector.selection || outcome.active !== true) {
+        continue;
+      }
+      if (String(outcome.handicap) !== String(selector.handicap)) {
+        continue;
+      }
+      const value = asOddsValue(outcome.value);
+      if (value !== null) {
+        values.push(value);
+      }
+    }
+  }
+  return values.length === 0 ? null : Math.max(...values);
 }

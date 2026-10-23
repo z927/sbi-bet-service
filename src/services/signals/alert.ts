@@ -1,3 +1,5 @@
+import type { OddsMarketSelector } from "../../scraper/models.ts";
+
 export interface Alert {
   rule: string;
   matchId: string;
@@ -13,4 +15,5 @@ export interface Alert {
   awayScore?: number | null;
   touches?: number | null;
   odds?: number | null;
+  oddsMarket?: OddsMarketSelector;
 }

@@ -96,10 +96,12 @@ const formatAlert = (alert: Alert): string => {
   const league = [tournament, flag].filter((part) => part).join(" ");
   const touches = alert.touches === null || alert.touches === undefined ? "n/a" : String(alert.touches);
   const ratio = alert.value === null ? "n/a" : alert.value.toFixed(2);
+  const odds = alert.odds === null || alert.odds === undefined ? "n/a" : alert.odds.toFixed(2);
   return [
     `⚽ ${alert.text}`,
     `🏆 ${league}`,
     `💹 Live, Win Rate: ➡️ ${getWinRate()}%`,
+    `💶 Quota live: ${odds}`,
     `⏱ ${minute}`,
     `🎽 ${alert.home} vs ${alert.away}${formatScore(alert)}`,
     `ℹ️ Tocchi area: ${touches}`,

@@ -66,6 +66,7 @@ export {
   GOAL_OVER_SIGNAL,
   GOAL_OVER_HT_TEXT,
   GOAL_OVER_FT_TEXT,
+  GOAL_OVER_MARKET,
   GOAL_RATIO_ENV,
   DEFAULT_GOAL_RATIO_THRESHOLD,
   FIRST_HALF_WINDOW,
@@ -76,6 +77,8 @@ export type { MatchPeriod } from "./match_minutes.ts";
 export { touchSnapshot, TOUCH_STAT_NAME, TOUCH_CATEGORY } from "./touch_stats.ts";
 export type { TouchSnapshot } from "./touch_stats.ts";
 export { getTelegramConfig, sendTelegram, countryFlag, getWinRate, stripCountryPrefix, TELEGRAM_BOT_TOKEN_ENV, TELEGRAM_CHAT_ID_ENV, WIN_RATE_ENV, DEFAULT_WIN_RATE } from "./telegram.ts";
+export { attachLiveOdds, resolveLiveOdds, DEFAULT_ODDS_GEO } from "./live_odds.ts";
+export type { AlertOddsResolver } from "./live_odds.ts";
 export type { Alert } from "./alert.ts";
 export type { Signal } from "./signal.ts";
 export type { TelegramConfig } from "./telegram.ts";

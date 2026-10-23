@@ -8,6 +8,11 @@ export const GOAL_OVER_SIGNAL = "goal-over-0.5";
 export const GOAL_OVER_HT_TEXT = "Alert Goal Over 0.5 HT";
 export const GOAL_OVER_FT_TEXT = "Alert Goal Over 0.5 FT";
 export const GOAL_RATIO_ENV = "MONITOR_SIGNAL_GOAL_RATIO_THRESHOLD";
+export const GOAL_OVER_MARKET = {
+  betType: "OVER_UNDER",
+  handicap: 0.5,
+  selection: "OVER",
+} as const;
 export const DEFAULT_GOAL_RATIO_THRESHOLD = 0.7;
 
 export const FIRST_HALF_WINDOW = { min: 10, max: 30 } as const;
@@ -72,6 +77,10 @@ export const goalOverSignal: Signal = {
       homeScore: match.home_score,
       awayScore: match.away_score,
       touches: snapshot.touches,
+      oddsMarket: {
+        ...GOAL_OVER_MARKET,
+        scope: period === "first_half" ? "FIRST_HALF" : "FULL_TIME",
+      },
     };
   },
 };

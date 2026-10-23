@@ -11,6 +11,7 @@ import {
   TELEGRAM_BOT_TOKEN_ENV,
   TELEGRAM_CHAT_ID_ENV,
   WIN_RATE_ENV,
+  attachLiveOdds,
   countryFlag,
   dispatchAlerts,
   evaluateSignals,
@@ -26,7 +27,8 @@ import {
   type Alert,
   type Signal,
 } from "../src/services/signals/index.ts";
-import type { Match, Statistics } from "../src/scraper/models.ts";
+import { bestLiveOutcome } from "../src/scraper/client/odds.ts";
+import type { Match, Odds, Statistics } from "../src/scraper/models.ts";
 
 const makeAlert = (overrides: Partial<Alert> = {}): Alert => ({
   rule: "test-rule",
@@ -158,6 +160,7 @@ test("sendTelegram posts the formatted alert to the bot endpoint", async () => {
       "⚽ Alert over 0.5 HT!",
       "🏆 Serie A 🇮🇹",
       "💹 Live, Win Rate: ➡️ 80%",
+      "💶 Quota live: n/a",
       "⏱ 23°",
       "🎽 Inter vs Milan [1-0]",
       "ℹ️ Tocchi area: 30",
@@ -338,6 +341,12 @@ test("goalOverSignal fires a first-half alert on a 0-0 in the 10'-30' window", (
   assert.equal(alert.homeScore, 0);
   assert.equal(alert.awayScore, 0);
   assert.equal(alert.touches, 25);
+  assert.deepEqual(alert.oddsMarket, {
+    betType: "OVER_UNDER",
+    scope: "FIRST_HALF",
+    handicap: 0.5,
+    selection: "OVER",
+  });
   assert.ok(Math.abs(alert.value! - 25 / 15) < 1e-9);
 });
 
@@ -379,6 +388,12 @@ test("goalOverSignal fires a second-half alert on a 0-0 in the 50'-70' window", 
   assert.equal(alert.minute, 55);
   assert.equal(alert.threshold, DEFAULT_GOAL_RATIO_THRESHOLD);
   assert.equal(alert.touches, 20);
+  assert.deepEqual(alert.oddsMarket, {
+    betType: "OVER_UNDER",
+    scope: "FULL_TIME",
+    handicap: 0.5,
+    selection: "OVER",
+  });
   assert.ok(Math.abs(alert.value! - 20 / 10) < 1e-9);
 });
 
@@ -504,10 +519,138 @@ test("sendTelegram keeps the touch details for goal alerts", async () => {
       `⚽ ${GOAL_OVER_HT_TEXT}`,
       "🏆 Serie A 🇮🇹",
       "💹 Live, Win Rate: ➡️ 80%",
+      "💶 Quota live: n/a",
       "⏱ 15°",
       "🎽 Inter vs Milan [0-0]",
       "ℹ️ Tocchi area: 25",
       "ℹ️ Rapporto: 1.67",
     ].join("\n"),
   );
+});
+
+const makeOdds = (): Odds => ({
+  bookmakers: ["A", "B"],
+  markets: [
+    {
+      bookmaker_id: "1",
+      bookmaker: "A",
+      bet_type: "OVER_UNDER",
+      scope: "FIRST_HALF",
+      live: true,
+      outcomes: [
+        { label: "OVER", value: "1.36", opening: "1.33", handicap: "0.5", active: true },
+        { label: "UNDER", value: "3.0", opening: "2.8", handicap: "0.5", active: true },
+      ],
+    },
+    {
+      bookmaker_id: "2",
+      bookmaker: "B",
+      bet_type: "OVER_UNDER",
+      scope: "FIRST_HALF",
+      live: true,
+      outcomes: [
+        { label: "OVER", value: "1.5", opening: "1.4", handicap: "0.5", active: true },
+        { label: "OVER", value: "2.5", opening: "2.4", handicap: "1.5", active: true },
+      ],
+    },
+    {
+      bookmaker_id: "3",
+      bookmaker: "C",
+      bet_type: "OVER_UNDER",
+      scope: "FIRST_HALF",
+      live: false,
+      outcomes: [
+        { label: "OVER", value: "9.99", opening: "9.99", handicap: "0.5", active: true },
+      ],
+    },
+    {
+      bookmaker_id: "4",
+      bookmaker: "D",
+      bet_type: "OVER_UNDER",
+      scope: "FIRST_HALF",
+      live: true,
+      outcomes: [
+        { label: "OVER", value: "8.0", opening: "8.0", handicap: "0.5", active: false },
+      ],
+    },
+    {
+      bookmaker_id: "5",
+      bookmaker: "E",
+      bet_type: "OVER_UNDER",
+      scope: "FULL_TIME",
+      live: true,
+      outcomes: [
+        { label: "OVER", value: "7.0", opening: "7.0", handicap: "0.5", active: true },
+      ],
+    },
+  ],
+});
+
+test("bestLiveOutcome picks the highest live active outcome for the market", () => {
+  assert.equal(
+    bestLiveOutcome(makeOdds(), {
+      betType: "OVER_UNDER",
+      scope: "FIRST_HALF",
+      handicap: 0.5,
+      selection: "OVER",
+    }),
+    1.5,
+  );
+});
+
+test("bestLiveOutcome returns null when no live outcome matches", () => {
+  assert.equal(
+    bestLiveOutcome(makeOdds(), {
+      betType: "OVER_UNDER",
+      scope: "SECOND_HALF",
+      handicap: 0.5,
+      selection: "OVER",
+    }),
+    null,
+  );
+  assert.equal(
+    bestLiveOutcome({ bookmakers: [], markets: [] }, {
+      betType: "OVER_UNDER",
+      scope: "FIRST_HALF",
+      handicap: 0.5,
+      selection: "OVER",
+    }),
+    null,
+  );
+});
+
+test("attachLiveOdds resolves odds only for alerts that declare a market", async () => {
+  const withMarket = makeAlert({
+    oddsMarket: { betType: "OVER_UNDER", scope: "FIRST_HALF", handicap: 0.5, selection: "OVER" },
+  });
+  const withoutMarket = makeAlert({ matchId: "m2" });
+
+  await attachLiveOdds([withMarket, withoutMarket], async () => 1.75);
+
+  assert.equal(withMarket.odds, 1.75);
+  assert.equal(withoutMarket.odds, undefined);
+});
+
+test("attachLiveOdds isolates resolver failures and stores null odds", async () => {
+  const alert = makeAlert({
+    oddsMarket: { betType: "OVER_UNDER", scope: "FIRST_HALF", handicap: 0.5, selection: "OVER" },
+  });
+  const originalError = console.error;
+  console.error = () => {};
+  try {
+    await attachLiveOdds([alert], async () => {
+      throw new Error("boom");
+    });
+  } finally {
+    console.error = originalError;
+  }
+
+  assert.equal(alert.odds, null);
+});
+
+test("sendTelegram renders the resolved live odds", async () => {
+  await sendTelegram(makeAlert({ odds: 1.36 }), { token: "t", chatId: "c" });
+
+  const text = JSON.parse(String(captured?.init?.body)).text as string;
+  assert.match(text, /^💶 Quota live: 1\.36$/m);
 });
