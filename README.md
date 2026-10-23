@@ -167,6 +167,7 @@ src/
       strategy.ts           Strategy interface + result types
       major_leagues.ts      env allowlist of major leagues
       live_matches_strategy.ts  live (major) matches -> statistics
+    signals/                goal-over-0.5 evaluation, live odds, Telegram, persistence
   sbi/
     generated/api-types.ts  openapi-typescript output
     routes.ts               /api/v1 routes + route metadata
@@ -241,6 +242,12 @@ Read from environment variables via `src/config.ts`:
   second-half elapsed minutes (e.g. absolute 53' → 8 minutes). Missing or
   non-numeric stats produce no alert. Each alert is sent at most once per match
   per rule.
+- When a signal fires, the monitor fetches live odds from diretta.it for the
+  matching Over 0.5 market (`FIRST_HALF` for the HT alert, `FULL_TIME` for the
+  FT alert), picks the highest quote among live active bookmaker offers, and
+  stores it in `signals.odds`. The same quote is shown in the Telegram message
+  as `💶 Quota live`; when no live offer is available the line shows `n/a` and
+  `signals.odds` is `null`.
 - `MONITOR_SIGNAL_GOAL_RATIO_THRESHOLD` — minimum touch ratio for the
   goal-over-0.5 alert (default `0.7`).
 - `MONITOR_SIGNAL_WIN_RATE` — win rate percentage shown in the Telegram message

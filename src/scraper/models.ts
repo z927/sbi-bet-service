@@ -1,3 +1,32 @@
+export interface OddsOutcome {
+  label: string | null;
+  value: unknown;
+  opening: unknown;
+  handicap: unknown;
+  active: unknown;
+}
+
+export interface OddsMarket {
+  bookmaker_id: string;
+  bookmaker: string;
+  bet_type: string;
+  scope: unknown;
+  live: unknown;
+  outcomes: OddsOutcome[];
+}
+
+export interface Odds {
+  bookmakers: string[];
+  markets: OddsMarket[];
+}
+
+export interface OddsMarketSelector {
+  betType: string;
+  scope: string;
+  handicap: number;
+  selection: string;
+}
+
 export interface Match {
   id: string;
   sport?: number;
@@ -25,7 +54,7 @@ export interface Match {
   statistics?: Statistics;
   events?: unknown[];
   lineups?: Record<string, unknown>;
-  odds?: { bookmakers: string[]; markets: unknown[] };
+  odds?: Odds;
   detail?: Record<string, unknown>;
   enrich_error?: string;
   [key: string]: unknown;
