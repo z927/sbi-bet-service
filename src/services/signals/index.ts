@@ -69,8 +69,7 @@ const maybeSendPreAlert = async (
     return;
   }
   const threshold = getGoalRatioThreshold();
-  const preThreshold = threshold * PRE_ALERT_RATIO_FACTOR;
-  if (snapshot.ratio < preThreshold) {
+  if (snapshot.ratio < threshold) {
     return;
   }
   const alert: Alert = {
