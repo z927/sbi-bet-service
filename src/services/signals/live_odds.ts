@@ -13,7 +13,7 @@ export const resolveLiveOdds = async (
   if (!alert.oddsMarket) {
     return null;
   }
-  const odds = await client.getOdds(alert.matchId, geo);
+  const odds = await client.getLiveOdds(alert.matchId, geo);
   return bestLiveOutcome(odds, alert.oddsMarket);
 }
 
