@@ -233,13 +233,13 @@ Read from environment variables via `src/config.ts`:
   score) produces no alert, for every rule.
 - The only active live signal is goal-over-0.5 (below).
 - Goal-over-0.5 signal — fires on a 0-0 score inside fixed windows: minute
-  10'-30' of the first half (`Alert Goal Over 0.5 HT`) and minute 50'-70'
+  15'-35' of the first half (`Alert Goal Over 0.5 HT`) and minute 60'-80'
   (absolute clock) of the second half (`Alert Goal Over 0.5 FT`). An alert is
   sent only when the touch ratio ("Palloni toccati nell'area avversaria" /
   elapsed minutes) meets `MONITOR_SIGNAL_GOAL_RATIO_THRESHOLD` (default `0.7`,
   comparison `>=`). The first half uses first-half touches over first-half
   elapsed minutes; the second half uses only second-half touches over
-  second-half elapsed minutes (e.g. absolute 53' → 8 minutes). Missing or
+  second-half elapsed minutes. Missing or
   non-numeric stats produce no alert. Each alert is sent at most once per match
   per rule.
 - When a signal fires, the monitor fetches live odds from diretta.it's live

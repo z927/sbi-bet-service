@@ -328,7 +328,7 @@ test("matchMinute returns null outside the halves", () => {
   assert.equal(matchMinute(signalMatch({ stage_id: null })), null);
 });
 
-test("goalOverSignal fires a first-half alert on a 0-0 in the 10'-30' window", () => {
+test("goalOverSignal fires a first-half alert on a 0-0 in the 15'-35' window", () => {
   const alert = goalOverSignal.evaluate(goalMatch(), touchStats("15", "10"));
 
   assert.ok(alert);
@@ -359,13 +359,13 @@ test("goalOverSignal stays silent in the first-half window when the ratio is bel
 });
 
 test("goalOverSignal fires when the first-half ratio equals the threshold exactly", () => {
-  const earlyWindow = goalMatch({ stage_start: Math.floor(Date.now() / 1000) - 9 * 60 });
+  const earlyWindow = goalMatch({ stage_start: Math.floor(Date.now() / 1000) - 14 * 60 });
 
-  const alert = goalOverSignal.evaluate(earlyWindow, touchStats("4", "3"));
+  const alert = goalOverSignal.evaluate(earlyWindow, touchStats("6", "5"));
 
   assert.ok(alert);
-  assert.equal(alert.minute, 10);
-  assert.ok(Math.abs(alert.value! - 0.7) < 1e-9);
+  assert.equal(alert.minute, 15);
+  assert.ok(Math.abs(alert.value! - 11 / 15) < 1e-9);
 });
 
 test("goalOverSignal stays silent when the first-half touch stats are missing", () => {
@@ -376,16 +376,16 @@ test("goalOverSignal stays silent when the first-half touch stats are missing", 
   assert.equal(goalOverSignal.evaluate(goalMatch(), touchStats("x%", "10")), null);
 });
 
-test("goalOverSignal fires a second-half alert on a 0-0 in the 50'-70' window", () => {
+test("goalOverSignal fires a second-half alert on a 0-0 in the 60'-80' window", () => {
   const match = goalMatch({
     stage_id: 13,
-    stage_start: Math.floor(Date.now() / 1000) - 9 * 60,
+    stage_start: Math.floor(Date.now() / 1000) - 14 * 60,
   });
   const alert = goalOverSignal.evaluate(match, touchStatsSecondHalf("12", "8"));
 
   assert.ok(alert);
   assert.equal(alert.text, GOAL_OVER_FT_TEXT);
-  assert.equal(alert.minute, 55);
+  assert.equal(alert.minute, 60);
   assert.equal(alert.threshold, DEFAULT_GOAL_RATIO_THRESHOLD);
   assert.equal(alert.touches, 20);
   assert.deepEqual(alert.oddsMarket, {
@@ -394,27 +394,27 @@ test("goalOverSignal fires a second-half alert on a 0-0 in the 50'-70' window", 
     handicap: 0.5,
     selection: "OVER",
   });
-  assert.ok(Math.abs(alert.value! - 20 / 10) < 1e-9);
+  assert.ok(Math.abs(alert.value! - 20 / 15) < 1e-9);
 });
 
 test("goalOverSignal computes the second-half ratio on second-half minutes only", () => {
   const match = goalMatch({
     stage_id: 13,
-    stage_start: Math.floor(Date.now() / 1000) - 7 * 60,
+    stage_start: Math.floor(Date.now() / 1000) - 19 * 60,
   });
 
-  const alert = goalOverSignal.evaluate(match, touchStatsSecondHalf("5", "3"));
+  const alert = goalOverSignal.evaluate(match, touchStatsSecondHalf("10", "5"));
 
   assert.ok(alert);
-  assert.equal(alert.minute, 53);
-  assert.equal(alert.touches, 8);
-  assert.ok(Math.abs(alert.value! - 8 / 8) < 1e-9);
+  assert.equal(alert.minute, 65);
+  assert.equal(alert.touches, 15);
+  assert.ok(Math.abs(alert.value! - 15 / 20) < 1e-9);
 });
 
 test("goalOverSignal ignores first-half stats in the second half", () => {
   const match = goalMatch({
     stage_id: 13,
-    stage_start: Math.floor(Date.now() / 1000) - 9 * 60,
+    stage_start: Math.floor(Date.now() / 1000) - 14 * 60,
   });
 
   assert.equal(goalOverSignal.evaluate(match, touchStats("30", "15")), null);
@@ -423,7 +423,7 @@ test("goalOverSignal ignores first-half stats in the second half", () => {
 test("goalOverSignal stays silent in the second half when second-half stats are missing or low", () => {
   const match = goalMatch({
     stage_id: 13,
-    stage_start: Math.floor(Date.now() / 1000) - 9 * 60,
+    stage_start: Math.floor(Date.now() / 1000) - 14 * 60,
   });
 
   assert.equal(
@@ -447,14 +447,14 @@ test("goalOverSignal honors the ratio threshold env override", () => {
 
 test("goalOverSignal stays silent outside the configured windows", () => {
   const early = goalMatch({ stage_start: Math.floor(Date.now() / 1000) - 4 * 60 });
-  const late = goalMatch({ stage_start: Math.floor(Date.now() / 1000) - 34 * 60 });
+  const late = goalMatch({ stage_start: Math.floor(Date.now() / 1000) - 35 * 60 });
   const secondEarly = goalMatch({
     stage_id: 13,
     stage_start: Math.floor(Date.now() / 1000) - 2 * 60,
   });
   const secondLate = goalMatch({
     stage_id: 13,
-    stage_start: Math.floor(Date.now() / 1000) - 34 * 60,
+    stage_start: Math.floor(Date.now() / 1000) - 35 * 60,
   });
 
   assert.equal(goalOverSignal.evaluate(early, touchStats("0", "0")), null);
@@ -482,8 +482,8 @@ test("evaluateSignals gates every signal on the 0-0 score", () => {
 });
 
 test("goalOverSignal reports the configured windows", () => {
-  assert.deepEqual({ ...FIRST_HALF_WINDOW }, { min: 10, max: 30 });
-  assert.deepEqual({ ...SECOND_HALF_WINDOW }, { min: 50, max: 70 });
+  assert.deepEqual({ ...FIRST_HALF_WINDOW }, { min: 15, max: 35 });
+  assert.deepEqual({ ...SECOND_HALF_WINDOW }, { min: 60, max: 80 });
 });
 
 test("sendTelegram strips the country prefix from the tournament name", async () => {

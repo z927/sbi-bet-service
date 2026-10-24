@@ -15,8 +15,8 @@ export const GOAL_OVER_MARKET = {
 } as const;
 export const DEFAULT_GOAL_RATIO_THRESHOLD = 0.7;
 
-export const FIRST_HALF_WINDOW = { min: 10, max: 30 } as const;
-export const SECOND_HALF_WINDOW = { min: 50, max: 70 } as const;
+export const FIRST_HALF_WINDOW = { min: 15, max: 35 } as const;
+export const SECOND_HALF_WINDOW = { min: 60, max: 80 } as const;
 
 export interface MinuteWindow {
   readonly min: number;
