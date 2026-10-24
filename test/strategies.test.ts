@@ -37,37 +37,61 @@ const ALERT_STATS_FIXTURE = [
   "SD\u00f799\u00acSG\u00f7Palloni toccati nell'area avversaria\u00acSH\u00f720\u00acSI\u00f710",
 ].join("~");
 
-const ODDS_FIXTURE = JSON.stringify({
+const LIVE_ODDS_MENU_FIXTURE = JSON.stringify({
   data: {
-    findOddsByEventId: {
+    getLiveOddsBettingTypeMenu: {
       settings: {
         bookmakers: [
           { bookmaker: { id: 1, name: "Book A" } },
           { bookmaker: { id: 2, name: "Book B" } },
         ],
       },
-      odds: [
+      items: [
         {
-          bookmakerId: 1,
           bettingType: "OVER_UNDER",
           bettingScope: "FIRST_HALF",
-          hasLiveBettingOffers: true,
-          odds: [
-            { value: "1.5", opening: "1.4", handicap: { value: "0.5" }, active: true },
-            { value: "2.9", opening: "2.8", handicap: { value: "0.5" }, active: true },
-          ],
+          types: ["LIVE"],
+          bookmakerIds: [1, 2],
         },
         {
-          bookmakerId: 2,
           bettingType: "OVER_UNDER",
-          bettingScope: "FIRST_HALF",
-          hasLiveBettingOffers: true,
-          odds: [
-            { value: "1.8", opening: "1.7", handicap: { value: "0.5" }, active: true },
-            { value: "2.6", opening: "2.5", handicap: { value: "0.5" }, active: true },
-          ],
+          bettingScope: "FULL_TIME",
+          types: ["LIVE"],
+          bookmakerIds: [1, 2],
         },
       ],
+    },
+  },
+});
+
+const LIVE_ODDS_MARKET_FIXTURE_1 = JSON.stringify({
+  data: {
+    findLiveOddsForBookmaker: {
+      eventOddsOverview: {
+        opportunities: [
+          {
+            handicap: { value: "0.5" },
+            over: { value: "1.5", opening: "1.4", active: true },
+            under: { value: "2.9", opening: "2.8", active: true },
+          },
+        ],
+      },
+    },
+  },
+});
+
+const LIVE_ODDS_MARKET_FIXTURE_2 = JSON.stringify({
+  data: {
+    findLiveOddsForBookmaker: {
+      eventOddsOverview: {
+        opportunities: [
+          {
+            handicap: { value: "0.5" },
+            over: { value: "1.8", opening: "1.7", active: true },
+            under: { value: "2.6", opening: "2.5", active: true },
+          },
+        ],
+      },
     },
   },
 });
@@ -75,6 +99,8 @@ const ODDS_FIXTURE = JSON.stringify({
 const originalFetch = globalThis.fetch;
 let statsCalls = 0;
 let oddsCalls = 0;
+let liveMenuCalls = 0;
+let liveOddsCalls = 0;
 let statsFail = false;
 let statsBody = STATS_FIXTURE;
 let telegramCalls = 0;
@@ -96,9 +122,23 @@ const fixtureFetch = (async (url: string, init?: RequestInit) => {
     statsCalls += 1;
     return statsFail ? makeResponse("boom", false, 500) : makeResponse(statsBody);
   }
+  if (target.includes("400.ds.lsapp.eu/pq_graphql")) {
+    if (target.includes("_hash=lobtm")) {
+      liveMenuCalls += 1;
+      return makeResponse(LIVE_ODDS_MENU_FIXTURE);
+    }
+    if (target.includes("_hash=ole2")) {
+      liveOddsCalls += 1;
+      oddsCalls += 1;
+      if (target.includes("bookmakerId=1")) {
+        return makeResponse(LIVE_ODDS_MARKET_FIXTURE_1);
+      }
+      return makeResponse(LIVE_ODDS_MARKET_FIXTURE_2);
+    }
+  }
   if (target.includes("pq_graphql")) {
     oddsCalls += 1;
-    return makeResponse(ODDS_FIXTURE);
+    return makeResponse(LIVE_ODDS_MENU_FIXTURE);
   }
   return makeResponse(FIXTURE);
 }) as unknown as typeof fetch;
@@ -112,6 +152,8 @@ beforeEach(() => {
   globalThis.fetch = fixtureFetch;
   statsCalls = 0;
   oddsCalls = 0;
+  liveMenuCalls = 0;
+  liveOddsCalls = 0;
   statsFail = false;
   statsBody = STATS_FIXTURE;
   telegramCalls = 0;
@@ -239,7 +281,8 @@ test("strategy dispatches signal alerts through Telegram", async () => {
     assert.equal(result.failures, 0);
     assert.equal(result.results[0]!.alerts.length, 1);
     assert.equal(result.results[0]!.alerts[0]!.odds, 1.8);
-    assert.equal(oddsCalls, 1);
+    assert.equal(liveMenuCalls, 1);
+    assert.equal(liveOddsCalls >= 1, true);
     assert.equal(telegramCalls, 1);
     assert.deepEqual(telegramBodies[0], {
       chat_id: "-10042",
