@@ -2,7 +2,7 @@ import { inspect } from "node:util";
 
 import { client } from "../../scraper/client/index.ts";
 import type { Match, Statistics } from "../../scraper/models.ts";
-import { attachLiveOdds, dispatchAlerts, evaluateSignals } from "../signals/index.ts";
+import { attachLiveOdds, dispatchAlerts, evaluateSignalsWithPreAlert } from "../signals/index.ts";
 import { configuredMajorLeagues, isMajorLeague } from "./major_leagues.ts";
 import type {
   Strategy,
@@ -48,7 +48,7 @@ export const runLiveMatchesStrategy = async (
     try {
       const statistics = await client.getStatistics(match.id);
       hooks.log(match, statistics);
-      const alerts = evaluateSignals(match, statistics);
+      const alerts = await evaluateSignalsWithPreAlert(match, statistics, undefined, { match, statistics });
       if (alerts.length > 0) {
         await attachLiveOdds(alerts);
       }

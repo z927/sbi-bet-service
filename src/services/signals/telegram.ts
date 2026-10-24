@@ -109,6 +109,28 @@ const formatAlert = (alert: Alert): string => {
   ].join("\n");
 }
 
+const formatPreAlert = (alert: Alert): string => {
+  const minute = alert.minute === null ? "n/a" : `${alert.minute}°`;
+  const flag = countryFlag(alert.country);
+  const tournament = stripCountryPrefix(alert.tournament ?? "", alert.country);
+  const league = [tournament, flag].filter((part) => part).join(" ");
+  const touches = alert.touches === null || alert.touches === undefined ? "n/a" : String(alert.touches);
+  const ratio = alert.value === null ? "n/a" : alert.value.toFixed(2);
+  const odds = alert.odds === null || alert.odds === undefined ? "n/a" : alert.odds.toFixed(2);
+  return [
+    `👀 PRE-ALERT - Partita da monitorare`,
+    `⚽ ${alert.text.replace("Alert Goal Over 0.5", "Goal Over 0.5 (potenziale)")}`,
+    `🏆 ${league}`,
+    `💹 Live, Win Rate: ➡️ ${getWinRate()}%`,
+    `💶 Quota live: ${odds}`,
+    `⏱ ${minute}`,
+    `🎽 ${alert.home} vs ${alert.away}${formatScore(alert)}`,
+    `ℹ️ Tocchi area: ${touches}`,
+    `ℹ️ Rapporto: ${ratio}`,
+    `⏳ Verrà ricontrollata tra ~5 min se rimane 0-0`,
+  ].join("\n");
+}
+
 export const sendTelegram = async (
   alert: Alert,
   config: TelegramConfig | null = getTelegramConfig(),
@@ -119,6 +141,29 @@ export const sendTelegram = async (
   const body = JSON.stringify({
     chat_id: config.chatId,
     text: formatAlert(alert),
+  });
+  const response = await fetch(`${TELEGRAM_API}/bot${config.token}/sendMessage`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body,
+  });
+  if (!response.ok) {
+    const text = (await response.text()).slice(0, 120);
+    throw new Error(`Telegram HTTP ${response.status}: ${text}`);
+  }
+  return true;
+}
+
+export const sendPreAlertTelegram = async (
+  alert: Alert,
+  config: TelegramConfig | null = getTelegramConfig(),
+): Promise<boolean> => {
+  if (config === null) {
+    return false;
+  }
+  const body = JSON.stringify({
+    chat_id: config.chatId,
+    text: formatPreAlert(alert),
   });
   const response = await fetch(`${TELEGRAM_API}/bot${config.token}/sendMessage`, {
     method: "POST",
