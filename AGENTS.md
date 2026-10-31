@@ -94,8 +94,10 @@ src/
     generated/api-types.ts  openapi-typescript output (do not edit by hand)
     routes.ts               /api/v1 routes + route metadata
     services/               in-memory business logic
+  clients/
+    apifootball/            API-Football client (leagues, teams, fixtures)
+    diretta/                diretta.it client, una risorsa per file (transport, matches, match, statistics, events, lineups, odds, index)
   scraper/
-    client/                 diretta.it client, una risorsa per file (transport, matches, match, statistics, events, lineups, odds, index)
     db.ts                   node:sqlite persistence
     service.ts              TTL cache + orchestration (collect/enrich)
     routes.ts               scraper routes

@@ -1,7 +1,7 @@
 import { getSettings, type Settings } from "../config.ts";
 import { ConflictError, baseResponse } from "../errors.ts";
 import type { BaseResponse } from "../types.ts";
-import { client as feedClient, FeedError } from "../scraper/client/index.ts";
+import { client as feedClient, FeedError } from "../clients/diretta/index.ts";
 import * as db from "../scraper/db.ts";
 import type { Match } from "../scraper/models.ts";
 import { defaultSchedulerClient, type SchedulerClient } from "../cloud_scheduler/client.ts";

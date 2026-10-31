@@ -18,6 +18,8 @@ export interface Settings {
   schedulerCronStepMinutes: number;
   supabaseUrl: string;
   supabaseServiceRoleKey: string;
+  apiFootballBaseUrl: string;
+  apiFootballKey: string;
 }
 
 const DEFAULT_UPSTREAM = "https://bet-service-658489904938.europe-west6.run.app";
@@ -56,5 +58,7 @@ export const getSettings = (env: NodeJS.ProcessEnv = process.env): Settings => {
     schedulerCronStepMinutes: Number.isNaN(step) || step < 1 || step > 59 ? 10 : step,
     supabaseUrl: env.SUPABASE_URL ?? "",
     supabaseServiceRoleKey: env.SUPABASE_SERVICE_ROLE_KEY ?? "",
+    apiFootballBaseUrl: env.API_FOOTBALL_BASE_URL ?? "https://v3.football.api-sports.io",
+    apiFootballKey: env.API_FOOTBALL_KEY ?? "",
   };
 }

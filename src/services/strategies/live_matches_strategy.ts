@@ -1,6 +1,6 @@
 import { inspect } from "node:util";
 
-import { client } from "../../scraper/client/index.ts";
+import { client } from "../../clients/diretta/index.ts";
 import type { Match, Statistics } from "../../scraper/models.ts";
 import { attachLiveOdds, dispatchAlerts, evaluateSignalsWithPreAlert } from "../signals/index.ts";
 import { configuredMajorLeagues, isMajorLeague } from "./major_leagues.ts";

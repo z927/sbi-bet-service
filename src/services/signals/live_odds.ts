@@ -1,5 +1,5 @@
-import { client } from "../../scraper/client/index.ts";
-import { bestLiveOutcome } from "../../scraper/client/odds.ts";
+import { client } from "../../clients/diretta/index.ts";
+import { bestLiveOutcome } from "../../clients/diretta/odds.ts";
 import type { Alert } from "./alert.ts";
 
 export const DEFAULT_ODDS_GEO = "IT";

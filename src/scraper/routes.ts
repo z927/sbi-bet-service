@@ -1,7 +1,7 @@
 import type { FastifyInstance } from "fastify";
 import { ValidationError } from "../errors.ts";
 import type { RouteMetadata } from "../sbi/routes.ts";
-import { SPORTS } from "./client/index.ts";
+import { SPORTS } from "../clients/diretta/index.ts";
 import * as db from "./db.ts";
 import * as service from "./service.ts";
 

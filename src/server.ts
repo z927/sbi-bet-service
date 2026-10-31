@@ -6,9 +6,11 @@ import swaggerUi from "@fastify/swagger-ui";
 import type { FastifyError, FastifyReply, FastifyRequest } from "fastify";
 import { getSettings } from "./config.ts";
 import { ConflictError, ValidationError, baseResponse } from "./errors.ts";
-import { FeedError } from "./scraper/client/index.ts";
+import { FeedError } from "./clients/diretta/index.ts";
+import { ApiFootballError } from "./clients/apifootball/client.ts";
 import { sbiRoutes } from "./sbi/routes.ts";
 import { scraperRoutes } from "./scraper/routes.ts";
+import { mappingRoutes } from "./mapping/routes.ts";
 import { initDb } from "./scraper/db.ts";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -33,6 +35,10 @@ export const buildServer = async (): Promise<FastifyInstance> => {
     }
     if (error instanceof FeedError) {
       request.log.error({ err: error }, "upstream feed error");
+      return reply.code(502).send({ detail: error.message });
+    }
+    if (error instanceof ApiFootballError) {
+      request.log.error({ err: error }, "api-football error");
       return reply.code(502).send({ detail: error.message });
     }
     if (error.validation) {
@@ -62,6 +68,7 @@ export const buildServer = async (): Promise<FastifyInstance> => {
 
   app.register(sbiRoutes);
   app.register(scraperRoutes);
+  app.register(mappingRoutes);
 
   return app;
 }

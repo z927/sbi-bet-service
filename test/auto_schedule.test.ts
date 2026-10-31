@@ -8,7 +8,7 @@ import type {
   SchedulerJob,
 } from "../src/cloud_scheduler/client.ts";
 import { ConflictError } from "../src/errors.ts";
-import { FeedError } from "../src/scraper/client/transport.ts";
+import { FeedError } from "../src/clients/diretta/transport.ts";
 import type { AppLogger } from "../src/logger.ts";
 import * as db from "../src/scraper/db.ts";
 import { removeDb, useTempDb } from "./support.ts";
