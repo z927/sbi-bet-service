@@ -1,6 +1,7 @@
 import type { Match, Statistics } from "../../scraper/models.ts";
 import type { Alert } from "./alert.ts";
 import type { Signal } from "./signal.ts";
+import { getStrategyLogger } from "../../logger.ts";
 import { goalOverSignal, GOAL_OVER_SIGNAL, GOAL_RATIO_ENV, DEFAULT_GOAL_RATIO_THRESHOLD, FIRST_HALF_WINDOW, SECOND_HALF_WINDOW } from "./goal_over_signal.ts";
 import { matchMinute, matchPeriod } from "./match_minutes.ts";
 import { sendTelegram, sendPreAlertTelegram } from "./telegram.ts";
@@ -95,9 +96,15 @@ const maybeSendPreAlert = async (
   };
   try {
     await sendPreAlertTelegram(alert);
+    getStrategyLogger().info(
+      { rule: alert.rule, minute: alert.minute, value: alert.value, threshold: alert.threshold },
+      "pre-alert detected",
+    );
   } catch (exc) {
-    const error = exc instanceof Error ? exc.message : String(exc);
-    console.error(`[signals] pre-alert dispatch failed for ${alert.matchId} (${alert.rule}): ${error}`);
+    getStrategyLogger().error(
+      { err: exc, rule: alert.rule, matchId: alert.matchId },
+      "pre-alert dispatch failed",
+    );
   }
   preAlerted.add(key);
   preAlertCheckAt.set(key, Date.now() + PRE_ALERT_RECHECK_MINUTES * 60 * 1000);
@@ -175,6 +182,10 @@ const recheckPreAlerts = async (
     },
   };
   fired.add(key);
+  getStrategyLogger().info(
+    { rule: alert.rule, minute: alert.minute, value: alert.value, threshold: alert.threshold },
+    "pre-alert confirmed",
+  );
   await dispatchAlerts([alert], sendTelegram, context ?? { match: currentMatch, statistics: currentStatistics });
   return [alert];
 }
@@ -197,6 +208,10 @@ export const evaluateSignals = (
     if (alert !== null) {
       fired.add(key);
       alerts.push(alert);
+      getStrategyLogger().info(
+        { rule: alert.rule, minute: alert.minute, value: alert.value, threshold: alert.threshold },
+        "signal fired",
+      );
     }
   }
   return alerts;
@@ -232,14 +247,18 @@ export const dispatchAlerts = async (
     try {
       await sender(alert);
     } catch (exc) {
-      const error = exc instanceof Error ? exc.message : String(exc);
-      console.error(`[signals] dispatch failed for ${alert.rule} (match ${alert.matchId}): ${error}`);
+      getStrategyLogger().error(
+        { err: exc, rule: alert.rule, matchId: alert.matchId },
+        "alert dispatch failed",
+      );
     }
     try {
       await saveSignal(alert, context);
     } catch (exc) {
-      const error = exc instanceof Error ? exc.message : String(exc);
-      console.error(`[signals] failed to persist signal for ${alert.matchId} (${alert.rule}): ${error}`);
+      getStrategyLogger().error(
+        { err: exc, rule: alert.rule, matchId: alert.matchId },
+        "signal persist failed",
+      );
     }
   }
 }

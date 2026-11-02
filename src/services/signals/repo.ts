@@ -1,5 +1,6 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { getSettings } from "../../config.ts";
+import { getStrategyLogger } from "../../logger.ts";
 import type { Alert } from "./alert.ts";
 import type { Match, Statistics } from "../../scraper/models.ts";
 
@@ -54,7 +55,9 @@ export const saveSignal = async (alert: Alert, context?: SaveSignalContext): Pro
       match_data: match ?? null,
     });
   } catch (err) {
-    const error = err instanceof Error ? err.message : String(err);
-    console.error(`[signals] failed to save signal for ${alert.matchId} (${alert.rule}): ${error}`);
+    getStrategyLogger().error(
+      { err, rule: alert.rule, matchId: alert.matchId },
+      "signal save failed",
+    );
   }
 };

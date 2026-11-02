@@ -1,3 +1,4 @@
+import { getLogger } from "../logger.ts";
 import { client, FeedError, feedName, liveMinute } from "./client/index.ts";
 import * as db from "./db.ts";
 import type { Match, ScrapeTestResponse, Statistics } from "./models.ts";
@@ -82,11 +83,12 @@ export const collect = async (
   workers: number,
 ): Promise<Match[]> => {
   const feed = feedName(sport);
+  const log = getLogger();
   let matches = await client.listMatches(sport);
-  console.log(`[scraper] diretta ${feed} ha restituito ${matches.length} partite`);
+  log.info({ feed, count: matches.length }, "diretta feed fetched");
   if (scope === "live") {
     matches = matches.filter((m) => m.is_live);
-    console.log(`[scraper] dopo filtro live restano ${matches.length} partite live (sport=${sport})`);
+    log.info({ sport, count: matches.length }, "live matches after filter");
   }
   if (filterText) {
     const needle = filterText.toLowerCase();

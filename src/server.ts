@@ -1,6 +1,7 @@
+import { randomUUID } from "node:crypto";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import Fastify, { type FastifyInstance } from "fastify";
+import Fastify, { LogController, type FastifyInstance } from "fastify";
 import swagger from "@fastify/swagger";
 import swaggerUi from "@fastify/swagger-ui";
 import type { FastifyError, FastifyReply, FastifyRequest } from "fastify";
@@ -10,6 +11,7 @@ import { FeedError } from "./scraper/client/index.ts";
 import { sbiRoutes } from "./sbi/routes.ts";
 import { scraperRoutes } from "./scraper/routes.ts";
 import { initDb } from "./scraper/db.ts";
+import { getLogger, runWithLogContext } from "./logger.ts";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const CONTRACT_PATH = resolve(HERE, "..", "openapi", "openapi.yaml");
@@ -17,7 +19,33 @@ const CONTRACT_PATH = resolve(HERE, "..", "openapi", "openapi.yaml");
 export const buildServer = async (): Promise<FastifyInstance> => {
   const settings = getSettings();
   const app = Fastify({
-    logger: { level: settings.logLevel },
+    loggerInstance: getLogger(),
+    logController: new LogController({ disableRequestLogging: true }),
+    genReqId: (request) => {
+      const header = request.headers["x-request-id"];
+      const value = Array.isArray(header) ? header[0] : header;
+      return value !== undefined && value.trim() !== "" ? value.trim() : randomUUID();
+    },
+  });
+
+  app.addHook("onRequest", (request, _reply, done) => {
+    runWithLogContext({ traceId: String(request.id) }, () => {
+      request.log.info({ method: request.method, url: request.url }, "incoming request");
+      done();
+    });
+  });
+
+  app.addHook("onResponse", (request, reply, done) => {
+    request.log.info(
+      {
+        method: request.method,
+        url: request.url,
+        statusCode: reply.statusCode,
+        responseTime: reply.elapsedTime,
+      },
+      "request completed",
+    );
+    done();
   });
 
   initDb();
@@ -63,5 +91,5 @@ export const buildServer = async (): Promise<FastifyInstance> => {
   app.register(sbiRoutes);
   app.register(scraperRoutes);
 
-  return app;
+  return app as unknown as FastifyInstance;
 }
