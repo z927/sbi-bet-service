@@ -49,6 +49,16 @@ export const runWithLogContext = <T>(context: LogContext, fn: () => T): T => {
   return storage.run(merged, fn);
 };
 
+/**
+ * Runs `fn` with a brand-new trace id, ignoring the parent one.
+ *
+ * Use it for a child unit of work that should be followed independently, e.g.
+ * a single match processed inside a strategy run.
+ */
+export const runWithNewLogTrace = <T>(context: Omit<LogContext, "traceId">, fn: () => T): T => {
+  return runWithLogContext({ ...context, traceId: randomUUID() }, fn);
+};
+
 type LogRecord = Record<string, unknown>;
 type LogFormatter = (entry: LogRecord) => string;
 

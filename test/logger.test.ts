@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { getLogContext, runWithLogContext } from "../src/logger.ts";
+import { getLogContext, runWithLogContext, runWithNewLogTrace } from "../src/logger.ts";
 
 process.env["LOG_LEVEL"] = "silent";
 
@@ -26,5 +26,25 @@ test("runWithLogContext merges nested context and reuses the trace id", () => {
 test("runWithLogContext keeps an explicitly provided trace id", () => {
   runWithLogContext({ traceId: "trace-1", strategy: "demo" }, () => {
     assert.equal(getLogContext().traceId, "trace-1");
+  });
+});
+
+test("runWithNewLogTrace starts a fresh trace id for each unit of work", () => {
+  runWithLogContext({ strategy: "demo" }, () => {
+    const outer = getLogContext().traceId;
+    const traces: string[] = [];
+
+    for (const match of ["Inter - Milan", "Roma - Lazio"]) {
+      runWithNewLogTrace({ match }, () => {
+        const inner = getLogContext();
+        assert.equal(inner.strategy, "demo");
+        assert.equal(inner.match, match);
+        assert.ok(inner.traceId);
+        assert.notEqual(inner.traceId, outer);
+        traces.push(inner.traceId);
+      });
+    }
+
+    assert.equal(new Set(traces).size, traces.length);
   });
 });

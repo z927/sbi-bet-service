@@ -263,7 +263,9 @@ Structured logging uses `pino` (`src/logger.ts`) with an `AsyncLocalStorage`
 context that behaves like the logback MDC:
 
 - `traceId` — request id (`x-request-id` when provided, otherwise a UUID) or a
-  per-run UUID for cron/strategy executions.
+  per-run UUID for cron/strategy executions. Inside the live strategy each match
+  gets its own trace, opened at the start of the match and closed right after its
+  processing, so a single match can be followed independently.
 - `strategy` — strategy name (e.g. `live-matches-statistics`).
 - `match` — `"home - away"`.
 - `fixtureId` — SBI fixture id; in the live scraper flow it is the diretta.it
@@ -282,8 +284,12 @@ with `additivity="false"`) writes only strategy/signal events:
 [ LEVEL ] | traceId | strategy | match | fixtureId | message
 ```
 
-Additional structured fields (e.g. `rule`, `minute`, `err`) are appended as a
-compact JSON object after the message. `LOG_LEVEL` controls both loggers.
+Per-match strategy events include `match strategy started` / `match strategy
+completed`, plus `match minute` (`minute`, `period`) and `touch ratio` (`touches`,
+`ratio` = touches in the opponent box / elapsed minutes) messages when the data
+is available. Additional structured fields (e.g. `rule`, `minute`, `err`) are
+appended as a compact JSON object after the message. `LOG_LEVEL` controls both
+loggers.
 
 ## Test
 
