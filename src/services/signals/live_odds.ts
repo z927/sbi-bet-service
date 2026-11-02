@@ -1,5 +1,6 @@
 import { client } from "../../scraper/client/index.ts";
 import { bestLiveOutcome } from "../../scraper/client/odds.ts";
+import { getStrategyLogger } from "../../logger.ts";
 import type { Alert } from "./alert.ts";
 
 export const DEFAULT_ODDS_GEO = "IT";
@@ -29,8 +30,10 @@ export const attachLiveOdds = async (
       alert.odds = await resolver(alert);
     } catch (exc) {
       alert.odds = null;
-      const error = exc instanceof Error ? exc.message : String(exc);
-      console.error(`[signals] failed to fetch live odds for ${alert.matchId} (${alert.rule}): ${error}`);
+      getStrategyLogger().error(
+        { err: exc, rule: alert.rule, matchId: alert.matchId },
+        "live odds lookup failed",
+      );
     }
   }
 }

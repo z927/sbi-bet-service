@@ -257,6 +257,34 @@ Read from environment variables via `src/config.ts`:
 
 Secrets must never be committed.
 
+## Logging
+
+Structured logging uses `pino` (`src/logger.ts`) with an `AsyncLocalStorage`
+context that behaves like the logback MDC:
+
+- `traceId` — request id (`x-request-id` when provided, otherwise a UUID) or a
+  per-run UUID for cron/strategy executions.
+- `strategy` — strategy name (e.g. `live-matches-statistics`).
+- `match` — `"home - away"`.
+- `fixtureId` — SBI fixture id; in the live scraper flow it is the diretta.it
+  match id for now.
+
+The default console logger pattern is:
+
+```text
+[ LEVEL ] | thread | traceId | message
+```
+
+A dedicated strategy logger (`getStrategyLogger`, equivalent to a logback logger
+with `additivity="false"`) writes only strategy/signal events:
+
+```text
+[ LEVEL ] | traceId | strategy | match | fixtureId | message
+```
+
+Additional structured fields (e.g. `rule`, `minute`, `err`) are appended as a
+compact JSON object after the message. `LOG_LEVEL` controls both loggers.
+
 ## Test
 
 ```bash

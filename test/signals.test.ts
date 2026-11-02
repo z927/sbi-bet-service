@@ -30,6 +30,8 @@ import {
 import { bestLiveOutcome } from "../src/scraper/client/odds.ts";
 import type { Match, Odds, Statistics } from "../src/scraper/models.ts";
 
+process.env["LOG_LEVEL"] = "silent";
+
 const makeAlert = (overrides: Partial<Alert> = {}): Alert => ({
   rule: "test-rule",
   matchId: "m1",

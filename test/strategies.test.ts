@@ -15,6 +15,8 @@ import {
   resetSignalState,
 } from "../src/services/signals/index.ts";
 
+process.env["LOG_LEVEL"] = "silent";
+
 const M1_STAGE_START = Math.floor(Date.now() / 1000) - 15 * 60;
 
 const FIXTURE = [
