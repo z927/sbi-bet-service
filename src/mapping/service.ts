@@ -1,6 +1,7 @@
 import { ValidationError } from "../errors.ts";
 import { isIsoDate } from "../validation.ts";
 import * as af from "../clients/apifootball/client.ts";
+import { listMatches } from "../clients/diretta/matches.ts";
 import { normalizeTeamName, rankCandidates } from "./normalize.ts";
 import * as repo from "./repo.ts";
 import {
@@ -12,10 +13,13 @@ import {
   type LeagueLink,
   type MappingStatus,
   type Provider,
+  type ProviderTeamSyncCounts,
   type ResolveTeamInput,
   type ResolveTeamResult,
   type SyncSeasonInput,
   type SyncSeasonReport,
+  type SyncTeamsInput,
+  type SyncTeamsReport,
   type Team,
   type TeamAlias,
   type TeamProviderMapping,
@@ -410,6 +414,194 @@ export const syncSeason = async (input: SyncSeasonInput): Promise<SyncSeasonRepo
       }
     }
   }
+
+  return report;
+};
+
+const emptyTeamCounts = (): ProviderTeamSyncCounts => ({
+  seen: 0,
+  created: 0,
+  mapped: 0,
+  pending: 0,
+  unmatched: 0,
+});
+
+interface ProviderTeamEntry {
+  providerTeamId: string;
+  name: string;
+  country: string;
+}
+
+const syncProviderTeams = async (
+  provider: Provider,
+  entries: ProviderTeamEntry[],
+  dryRun: boolean,
+  errors: string[],
+): Promise<{ counts: ProviderTeamSyncCounts; teamIds: Map<string, string> }> => {
+  const counts = emptyTeamCounts();
+  counts.seen = entries.length;
+  const teamIds = new Map<string, string>();
+
+  for (const entry of entries) {
+    const { providerTeamId, name, country } = entry;
+    try {
+      const existing = await repo.findMapping(provider, providerTeamId);
+      if (existing) {
+        if (existing.status === "rejected") {
+          counts.unmatched += 1;
+          if (errors.length < 50) {
+            errors.push(`${provider} team ${providerTeamId} (${name}): mapping rifiutata`);
+          }
+          continue;
+        }
+        teamIds.set(providerTeamId, existing.teamId);
+        if (existing.status === "pending") {
+          counts.pending += 1;
+        } else {
+          counts.mapped += 1;
+        }
+        continue;
+      }
+
+      const resolved = await resolveTeam({
+        provider,
+        providerTeamId,
+        name,
+        country,
+        autoLink: !dryRun,
+      });
+
+      if (resolved.status === "matched" && resolved.team) {
+        teamIds.set(providerTeamId, resolved.team.id);
+        counts.mapped += 1;
+        continue;
+      }
+
+      if (resolved.status === "pending") {
+        counts.pending += 1;
+        if (resolved.team) {
+          teamIds.set(providerTeamId, resolved.team.id);
+        } else if (errors.length < 50) {
+          errors.push(`${provider} team ${providerTeamId} (${name}): match ambiguo, revisione manuale`);
+        }
+        continue;
+      }
+
+      if (resolved.status === "rejected") {
+        counts.unmatched += 1;
+        if (errors.length < 50) {
+          errors.push(`${provider} team ${providerTeamId} (${name}): mapping rifiutata`);
+        }
+        continue;
+      }
+
+      counts.created += 1;
+      if (dryRun) {
+        continue;
+      }
+      const team = await createTeam({ name, country });
+      teamIds.set(providerTeamId, team.id);
+      await repo.upsertMapping({
+        teamId: team.id,
+        provider,
+        providerTeamId,
+        rawName: name,
+        country,
+        confidence: 1,
+        status: "confirmed",
+        source: "id",
+      });
+    } catch (error) {
+      counts.unmatched += 1;
+      if (errors.length < 50) {
+        errors.push(`${provider} team ${providerTeamId} (${name}): ${errorMessage(error)}`);
+      }
+    }
+  }
+
+  return { counts, teamIds };
+};
+
+export const syncTeams = async (input: SyncTeamsInput): Promise<SyncTeamsReport> => {
+  if (!Number.isInteger(input.leagueId) || input.leagueId <= 0) {
+    throw new ValidationError("leagueId must be a positive integer");
+  }
+  if (input.season !== undefined && (!Number.isInteger(input.season) || input.season < 1800)) {
+    throw new ValidationError("season must be a valid year");
+  }
+  const dryRun = input.dryRun ?? false;
+
+  const league = await af.getLeague(input.leagueId);
+  const season = af.resolveSeason(league, input.season);
+  const existingLink = await repo.getLeagueLink(input.leagueId);
+  const direttaTournamentId =
+    input.direttaTournamentId?.trim() || existingLink?.direttaTournamentId || "";
+  if (direttaTournamentId === "") {
+    throw new ValidationError(
+      "direttaTournamentId is required (or set it once via /mapping/seasons/sync)",
+    );
+  }
+
+  if (!dryRun) {
+    await repo.upsertLeagueLink({
+      apiFootballLeagueId: input.leagueId,
+      direttaTournamentId,
+      name: league.league.name,
+    });
+  }
+
+  const report: SyncTeamsReport = {
+    league: {
+      apiFootballId: league.league.id,
+      name: league.league.name,
+      country: league.country.name,
+      season: season.year,
+      seasonStart: season.start,
+      seasonEnd: season.end,
+      current: season.current,
+    },
+    direttaTournamentId,
+    dryRun,
+    apiFootball: emptyTeamCounts(),
+    diretta: emptyTeamCounts(),
+    errors: [],
+  };
+
+  const apiTeams = await af.listTeams(input.leagueId, season.year);
+  const apiSync = await syncProviderTeams(
+    "api_football",
+    apiTeams.map((entry) => ({
+      providerTeamId: String(entry.team.id),
+      name: entry.team.name,
+      country: entry.team.country ?? league.country.name,
+    })),
+    dryRun,
+    report.errors,
+  );
+  report.apiFootball = apiSync.counts;
+
+  const matches = await listMatches(1);
+  const direttaTeams = new Map<string, ProviderTeamEntry>();
+  for (const match of matches) {
+    if ((match.tournament_id ?? "") !== direttaTournamentId) {
+      continue;
+    }
+    const country = match.country || league.country.name;
+    if (match.home_id && match.home) {
+      direttaTeams.set(match.home_id, { providerTeamId: match.home_id, name: match.home, country });
+    }
+    if (match.away_id && match.away) {
+      direttaTeams.set(match.away_id, { providerTeamId: match.away_id, name: match.away, country });
+    }
+  }
+
+  const direttaSync = await syncProviderTeams(
+    "diretta",
+    [...direttaTeams.values()],
+    dryRun,
+    report.errors,
+  );
+  report.diretta = direttaSync.counts;
 
   return report;
 };

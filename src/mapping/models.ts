@@ -142,3 +142,27 @@ export interface SyncSeasonReport {
   fixtures: { seen: number; created: number; updated: number; skipped: number };
   errors: string[];
 }
+
+export interface SyncTeamsInput {
+  leagueId: number;
+  season?: number;
+  direttaTournamentId?: string;
+  dryRun?: boolean;
+}
+
+export interface ProviderTeamSyncCounts {
+  seen: number;
+  created: number;
+  mapped: number;
+  pending: number;
+  unmatched: number;
+}
+
+export interface SyncTeamsReport {
+  league: SyncSeasonReport["league"];
+  direttaTournamentId: string;
+  dryRun: boolean;
+  apiFootball: ProviderTeamSyncCounts;
+  diretta: ProviderTeamSyncCounts;
+  errors: string[];
+}

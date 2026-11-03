@@ -29,7 +29,7 @@ npm run hooks          # una tantum: attiva gli hook git in .githooks/
 
 | Script | Description |
 | --- | --- |
-| `npm run generate` | Regenerate `src/sbi/generated/api-types.ts` from `openapi/openapi.yaml` (openapi-typescript). |
+| `npm run generate` | Regenerate `src/bet-api/generated/api-types.ts` from `openapi/openapi.yaml` (openapi-typescript). |
 | `npm run typecheck` | Type-check the project with `tsc --noEmit`. |
 | `npm run build` | **Build command**: `generate` + `typecheck`. |
 | `npm run dev` | Run with `node --watch` (auto-restart). |
@@ -51,7 +51,7 @@ npm run dev      # http://127.0.0.1:8000
 
 The SBI request/response **types** are generated from the contract:
 
-- Output: `src/sbi/generated/api-types.ts` (do not edit by hand).
+- Output: `src/bet-api/generated/api-types.ts` (do not edit by hand).
 
 The running server **serves the contract file itself** at `/openapi.json`
 (via `@fastify/swagger` static mode), so the published document can never drift
@@ -163,6 +163,7 @@ back to an in-memory store (tests, local dev).
 | GET | `/mapping/teams` | List canonical teams. |
 | POST | `/mapping/teams` | Create a canonical team (`name`, optional `country`, `aliases`). |
 | GET | `/mapping/teams/resolve` | Resolve a provider team (`provider`, `providerTeamId`, `name`, `country`, `autoLink`). |
+| POST | `/mapping/teams/sync` | Sync API-Football and diretta teams for a league (`leagueId`, optional `season`, `direttaTournamentId`, `dryRun`). |
 | GET | `/mapping/teams/:teamId/aliases` | List aliases for a canonical team. |
 | POST | `/mapping/teams/:teamId/aliases` | Add an alias (`alias`, optional `source`). |
 | GET | `/mapping/mappings` | List provider mappings, optionally filtered by `status`. |
@@ -189,6 +190,18 @@ reported as `rejected` and are not silently rematched.
 4. stores the league mapping API-Football ↔ diretta in `league_links` when
    `direttaTournamentId` is supplied;
 5. is idempotent and does not overwrite an existing `direttaMatchId`.
+
+#### Team sync
+
+`POST /mapping/teams/sync` is the single entry point for reconciling teams
+between the two providers. It imports the API-Football teams of a league/season
+first, then collects the diretta teams observed in the live feed for the
+`direttaTournamentId` (falling back to the stored `league_links` value). For each
+provider team it reuses an existing mapping, then an exact normalized alias, then
+a fuzzy match; only unmatched teams create a new canonical team. Fuzzy matches
+are stored as `pending` for manual review. `dryRun: true` reports the work
+without writing anything. The season's `league_links` row is created/updated when
+`direttaTournamentId` is supplied.
 
 Diretta matches are linked incrementally: when a match is observed in the live
 feed, its `home_id`/`away_id` resolve to canonical teams and the existing
@@ -229,7 +242,7 @@ src/
       major_leagues.ts      env allowlist of major leagues
       live_matches_strategy.ts  live (major) matches -> statistics
     signals/                goal-over-0.5 evaluation, live odds, Telegram, persistence
-  sbi/
+  bet-api/
     generated/api-types.ts  openapi-typescript output
     routes.ts               /api/v1 routes + route metadata
   scraper/

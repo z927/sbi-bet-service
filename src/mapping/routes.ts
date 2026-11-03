@@ -1,4 +1,5 @@
 import type { FastifyInstance } from "fastify";
+import type { RouteMetadata } from "../bet-api/routes.ts";
 import * as service from "./service.ts";
 import {
   MAPPING_SOURCES,
@@ -7,6 +8,7 @@ import {
   type CreateTeamInput,
   type Provider,
   type SyncSeasonInput,
+  type SyncTeamsInput,
   type UpsertFixtureLinkInput,
   type UpsertMappingInput,
 } from "./models.ts";
@@ -31,6 +33,21 @@ interface FixtureQuery {
 
 const providerSchema = { type: "string", enum: PROVIDERS } as const;
 const statusSchema = { type: "string", enum: MAPPING_STATUSES } as const;
+
+export const MAPPING_ROUTES: readonly RouteMetadata[] = [
+  { method: "GET", path: "/mapping/teams", operationId: "listTeams" },
+  { method: "POST", path: "/mapping/teams", operationId: "createTeam" },
+  { method: "GET", path: "/mapping/teams/resolve", operationId: "resolveTeam" },
+  { method: "POST", path: "/mapping/teams/sync", operationId: "syncTeams" },
+  { method: "GET", path: "/mapping/teams/{teamId}/aliases", operationId: "listTeamAliases" },
+  { method: "POST", path: "/mapping/teams/{teamId}/aliases", operationId: "addTeamAlias" },
+  { method: "GET", path: "/mapping/mappings", operationId: "listMappings" },
+  { method: "PUT", path: "/mapping/mappings", operationId: "upsertMapping" },
+  { method: "POST", path: "/mapping/mappings/{mappingId}/status", operationId: "setMappingStatus" },
+  { method: "POST", path: "/mapping/seasons/sync", operationId: "syncSeason" },
+  { method: "PUT", path: "/mapping/fixtures", operationId: "upsertFixtureLink" },
+  { method: "GET", path: "/mapping/fixtures/resolve", operationId: "resolveFixture" },
+];
 
 export const mappingRoutes = (app: FastifyInstance): void => {
   app.get("/mapping/teams", () => service.listTeams());
@@ -74,6 +91,25 @@ export const mappingRoutes = (app: FastifyInstance): void => {
       },
     },
     (request) => service.resolveTeam(request.query),
+  );
+
+  app.post<{ Body: SyncTeamsInput }>(
+    "/mapping/teams/sync",
+    {
+      schema: {
+        body: {
+          type: "object",
+          required: ["leagueId"],
+          properties: {
+            leagueId: { type: "integer", minimum: 1 },
+            season: { type: "integer", minimum: 1800 },
+            direttaTournamentId: { type: "string" },
+            dryRun: { type: "boolean" },
+          },
+        },
+      },
+    },
+    (request) => service.syncTeams(request.body),
   );
 
   app.get<{ Params: { teamId: string } }>(

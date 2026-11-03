@@ -282,6 +282,162 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/mapping/teams": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List canonical teams */
+        get: operations["listTeams"];
+        put?: never;
+        /** Create a canonical team */
+        post: operations["createTeam"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/mapping/teams/resolve": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Resolve a provider team to a canonical team */
+        get: operations["resolveTeam"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/mapping/teams/sync": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Sync API-Football and diretta teams into canonical teams */
+        post: operations["syncTeams"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/mapping/teams/{teamId}/aliases": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List aliases for a canonical team */
+        get: operations["listTeamAliases"];
+        put?: never;
+        /** Add an alias to a canonical team */
+        post: operations["addTeamAlias"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/mapping/mappings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List team provider mappings */
+        get: operations["listMappings"];
+        /** Create or update a team provider mapping */
+        put: operations["upsertMapping"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/mapping/mappings/{mappingId}/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Update the status of a team provider mapping */
+        post: operations["setMappingStatus"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/mapping/seasons/sync": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Sync API-Football teams and fixtures for a season */
+        post: operations["syncSeason"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/mapping/fixtures": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Create or update a fixture link */
+        put: operations["upsertFixtureLink"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/mapping/fixtures/resolve": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Resolve a fixture link */
+        get: operations["resolveFixture"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -386,6 +542,160 @@ export interface components {
         };
         NotFoundError: {
             detail: string;
+        };
+        /** @enum {string} */
+        Provider: "diretta" | "api_football";
+        /** @enum {string} */
+        MappingStatus: "confirmed" | "pending" | "rejected";
+        /** @enum {string} */
+        MappingSource: "manual" | "id" | "alias" | "fuzzy";
+        /** @enum {string} */
+        ResolveStatus: "matched" | "pending" | "unmatched" | "rejected";
+        Team: {
+            id: string;
+            name: string;
+            country: string | null;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        TeamAlias: {
+            id: string;
+            teamId: string;
+            alias: string;
+            normalized: string;
+            source: string;
+            /** Format: date-time */
+            createdAt: string;
+        };
+        TeamProviderMapping: {
+            id: string;
+            teamId: string;
+            provider: components["schemas"]["Provider"];
+            providerTeamId: string;
+            rawName: string;
+            country: string | null;
+            confidence: number;
+            status: components["schemas"]["MappingStatus"];
+            source: components["schemas"]["MappingSource"];
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        FixtureLink: {
+            id: string;
+            /** Format: date */
+            matchDate: string;
+            homeTeamId: string;
+            awayTeamId: string;
+            direttaMatchId: string | null;
+            apiFootballFixtureId: string | null;
+            /** Format: date-time */
+            kickoffAt: string | null;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        TeamCandidate: {
+            team: components["schemas"]["Team"];
+            confidence: number;
+        };
+        ResolveTeamResult: {
+            status: components["schemas"]["ResolveStatus"];
+            team: components["schemas"]["Team"] | null;
+            mapping: components["schemas"]["TeamProviderMapping"] | null;
+            confidence: number;
+            candidates: components["schemas"]["TeamCandidate"][];
+        };
+        CreateTeamRequest: {
+            name: string;
+            country?: string | null;
+            aliases?: string[];
+        };
+        AddTeamAliasRequest: {
+            alias: string;
+            source?: string;
+        };
+        UpsertMappingRequest: {
+            teamId: string;
+            provider: components["schemas"]["Provider"];
+            providerTeamId: string;
+            rawName?: string;
+            country?: string | null;
+            confidence?: number;
+            status?: components["schemas"]["MappingStatus"];
+            source?: components["schemas"]["MappingSource"];
+        };
+        MappingStatusRequest: {
+            status: components["schemas"]["MappingStatus"];
+        };
+        SyncSeasonRequest: {
+            leagueId: number;
+            season?: number;
+            direttaTournamentId?: string;
+            dryRun?: boolean;
+            maxFixtures?: number;
+        };
+        SyncSeasonLeague: {
+            apiFootballId: number;
+            name: string;
+            country: string;
+            season: number;
+            seasonStart: string;
+            seasonEnd: string;
+            current: boolean;
+        };
+        SyncSeasonTeamsCounts: {
+            seen: number;
+            created: number;
+            mapped: number;
+        };
+        SyncSeasonFixturesCounts: {
+            seen: number;
+            created: number;
+            updated: number;
+            skipped: number;
+        };
+        SyncSeasonReport: {
+            league: components["schemas"]["SyncSeasonLeague"];
+            dryRun: boolean;
+            teams: components["schemas"]["SyncSeasonTeamsCounts"];
+            fixtures: components["schemas"]["SyncSeasonFixturesCounts"];
+            errors: string[];
+        };
+        SyncTeamsRequest: {
+            leagueId: number;
+            season?: number;
+            direttaTournamentId?: string;
+            dryRun?: boolean;
+        };
+        ProviderTeamSyncCounts: {
+            seen: number;
+            created: number;
+            mapped: number;
+            pending: number;
+            unmatched: number;
+        };
+        SyncTeamsReport: {
+            league: components["schemas"]["SyncSeasonLeague"];
+            direttaTournamentId: string;
+            dryRun: boolean;
+            apiFootball: components["schemas"]["ProviderTeamSyncCounts"];
+            diretta: components["schemas"]["ProviderTeamSyncCounts"];
+            errors: string[];
+        };
+        UpsertFixtureLinkRequest: {
+            /** Format: date */
+            matchDate: string;
+            homeTeamId: string;
+            awayTeamId: string;
+            direttaMatchId?: string | null;
+            apiFootballFixtureId?: string | null;
+            /** Format: date-time */
+            kickoffAt?: string | null;
         };
     };
     responses: never;
@@ -837,6 +1147,409 @@ export interface operations {
                 };
                 content: {
                     "application/json": Record<string, never>;
+                };
+            };
+            /** @description Validation error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationError"];
+                };
+            };
+        };
+    };
+    listTeams: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Team"][];
+                };
+            };
+        };
+    };
+    createTeam: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateTeamRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Team"];
+                };
+            };
+            /** @description Validation error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationError"];
+                };
+            };
+        };
+    };
+    resolveTeam: {
+        parameters: {
+            query: {
+                provider: components["schemas"]["Provider"];
+                providerTeamId?: string;
+                name?: string;
+                country?: string;
+                autoLink?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ResolveTeamResult"];
+                };
+            };
+            /** @description Validation error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationError"];
+                };
+            };
+        };
+    };
+    syncTeams: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SyncTeamsRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SyncTeamsReport"];
+                };
+            };
+            /** @description Validation error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationError"];
+                };
+            };
+            /** @description Upstream error (API-Football or diretta.it) */
+            502: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationError"];
+                };
+            };
+        };
+    };
+    listTeamAliases: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                teamId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TeamAlias"][];
+                };
+            };
+        };
+    };
+    addTeamAlias: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                teamId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AddTeamAliasRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TeamAlias"];
+                };
+            };
+            /** @description Validation error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationError"];
+                };
+            };
+        };
+    };
+    listMappings: {
+        parameters: {
+            query?: {
+                status?: components["schemas"]["MappingStatus"];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TeamProviderMapping"][];
+                };
+            };
+            /** @description Validation error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationError"];
+                };
+            };
+        };
+    };
+    upsertMapping: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpsertMappingRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TeamProviderMapping"];
+                };
+            };
+            /** @description Validation error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationError"];
+                };
+            };
+        };
+    };
+    setMappingStatus: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                mappingId: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MappingStatusRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TeamProviderMapping"];
+                };
+            };
+            /** @description Validation error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationError"];
+                };
+            };
+        };
+    };
+    syncSeason: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SyncSeasonRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SyncSeasonReport"];
+                };
+            };
+            /** @description Validation error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationError"];
+                };
+            };
+            /** @description API-Football error */
+            502: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationError"];
+                };
+            };
+        };
+    };
+    upsertFixtureLink: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpsertFixtureLinkRequest"];
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FixtureLink"];
+                };
+            };
+            /** @description Validation error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationError"];
+                };
+            };
+        };
+    };
+    resolveFixture: {
+        parameters: {
+            query: {
+                date: string;
+                homeTeamId: string;
+                awayTeamId: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FixtureLink"];
+                };
+            };
+            /** @description Not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NotFoundError"];
                 };
             };
             /** @description Validation error */

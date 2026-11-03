@@ -5,8 +5,9 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse } from "yaml";
 import packageJson from "../package.json" with { type: "json" };
-import { SBI_ROUTES } from "../src/sbi/routes.ts";
+import { SBI_ROUTES } from "../src/bet-api/routes.ts";
 import { SCRAPER_ROUTES } from "../src/scraper/routes.ts";
+import { MAPPING_ROUTES } from "../src/mapping/routes.ts";
 import { buildServer } from "../src/server.ts";
 import { removeDb, useTempDb } from "./support.ts";
 
@@ -24,7 +25,7 @@ const contract = parse(readFileSync(CONTRACT_PATH, "utf8")) as {
   paths: Record<string, Record<string, { operationId?: string }>>;
 };
 
-const ROUTES = [...SBI_ROUTES, ...SCRAPER_ROUTES];
+const ROUTES = [...SBI_ROUTES, ...SCRAPER_ROUTES, ...MAPPING_ROUTES];
 
 test("implemented routes match the contract paths, methods and operationIds", () => {
   for (const route of ROUTES) {
@@ -40,7 +41,7 @@ test("contract paths are fully covered by implemented routes", () => {
   const implemented = new Set(ROUTES.map((r) => `${r.method} ${r.path}`));
   const declared: string[] = [];
   for (const [path, item] of Object.entries(contract.paths)) {
-    for (const method of ["get", "post"]) {
+    for (const method of ["get", "post", "put"]) {
       if (item[method]) {
         declared.push(`${method.toUpperCase()} ${path}`);
       }

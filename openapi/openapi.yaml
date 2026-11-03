@@ -493,6 +493,352 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ValidationError'
+  /mapping/teams:
+    get:
+      tags:
+        - Team Mapping
+      operationId: listTeams
+      summary: List canonical teams
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Team'
+    post:
+      tags:
+        - Team Mapping
+      operationId: createTeam
+      summary: Create a canonical team
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTeamRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Team'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+  /mapping/teams/resolve:
+    get:
+      tags:
+        - Team Mapping
+      operationId: resolveTeam
+      summary: Resolve a provider team to a canonical team
+      parameters:
+        - name: provider
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Provider'
+        - name: providerTeamId
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: name
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: country
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: autoLink
+          in: query
+          required: false
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResolveTeamResult'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+  /mapping/teams/sync:
+    post:
+      tags:
+        - Team Mapping
+      operationId: syncTeams
+      summary: Sync API-Football and diretta teams into canonical teams
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SyncTeamsRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyncTeamsReport'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '502':
+          description: Upstream error (API-Football or diretta.it)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+  /mapping/teams/{teamId}/aliases:
+    get:
+      tags:
+        - Team Mapping
+      operationId: listTeamAliases
+      summary: List aliases for a canonical team
+      parameters:
+        - name: teamId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TeamAlias'
+    post:
+      tags:
+        - Team Mapping
+      operationId: addTeamAlias
+      summary: Add an alias to a canonical team
+      parameters:
+        - name: teamId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddTeamAliasRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamAlias'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+  /mapping/mappings:
+    get:
+      tags:
+        - Team Mapping
+      operationId: listMappings
+      summary: List team provider mappings
+      parameters:
+        - name: status
+          in: query
+          required: false
+          schema:
+            $ref: '#/components/schemas/MappingStatus'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TeamProviderMapping'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+    put:
+      tags:
+        - Team Mapping
+      operationId: upsertMapping
+      summary: Create or update a team provider mapping
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpsertMappingRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamProviderMapping'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+  /mapping/mappings/{mappingId}/status:
+    post:
+      tags:
+        - Team Mapping
+      operationId: setMappingStatus
+      summary: Update the status of a team provider mapping
+      parameters:
+        - name: mappingId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MappingStatusRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamProviderMapping'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+  /mapping/seasons/sync:
+    post:
+      tags:
+        - Team Mapping
+      operationId: syncSeason
+      summary: Sync API-Football teams and fixtures for a season
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SyncSeasonRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SyncSeasonReport'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '502':
+          description: API-Football error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+  /mapping/fixtures:
+    put:
+      tags:
+        - Team Mapping
+      operationId: upsertFixtureLink
+      summary: Create or update a fixture link
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpsertFixtureLinkRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FixtureLink'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+  /mapping/fixtures/resolve:
+    get:
+      tags:
+        - Team Mapping
+      operationId: resolveFixture
+      summary: Resolve a fixture link
+      parameters:
+        - name: date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: homeTeamId
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: awayTeamId
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FixtureLink'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundError'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
 
 components:
   schemas:
@@ -698,3 +1044,439 @@ components:
           type: string
       required:
         - detail
+    Provider:
+      type: string
+      enum:
+        - diretta
+        - api_football
+    MappingStatus:
+      type: string
+      enum:
+        - confirmed
+        - pending
+        - rejected
+    MappingSource:
+      type: string
+      enum:
+        - manual
+        - id
+        - alias
+        - fuzzy
+    ResolveStatus:
+      type: string
+      enum:
+        - matched
+        - pending
+        - unmatched
+        - rejected
+    Team:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        country:
+          type:
+            - string
+            - 'null'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - name
+        - country
+        - createdAt
+        - updatedAt
+    TeamAlias:
+      type: object
+      properties:
+        id:
+          type: string
+        teamId:
+          type: string
+        alias:
+          type: string
+        normalized:
+          type: string
+        source:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - teamId
+        - alias
+        - normalized
+        - source
+        - createdAt
+    TeamProviderMapping:
+      type: object
+      properties:
+        id:
+          type: string
+        teamId:
+          type: string
+        provider:
+          $ref: '#/components/schemas/Provider'
+        providerTeamId:
+          type: string
+        rawName:
+          type: string
+        country:
+          type:
+            - string
+            - 'null'
+        confidence:
+          type: number
+          minimum: 0
+          maximum: 1
+        status:
+          $ref: '#/components/schemas/MappingStatus'
+        source:
+          $ref: '#/components/schemas/MappingSource'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - teamId
+        - provider
+        - providerTeamId
+        - rawName
+        - country
+        - confidence
+        - status
+        - source
+        - createdAt
+        - updatedAt
+    FixtureLink:
+      type: object
+      properties:
+        id:
+          type: string
+        matchDate:
+          type: string
+          format: date
+        homeTeamId:
+          type: string
+        awayTeamId:
+          type: string
+        direttaMatchId:
+          type:
+            - string
+            - 'null'
+        apiFootballFixtureId:
+          type:
+            - string
+            - 'null'
+        kickoffAt:
+          type:
+            - string
+            - 'null'
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+      required:
+        - id
+        - matchDate
+        - homeTeamId
+        - awayTeamId
+        - direttaMatchId
+        - apiFootballFixtureId
+        - kickoffAt
+        - createdAt
+        - updatedAt
+    TeamCandidate:
+      type: object
+      properties:
+        team:
+          $ref: '#/components/schemas/Team'
+        confidence:
+          type: number
+          minimum: 0
+          maximum: 1
+      required:
+        - team
+        - confidence
+    ResolveTeamResult:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/ResolveStatus'
+        team:
+          oneOf:
+            - $ref: '#/components/schemas/Team'
+            - type: 'null'
+        mapping:
+          oneOf:
+            - $ref: '#/components/schemas/TeamProviderMapping'
+            - type: 'null'
+        confidence:
+          type: number
+          minimum: 0
+          maximum: 1
+        candidates:
+          type: array
+          items:
+            $ref: '#/components/schemas/TeamCandidate'
+      required:
+        - status
+        - team
+        - mapping
+        - confidence
+        - candidates
+    CreateTeamRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+        country:
+          type:
+            - string
+            - 'null'
+        aliases:
+          type: array
+          items:
+            type: string
+      required:
+        - name
+    AddTeamAliasRequest:
+      type: object
+      properties:
+        alias:
+          type: string
+          minLength: 1
+        source:
+          type: string
+      required:
+        - alias
+    UpsertMappingRequest:
+      type: object
+      properties:
+        teamId:
+          type: string
+          minLength: 1
+        provider:
+          $ref: '#/components/schemas/Provider'
+        providerTeamId:
+          type: string
+          minLength: 1
+        rawName:
+          type: string
+        country:
+          type:
+            - string
+            - 'null'
+        confidence:
+          type: number
+          minimum: 0
+          maximum: 1
+        status:
+          $ref: '#/components/schemas/MappingStatus'
+        source:
+          $ref: '#/components/schemas/MappingSource'
+      required:
+        - teamId
+        - provider
+        - providerTeamId
+    MappingStatusRequest:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/MappingStatus'
+      required:
+        - status
+    SyncSeasonRequest:
+      type: object
+      properties:
+        leagueId:
+          type: integer
+          minimum: 1
+        season:
+          type: integer
+          minimum: 1800
+        direttaTournamentId:
+          type: string
+        dryRun:
+          type: boolean
+        maxFixtures:
+          type: integer
+          minimum: 0
+      required:
+        - leagueId
+    SyncSeasonLeague:
+      type: object
+      properties:
+        apiFootballId:
+          type: integer
+        name:
+          type: string
+        country:
+          type: string
+        season:
+          type: integer
+        seasonStart:
+          type: string
+        seasonEnd:
+          type: string
+        current:
+          type: boolean
+      required:
+        - apiFootballId
+        - name
+        - country
+        - season
+        - seasonStart
+        - seasonEnd
+        - current
+    SyncSeasonTeamsCounts:
+      type: object
+      properties:
+        seen:
+          type: integer
+        created:
+          type: integer
+        mapped:
+          type: integer
+      required:
+        - seen
+        - created
+        - mapped
+    SyncSeasonFixturesCounts:
+      type: object
+      properties:
+        seen:
+          type: integer
+        created:
+          type: integer
+        updated:
+          type: integer
+        skipped:
+          type: integer
+      required:
+        - seen
+        - created
+        - updated
+        - skipped
+    SyncSeasonReport:
+      type: object
+      properties:
+        league:
+          $ref: '#/components/schemas/SyncSeasonLeague'
+        dryRun:
+          type: boolean
+        teams:
+          $ref: '#/components/schemas/SyncSeasonTeamsCounts'
+        fixtures:
+          $ref: '#/components/schemas/SyncSeasonFixturesCounts'
+        errors:
+          type: array
+          items:
+            type: string
+      required:
+        - league
+        - dryRun
+        - teams
+        - fixtures
+        - errors
+    SyncTeamsRequest:
+      type: object
+      properties:
+        leagueId:
+          type: integer
+          minimum: 1
+        season:
+          type: integer
+          minimum: 1800
+        direttaTournamentId:
+          type: string
+        dryRun:
+          type: boolean
+      required:
+        - leagueId
+    ProviderTeamSyncCounts:
+      type: object
+      properties:
+        seen:
+          type: integer
+        created:
+          type: integer
+        mapped:
+          type: integer
+        pending:
+          type: integer
+        unmatched:
+          type: integer
+      required:
+        - seen
+        - created
+        - mapped
+        - pending
+        - unmatched
+    SyncTeamsReport:
+      type: object
+      properties:
+        league:
+          $ref: '#/components/schemas/SyncSeasonLeague'
+        direttaTournamentId:
+          type: string
+        dryRun:
+          type: boolean
+        apiFootball:
+          $ref: '#/components/schemas/ProviderTeamSyncCounts'
+        diretta:
+          $ref: '#/components/schemas/ProviderTeamSyncCounts'
+        errors:
+          type: array
+          items:
+            type: string
+      required:
+        - league
+        - direttaTournamentId
+        - dryRun
+        - apiFootball
+        - diretta
+        - errors
+    UpsertFixtureLinkRequest:
+      type: object
+      properties:
+        matchDate:
+          type: string
+          format: date
+        homeTeamId:
+          type: string
+          minLength: 1
+        awayTeamId:
+          type: string
+          minLength: 1
+        direttaMatchId:
+          type:
+            - string
+            - 'null'
+        apiFootballFixtureId:
+          type:
+            - string
+            - 'null'
+        kickoffAt:
+          type:
+            - string
+            - 'null'
+          format: date-time
+      required:
+        - matchDate
+        - homeTeamId
+        - awayTeamId

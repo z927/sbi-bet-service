@@ -70,7 +70,7 @@ jobs:
         run: npm run build
 
       - name: Check OpenAPI generated types drift
-        run: git diff --exit-code -- src/sbi/generated/api-types.ts
+        run: git diff --exit-code -- src/bet-api/generated/api-types.ts
 
       - name: Test
         run: npm test

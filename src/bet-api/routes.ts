@@ -8,7 +8,7 @@ import * as monitoring from "../services/monitoring_service.ts";
 import * as matches from "../services/matches_service.ts";
 
 export interface RouteMetadata {
-  method: "GET" | "POST";
+  method: "GET" | "POST" | "PUT";
   path: string;
   operationId: string;
 }

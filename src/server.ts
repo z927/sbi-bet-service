@@ -8,7 +8,7 @@ import { getSettings } from "./config.ts";
 import { ConflictError, ValidationError, baseResponse } from "./errors.ts";
 import { FeedError } from "./clients/diretta/index.ts";
 import { ApiFootballError } from "./clients/apifootball/client.ts";
-import { sbiRoutes } from "./sbi/routes.ts";
+import { sbiRoutes } from "./bet-api/routes.ts";
 import { scraperRoutes } from "./scraper/routes.ts";
 import { mappingRoutes } from "./mapping/routes.ts";
 import { initDb } from "./scraper/db.ts";

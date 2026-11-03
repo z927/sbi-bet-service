@@ -90,7 +90,7 @@ src/
   config.ts               env-driven settings
   validation.ts           ISO date validation helpers
   types.ts                re-exported contract types
-  sbi/
+  bet-api/
     generated/api-types.ts  openapi-typescript output (do not edit by hand)
     routes.ts               /api/v1 routes + route metadata
     services/               in-memory business logic
