@@ -155,4 +155,5 @@ jobs:
             --set-env-vars "MONITOR_SIGNAL_GOAL_RATIO_THRESHOLD=0.7" \
             --set-env-vars "MONITOR_JOB_TARGET_BASE_URL=https://sbi-bet-service-658489904938.europe-west6.run.app" \
             --set-env-vars "SUPABASE_URL=https://qngakaacpeokqoibtqqn.supabase.co" \
-            --set-env-vars "SUPABASE_SERVICE_ROLE_KEY=${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}"
+            --set-env-vars "SUPABASE_SERVICE_ROLE_KEY=${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" \
+            --set-env-vars "API_FOOTBALL_KEY=${{ secrets.API_FOOTBALL_KEY }}"

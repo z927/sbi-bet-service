@@ -1,3 +1,5 @@
+import { existsSync } from "node:fs";
+import { resolve } from "node:path";
 import packageJson from "../package.json" with { type: "json" };
 
 export type LogLevel = "debug" | "info" | "warn" | "error" | "silent";
@@ -23,6 +25,26 @@ export interface Settings {
 }
 
 const DEFAULT_UPSTREAM = "https://bet-service-658489904938.europe-west6.run.app";
+
+const loadEnvFileIfPresent = (file: string): void => {
+  const path = resolve(process.cwd(), file);
+  if (!existsSync(path)) return;
+  const load = (process as NodeJS.Process & {
+    loadEnvFile?: (path?: string) => void;
+  }).loadEnvFile;
+  if (typeof load !== "function") return;
+  load(path);
+};
+
+let envLoaded = false;
+export const loadEnvFiles = (): void => {
+  if (envLoaded) return;
+  envLoaded = true;
+  loadEnvFileIfPresent(".env");
+  loadEnvFileIfPresent(".env.local");
+};
+
+loadEnvFiles();
 
 const asLogLevel = (value: string | undefined): LogLevel => {
   const normalized = (value ?? "info").toLowerCase();

@@ -143,6 +143,47 @@ export interface SyncSeasonReport {
   errors: string[];
 }
 
+export interface AutoSyncLeaguesInput {
+  dryRun?: boolean;
+  apply?: boolean;
+  season?: number;
+  runTeamsSync?: boolean;
+  runSeasonSync?: boolean;
+}
+
+export interface AutoSyncLeagueCandidate {
+  apiFootballLeagueId: number;
+  name: string;
+  country: string;
+  score: number;
+  seasons?: number[];
+}
+
+export interface AutoSyncLeaguesReport {
+  dryRun: boolean;
+  applied: boolean;
+  fetchedDiretta: number;
+  relevant: number;
+  alreadyLinked: number;
+  matched: number;
+  createdLinks: number;
+  failed: number;
+  errors: string[];
+  results: Array<{
+    direttaTournamentId: string;
+    tournament: string;
+    country?: string;
+    status: "already_linked" | "matched" | "unmatched" | "linked" | "synced" | "skipped";
+    apiFootballLeagueId?: number;
+    apiFootballLeagueName?: string;
+    apiFootballCountry?: string;
+    score?: number;
+    seasonSync?: SyncSeasonReport | null;
+    teamsSync?: SyncTeamsReport | null;
+    error?: string;
+  }>;
+}
+
 export interface SyncTeamsInput {
   leagueId: number;
   season?: number;

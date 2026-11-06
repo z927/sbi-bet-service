@@ -177,3 +177,16 @@ export const listTeams = async (leagueId: number, season: number): Promise<AfTea
 export const listFixtures = async (leagueId: number, season: number): Promise<AfFixtureEntry[]> => {
   return fetchAll<AfFixtureEntry>("/fixtures", { league: leagueId, season });
 };
+
+export const listLeagues = async (params: {
+  search?: string;
+  country?: string;
+  code?: string;
+} = {}): Promise<AfLeague[]> => {
+  const body = await request<AfLeague>("/leagues", {
+    search: params.search,
+    country: params.country,
+    code: params.code,
+  });
+  return body.response ?? [];
+};

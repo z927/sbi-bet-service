@@ -496,6 +496,15 @@ export const getLeagueLink = async (apiFootballLeagueId: number): Promise<League
   return data ? toLeague(data as LeagueRow) : null;
 };
 
+export const listLeagueLinks = async (): Promise<LeagueLink[]> => {
+  if (isMemoryMode()) {
+    return [...memory.leagues.values()];
+  }
+  const { data, error } = await getClient().from("league_links").select("*");
+  if (error) throw error;
+  return (data ?? []).map((row) => toLeague(row as LeagueRow));
+};
+
 export const upsertLeagueLink = async (input: UpsertLeagueLinkInput): Promise<LeagueLink> => {
   const values: Record<string, unknown> = { api_football_league_id: input.apiFootballLeagueId };
   if (input.direttaTournamentId !== undefined) values["diretta_tournament_id"] = input.direttaTournamentId;

@@ -1,13 +1,18 @@
 import { ValidationError } from "../errors.ts";
 import { isIsoDate } from "../validation.ts";
 import * as af from "../clients/apifootball/client.ts";
+import { client as feedClient } from "../clients/diretta/index.ts";
 import { listMatches } from "../clients/diretta/matches.ts";
+import { configuredMajorLeagues, isMajorLeague } from "../services/strategies/major_leagues.ts";
 import { normalizeTeamName, rankCandidates } from "./normalize.ts";
 import * as repo from "./repo.ts";
 import {
   MAPPING_SOURCES,
   MAPPING_STATUSES,
   PROVIDERS,
+  type AutoSyncLeagueCandidate,
+  type AutoSyncLeaguesInput,
+  type AutoSyncLeaguesReport,
   type CreateTeamInput,
   type FixtureLink,
   type LeagueLink,
@@ -250,6 +255,261 @@ export const upsertFixtureLink = async (input: UpsertFixtureLinkInput): Promise<
   return repo.upsertFixtureLink({ ...input, kickoffAt });
 };
 
+const extractCountryFromTournament = (tournament: string): string | undefined => {
+  const [country] = tournament.split(":");
+  const trimmed = country?.trim();
+  if (!trimmed) return undefined;
+  if (trimmed.toUpperCase() === "EUROPA" || trimmed.toUpperCase() === "MONDO") return undefined;
+  return trimmed;
+};
+
+const normalizeForMatch = (value: string): string =>
+  normalizeTeamName(value)
+    .replace(/\b(uefa|champions league|europa league|conference league|nations league|premier league|liga|serie|bundesliga|ligue|eredivisie|superliga|primeira|la liga)\b/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+
+const scoreLeagueMatch = (direttaName: string, direttaCountry: string | undefined, league: af.AfLeague): number => {
+  const leagueNameNorm = normalizeForMatch(league.league.name);
+  const dirNorm = normalizeForMatch(direttaName);
+  if (dirNorm === "" || leagueNameNorm === "") return 0;
+  if (dirNorm === leagueNameNorm) return 1;
+  if (dirNorm.includes(leagueNameNorm) || leagueNameNorm.includes(dirNorm)) {
+    const base = 0.9;
+    if (direttaCountry && league.country.name.toLowerCase() === direttaCountry.toLowerCase()) {
+      return base + 0.05;
+    }
+    return base;
+  }
+  if (direttaCountry && league.country.name.toLowerCase() === direttaCountry.toLowerCase()) {
+    if (leagueNameNorm.split(" ").some((token) => token.length > 3 && dirNorm.includes(token))) {
+      return 0.8;
+    }
+  }
+  return 0;
+};
+
+export const autoSyncLeaguesFromMonitoring = async (
+  input: AutoSyncLeaguesInput = {},
+): Promise<AutoSyncLeaguesReport> => {
+  if (input.runSeasonSync !== false && input.runTeamsSync !== false) {
+    // defaults allow both; user can disable
+  }
+  const dryRun = input.dryRun ?? true;
+  const apply = input.apply ?? false;
+  const runSeasonSync = input.runSeasonSync ?? true;
+  const runTeamsSync = input.runTeamsSync ?? true;
+  const allowlist = configuredMajorLeagues();
+
+  const report: AutoSyncLeaguesReport = {
+    dryRun,
+    applied: apply,
+    fetchedDiretta: 0,
+    relevant: 0,
+    alreadyLinked: 0,
+    matched: 0,
+    createdLinks: 0,
+    failed: 0,
+    errors: [],
+    results: [],
+  };
+
+  let matches;
+  try {
+    matches = await feedClient.listMatches(1);
+  } catch (error) {
+    throw new ValidationError(`Impossibile recuperare partite diretta: ${errorMessage(error)}`);
+  }
+  report.fetchedDiretta = matches.length;
+
+  const grouped = new Map<
+    string,
+    { tournamentId: string; tournament: string; country?: string; count: number }
+  >();
+  for (const match of matches) {
+    if (!isMajorLeague(match, allowlist)) continue;
+    const tournamentId = (match.tournament_id ?? "").trim();
+    const tournament = (match.tournament ?? "").trim();
+    if (tournamentId === "" || tournament === "") continue;
+    const key = tournamentId;
+    const existing = grouped.get(key);
+    if (existing) {
+      existing.count += 1;
+      continue;
+    }
+    grouped.set(key, {
+      tournamentId,
+      tournament,
+      country: extractCountryFromTournament(tournament),
+      count: 1,
+    });
+  }
+
+  const relevant = [...grouped.values()];
+  report.relevant = relevant.length;
+
+  const leagueLinks = await repo.listLeagueLinks();
+  const linkedByDiretta = new Map<string, LeagueLink>();
+  for (const link of leagueLinks) {
+    if (link.direttaTournamentId) {
+      linkedByDiretta.set(link.direttaTournamentId, link);
+    }
+  }
+
+  let candidatesPool: af.AfLeague[] = [];
+  try {
+    candidatesPool = await af.listLeagues();
+  } catch (error) {
+    if (report.errors.length < 50) {
+      report.errors.push(`listLeagues: ${errorMessage(error)}`);
+    }
+  }
+
+  for (const item of relevant) {
+    const already = linkedByDiretta.get(item.tournamentId);
+    if (already) {
+      report.alreadyLinked += 1;
+      const result: AutoSyncLeaguesReport["results"][number] = {
+        direttaTournamentId: item.tournamentId,
+        tournament: item.tournament,
+        country: item.country,
+        status: "already_linked",
+        apiFootballLeagueId: already.apiFootballLeagueId,
+        apiFootballLeagueName: already.name ?? undefined,
+      };
+      if (apply && !dryRun) {
+        try {
+          let seasonSync: SyncSeasonReport | null = null;
+          let teamsSync: SyncTeamsReport | null = null;
+          if (runSeasonSync) {
+            seasonSync = await syncSeason({
+              leagueId: already.apiFootballLeagueId,
+              season: input.season,
+              direttaTournamentId: item.tournamentId,
+            });
+          }
+          if (runTeamsSync) {
+            teamsSync = await syncTeams({
+              leagueId: already.apiFootballLeagueId,
+              season: input.season,
+              direttaTournamentId: item.tournamentId,
+            });
+          }
+          result.status = "synced";
+          result.seasonSync = seasonSync;
+          result.teamsSync = teamsSync;
+        } catch (error) {
+          report.failed += 1;
+          result.error = errorMessage(error);
+          if (report.errors.length < 50) {
+            report.errors.push(`${item.tournamentId}: ${errorMessage(error)}`);
+          }
+        }
+      } else {
+        result.status = dryRun ? "already_linked" : "skipped";
+      }
+      report.results.push(result);
+      continue;
+    }
+
+    let best: { league: af.AfLeague; score: number } | null = null;
+    for (const league of candidatesPool) {
+      const score = scoreLeagueMatch(item.tournament, item.country, league);
+      if (score === 0) continue;
+      if (!best || score > best.score) {
+        best = { league, score };
+      } else if (score === best.score && item.country && league.country.name.toLowerCase() === item.country.toLowerCase()) {
+        best = { league, score };
+      }
+    }
+
+    if (!best || best.score < 0.7) {
+      report.failed += 1;
+      report.results.push({
+        direttaTournamentId: item.tournamentId,
+        tournament: item.tournament,
+        country: item.country,
+        status: "unmatched",
+        error: best ? `score troppo basso (${best.score.toFixed(2)})` : "nessun candidato trovato",
+      });
+      if (report.errors.length < 50) {
+        report.errors.push(`${item.tournamentId} (${item.tournament}): nessun match API-Football`);
+      }
+      continue;
+    }
+
+    report.matched += 1;
+    if (!apply || dryRun) {
+      report.results.push({
+        direttaTournamentId: item.tournamentId,
+        tournament: item.tournament,
+        country: item.country,
+        status: "matched",
+        apiFootballLeagueId: best.league.league.id,
+        apiFootballLeagueName: best.league.league.name,
+        apiFootballCountry: best.league.country.name,
+        score: best.score,
+      });
+      continue;
+    }
+
+    try {
+      await repo.upsertLeagueLink({
+        apiFootballLeagueId: best.league.league.id,
+        direttaTournamentId: item.tournamentId,
+        name: best.league.league.name,
+      });
+      report.createdLinks += 1;
+      let seasonSync: SyncSeasonReport | null = null;
+      let teamsSync: SyncTeamsReport | null = null;
+      if (runSeasonSync) {
+        seasonSync = await syncSeason({
+          leagueId: best.league.league.id,
+          season: input.season,
+          direttaTournamentId: item.tournamentId,
+        });
+      }
+      if (runTeamsSync) {
+        teamsSync = await syncTeams({
+          leagueId: best.league.league.id,
+          season: input.season,
+          direttaTournamentId: item.tournamentId,
+        });
+      }
+      report.results.push({
+        direttaTournamentId: item.tournamentId,
+        tournament: item.tournament,
+        country: item.country,
+        status: "synced",
+        apiFootballLeagueId: best.league.league.id,
+        apiFootballLeagueName: best.league.league.name,
+        apiFootballCountry: best.league.country.name,
+        score: best.score,
+        seasonSync,
+        teamsSync,
+      });
+    } catch (error) {
+      report.failed += 1;
+      report.results.push({
+        direttaTournamentId: item.tournamentId,
+        tournament: item.tournament,
+        country: item.country,
+        status: "matched",
+        apiFootballLeagueId: best.league.league.id,
+        apiFootballLeagueName: best.league.league.name,
+        apiFootballCountry: best.league.country.name,
+        score: best.score,
+        error: errorMessage(error),
+      });
+      if (report.errors.length < 50) {
+        report.errors.push(`${item.tournamentId}: ${errorMessage(error)}`);
+      }
+    }
+  }
+
+  return report;
+};
+
 export const resolveFixture = async (
   matchDate: string,
   homeTeamId: string,
@@ -259,13 +519,6 @@ export const resolveFixture = async (
     throw new ValidationError("matchDate must be a valid ISO date (YYYY-MM-DD)");
   }
   return repo.getFixtureLink(matchDate, homeTeamId, awayTeamId);
-};
-
-export const upsertLeagueLink = async (input: UpsertLeagueLinkInput): Promise<LeagueLink> => {
-  if (!Number.isInteger(input.apiFootballLeagueId) || input.apiFootballLeagueId <= 0) {
-    throw new ValidationError("apiFootballLeagueId must be a positive integer");
-  }
-  return repo.upsertLeagueLink(input);
 };
 
 const errorMessage = (error: unknown): string =>

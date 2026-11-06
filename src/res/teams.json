@@ -1,0 +1,3044 @@
+{
+  "teams": [
+    {
+      "apiFootball": "Austria Klagenfurt",
+      "sofascore": "A. Klagenfurt"
+    },
+    {
+      "apiFootball": "Austria Lustenau",
+      "sofascore": "SC Austria Lustenau"
+    },
+    {
+      "apiFootball": "Austria Vienna",
+      "sofascore": "Austria Wien"
+    },
+    {
+      "apiFootball": "FC BW Linz",
+      "sofascore": "BW Linz"
+    },
+    {
+      "apiFootball": "Lask Linz",
+      "sofascore": "LASK"
+    },
+    {
+      "apiFootball": "Grazer AK",
+      "sofascore": "GAK 1902"
+    },
+    {
+      "apiFootball": "Rapid Vienna",
+      "sofascore": "Rapid"
+    },
+    {
+      "apiFootball": "Red Bull Salzburg",
+      "sofascore": "RB Salzburg"
+    },
+    {
+      "apiFootball": "SCR Altach",
+      "sofascore": "SCR Altach"
+    },
+    {
+      "apiFootball": "Sturm Graz",
+      "sofascore": "Sturm"
+    },
+    {
+      "apiFootball": "TSV Hartberg",
+      "sofascore": "Hartberg"
+    },
+    {
+      "apiFootball": "Wolfsberger AC",
+      "sofascore": "WAC"
+    },
+    {
+      "apiFootball": "WSG Wattens",
+      "sofascore": "Tirol"
+    },
+    {
+      "apiFootball": "Albania",
+      "sofascore": "Albania"
+    },
+    {
+      "apiFootball": "Austria",
+      "sofascore": "Austria"
+    },
+    {
+      "apiFootball": "Belgium",
+      "sofascore": "Belgium"
+    },
+    {
+      "apiFootball": "Croatia",
+      "sofascore": "Croatia"
+    },
+    {
+      "apiFootball": "Czech Republic",
+      "sofascore": "Czech Republic"
+    },
+    {
+      "apiFootball": "Denmark",
+      "sofascore": "Denmark"
+    },
+    {
+      "apiFootball": "England",
+      "sofascore": "England"
+    },
+    {
+      "apiFootball": "France",
+      "sofascore": "France"
+    },
+    {
+      "apiFootball": "Georgia",
+      "sofascore": "Georgia"
+    },
+    {
+      "apiFootball": "Germany",
+      "sofascore": "Germany"
+    },
+    {
+      "apiFootball": "Hungary",
+      "sofascore": "Hungary"
+    },
+    {
+      "apiFootball": "Italy",
+      "sofascore": "Italy"
+    },
+    {
+      "apiFootball": "Netherlands",
+      "sofascore": "Netherlands"
+    },
+    {
+      "apiFootball": "Poland",
+      "sofascore": "Poland"
+    },
+    {
+      "apiFootball": "Portugal",
+      "sofascore": "Portugal"
+    },
+    {
+      "apiFootball": "Romania",
+      "sofascore": "Romania"
+    },
+    {
+      "apiFootball": "Scotland",
+      "sofascore": "Scotland"
+    },
+    {
+      "apiFootball": "Serbia",
+      "sofascore": "Serbia"
+    },
+    {
+      "apiFootball": "Slovakia",
+      "sofascore": "Slovakia"
+    },
+    {
+      "apiFootball": "Slovenia",
+      "sofascore": "Slovenia"
+    },
+    {
+      "apiFootball": "Spain",
+      "sofascore": "Spain"
+    },
+    {
+      "apiFootball": "Switzerland",
+      "sofascore": "Switzerland"
+    },
+    {
+      "apiFootball": "Turkey",
+      "sofascore": "Turkey"
+    },
+    {
+      "apiFootball": "Ukraine",
+      "sofascore": "Ukraine"
+    },
+    {
+      "apiFootball": "Atletico Goianiense",
+      "sofascore": "Atlético-GO"
+    },
+    {
+      "apiFootball": "Atletico Paranaense",
+      "sofascore": "Athletico"
+    },
+    {
+      "apiFootball": "Atletico-MG",
+      "sofascore": "Atlético-MG"
+    },
+    {
+      "apiFootball": "Bahia",
+      "sofascore": "Bahia"
+    },
+    {
+      "apiFootball": "Botafogo",
+      "sofascore": "Botafogo"
+    },
+    {
+      "apiFootball": "Corinthians",
+      "sofascore": "Corinthians"
+    },
+    {
+      "apiFootball": "Criciuma",
+      "sofascore": "Criciúma"
+    },
+    {
+      "apiFootball": "Cruzeiro",
+      "sofascore": "Cruzeiro"
+    },
+    {
+      "apiFootball": "Cuiaba",
+      "sofascore": "Cuiabá"
+    },
+    {
+      "apiFootball": "Flamengo",
+      "sofascore": "Flamengo"
+    },
+    {
+      "apiFootball": "Fluminense",
+      "sofascore": "Fluminense"
+    },
+    {
+      "apiFootball": "Fortaleza EC",
+      "sofascore": "Fortaleza"
+    },
+    {
+      "apiFootball": "Gremio",
+      "sofascore": "Grêmio"
+    },
+    {
+      "apiFootball": "Internacional",
+      "sofascore": "Internacional"
+    },
+    {
+      "apiFootball": "Juventude",
+      "sofascore": "Juventude"
+    },
+    {
+      "apiFootball": "Palmeiras",
+      "sofascore": "Palmeiras"
+    },
+    {
+      "apiFootball": "RB Bragantino",
+      "sofascore": "RB Bragantino"
+    },
+    {
+      "apiFootball": "Sao Paulo",
+      "sofascore": "São Paulo"
+    },
+    {
+      "apiFootball": "Vasco DA Gama",
+      "sofascore": "Vasco"
+    },
+    {
+      "apiFootball": "Vitoria",
+      "sofascore": "Vitória"
+    },
+    {
+      "apiFootball": "Clermont Foot",
+      "sofascore": "Clermont"
+    },
+    {
+      "apiFootball": "LE Havre",
+      "sofascore": "Le Havre"
+    },
+    {
+      "apiFootball": "Lens",
+      "sofascore": "Lens"
+    },
+    {
+      "apiFootball": "Lille",
+      "sofascore": "Lille"
+    },
+    {
+      "apiFootball": "Lorient",
+      "sofascore": "Lorient"
+    },
+    {
+      "apiFootball": "Lyon",
+      "sofascore": "Lyon"
+    },
+    {
+      "apiFootball": "Marseille",
+      "sofascore": "Marseille"
+    },
+    {
+      "apiFootball": "Metz",
+      "sofascore": "Metz"
+    },
+    {
+      "apiFootball": "Monaco",
+      "sofascore": "AS Monaco"
+    },
+    {
+      "apiFootball": "Montpellier",
+      "sofascore": "Montpellier"
+    },
+    {
+      "apiFootball": "Nantes",
+      "sofascore": "Nantes"
+    },
+    {
+      "apiFootball": "Nice",
+      "sofascore": "Nice"
+    },
+    {
+      "apiFootball": "Paris Saint Germain",
+      "sofascore": "PSG"
+    },
+    {
+      "apiFootball": "Reims",
+      "sofascore": "Reims"
+    },
+    {
+      "apiFootball": "Rennes",
+      "sofascore": "Rennes"
+    },
+    {
+      "apiFootball": "Stade Brestois 29",
+      "sofascore": "Brest"
+    },
+    {
+      "apiFootball": "Strasbourg",
+      "sofascore": "Strasbourg"
+    },
+    {
+      "apiFootball": "Toulouse",
+      "sofascore": "Toulouse"
+    },
+    {
+      "apiFootball": "Ascoli",
+      "sofascore": "Ascoli"
+    },
+    {
+      "apiFootball": "Bari",
+      "sofascore": "Bari"
+    },
+    {
+      "apiFootball": "Brescia",
+      "sofascore": "Brescia"
+    },
+    {
+      "apiFootball": "Catanzaro",
+      "sofascore": "Catanzaro"
+    },
+    {
+      "apiFootball": "Feralpisalo",
+      "sofascore": "Feralpisalò"
+    },
+    {
+      "apiFootball": "Lecco",
+      "sofascore": "Lecco"
+    },
+    {
+      "apiFootball": "Modena",
+      "sofascore": "Modena"
+    },
+    {
+      "apiFootball": "Reggiana",
+      "sofascore": "Reggiana"
+    },
+    {
+      "apiFootball": "Sampdoria",
+      "sofascore": "Sampdoria"
+    },
+    {
+      "apiFootball": "Spezia",
+      "sofascore": "Spezia"
+    },
+    {
+      "apiFootball": "Sudtirol",
+      "sofascore": "Südtirol"
+    },
+    {
+      "apiFootball": "Ternana",
+      "sofascore": "Ternana"
+    },
+    {
+      "apiFootball": "Venezia",
+      "sofascore": "Venezia"
+    },
+    {
+      "apiFootball": "Cukaricki",
+      "sofascore": "Čukarički"
+    },
+    {
+      "apiFootball": "FK Crvena Zvezda",
+      "sofascore": "Crvena zvezda"
+    },
+    {
+      "apiFootball": "FK Partizan",
+      "sofascore": "Partizan"
+    },
+    {
+      "apiFootball": "FK Spartak Zdrepceva KRV",
+      "sofascore": "Spartak"
+    },
+    {
+      "apiFootball": "FK Vozdovac",
+      "sofascore": "Voždovac"
+    },
+    {
+      "apiFootball": "IMT Novi Beograd",
+      "sofascore": "IMT"
+    },
+    {
+      "apiFootball": "Javor",
+      "sofascore": "Javor"
+    },
+    {
+      "apiFootball": "Mladost Lucani",
+      "sofascore": "Mladost"
+    },
+    {
+      "apiFootball": "Napredak",
+      "sofascore": "Napredak"
+    },
+    {
+      "apiFootball": "Novi Pazar",
+      "sofascore": "Novi Pazar"
+    },
+    {
+      "apiFootball": "Radnicki 1923",
+      "sofascore": "Radnički 1923"
+    },
+    {
+      "apiFootball": "Radnicki NIS",
+      "sofascore": "Radnički N."
+    },
+    {
+      "apiFootball": "Radnik Surdulica",
+      "sofascore": "Radnik"
+    },
+    {
+      "apiFootball": "TSC Backa Topola",
+      "sofascore": "TSC"
+    },
+    {
+      "apiFootball": "Vojvodina",
+      "sofascore": "Vojvodina"
+    },
+    {
+      "apiFootball": "Železničar Pančevo",
+      "sofascore": "Železničar"
+    },
+    {
+      "apiFootball": "České Budějovice",
+      "sofascore": "Dynamo Č.B."
+    },
+    {
+      "apiFootball": "FK Jablonec",
+      "sofascore": "Jablonec"
+    },
+    {
+      "apiFootball": "Hradec Králové",
+      "sofascore": "Hradec Králové"
+    },
+    {
+      "apiFootball": "Karviná",
+      "sofascore": "Karviná"
+    },
+    {
+      "apiFootball": "Mlada Boleslav",
+      "sofascore": "Mladá Boleslav"
+    },
+    {
+      "apiFootball": "Pardubice",
+      "sofascore": "Pardubice"
+    },
+    {
+      "apiFootball": "Plzen",
+      "sofascore": "Viktoria Plzeň"
+    },
+    {
+      "apiFootball": "Sigma Olomouc",
+      "sofascore": "Sigma Olomouc"
+    },
+    {
+      "apiFootball": "Slavia Praha",
+      "sofascore": "Slavia Praha"
+    },
+    {
+      "apiFootball": "Slovan Liberec",
+      "sofascore": "Slovan Liberec"
+    },
+    {
+      "apiFootball": "Sparta Praha",
+      "sofascore": "Sparta Praha"
+    },
+    {
+      "apiFootball": "Táborsko",
+      "sofascore": "FK Taborsko"
+    },
+    {
+      "apiFootball": "Teplice",
+      "sofascore": "Teplice"
+    },
+    {
+      "apiFootball": "Vyškov",
+      "sofascore": "Vyškov"
+    },
+    {
+      "apiFootball": "Zlin",
+      "sofascore": "Zlín"
+    },
+    {
+      "apiFootball": "Aarhus",
+      "sofascore": "AGF"
+    },
+    {
+      "apiFootball": "Brondby",
+      "sofascore": "Brøndby"
+    },
+    {
+      "apiFootball": "FC Copenhagen",
+      "sofascore": "København"
+    },
+    {
+      "apiFootball": "FC Midtjylland",
+      "sofascore": "Midtjylland"
+    },
+    {
+      "apiFootball": "FC Nordsjaelland",
+      "sofascore": "Nordsjælland"
+    },
+    {
+      "apiFootball": "Hvidovre",
+      "sofascore": "Hvidovre"
+    },
+    {
+      "apiFootball": "Odense",
+      "sofascore": "OB"
+    },
+    {
+      "apiFootball": "Silkeborg",
+      "sofascore": "Silkeborg"
+    },
+    {
+      "apiFootball": "Vejle",
+      "sofascore": "Vejle"
+    },
+    {
+      "apiFootball": "Viborg",
+      "sofascore": "Viborg"
+    },
+    {
+      "apiFootball": "Bohemians",
+      "sofascore": "Bohemians"
+    },
+    {
+      "apiFootball": "Derry City",
+      "sofascore": "Derry City"
+    },
+    {
+      "apiFootball": "Drogheda United",
+      "sofascore": "Drogheda Utd"
+    },
+    {
+      "apiFootball": "Dundalk",
+      "sofascore": "Dundalk"
+    },
+    {
+      "apiFootball": "Galway United",
+      "sofascore": "Galway Utd"
+    },
+    {
+      "apiFootball": "Shamrock Rovers",
+      "sofascore": "Shamrock Rovers"
+    },
+    {
+      "apiFootball": "Shelbourne",
+      "sofascore": "Shelbourne"
+    },
+    {
+      "apiFootball": "Sligo Rovers",
+      "sofascore": "Sligo Rovers"
+    },
+    {
+      "apiFootball": "St Patrick's Athl.",
+      "sofascore": "St. Patrick’s"
+    },
+    {
+      "apiFootball": "Waterford",
+      "sofascore": "Waterford"
+    },
+    {
+      "apiFootball": "Albacete",
+      "sofascore": "Albacete"
+    },
+    {
+      "apiFootball": "Alcorcon",
+      "sofascore": "Alcorcón"
+    },
+    {
+      "apiFootball": "Amorebieta",
+      "sofascore": "Amorebieta"
+    },
+    {
+      "apiFootball": "Burgos",
+      "sofascore": "Burgos"
+    },
+    {
+      "apiFootball": "Eibar",
+      "sofascore": "Eibar"
+    },
+    {
+      "apiFootball": "Elche",
+      "sofascore": "Elche"
+    },
+    {
+      "apiFootball": "Eldense",
+      "sofascore": "Eldense"
+    },
+    {
+      "apiFootball": "Espanyol",
+      "sofascore": "Espanyol"
+    },
+    {
+      "apiFootball": "FC Andorra",
+      "sofascore": "FC Andorra"
+    },
+    {
+      "apiFootball": "FC Cartagena",
+      "sofascore": "Cartagena"
+    },
+    {
+      "apiFootball": "Huesca",
+      "sofascore": "Huesca"
+    },
+    {
+      "apiFootball": "Leganes",
+      "sofascore": "Leganés"
+    },
+    {
+      "apiFootball": "Levante",
+      "sofascore": "Levante"
+    },
+    {
+      "apiFootball": "Mirandes",
+      "sofascore": "Mirandés"
+    },
+    {
+      "apiFootball": "Oviedo",
+      "sofascore": "Real Oviedo"
+    },
+    {
+      "apiFootball": "Racing Ferrol",
+      "sofascore": "Racing de Ferrol"
+    },
+    {
+      "apiFootball": "Racing Santander",
+      "sofascore": "Racing de Santander"
+    },
+    {
+      "apiFootball": "Sporting Gijon",
+      "sofascore": "Sporting"
+    },
+    {
+      "apiFootball": "Valladolid",
+      "sofascore": "Real Valladolid"
+    },
+    {
+      "apiFootball": "Villarreal II",
+      "sofascore": "Villarreal B "
+    },
+    {
+      "apiFootball": "Zaragoza",
+      "sofascore": "Real Zaragoza"
+    },
+    {
+      "apiFootball": "AFC Hermannstadt",
+      "sofascore": "Hermannstadt"
+    },
+    {
+      "apiFootball": "CFR 1907 Cluj",
+      "sofascore": "CFR Cluj"
+    },
+    {
+      "apiFootball": "Dinamo Bucuresti",
+      "sofascore": "Dinamo București"
+    },
+    {
+      "apiFootball": "Farul Constanta",
+      "sofascore": "Farul Constanța"
+    },
+    {
+      "apiFootball": "FC Botosani",
+      "sofascore": "FC Botoșani"
+    },
+    {
+      "apiFootball": "FCSB",
+      "sofascore": "FCSB"
+    },
+    {
+      "apiFootball": "Oţelul",
+      "sofascore": "Oțelul Galați"
+    },
+    {
+      "apiFootball": "Petrolul Ploiesti",
+      "sofascore": "Petrolul Ploieşti"
+    },
+    {
+      "apiFootball": "Politehnica Iasi",
+      "sofascore": "Poli Iași"
+    },
+    {
+      "apiFootball": "Rapid",
+      "sofascore": "Rapid București"
+    },
+    {
+      "apiFootball": "SCM Gloria Buzău",
+      "sofascore": "Gloria Buzău"
+    },
+    {
+      "apiFootball": "Sepsi OSK Sfantu Gheorghe",
+      "sofascore": "Sepsi OSK"
+    },
+    {
+      "apiFootball": "Unirea Slobozia",
+      "sofascore": "Unirea Slobozia"
+    },
+    {
+      "apiFootball": "Universitatea Cluj",
+      "sofascore": "U. Cluj"
+    },
+    {
+      "apiFootball": "Universitatea Craiova",
+      "sofascore": "U. Craiova"
+    },
+    {
+      "apiFootball": "Uta Arad",
+      "sofascore": "UTA Arad"
+    },
+    {
+      "apiFootball": "Baník Ostrava",
+      "sofascore": "Baník"
+    },
+    {
+      "apiFootball": "Dukla Praha",
+      "sofascore": "Dukla Praha"
+    },
+    {
+      "apiFootball": "Slovácko",
+      "sofascore": "Slovácko"
+    },
+    {
+      "apiFootball": "Aalborg",
+      "sofascore": "Aalborg"
+    },
+    {
+      "apiFootball": "Lyngby",
+      "sofascore": "Lyngby"
+    },
+    {
+      "apiFootball": "Randers FC",
+      "sofascore": "Randers"
+    },
+    {
+      "apiFootball": "Sonderjyske",
+      "sofascore": "Sønderjyske"
+    },
+    {
+      "apiFootball": "Akhmat",
+      "sofascore": "Akhmat"
+    },
+    {
+      "apiFootball": "Akron",
+      "sofascore": "Akron Togliatti"
+    },
+    {
+      "apiFootball": "CSKA Moscow",
+      "sofascore": "CSKA"
+    },
+    {
+      "apiFootball": "Dynamo",
+      "sofascore": "Dynamo"
+    },
+    {
+      "apiFootball": "Fakel",
+      "sofascore": "Fakel"
+    },
+    {
+      "apiFootball": "FC Krasnodar",
+      "sofascore": "Krasnodar"
+    },
+    {
+      "apiFootball": "FC Orenburg",
+      "sofascore": "Orenburg"
+    },
+    {
+      "apiFootball": "FC Rostov",
+      "sofascore": "Rostov"
+    },
+    {
+      "apiFootball": "Khimki",
+      "sofascore": "Khimki"
+    },
+    {
+      "apiFootball": "Krylia Sovetov",
+      "sofascore": "Krylya Sovetov"
+    },
+    {
+      "apiFootball": "Lokomotiv",
+      "sofascore": "Lokomotiv"
+    },
+    {
+      "apiFootball": "Makhachkala",
+      "sofascore": "Dinamo Makhachkala"
+    },
+    {
+      "apiFootball": "Nizhny Novgorod",
+      "sofascore": "Pari NN"
+    },
+    {
+      "apiFootball": "Rubin",
+      "sofascore": "Rubin Kazan"
+    },
+    {
+      "apiFootball": "Spartak Moscow",
+      "sofascore": "Spartak "
+    },
+    {
+      "apiFootball": "Zenit",
+      "sofascore": "Zenit"
+    },
+    {
+      "apiFootball": "Ballkani",
+      "sofascore": "Ballkani"
+    },
+    {
+      "apiFootball": "Borac Banja Luka",
+      "sofascore": "Borac"
+    },
+    {
+      "apiFootball": "Celje",
+      "sofascore": "Celje"
+    },
+    {
+      "apiFootball": "Dečić",
+      "sofascore": "FK Dečić"
+    },
+    {
+      "apiFootball": "Dinamo Batumi",
+      "sofascore": "Dinamo Batumi"
+    },
+    {
+      "apiFootball": "Dinamo Minsk",
+      "sofascore": "Dinamo Minsk"
+    },
+    {
+      "apiFootball": "Dynamo Kyiv",
+      "sofascore": "Dynamo Kyiv"
+    },
+    {
+      "apiFootball": "Egnatia Rrogozhinë",
+      "sofascore": "Egnatia"
+    },
+    {
+      "apiFootball": "FC Differdange 03",
+      "sofascore": "Differdange 03"
+    },
+    {
+      "apiFootball": "FC Lugano",
+      "sofascore": "Lugano"
+    },
+    {
+      "apiFootball": "Fenerbahce",
+      "sofascore": "Fenerbahçe"
+    },
+    {
+      "apiFootball": "Flora Tallinn",
+      "sofascore": "Flora"
+    },
+    {
+      "apiFootball": "Hamrun Spartans",
+      "sofascore": "Ħamrun S."
+    },
+    {
+      "apiFootball": "HJK helsinki",
+      "sofascore": "HJK"
+    },
+    {
+      "apiFootball": "KI Klaksvik",
+      "sofascore": "Klaksvík"
+    },
+    {
+      "apiFootball": "Larne",
+      "sofascore": "Larne FC"
+    },
+    {
+      "apiFootball": "Lincoln Red Imps FC",
+      "sofascore": "Lincoln RI"
+    },
+    {
+      "apiFootball": "Ludogorets",
+      "sofascore": "Ludogorets"
+    },
+    {
+      "apiFootball": "Ordabasy",
+      "sofascore": "Ordabasy"
+    },
+    {
+      "apiFootball": "Panevėžys",
+      "sofascore": "Panevėžys"
+    },
+    {
+      "apiFootball": "Petrocub",
+      "sofascore": "Petrocub"
+    },
+    {
+      "apiFootball": "Pyunik Yerevan",
+      "sofascore": "Pyunik"
+    },
+    {
+      "apiFootball": "Rīgas FS",
+      "sofascore": "RFS"
+    },
+    {
+      "apiFootball": "Slovan Bratislava",
+      "sofascore": "Slovan"
+    },
+    {
+      "apiFootball": "Struga",
+      "sofascore": "Struga T&L"
+    },
+    {
+      "apiFootball": "The New Saints",
+      "sofascore": "TNS"
+    },
+    {
+      "apiFootball": "UE Santa Coloma",
+      "sofascore": "UE Coloma"
+    },
+    {
+      "apiFootball": "Vikingur Reykjavik",
+      "sofascore": "Víkingur"
+    },
+    {
+      "apiFootball": "Virtus",
+      "sofascore": "Virtus"
+    },
+    {
+      "apiFootball": "Anderlecht",
+      "sofascore": "Anderlecht"
+    },
+    {
+      "apiFootball": "Antwerp",
+      "sofascore": "Royal Antwerp"
+    },
+    {
+      "apiFootball": "Beerschot Wilrijk",
+      "sofascore": "Beerschot"
+    },
+    {
+      "apiFootball": "Cercle Brugge",
+      "sofascore": "Cercle Brugge"
+    },
+    {
+      "apiFootball": "Charleroi",
+      "sofascore": "Charleroi"
+    },
+    {
+      "apiFootball": "Club Brugge KV",
+      "sofascore": "Club Brugge"
+    },
+    {
+      "apiFootball": "Dender",
+      "sofascore": "Dender "
+    },
+    {
+      "apiFootball": "Genk",
+      "sofascore": "Genk"
+    },
+    {
+      "apiFootball": "Gent",
+      "sofascore": "Gent"
+    },
+    {
+      "apiFootball": "Kortrijk",
+      "sofascore": "Kortrijk"
+    },
+    {
+      "apiFootball": "KV Mechelen",
+      "sofascore": "Mechelen"
+    },
+    {
+      "apiFootball": "KVC Westerlo",
+      "sofascore": "Westerlo"
+    },
+    {
+      "apiFootball": "OH Leuven",
+      "sofascore": "OH Leuven"
+    },
+    {
+      "apiFootball": "St. Truiden",
+      "sofascore": "St. Truidense"
+    },
+    {
+      "apiFootball": "Standard Liege",
+      "sofascore": "Standard Liège"
+    },
+    {
+      "apiFootball": "Union St. Gilloise",
+      "sofascore": "USG"
+    },
+    {
+      "apiFootball": "1.FC Köln",
+      "sofascore": "Köln"
+    },
+    {
+      "apiFootball": "Eintracht Braunschweig",
+      "sofascore": "Braunschweig"
+    },
+    {
+      "apiFootball": "FC Kaiserslautern",
+      "sofascore": "Kaiserslautern"
+    },
+    {
+      "apiFootball": "FC Magdeburg",
+      "sofascore": "Magdeburg"
+    },
+    {
+      "apiFootball": "FC Nurnberg",
+      "sofascore": "Nürnberg"
+    },
+    {
+      "apiFootball": "FC Schalke 04",
+      "sofascore": "Schalke"
+    },
+    {
+      "apiFootball": "Hamburger SV",
+      "sofascore": "HSV"
+    },
+    {
+      "apiFootball": "Hannover 96",
+      "sofascore": "Hannover"
+    },
+    {
+      "apiFootball": "Hertha Berlin",
+      "sofascore": "Hertha"
+    },
+    {
+      "apiFootball": "Jahn Regensburg",
+      "sofascore": "Regensburg"
+    },
+    {
+      "apiFootball": "Karlsruher SC",
+      "sofascore": "Karlsruhe"
+    },
+    {
+      "apiFootball": "Preussen Munster",
+      "sofascore": "Münster"
+    },
+    {
+      "apiFootball": "SC Paderborn 07",
+      "sofascore": "Paderborn"
+    },
+    {
+      "apiFootball": "SpVgg Greuther Furth",
+      "sofascore": "Fürth"
+    },
+    {
+      "apiFootball": "SSV ULM 1846",
+      "sofascore": "Ulm"
+    },
+    {
+      "apiFootball": "SV Darmstadt 98",
+      "sofascore": "Darmstadt"
+    },
+    {
+      "apiFootball": "SV Elversberg",
+      "sofascore": "Elversberg"
+    },
+    {
+      "apiFootball": "1899 Hoffenheim",
+      "sofascore": "Hoffenheim"
+    },
+    {
+      "apiFootball": "Bayer Leverkusen",
+      "sofascore": "Leverkusen"
+    },
+    {
+      "apiFootball": "Bayern Munich",
+      "sofascore": "Bayern"
+    },
+    {
+      "apiFootball": "Borussia Dortmund",
+      "sofascore": "Dortmund"
+    },
+    {
+      "apiFootball": "Borussia Monchengladbach",
+      "sofascore": "M'gladbach"
+    },
+    {
+      "apiFootball": "Eintracht Frankfurt",
+      "sofascore": "Frankfurt"
+    },
+    {
+      "apiFootball": "FC Augsburg",
+      "sofascore": "Augsburg"
+    },
+    {
+      "apiFootball": "FC Heidenheim",
+      "sofascore": "Heidenheim"
+    },
+    {
+      "apiFootball": "FC St. Pauli",
+      "sofascore": "St. Pauli"
+    },
+    {
+      "apiFootball": "FSV Mainz 05",
+      "sofascore": "Mainz 05"
+    },
+    {
+      "apiFootball": "Holstein Kiel",
+      "sofascore": "Kiel"
+    },
+    {
+      "apiFootball": "RB Leipzig",
+      "sofascore": "Leipzig"
+    },
+    {
+      "apiFootball": "SC Freiburg",
+      "sofascore": "Freiburg"
+    },
+    {
+      "apiFootball": "Union Berlin",
+      "sofascore": "Union Berlin"
+    },
+    {
+      "apiFootball": "VfB Stuttgart",
+      "sofascore": "Stuttgart"
+    },
+    {
+      "apiFootball": "Vfl Bochum",
+      "sofascore": "Bochum"
+    },
+    {
+      "apiFootball": "VfL Wolfsburg",
+      "sofascore": "Wolfsburg"
+    },
+    {
+      "apiFootball": "Werder Bremen",
+      "sofascore": "Bremen"
+    },
+    {
+      "apiFootball": "Avellino",
+      "sofascore": "Avellino"
+    },
+    {
+      "apiFootball": "Carrarese",
+      "sofascore": "Carrarese"
+    },
+    {
+      "apiFootball": "Catania",
+      "sofascore": "Catania"
+    },
+    {
+      "apiFootball": "Cesena",
+      "sofascore": "Cesena"
+    },
+    {
+      "apiFootball": "Cittadella",
+      "sofascore": "Cittadella"
+    },
+    {
+      "apiFootball": "Como",
+      "sofascore": "Como"
+    },
+    {
+      "apiFootball": "Cosenza",
+      "sofascore": "Cosenza"
+    },
+    {
+      "apiFootball": "Cremonese",
+      "sofascore": "Cremonese"
+    },
+    {
+      "apiFootball": "Empoli",
+      "sofascore": "Empoli"
+    },
+    {
+      "apiFootball": "Frosinone",
+      "sofascore": "Frosinone"
+    },
+    {
+      "apiFootball": "Genoa",
+      "sofascore": "Genoa"
+    },
+    {
+      "apiFootball": "Juve Stabia",
+      "sofascore": "Juve Stabia"
+    },
+    {
+      "apiFootball": "Mantova",
+      "sofascore": "Mantova"
+    },
+    {
+      "apiFootball": "Monza",
+      "sofascore": "Monza"
+    },
+    {
+      "apiFootball": "Napoli",
+      "sofascore": "Napoli"
+    },
+    {
+      "apiFootball": "Padova",
+      "sofascore": "Padova"
+    },
+    {
+      "apiFootball": "Palermo",
+      "sofascore": "Palermo"
+    },
+    {
+      "apiFootball": "Parma",
+      "sofascore": "Parma"
+    },
+    {
+      "apiFootball": "Pisa",
+      "sofascore": "Pisa"
+    },
+    {
+      "apiFootball": "Salernitana",
+      "sofascore": "Salernitana"
+    },
+    {
+      "apiFootball": "Sassuolo",
+      "sofascore": "Sassuolo"
+    },
+    {
+      "apiFootball": "Torino",
+      "sofascore": "Torino"
+    },
+    {
+      "apiFootball": "Torres",
+      "sofascore": "Torres"
+    },
+    {
+      "apiFootball": "Aberdeen",
+      "sofascore": "Aberdeen"
+    },
+    {
+      "apiFootball": "Celtic",
+      "sofascore": "Celtic"
+    },
+    {
+      "apiFootball": "Dundee",
+      "sofascore": "Dundee"
+    },
+    {
+      "apiFootball": "Dundee Utd",
+      "sofascore": "Dundee Utd"
+    },
+    {
+      "apiFootball": "Heart OF Midlothian",
+      "sofascore": "Hearts"
+    },
+    {
+      "apiFootball": "Hibernian",
+      "sofascore": "Hibernian"
+    },
+    {
+      "apiFootball": "Kilmarnock",
+      "sofascore": "Kilmarnock"
+    },
+    {
+      "apiFootball": "Motherwell",
+      "sofascore": "Motherwell"
+    },
+    {
+      "apiFootball": "Rangers",
+      "sofascore": "Rangers"
+    },
+    {
+      "apiFootball": "Ross County",
+      "sofascore": "Ross County"
+    },
+    {
+      "apiFootball": "ST Johnstone",
+      "sofascore": "St. Johnstone"
+    },
+    {
+      "apiFootball": "ST Mirren",
+      "sofascore": "St Mirren"
+    },
+    {
+      "apiFootball": "Blackburn",
+      "sofascore": "Blackburn"
+    },
+    {
+      "apiFootball": "Bristol City",
+      "sofascore": "Bristol City"
+    },
+    {
+      "apiFootball": "Burnley",
+      "sofascore": "Burnley"
+    },
+    {
+      "apiFootball": "Cardiff",
+      "sofascore": "Cardiff"
+    },
+    {
+      "apiFootball": "Coventry",
+      "sofascore": "Coventry"
+    },
+    {
+      "apiFootball": "Derby",
+      "sofascore": "Derby"
+    },
+    {
+      "apiFootball": "Hull City",
+      "sofascore": "Hull"
+    },
+    {
+      "apiFootball": "Leeds",
+      "sofascore": "Leeds"
+    },
+    {
+      "apiFootball": "Luton",
+      "sofascore": "Luton"
+    },
+    {
+      "apiFootball": "Middlesbrough",
+      "sofascore": "Middlesbrough"
+    },
+    {
+      "apiFootball": "Millwall",
+      "sofascore": "Millwall"
+    },
+    {
+      "apiFootball": "Norwich",
+      "sofascore": "Norwich"
+    },
+    {
+      "apiFootball": "Oxford United",
+      "sofascore": "Oxford Utd"
+    },
+    {
+      "apiFootball": "Plymouth",
+      "sofascore": "Plymouth"
+    },
+    {
+      "apiFootball": "Portsmouth",
+      "sofascore": "Portsmouth"
+    },
+    {
+      "apiFootball": "Preston",
+      "sofascore": "Preston"
+    },
+    {
+      "apiFootball": "QPR",
+      "sofascore": "QPR"
+    },
+    {
+      "apiFootball": "Sheffield Utd",
+      "sofascore": "Sheffield Utd"
+    },
+    {
+      "apiFootball": "Sheffield Wednesday",
+      "sofascore": "Sheffield Wed"
+    },
+    {
+      "apiFootball": "Stoke City",
+      "sofascore": "Stoke"
+    },
+    {
+      "apiFootball": "Sunderland",
+      "sofascore": "Sunderland"
+    },
+    {
+      "apiFootball": "Swansea",
+      "sofascore": "Swansea"
+    },
+    {
+      "apiFootball": "Watford",
+      "sofascore": "Watford"
+    },
+    {
+      "apiFootball": "West Brom",
+      "sofascore": "West Brom"
+    },
+    {
+      "apiFootball": "Ajax",
+      "sofascore": "Ajax"
+    },
+    {
+      "apiFootball": "Almere City FC",
+      "sofascore": "Almere City"
+    },
+    {
+      "apiFootball": "AZ Alkmaar",
+      "sofascore": "AZ"
+    },
+    {
+      "apiFootball": "Feyenoord",
+      "sofascore": "Feyenoord"
+    },
+    {
+      "apiFootball": "Fortuna Sittard",
+      "sofascore": "Fortuna"
+    },
+    {
+      "apiFootball": "GO Ahead Eagles",
+      "sofascore": "GA Eagles"
+    },
+    {
+      "apiFootball": "Groningen",
+      "sofascore": "Groningen"
+    },
+    {
+      "apiFootball": "Heerenveen",
+      "sofascore": "Heerenveen"
+    },
+    {
+      "apiFootball": "Heracles",
+      "sofascore": "Heracles"
+    },
+    {
+      "apiFootball": "NAC Breda",
+      "sofascore": "NAC Breda"
+    },
+    {
+      "apiFootball": "NEC Nijmegen",
+      "sofascore": "NEC"
+    },
+    {
+      "apiFootball": "PEC Zwolle",
+      "sofascore": "Zwolle"
+    },
+    {
+      "apiFootball": "PSV Eindhoven",
+      "sofascore": "PSV"
+    },
+    {
+      "apiFootball": "Sparta Rotterdam",
+      "sofascore": "Sparta"
+    },
+    {
+      "apiFootball": "Twente",
+      "sofascore": "Twente"
+    },
+    {
+      "apiFootball": "Utrecht",
+      "sofascore": "Utrecht"
+    },
+    {
+      "apiFootball": "Waalwijk",
+      "sofascore": "Waalwijk"
+    },
+    {
+      "apiFootball": "Willem II",
+      "sofascore": "Willem II"
+    },
+    {
+      "apiFootball": "ADO Den Haag",
+      "sofascore": "ADO"
+    },
+    {
+      "apiFootball": "Cambuur",
+      "sofascore": "Cambuur"
+    },
+    {
+      "apiFootball": "De Graafschap",
+      "sofascore": "De Graafschap"
+    },
+    {
+      "apiFootball": "Den Bosch",
+      "sofascore": "Den Bosch"
+    },
+    {
+      "apiFootball": "Dordrecht",
+      "sofascore": "Dordrecht"
+    },
+    {
+      "apiFootball": "Emmen",
+      "sofascore": "Emmen"
+    },
+    {
+      "apiFootball": "Excelsior",
+      "sofascore": "Excelsior"
+    },
+    {
+      "apiFootball": "FC Eindhoven",
+      "sofascore": "Eindhoven"
+    },
+    {
+      "apiFootball": "FC OSS",
+      "sofascore": "TOP Oss"
+    },
+    {
+      "apiFootball": "FC Volendam",
+      "sofascore": "Volendam"
+    },
+    {
+      "apiFootball": "Helmond Sport",
+      "sofascore": "Helmond Sport"
+    },
+    {
+      "apiFootball": "Jong Ajax",
+      "sofascore": "Jong Ajax"
+    },
+    {
+      "apiFootball": "Jong AZ",
+      "sofascore": "Jong AZ"
+    },
+    {
+      "apiFootball": "Jong PSV",
+      "sofascore": "Jong PSV"
+    },
+    {
+      "apiFootball": "Jong Utrecht",
+      "sofascore": "Jong FC Utrecht"
+    },
+    {
+      "apiFootball": "MVV",
+      "sofascore": "MVV"
+    },
+    {
+      "apiFootball": "Roda",
+      "sofascore": "Roda"
+    },
+    {
+      "apiFootball": "Telstar",
+      "sofascore": "Telstar"
+    },
+    {
+      "apiFootball": "Vitesse",
+      "sofascore": "Vitesse"
+    },
+    {
+      "apiFootball": "VVV Venlo",
+      "sofascore": "VVV-Venlo"
+    },
+    {
+      "apiFootball": "Barnsley",
+      "sofascore": "Barnsley"
+    },
+    {
+      "apiFootball": "Birmingham",
+      "sofascore": "Birmingham"
+    },
+    {
+      "apiFootball": "Blackpool",
+      "sofascore": "Blackpool"
+    },
+    {
+      "apiFootball": "Bolton",
+      "sofascore": "Bolton"
+    },
+    {
+      "apiFootball": "Bristol Rovers",
+      "sofascore": "Bristol Rovers"
+    },
+    {
+      "apiFootball": "Burton Albion",
+      "sofascore": "Burton"
+    },
+    {
+      "apiFootball": "Cambridge United",
+      "sofascore": "Cambridge"
+    },
+    {
+      "apiFootball": "Charlton",
+      "sofascore": "Charlton"
+    },
+    {
+      "apiFootball": "Crawley Town",
+      "sofascore": "Crawley"
+    },
+    {
+      "apiFootball": "Exeter City",
+      "sofascore": "Exeter"
+    },
+    {
+      "apiFootball": "Huddersfield",
+      "sofascore": "Huddersfield"
+    },
+    {
+      "apiFootball": "Leyton Orient",
+      "sofascore": "Leyton Orient"
+    },
+    {
+      "apiFootball": "Lincoln",
+      "sofascore": "Lincoln"
+    },
+    {
+      "apiFootball": "Mansfield Town",
+      "sofascore": "Mansfield"
+    },
+    {
+      "apiFootball": "Northampton",
+      "sofascore": "Northampton"
+    },
+    {
+      "apiFootball": "Peterborough",
+      "sofascore": "Peterborough Utd"
+    },
+    {
+      "apiFootball": "Reading",
+      "sofascore": "Reading"
+    },
+    {
+      "apiFootball": "Rotherham",
+      "sofascore": "Rotherham"
+    },
+    {
+      "apiFootball": "Shrewsbury",
+      "sofascore": "Shrewsbury"
+    },
+    {
+      "apiFootball": "Stevenage",
+      "sofascore": "Stevenage"
+    },
+    {
+      "apiFootball": "Stockport County",
+      "sofascore": "Stockport"
+    },
+    {
+      "apiFootball": "Wigan",
+      "sofascore": "Wigan"
+    },
+    {
+      "apiFootball": "Wrexham",
+      "sofascore": "Wrexham"
+    },
+    {
+      "apiFootball": "Wycombe",
+      "sofascore": "Wycombe"
+    },
+    {
+      "apiFootball": "Accrington ST",
+      "sofascore": "Accrington"
+    },
+    {
+      "apiFootball": "AFC Wimbledon",
+      "sofascore": "Wimbledon"
+    },
+    {
+      "apiFootball": "Barrow",
+      "sofascore": "Barrow"
+    },
+    {
+      "apiFootball": "Bradford",
+      "sofascore": "Bradford"
+    },
+    {
+      "apiFootball": "Bromley",
+      "sofascore": "Bromley"
+    },
+    {
+      "apiFootball": "Carlisle",
+      "sofascore": "Carlisle"
+    },
+    {
+      "apiFootball": "Cheltenham",
+      "sofascore": "Cheltenham"
+    },
+    {
+      "apiFootball": "Chesterfield",
+      "sofascore": "Chesterfield"
+    },
+    {
+      "apiFootball": "Colchester",
+      "sofascore": "Colchester"
+    },
+    {
+      "apiFootball": "Crewe",
+      "sofascore": "Crewe"
+    },
+    {
+      "apiFootball": "Doncaster",
+      "sofascore": "Doncaster"
+    },
+    {
+      "apiFootball": "Fleetwood Town",
+      "sofascore": "Fleetwood"
+    },
+    {
+      "apiFootball": "Gillingham",
+      "sofascore": "Gillingham"
+    },
+    {
+      "apiFootball": "Grimsby",
+      "sofascore": "Grimsby"
+    },
+    {
+      "apiFootball": "Harrogate Town",
+      "sofascore": "Harrogate"
+    },
+    {
+      "apiFootball": "Milton Keynes Dons",
+      "sofascore": "MK Dons"
+    },
+    {
+      "apiFootball": "Morecambe",
+      "sofascore": "Morecambe"
+    },
+    {
+      "apiFootball": "Newport County",
+      "sofascore": "Notts County"
+    },
+    {
+      "apiFootball": "Port Vale",
+      "sofascore": "Port Vale"
+    },
+    {
+      "apiFootball": "Salford City",
+      "sofascore": "Salford"
+    },
+    {
+      "apiFootball": "Swindon Town",
+      "sofascore": "Swindon"
+    },
+    {
+      "apiFootball": "Tranmere",
+      "sofascore": "Tranmere"
+    },
+    {
+      "apiFootball": "Walsall",
+      "sofascore": "Walsall"
+    },
+    {
+      "apiFootball": "AFC Fylde",
+      "sofascore": "Fylde"
+    },
+    {
+      "apiFootball": "Aldershot Town",
+      "sofascore": "Aldershot"
+    },
+    {
+      "apiFootball": "Altrincham",
+      "sofascore": "Altrincham"
+    },
+    {
+      "apiFootball": "Barnet",
+      "sofascore": "Barnet"
+    },
+    {
+      "apiFootball": "Boston United",
+      "sofascore": "Boston"
+    },
+    {
+      "apiFootball": "Braintree",
+      "sofascore": "Braintree"
+    },
+    {
+      "apiFootball": "Dagenham & Redbridge",
+      "sofascore": "Dag & Red"
+    },
+    {
+      "apiFootball": "Eastleigh",
+      "sofascore": "Eastleigh"
+    },
+    {
+      "apiFootball": "Ebbsfleet United",
+      "sofascore": "Ebbsfleet"
+    },
+    {
+      "apiFootball": "FC Halifax Town",
+      "sofascore": "Halifax"
+    },
+    {
+      "apiFootball": "Forest Green",
+      "sofascore": "Forest Green"
+    },
+    {
+      "apiFootball": "Gateshead",
+      "sofascore": "Gateshead"
+    },
+    {
+      "apiFootball": "Hartlepool",
+      "sofascore": "Hartlepool"
+    },
+    {
+      "apiFootball": "Maidenhead",
+      "sofascore": "Maidenhead"
+    },
+    {
+      "apiFootball": "Oldham",
+      "sofascore": "Oldham"
+    },
+    {
+      "apiFootball": "Rochdale",
+      "sofascore": "Rochdale"
+    },
+    {
+      "apiFootball": "Solihull Moors",
+      "sofascore": "Solihull Moors"
+    },
+    {
+      "apiFootball": "Southend",
+      "sofascore": "Southend Utd"
+    },
+    {
+      "apiFootball": "Sutton Utd",
+      "sofascore": "Sutton"
+    },
+    {
+      "apiFootball": "Tamworth",
+      "sofascore": "Tamworth"
+    },
+    {
+      "apiFootball": "Wealdstone",
+      "sofascore": "Wealdstone"
+    },
+    {
+      "apiFootball": "Woking",
+      "sofascore": "Woking"
+    },
+    {
+      "apiFootball": "Yeovil Town",
+      "sofascore": "Yeovil"
+    },
+    {
+      "apiFootball": "York",
+      "sofascore": "York"
+    },
+    {
+      "apiFootball": "Arouca",
+      "sofascore": "Arouca"
+    },
+    {
+      "apiFootball": "AVS",
+      "sofascore": "AVS"
+    },
+    {
+      "apiFootball": "Benfica",
+      "sofascore": "Benfica"
+    },
+    {
+      "apiFootball": "Boavista",
+      "sofascore": "Boavista"
+    },
+    {
+      "apiFootball": "Casa Pia",
+      "sofascore": "Casa Pia"
+    },
+    {
+      "apiFootball": "Estoril",
+      "sofascore": "Estoril"
+    },
+    {
+      "apiFootball": "Estrela",
+      "sofascore": "Estrela Amadora"
+    },
+    {
+      "apiFootball": "Famalicao",
+      "sofascore": "Famalicão"
+    },
+    {
+      "apiFootball": "Farense",
+      "sofascore": "Farense"
+    },
+    {
+      "apiFootball": "FC Porto",
+      "sofascore": "Porto"
+    },
+    {
+      "apiFootball": "GIL Vicente",
+      "sofascore": "Gil Vicente"
+    },
+    {
+      "apiFootball": "Moreirense",
+      "sofascore": "Moreirense"
+    },
+    {
+      "apiFootball": "Nacional",
+      "sofascore": "Nacional"
+    },
+    {
+      "apiFootball": "Rio Ave",
+      "sofascore": "Rio Ave"
+    },
+    {
+      "apiFootball": "Santa Clara",
+      "sofascore": "Santa Clara"
+    },
+    {
+      "apiFootball": "SC Braga",
+      "sofascore": "Braga"
+    },
+    {
+      "apiFootball": "Adana Demirspor",
+      "sofascore": "Adana DS"
+    },
+    {
+      "apiFootball": "Alanyaspor",
+      "sofascore": "Alanyaspor"
+    },
+    {
+      "apiFootball": "Antalyaspor",
+      "sofascore": "Antalyaspor"
+    },
+    {
+      "apiFootball": "BB Bodrumspor",
+      "sofascore": "Bodrum"
+    },
+    {
+      "apiFootball": "Besiktas",
+      "sofascore": "Beşiktaş"
+    },
+    {
+      "apiFootball": "Eyüpspor",
+      "sofascore": "Eyüpspor"
+    },
+    {
+      "apiFootball": "Galatasaray",
+      "sofascore": "Galatasaray"
+    },
+    {
+      "apiFootball": "Gazişehir Gaziantep",
+      "sofascore": "Gaziantep"
+    },
+    {
+      "apiFootball": "Goztepe",
+      "sofascore": "Göztepe"
+    },
+    {
+      "apiFootball": "Hatayspor",
+      "sofascore": "Hatayspor"
+    },
+    {
+      "apiFootball": "Istanbul Basaksehir",
+      "sofascore": "Başakşehir"
+    },
+    {
+      "apiFootball": "Kasimpasa",
+      "sofascore": "Kasımpaşa"
+    },
+    {
+      "apiFootball": "Kayserispor",
+      "sofascore": "Kayserispor"
+    },
+    {
+      "apiFootball": "Konyaspor",
+      "sofascore": "Konyaspor"
+    },
+    {
+      "apiFootball": "Rizespor",
+      "sofascore": "Rizespor"
+    },
+    {
+      "apiFootball": "Samsunspor",
+      "sofascore": "Samsunspor"
+    },
+    {
+      "apiFootball": "Sivasspor",
+      "sofascore": "Sivasspor"
+    },
+    {
+      "apiFootball": "Trabzonspor",
+      "sofascore": "Trabzonspor"
+    },
+    {
+      "apiFootball": "Alaves",
+      "sofascore": "Alavés"
+    },
+    {
+      "apiFootball": "Athletic Club",
+      "sofascore": "Athletic Club"
+    },
+    {
+      "apiFootball": "Atletico Madrid",
+      "sofascore": "Atl. Madrid"
+    },
+    {
+      "apiFootball": "Barcelona",
+      "sofascore": "Barcelona"
+    },
+    {
+      "apiFootball": "Celta Vigo",
+      "sofascore": "Celta"
+    },
+    {
+      "apiFootball": "Getafe",
+      "sofascore": "Getafe"
+    },
+    {
+      "apiFootball": "Girona",
+      "sofascore": "Girona"
+    },
+    {
+      "apiFootball": "Las Palmas",
+      "sofascore": "Las Palmas"
+    },
+    {
+      "apiFootball": "Mallorca",
+      "sofascore": "Mallorca"
+    },
+    {
+      "apiFootball": "Osasuna",
+      "sofascore": "Osasuna"
+    },
+    {
+      "apiFootball": "Rayo Vallecano",
+      "sofascore": "Rayo Vallecano"
+    },
+    {
+      "apiFootball": "Real Betis",
+      "sofascore": "Betis"
+    },
+    {
+      "apiFootball": "Real Madrid",
+      "sofascore": "Real Madrid"
+    },
+    {
+      "apiFootball": "Real Sociedad",
+      "sofascore": "Real Sociedad"
+    },
+    {
+      "apiFootball": "Sevilla",
+      "sofascore": "Sevilla"
+    },
+    {
+      "apiFootball": "Valencia",
+      "sofascore": "Valencia"
+    },
+    {
+      "apiFootball": "Villarreal",
+      "sofascore": "Villarreal"
+    },
+    {
+      "apiFootball": "Arsenal",
+      "sofascore": "Arsenal"
+    },
+    {
+      "apiFootball": "Aston Villa",
+      "sofascore": "Aston Villa"
+    },
+    {
+      "apiFootball": "Bournemouth",
+      "sofascore": "Bournemouth"
+    },
+    {
+      "apiFootball": "Brentford",
+      "sofascore": "Brentford"
+    },
+    {
+      "apiFootball": "Brighton",
+      "sofascore": "Brighton"
+    },
+    {
+      "apiFootball": "Chelsea",
+      "sofascore": "Chelsea"
+    },
+    {
+      "apiFootball": "Crystal Palace",
+      "sofascore": "Crystal Palace"
+    },
+    {
+      "apiFootball": "Everton",
+      "sofascore": "Everton"
+    },
+    {
+      "apiFootball": "Fulham",
+      "sofascore": "Fulham"
+    },
+    {
+      "apiFootball": "Ipswich",
+      "sofascore": "Ipswich"
+    },
+    {
+      "apiFootball": "Leicester",
+      "sofascore": "Leicester"
+    },
+    {
+      "apiFootball": "Liverpool",
+      "sofascore": "Liverpool"
+    },
+    {
+      "apiFootball": "Manchester City",
+      "sofascore": "Man City"
+    },
+    {
+      "apiFootball": "Manchester United",
+      "sofascore": "Man Utd"
+    },
+    {
+      "apiFootball": "Newcastle",
+      "sofascore": "Newcastle"
+    },
+    {
+      "apiFootball": "Nottingham Forest",
+      "sofascore": "Forest"
+    },
+    {
+      "apiFootball": "Southampton",
+      "sofascore": "Southampton"
+    },
+    {
+      "apiFootball": "Tottenham",
+      "sofascore": "Tottenham"
+    },
+    {
+      "apiFootball": "West Ham",
+      "sofascore": "West Ham"
+    },
+    {
+      "apiFootball": "Wolves",
+      "sofascore": "Wolves"
+    },
+    {
+      "apiFootball": "Alemannia Aachen",
+      "sofascore": "Aachen"
+    },
+    {
+      "apiFootball": "Arminia Bielefeld",
+      "sofascore": "Bielefeld"
+    },
+    {
+      "apiFootball": "Borussia Hildesheim",
+      "sofascore": "Hildesheim"
+    },
+    {
+      "apiFootball": "Bremer Sv",
+      "sofascore": "Bremer SV"
+    },
+    {
+      "apiFootball": "Carl Zeiss Jena",
+      "sofascore": "Jena"
+    },
+    {
+      "apiFootball": "Dynamo Dresden",
+      "sofascore": "Dresden"
+    },
+    {
+      "apiFootball": "Energie Cottbus",
+      "sofascore": "Cottbus"
+    },
+    {
+      "apiFootball": "Erzgebirge AUE",
+      "sofascore": "Aue"
+    },
+    {
+      "apiFootball": "FC 08 Villingen",
+      "sofascore": "Villingen"
+    },
+    {
+      "apiFootball": "FC Ingolstadt 04",
+      "sofascore": "Ingolstadt"
+    },
+    {
+      "apiFootball": "FC Saarbrücken",
+      "sofascore": "Saarbrücken"
+    },
+    {
+      "apiFootball": "FC Wurzburger Kickers",
+      "sofascore": "Würzburger Kickers"
+    },
+    {
+      "apiFootball": "Greifswalder FC",
+      "sofascore": "Greifswald"
+    },
+    {
+      "apiFootball": "Hallescher FC",
+      "sofascore": "Halle"
+    },
+    {
+      "apiFootball": "Hansa Rostock",
+      "sofascore": "Rostock"
+    },
+    {
+      "apiFootball": "Kickers Offenbach",
+      "sofascore": "Offenbach"
+    },
+    {
+      "apiFootball": "Phönix Lübeck",
+      "sofascore": "Phönix Lübeck"
+    },
+    {
+      "apiFootball": "Rot-weiss Essen",
+      "sofascore": "RW Essen"
+    },
+    {
+      "apiFootball": "Schott Mainz",
+      "sofascore": "Schott Mainz"
+    },
+    {
+      "apiFootball": "Sportfreunde Lotte",
+      "sofascore": "Lotte"
+    },
+    {
+      "apiFootball": "SV Meppen",
+      "sofascore": "Meppen"
+    },
+    {
+      "apiFootball": "SV Sandhausen",
+      "sofascore": "Sandhausen"
+    },
+    {
+      "apiFootball": "SV Wehen",
+      "sofascore": "Wehen"
+    },
+    {
+      "apiFootball": "Teutonia Ottensen",
+      "sofascore": "Teutonia 05"
+    },
+    {
+      "apiFootball": "TuS Koblenz",
+      "sofascore": "TuS Koblenz"
+    },
+    {
+      "apiFootball": "VfL Osnabruck",
+      "sofascore": "Osnabrück"
+    },
+    {
+      "apiFootball": "VfR Aalen",
+      "sofascore": "Aalen"
+    },
+    {
+      "apiFootball": "Viktoria Berlin",
+      "sofascore": "Viktoria Berlin"
+    },
+    {
+      "apiFootball": "Almeria",
+      "sofascore": "Almería"
+    },
+    {
+      "apiFootball": "Cadiz",
+      "sofascore": "Cádiz"
+    },
+    {
+      "apiFootball": "Castellón",
+      "sofascore": "Castellón"
+    },
+    {
+      "apiFootball": "Cordoba",
+      "sofascore": "Córdoba"
+    },
+    {
+      "apiFootball": "Deportivo La Coruna",
+      "sofascore": "Deportivo"
+    },
+    {
+      "apiFootball": "Granada CF",
+      "sofascore": "Granada"
+    },
+    {
+      "apiFootball": "Malaga",
+      "sofascore": "Málaga"
+    },
+    {
+      "apiFootball": "Tenerife",
+      "sofascore": "Tenerife"
+    },
+    {
+      "apiFootball": "AC Milan",
+      "sofascore": "Milan"
+    },
+    {
+      "apiFootball": "AS Roma",
+      "sofascore": "Roma"
+    },
+    {
+      "apiFootball": "Atalanta",
+      "sofascore": "Atalanta"
+    },
+    {
+      "apiFootball": "Bologna",
+      "sofascore": "Bologna"
+    },
+    {
+      "apiFootball": "Cagliari",
+      "sofascore": "Cagliari"
+    },
+    {
+      "apiFootball": "Fiorentina",
+      "sofascore": "Fiorentina"
+    },
+    {
+      "apiFootball": "Inter",
+      "sofascore": "Inter"
+    },
+    {
+      "apiFootball": "Juventus",
+      "sofascore": "Juventus"
+    },
+    {
+      "apiFootball": "Lazio",
+      "sofascore": "Lazio"
+    },
+    {
+      "apiFootball": "Lecce",
+      "sofascore": "Lecce"
+    },
+    {
+      "apiFootball": "Udinese",
+      "sofascore": "Udinese"
+    },
+    {
+      "apiFootball": "Verona",
+      "sofascore": "Verona"
+    },
+    {
+      "apiFootball": "Ajaccio",
+      "sofascore": "Ajaccio"
+    },
+    {
+      "apiFootball": "Amiens",
+      "sofascore": "Amiens"
+    },
+    {
+      "apiFootball": "Annecy",
+      "sofascore": "Annecy FC"
+    },
+    {
+      "apiFootball": "Bastia",
+      "sofascore": "Bastia"
+    },
+    {
+      "apiFootball": "Bordeaux",
+      "sofascore": "Bordeaux"
+    },
+    {
+      "apiFootball": "Caen",
+      "sofascore": "Caen"
+    },
+    {
+      "apiFootball": "Dunkerque",
+      "sofascore": "Dunkerque"
+    },
+    {
+      "apiFootball": "Grenoble",
+      "sofascore": "Grenoble"
+    },
+    {
+      "apiFootball": "Guingamp",
+      "sofascore": "Guingamp"
+    },
+    {
+      "apiFootball": "Laval",
+      "sofascore": "Laval"
+    },
+    {
+      "apiFootball": "Martigues",
+      "sofascore": "Martigues"
+    },
+    {
+      "apiFootball": "Paris FC",
+      "sofascore": "Paris"
+    },
+    {
+      "apiFootball": "PAU",
+      "sofascore": "Pau"
+    },
+    {
+      "apiFootball": "RED Star FC 93",
+      "sofascore": "Red Star"
+    },
+    {
+      "apiFootball": "Rodez",
+      "sofascore": "Rodez"
+    },
+    {
+      "apiFootball": "Angers",
+      "sofascore": "Angers"
+    },
+    {
+      "apiFootball": "Auxerre",
+      "sofascore": "Auxerre"
+    },
+    {
+      "apiFootball": "Saint Etienne",
+      "sofascore": "Saint-Étienne"
+    },
+    {
+      "apiFootball": "AS Eupen",
+      "sofascore": "Eupen"
+    },
+    {
+      "apiFootball": "Club Brugge II",
+      "sofascore": "Club NXT U23"
+    },
+    {
+      "apiFootball": "Deinze",
+      "sofascore": "Deinze"
+    },
+    {
+      "apiFootball": "Francs Borains",
+      "sofascore": "RFB"
+    },
+    {
+      "apiFootball": "KRC Genk II",
+      "sofascore": "Jong KRC Genk U23"
+    },
+    {
+      "apiFootball": "Liège",
+      "sofascore": "Club Liège"
+    },
+    {
+      "apiFootball": "Lierse Kempenzonen",
+      "sofascore": "Lierse K."
+    },
+    {
+      "apiFootball": "Lokeren-Temse",
+      "sofascore": "Lokeren-Temse"
+    },
+    {
+      "apiFootball": "Lommel United",
+      "sofascore": "Lommel"
+    },
+    {
+      "apiFootball": "Patro Eisden",
+      "sofascore": "Patro"
+    },
+    {
+      "apiFootball": "RAAL La Louvière",
+      "sofascore": "La Louvière"
+    },
+    {
+      "apiFootball": "RSC Anderlecht II",
+      "sofascore": "RSCA Futures U23"
+    },
+    {
+      "apiFootball": "RWDM",
+      "sofascore": "RWD Molenbeek"
+    },
+    {
+      "apiFootball": "Seraing United",
+      "sofascore": "RFC Seraing"
+    },
+    {
+      "apiFootball": "Waasland-beveren",
+      "sofascore": "Beveren"
+    },
+    {
+      "apiFootball": "Zulte Waregem",
+      "sofascore": "Zulte Waregem"
+    },
+    {
+      "apiFootball": "Jedinstvo Ub",
+      "sofascore": "Jedinstvo"
+    },
+    {
+      "apiFootball": "OFK Beograd",
+      "sofascore": "OFK Beograd"
+    },
+    {
+      "apiFootball": "Tekstilac Odžaci",
+      "sofascore": "Tekstilac"
+    },
+    {
+      "apiFootball": "Albinoleffe",
+      "sofascore": "AlbinoLeffe"
+    },
+    {
+      "apiFootball": "Alcione",
+      "sofascore": "Alcione"
+    },
+    {
+      "apiFootball": "Arzignano Valchiampo",
+      "sofascore": "Arzignano"
+    },
+    {
+      "apiFootball": "Atalanta II",
+      "sofascore": "Atalanta U23"
+    },
+    {
+      "apiFootball": "Caldiero Terme",
+      "sofascore": "Caldiero Terme"
+    },
+    {
+      "apiFootball": "Clodiense",
+      "sofascore": "Clodiense"
+    },
+    {
+      "apiFootball": "Giana Erminio",
+      "sofascore": "Giana"
+    },
+    {
+      "apiFootball": "Lumezzane",
+      "sofascore": "Lumezzane"
+    },
+    {
+      "apiFootball": "Novara",
+      "sofascore": "Novara"
+    },
+    {
+      "apiFootball": "Pergolettese",
+      "sofascore": "Pergolettese"
+    },
+    {
+      "apiFootball": "Pro Patria",
+      "sofascore": "Aurora Pro Patria"
+    },
+    {
+      "apiFootball": "PRO Vercelli",
+      "sofascore": "Pro Vercelli"
+    },
+    {
+      "apiFootball": "Renate",
+      "sofascore": "Renate"
+    },
+    {
+      "apiFootball": "Trento",
+      "sofascore": "Trento"
+    },
+    {
+      "apiFootball": "Triestina",
+      "sofascore": "Triestina"
+    },
+    {
+      "apiFootball": "Vicenza Virtus",
+      "sofascore": "Vicenza"
+    },
+    {
+      "apiFootball": "Virtus Verona",
+      "sofascore": "Virtus Verona"
+    },
+    {
+      "apiFootball": "Arezzo",
+      "sofascore": "Arezzo"
+    },
+    {
+      "apiFootball": "Athletic Carpi",
+      "sofascore": "Carpi"
+    },
+    {
+      "apiFootball": "Città di Campobasso",
+      "sofascore": "Campobasso"
+    },
+    {
+      "apiFootball": "Gubbio",
+      "sofascore": "Gubbio"
+    },
+    {
+      "apiFootball": "Legnago Salus",
+      "sofascore": "Legnago"
+    },
+    {
+      "apiFootball": "Lucchese",
+      "sofascore": "Lucchese"
+    },
+    {
+      "apiFootball": "Milan II",
+      "sofascore": "Milan Futuro"
+    },
+    {
+      "apiFootball": "Perugia",
+      "sofascore": "Perugia"
+    },
+    {
+      "apiFootball": "Pescara",
+      "sofascore": "Pescara"
+    },
+    {
+      "apiFootball": "Pianese",
+      "sofascore": "Pianese"
+    },
+    {
+      "apiFootball": "Pineto",
+      "sofascore": "Pineto"
+    },
+    {
+      "apiFootball": "Pontedera",
+      "sofascore": "Pontedera"
+    },
+    {
+      "apiFootball": "Rimini",
+      "sofascore": "Rimini"
+    },
+    {
+      "apiFootball": "Sestri Levante",
+      "sofascore": "Sestri Levante"
+    },
+    {
+      "apiFootball": "Spal",
+      "sofascore": "SPAL"
+    },
+    {
+      "apiFootball": "Virtus Entella",
+      "sofascore": "Entella"
+    },
+    {
+      "apiFootball": "Vis Pesaro",
+      "sofascore": "Vis Pesaro"
+    },
+    {
+      "apiFootball": "Audace Cerignola",
+      "sofascore": "Cerignola"
+    },
+    {
+      "apiFootball": "AZ Picerno",
+      "sofascore": "Picerno"
+    },
+    {
+      "apiFootball": "Casertana",
+      "sofascore": "Casertana"
+    },
+    {
+      "apiFootball": "Cavese",
+      "sofascore": "Cavese"
+    },
+    {
+      "apiFootball": "Crotone",
+      "sofascore": "Crotone"
+    },
+    {
+      "apiFootball": "Foggia",
+      "sofascore": "Foggia"
+    },
+    {
+      "apiFootball": "Giugliano",
+      "sofascore": "Giugliano"
+    },
+    {
+      "apiFootball": "Juventus U23",
+      "sofascore": "Juventus NG"
+    },
+    {
+      "apiFootball": "Latina",
+      "sofascore": "Latina"
+    },
+    {
+      "apiFootball": "Messina",
+      "sofascore": "Messina"
+    },
+    {
+      "apiFootball": "Potenza",
+      "sofascore": "Potenza"
+    },
+    {
+      "apiFootball": "Sorrento",
+      "sofascore": "Sorrento"
+    },
+    {
+      "apiFootball": "SS Monopoli",
+      "sofascore": "Monopoli"
+    },
+    {
+      "apiFootball": "Taranto",
+      "sofascore": "Taranto"
+    },
+    {
+      "apiFootball": "Team Altamura",
+      "sofascore": "Team Altamura"
+    },
+    {
+      "apiFootball": "Trapani 1905",
+      "sofascore": "Trapani"
+    },
+    {
+      "apiFootball": "Turris",
+      "sofascore": "Turris"
+    },
+    {
+      "apiFootball": "AEK Athens FC",
+      "sofascore": "AEK"
+    },
+    {
+      "apiFootball": "Aktobe",
+      "sofascore": "Aktobe"
+    },
+    {
+      "apiFootball": "Ararat-Armenia",
+      "sofascore": "Ararat-Armenia"
+    },
+    {
+      "apiFootball": "Atlètic Club d'Escaldes",
+      "sofascore": "AC Escaldes"
+    },
+    {
+      "apiFootball": "Auda",
+      "sofascore": "Auda"
+    },
+    {
+      "apiFootball": "B36 Torshavn",
+      "sofascore": "B36 Tórshavn"
+    },
+    {
+      "apiFootball": "Bala Town",
+      "sofascore": "Bala Town"
+    },
+    {
+      "apiFootball": "BK Hacken",
+      "sofascore": "Häcken"
+    },
+    {
+      "apiFootball": "Botev Plovdiv",
+      "sofascore": "Botev Plovdiv"
+    },
+    {
+      "apiFootball": "Brann",
+      "sofascore": "Brann"
+    },
+    {
+      "apiFootball": "Bravo",
+      "sofascore": "Bravo"
+    },
+    {
+      "apiFootball": "Breidablik",
+      "sofascore": "Breiðablik"
+    },
+    {
+      "apiFootball": "Buducnost Podgorica",
+      "sofascore": "Budućnost"
+    },
+    {
+      "apiFootball": "Caernarfon Town",
+      "sofascore": "Caernarfon"
+    },
+    {
+      "apiFootball": "Cherno More Varna",
+      "sofascore": "Cherno More"
+    },
+    {
+      "apiFootball": "Cliftonville FC",
+      "sofascore": "Cliftonville FC"
+    },
+    {
+      "apiFootball": "Corvinul Hunedoara",
+      "sofascore": "Corvinul Hunedoara"
+    },
+    {
+      "apiFootball": "Crusaders FC",
+      "sofascore": "Crusaders "
+    },
+    {
+      "apiFootball": "CSKA 1948",
+      "sofascore": "CSKA 1948 Sofia"
+    },
+    {
+      "apiFootball": "Dinamo Tbilisi",
+      "sofascore": "Dinamo Tbilisi"
+    },
+    {
+      "apiFootball": "Djurgardens IF",
+      "sofascore": "Djurgården"
+    },
+    {
+      "apiFootball": "Dnipro-1",
+      "sofascore": "Dnipro-1"
+    },
+    {
+      "apiFootball": "Drita",
+      "sofascore": "Drita"
+    },
+    {
+      "apiFootball": "Dunajska Streda",
+      "sofascore": "DAC 1904"
+    },
+    {
+      "apiFootball": "F91 Dudelange",
+      "sofascore": "Dudelange"
+    },
+    {
+      "apiFootball": "FC Astana",
+      "sofascore": "Astana"
+    },
+    {
+      "apiFootball": "FC Isloch Minsk R.",
+      "sofascore": "Isloch"
+    },
+    {
+      "apiFootball": "FC Levadia Tallinn",
+      "sofascore": "Levadia"
+    },
+    {
+      "apiFootball": "FC Noah",
+      "sofascore": "Noah"
+    },
+    {
+      "apiFootball": "FC ST. Gallen",
+      "sofascore": "St. Gallen"
+    },
+    {
+      "apiFootball": "FC Urartu",
+      "sofascore": "Urartu"
+    },
+    {
+      "apiFootball": "FC Vaduz",
+      "sofascore": "Vaduz"
+    },
+    {
+      "apiFootball": "FC Zurich",
+      "sofascore": "Zürich"
+    },
+    {
+      "apiFootball": "Fehérvár FC",
+      "sofascore": "Fehérvár"
+    },
+    {
+      "apiFootball": "FK Liepaja",
+      "sofascore": "Liepāja"
+    },
+    {
+      "apiFootball": "FK Sarajevo",
+      "sofascore": "Sarajevo"
+    },
+    {
+      "apiFootball": "FK Tobol Kostanay",
+      "sofascore": "Tobol"
+    },
+    {
+      "apiFootball": "FK Zalgiris Vilnius",
+      "sofascore": "Žalgiris"
+    },
+    {
+      "apiFootball": "Floriana",
+      "sofascore": "Floriana"
+    },
+    {
+      "apiFootball": "GAP Connah S Quay FC",
+      "sofascore": "Connah's Quay"
+    },
+    {
+      "apiFootball": "Hapoel Beer Sheva",
+      "sofascore": "H. Be'er Sheva"
+    },
+    {
+      "apiFootball": "HB",
+      "sofascore": "HB Tórshavn"
+    },
+    {
+      "apiFootball": "HNK Hajduk Split",
+      "sofascore": "Hajduk"
+    },
+    {
+      "apiFootball": "Ilves Tampere",
+      "sofascore": "Ilves"
+    },
+    {
+      "apiFootball": "KuPS",
+      "sofascore": "KuPS"
+    },
+    {
+      "apiFootball": "La Fiorita",
+      "sofascore": "La Fiorita"
+    },
+    {
+      "apiFootball": "Legia Warszawa",
+      "sofascore": "Legia"
+    },
+    {
+      "apiFootball": "Linfield",
+      "sofascore": "Linfield"
+    },
+    {
+      "apiFootball": "Llapi",
+      "sofascore": "Llapi"
+    },
+    {
+      "apiFootball": "Maccabi Haifa",
+      "sofascore": "M. Haifa"
+    },
+    {
+      "apiFootball": "Maccabi Petah Tikva",
+      "sofascore": "M. Petach Tikva"
+    },
+    {
+      "apiFootball": "Magpies",
+      "sofascore": "FC Bruno's Magpies"
+    },
+    {
+      "apiFootball": "Malisheva",
+      "sofascore": "FC Malisheva"
+    },
+    {
+      "apiFootball": "Maribor",
+      "sofascore": "Maribor"
+    },
+    {
+      "apiFootball": "Marsaxlokk",
+      "sofascore": "Marsaxlokk"
+    },
+    {
+      "apiFootball": "Milsami Orhei",
+      "sofascore": "Milsami"
+    },
+    {
+      "apiFootball": "Mornar",
+      "sofascore": "FK Mornar"
+    },
+    {
+      "apiFootball": "Neman",
+      "sofascore": "Neman Grodno"
+    },
+    {
+      "apiFootball": "NK Osijek",
+      "sofascore": "Osijek"
+    },
+    {
+      "apiFootball": "Olimpija Ljubljana",
+      "sofascore": "Olimpija"
+    },
+    {
+      "apiFootball": "Omonia Nicosia",
+      "sofascore": "Omonia"
+    },
+    {
+      "apiFootball": "Pafos",
+      "sofascore": "Pafos"
+    },
+    {
+      "apiFootball": "Paide",
+      "sofascore": "Paide"
+    },
+    {
+      "apiFootball": "Paks",
+      "sofascore": "Paksi"
+    },
+    {
+      "apiFootball": "Partizani",
+      "sofascore": "Partizani"
+    },
+    {
+      "apiFootball": "Polessya",
+      "sofascore": "Polissya"
+    },
+    {
+      "apiFootball": "Progres Niederkorn",
+      "sofascore": "Progrès"
+    },
+    {
+      "apiFootball": "Puskas Academy",
+      "sofascore": "Puskás"
+    },
+    {
+      "apiFootball": "Riga",
+      "sofascore": "Riga"
+    },
+    {
+      "apiFootball": "Ružomberok",
+      "sofascore": "Ružomberok"
+    },
+    {
+      "apiFootball": "Sabah FA",
+      "sofascore": "Sabah FK"
+    },
+    {
+      "apiFootball": "Saburtalo",
+      "sofascore": "Iberia"
+    },
+    {
+      "apiFootball": "Sheriff Tiraspol",
+      "sofascore": "Sheriff"
+    },
+    {
+      "apiFootball": "Shkendija",
+      "sofascore": "Shkëndija"
+    },
+    {
+      "apiFootball": "Šiauliai",
+      "sofascore": "Šiauliai"
+    },
+    {
+      "apiFootball": "Slask Wroclaw",
+      "sofascore": "Śląsk"
+    },
+    {
+      "apiFootball": "Sliema Wanderers",
+      "sofascore": "Sliema"
+    },
+    {
+      "apiFootball": "Spartak Trnava",
+      "sofascore": "FC Spartak Trnava"
+    },
+    {
+      "apiFootball": "St Joseph S Fc",
+      "sofascore": "St Joseph's"
+    },
+    {
+      "apiFootball": "St Patrick's Athl.",
+      "sofascore": "St. Patrick's"
+    },
+    {
+      "apiFootball": "Stjarnan",
+      "sofascore": "Stjarnan"
+    },
+    {
+      "apiFootball": "Sumqayıt",
+      "sofascore": "Sumqayıt"
+    },
+    {
+      "apiFootball": "Tallinna Kalev",
+      "sofascore": "T. Kalev"
+    },
+    {
+      "apiFootball": "Tikveš",
+      "sofascore": "Tikveš"
+    },
+    {
+      "apiFootball": "Tirana",
+      "sofascore": "Tirana"
+    },
+    {
+      "apiFootball": "Torpedo Kutaisi",
+      "sofascore": "Torpedo Kutaisi"
+    },
+    {
+      "apiFootball": "Torpedo Zhodino",
+      "sofascore": "Torpedo Zhodino"
+    },
+    {
+      "apiFootball": "TransINVEST Vilnius",
+      "sofascore": "FK Transinvest"
+    },
+    {
+      "apiFootball": "Tre Penne",
+      "sofascore": "Tre Penne"
+    },
+    {
+      "apiFootball": "Tromso",
+      "sofascore": "Tromsø"
+    },
+    {
+      "apiFootball": "UNA Strassen",
+      "sofascore": "Strassen"
+    },
+    {
+      "apiFootball": "vaasa PS",
+      "sofascore": "VPS"
+    },
+    {
+      "apiFootball": "Valur Reykjavik",
+      "sofascore": "Valur"
+    },
+    {
+      "apiFootball": "Velež",
+      "sofascore": "FK Velež"
+    },
+    {
+      "apiFootball": "Vllaznia Shkodër",
+      "sofascore": "Vllaznia"
+    },
+    {
+      "apiFootball": "Wisla Krakow",
+      "sofascore": "Wisła Kraków"
+    },
+    {
+      "apiFootball": "Zimbru",
+      "sofascore": "Zimbru"
+    },
+    {
+      "apiFootball": "Zira",
+      "sofascore": "Zirə"
+    },
+    {
+      "apiFootball": "Zrinjski",
+      "sofascore": "Zrinjski"
+    },
+    {
+      "apiFootball": "Apoel Nicosia",
+      "sofascore": "APOEL"
+    },
+    {
+      "apiFootball": "HNK Rijeka",
+      "sofascore": "Rijeka"
+    },
+    {
+      "apiFootball": "IF elfsborg",
+      "sofascore": "Elfsborg"
+    },
+    {
+      "apiFootball": "Maccabi Tel Aviv",
+      "sofascore": "M. Tel-Aviv"
+    },
+    {
+      "apiFootball": "Molde",
+      "sofascore": "Molde"
+    },
+    {
+      "apiFootball": "Panathinaikos",
+      "sofascore": "Panathinaikos"
+    },
+    {
+      "apiFootball": "Servette FC",
+      "sofascore": "Servette"
+    }
+  ]
+}

@@ -1,0 +1,3044 @@
+{
+  "teams": [
+    {
+      "apiFootball": "Austria Klagenfurt",
+      "diretta": "A. Salzburg"
+    },
+    {
+      "apiFootball": "Austria Lustenau",
+      "diretta": "Austria (Am)"
+    },
+    {
+      "apiFootball": "Austria Vienna",
+      "diretta": "Austria (Am)"
+    },
+    {
+      "apiFootball": "FC BW Linz",
+      "diretta": "Weiz"
+    },
+    {
+      "apiFootball": "Lask Linz",
+      "diretta": "BASK"
+    },
+    {
+      "apiFootball": "Grazer AK",
+      "diretta": "SAK 1914"
+    },
+    {
+      "apiFootball": "Rapid Vienna",
+      "diretta": "SK Rapid"
+    },
+    {
+      "apiFootball": "Red Bull Salzburg",
+      "diretta": "A. Salzburg"
+    },
+    {
+      "apiFootball": "SCR Altach",
+      "diretta": "SCM Zalau"
+    },
+    {
+      "apiFootball": "Sturm Graz",
+      "diretta": "Stubai"
+    },
+    {
+      "apiFootball": "TSV Hartberg",
+      "diretta": "Qarabag"
+    },
+    {
+      "apiFootball": "Wolfsberger AC",
+      "diretta": "Van"
+    },
+    {
+      "apiFootball": "WSG Wattens",
+      "diretta": "Turan"
+    },
+    {
+      "apiFootball": "Albania",
+      "diretta": "Bahia"
+    },
+    {
+      "apiFootball": "Austria",
+      "diretta": "Guria"
+    },
+    {
+      "apiFootball": "Belgium",
+      "diretta": "Belgrano"
+    },
+    {
+      "apiFootball": "Croatia",
+      "diretta": "Egnatia"
+    },
+    {
+      "apiFootball": "Czech Republic",
+      "diretta": "Zapresic"
+    },
+    {
+      "apiFootball": "Denmark",
+      "diretta": "Denbigh"
+    },
+    {
+      "apiFootball": "England",
+      "diretta": "Belgrano"
+    },
+    {
+      "apiFootball": "France",
+      "diretta": "Brann"
+    },
+    {
+      "apiFootball": "Georgia",
+      "diretta": "Georgia"
+    },
+    {
+      "apiFootball": "Germany",
+      "diretta": "Berkane"
+    },
+    {
+      "apiFootball": "Hungary",
+      "diretta": "Hunters"
+    },
+    {
+      "apiFootball": "Italy",
+      "diretta": "Nezla"
+    },
+    {
+      "apiFootball": "Netherlands",
+      "diretta": "Sunderland"
+    },
+    {
+      "apiFootball": "Poland",
+      "diretta": "Foolad"
+    },
+    {
+      "apiFootball": "Portugal",
+      "diretta": "Portmore"
+    },
+    {
+      "apiFootball": "Romania",
+      "diretta": "Magra"
+    },
+    {
+      "apiFootball": "Scotland",
+      "diretta": "Foolad"
+    },
+    {
+      "apiFootball": "Serbia",
+      "diretta": "Arba"
+    },
+    {
+      "apiFootball": "Slovakia",
+      "diretta": "Skikda"
+    },
+    {
+      "apiFootball": "Slovenia",
+      "diretta": "Moreni"
+    },
+    {
+      "apiFootball": "Spain",
+      "diretta": "Van"
+    },
+    {
+      "apiFootball": "Switzerland",
+      "diretta": "Sunderland"
+    },
+    {
+      "apiFootball": "Turkey",
+      "diretta": "Turan"
+    },
+    {
+      "apiFootball": "Ukraine",
+      "diretta": "Touraine"
+    },
+    {
+      "apiFootball": "Atletico Goianiense",
+      "diretta": "Tchologo"
+    },
+    {
+      "apiFootball": "Atletico Paranaense",
+      "diretta": "Celtic"
+    },
+    {
+      "apiFootball": "Atletico-MG",
+      "diretta": "Aalborg"
+    },
+    {
+      "apiFootball": "Bahia",
+      "diretta": "Bahia"
+    },
+    {
+      "apiFootball": "Botafogo",
+      "diretta": "Botafogo SP"
+    },
+    {
+      "apiFootball": "Corinthians",
+      "diretta": "Ruthin"
+    },
+    {
+      "apiFootball": "Criciuma",
+      "diretta": "Cracovia"
+    },
+    {
+      "apiFootball": "Cruzeiro",
+      "diretta": "Cruzeiro"
+    },
+    {
+      "apiFootball": "Cuiaba",
+      "diretta": "Annaba"
+    },
+    {
+      "apiFootball": "Flamengo",
+      "diretta": "Platense"
+    },
+    {
+      "apiFootball": "Fluminense",
+      "diretta": "Udinese"
+    },
+    {
+      "apiFootball": "Fortaleza EC",
+      "diretta": "Al Talaba"
+    },
+    {
+      "apiFootball": "Gremio",
+      "diretta": "Remo"
+    },
+    {
+      "apiFootball": "Internacional",
+      "diretta": "Caernarfon"
+    },
+    {
+      "apiFootball": "Juventude",
+      "diretta": "Juventus"
+    },
+    {
+      "apiFootball": "Palmeiras",
+      "diretta": "Palmeiras"
+    },
+    {
+      "apiFootball": "RB Bragantino",
+      "diretta": "H. Raanana"
+    },
+    {
+      "apiFootball": "Sao Paulo",
+      "diretta": "Sochaux"
+    },
+    {
+      "apiFootball": "Vasco DA Gama",
+      "diretta": "Cusco"
+    },
+    {
+      "apiFootball": "Vitoria",
+      "diretta": "Guria"
+    },
+    {
+      "apiFootball": "Clermont Foot",
+      "diretta": "Everton"
+    },
+    {
+      "apiFootball": "LE Havre",
+      "diretta": "Le Havre D"
+    },
+    {
+      "apiFootball": "Lens",
+      "diretta": "Lech"
+    },
+    {
+      "apiFootball": "Lille",
+      "diretta": "Vejle"
+    },
+    {
+      "apiFootball": "Lorient",
+      "diretta": "Orijent"
+    },
+    {
+      "apiFootball": "Lyon",
+      "diretta": "Van"
+    },
+    {
+      "apiFootball": "Marseille",
+      "diretta": "Marsiglia"
+    },
+    {
+      "apiFootball": "Metz",
+      "diretta": "Metz"
+    },
+    {
+      "apiFootball": "Monaco",
+      "diretta": "Monaco"
+    },
+    {
+      "apiFootball": "Montpellier",
+      "diretta": "Montpellier"
+    },
+    {
+      "apiFootball": "Nantes",
+      "diretta": "Nantes D"
+    },
+    {
+      "apiFootball": "Nice",
+      "diretta": "Nimes"
+    },
+    {
+      "apiFootball": "Paris Saint Germain",
+      "diretta": "PSG D"
+    },
+    {
+      "apiFootball": "Reims",
+      "diretta": "Reims"
+    },
+    {
+      "apiFootball": "Rennes",
+      "diretta": "Rudes"
+    },
+    {
+      "apiFootball": "Stade Brestois 29",
+      "diretta": "Breda"
+    },
+    {
+      "apiFootball": "Strasbourg",
+      "diretta": "Strasburgo"
+    },
+    {
+      "apiFootball": "Toulouse",
+      "diretta": "Tolosa"
+    },
+    {
+      "apiFootball": "Ascoli",
+      "diretta": "Ascoli"
+    },
+    {
+      "apiFootball": "Bari",
+      "diretta": "Bahia"
+    },
+    {
+      "apiFootball": "Brescia",
+      "diretta": "Brescia"
+    },
+    {
+      "apiFootball": "Catanzaro",
+      "diretta": "Chanmari"
+    },
+    {
+      "apiFootball": "Feralpisalo",
+      "diretta": "Famalicao"
+    },
+    {
+      "apiFootball": "Lecco",
+      "diretta": "Lech"
+    },
+    {
+      "apiFootball": "Modena",
+      "diretta": "Mouna"
+    },
+    {
+      "apiFootball": "Reggiana",
+      "diretta": "Sogdiana"
+    },
+    {
+      "apiFootball": "Sampdoria",
+      "diretta": "Parndorf"
+    },
+    {
+      "apiFootball": "Spezia",
+      "diretta": "Nezla"
+    },
+    {
+      "apiFootball": "Sudtirol",
+      "diretta": "Djijel"
+    },
+    {
+      "apiFootball": "Ternana",
+      "diretta": "Turan"
+    },
+    {
+      "apiFootball": "Venezia",
+      "diretta": "Venezia"
+    },
+    {
+      "apiFootball": "Cukaricki",
+      "diretta": "Dukagjini"
+    },
+    {
+      "apiFootball": "FK Crvena Zvezda",
+      "diretta": "Venezia"
+    },
+    {
+      "apiFootball": "FK Partizan",
+      "diretta": "Karvina"
+    },
+    {
+      "apiFootball": "FK Spartak Zdrepceva KRV",
+      "diretta": "Arba"
+    },
+    {
+      "apiFootball": "FK Vozdovac",
+      "diretta": "Karlovac"
+    },
+    {
+      "apiFootball": "IMT Novi Beograd",
+      "diretta": "Van"
+    },
+    {
+      "apiFootball": "Javor",
+      "diretta": "Pafos"
+    },
+    {
+      "apiFootball": "Mladost Lucani",
+      "diretta": "Pafos"
+    },
+    {
+      "apiFootball": "Napredak",
+      "diretta": "Zapresic"
+    },
+    {
+      "apiFootball": "Novi Pazar",
+      "diretta": "Bolivar"
+    },
+    {
+      "apiFootball": "Radnicki 1923",
+      "diretta": "SAK 1914"
+    },
+    {
+      "apiFootball": "Radnicki NIS",
+      "diretta": "Rubio Nu"
+    },
+    {
+      "apiFootball": "Radnik Surdulica",
+      "diretta": "Pyunik"
+    },
+    {
+      "apiFootball": "TSC Backa Topola",
+      "diretta": "TNS"
+    },
+    {
+      "apiFootball": "Vojvodina",
+      "diretta": "Londrina"
+    },
+    {
+      "apiFootball": "Železničar Pančevo",
+      "diretta": "Venezia"
+    },
+    {
+      "apiFootball": "České Budějovice",
+      "diretta": "Dynamo Brest D"
+    },
+    {
+      "apiFootball": "FK Jablonec",
+      "diretta": "Jablonec"
+    },
+    {
+      "apiFootball": "Hradec Králové",
+      "diretta": "Westerlo D"
+    },
+    {
+      "apiFootball": "Karviná",
+      "diretta": "Karvina"
+    },
+    {
+      "apiFootball": "Mlada Boleslav",
+      "diretta": "APS Bomet"
+    },
+    {
+      "apiFootball": "Pardubice",
+      "diretta": "Didube"
+    },
+    {
+      "apiFootball": "Plzen",
+      "diretta": "Viktoria Colonia"
+    },
+    {
+      "apiFootball": "Sigma Olomouc",
+      "diretta": "Riga FC"
+    },
+    {
+      "apiFootball": "Slavia Praha",
+      "diretta": "Dukla Praga"
+    },
+    {
+      "apiFootball": "Slovan Liberec",
+      "diretta": "Livyi Bereg"
+    },
+    {
+      "apiFootball": "Sparta Praha",
+      "diretta": "Dukla Praga"
+    },
+    {
+      "apiFootball": "Táborsko",
+      "diretta": "FK Skopje"
+    },
+    {
+      "apiFootball": "Teplice",
+      "diretta": "Telfs"
+    },
+    {
+      "apiFootball": "Vyškov",
+      "diretta": "Zizkov"
+    },
+    {
+      "apiFootball": "Zlin",
+      "diretta": "Van"
+    },
+    {
+      "apiFootball": "Aarhus",
+      "diretta": "AFS"
+    },
+    {
+      "apiFootball": "Brondby",
+      "diretta": "Sundby"
+    },
+    {
+      "apiFootball": "FC Copenhagen",
+      "diretta": "Kagran"
+    },
+    {
+      "apiFootball": "FC Midtjylland",
+      "diretta": "Nordsjaelland"
+    },
+    {
+      "apiFootball": "FC Nordsjaelland",
+      "diretta": "Nordsjaelland"
+    },
+    {
+      "apiFootball": "Hvidovre",
+      "diretta": "Skive"
+    },
+    {
+      "apiFootball": "Odense",
+      "diretta": "Orbi"
+    },
+    {
+      "apiFootball": "Silkeborg",
+      "diretta": "Silkeborg"
+    },
+    {
+      "apiFootball": "Vejle",
+      "diretta": "Vejle"
+    },
+    {
+      "apiFootball": "Viborg",
+      "diretta": "Aalborg"
+    },
+    {
+      "apiFootball": "Bohemians",
+      "diretta": "Bahia"
+    },
+    {
+      "apiFootball": "Derry City",
+      "diretta": "Newry City"
+    },
+    {
+      "apiFootball": "Drogheda United",
+      "diretta": "Sydney Utd"
+    },
+    {
+      "apiFootball": "Dundalk",
+      "diretta": "Sundby"
+    },
+    {
+      "apiFootball": "Galway United",
+      "diretta": "Sydney Utd"
+    },
+    {
+      "apiFootball": "Shamrock Rovers",
+      "diretta": "Bristol Rovers"
+    },
+    {
+      "apiFootball": "Shelbourne",
+      "diretta": "Helmond"
+    },
+    {
+      "apiFootball": "Sligo Rovers",
+      "diretta": "Bristol Rovers"
+    },
+    {
+      "apiFootball": "St Patrick's Athl.",
+      "diretta": "St. Truiden"
+    },
+    {
+      "apiFootball": "Waterford",
+      "diretta": "Westerlo D"
+    },
+    {
+      "apiFootball": "Albacete",
+      "diretta": "Alaves"
+    },
+    {
+      "apiFootball": "Alcorcon",
+      "diretta": "Tlemcen"
+    },
+    {
+      "apiFootball": "Amorebieta",
+      "diretta": "Andrezieux"
+    },
+    {
+      "apiFootball": "Burgos",
+      "diretta": "Burmoos"
+    },
+    {
+      "apiFootball": "Eibar",
+      "diretta": "Eibar"
+    },
+    {
+      "apiFootball": "Elche",
+      "diretta": "Lech"
+    },
+    {
+      "apiFootball": "Eldense",
+      "diretta": "Emden"
+    },
+    {
+      "apiFootball": "Espanyol",
+      "diretta": "Lugano"
+    },
+    {
+      "apiFootball": "FC Andorra",
+      "diretta": "GC Mascara"
+    },
+    {
+      "apiFootball": "FC Cartagena",
+      "diretta": "Cartagines"
+    },
+    {
+      "apiFootball": "Huesca",
+      "diretta": "Ludesch"
+    },
+    {
+      "apiFootball": "Leganes",
+      "diretta": "Lugano"
+    },
+    {
+      "apiFootball": "Levante",
+      "diretta": "Van"
+    },
+    {
+      "apiFootball": "Mirandes",
+      "diretta": "Piratas"
+    },
+    {
+      "apiFootball": "Oviedo",
+      "diretta": "Real Aviles"
+    },
+    {
+      "apiFootball": "Racing Ferrol",
+      "diretta": "Racing de Veracruz 2"
+    },
+    {
+      "apiFootball": "Racing Santander",
+      "diretta": "Racing de Veracruz 2"
+    },
+    {
+      "apiFootball": "Sporting Gijon",
+      "diretta": "Golling"
+    },
+    {
+      "apiFootball": "Valladolid",
+      "diretta": "Real Potosi"
+    },
+    {
+      "apiFootball": "Villarreal II",
+      "diretta": "Llanelli"
+    },
+    {
+      "apiFootball": "Zaragoza",
+      "diretta": "Real Espana"
+    },
+    {
+      "apiFootball": "AFC Hermannstadt",
+      "diretta": "Helmond"
+    },
+    {
+      "apiFootball": "CFR 1907 Cluj",
+      "diretta": "Frechen"
+    },
+    {
+      "apiFootball": "Dinamo Bucuresti",
+      "diretta": "Din. Bucuresti"
+    },
+    {
+      "apiFootball": "Farul Constanta",
+      "diretta": "Real Espana"
+    },
+    {
+      "apiFootball": "FC Botosani",
+      "diretta": "FC Volders"
+    },
+    {
+      "apiFootball": "FCSB",
+      "diretta": "KCB"
+    },
+    {
+      "apiFootball": "Oţelul",
+      "diretta": "Al Qalah"
+    },
+    {
+      "apiFootball": "Petrolul Ploiesti",
+      "diretta": "Petrolul Hartiesti"
+    },
+    {
+      "apiFootball": "Politehnica Iasi",
+      "diretta": "Bolivar"
+    },
+    {
+      "apiFootball": "Rapid",
+      "diretta": "Din. Bucuresti"
+    },
+    {
+      "apiFootball": "SCM Gloria Buzău",
+      "diretta": "Korneuburg"
+    },
+    {
+      "apiFootball": "Sepsi OSK Sfantu Gheorghe",
+      "diretta": "Saprissa"
+    },
+    {
+      "apiFootball": "Unirea Slobozia",
+      "diretta": "Unirea Bascov"
+    },
+    {
+      "apiFootball": "Universitatea Cluj",
+      "diretta": "Cancun"
+    },
+    {
+      "apiFootball": "Universitatea Craiova",
+      "diretta": "Univ. Craiova"
+    },
+    {
+      "apiFootball": "Uta Arad",
+      "diretta": "UTA Arad"
+    },
+    {
+      "apiFootball": "Baník Ostrava",
+      "diretta": "BASK"
+    },
+    {
+      "apiFootball": "Dukla Praha",
+      "diretta": "Dukla Praga"
+    },
+    {
+      "apiFootball": "Slovácko",
+      "diretta": "Plock"
+    },
+    {
+      "apiFootball": "Aalborg",
+      "diretta": "Aalborg"
+    },
+    {
+      "apiFootball": "Lyngby",
+      "diretta": "Lyngby"
+    },
+    {
+      "apiFootball": "Randers FC",
+      "diretta": "Rudes"
+    },
+    {
+      "apiFootball": "Sonderjyske",
+      "diretta": "Sunderland"
+    },
+    {
+      "apiFootball": "Akhmat",
+      "diretta": "BKMA"
+    },
+    {
+      "apiFootball": "Akron",
+      "diretta": "Antofagasta"
+    },
+    {
+      "apiFootball": "CSKA Moscow",
+      "diretta": "Arba"
+    },
+    {
+      "apiFootball": "Dynamo",
+      "diretta": "Monaco"
+    },
+    {
+      "apiFootball": "Fakel",
+      "diretta": "Gomel"
+    },
+    {
+      "apiFootball": "FC Krasnodar",
+      "diretta": "Krasnodar U19"
+    },
+    {
+      "apiFootball": "FC Orenburg",
+      "diretta": "Kornburg"
+    },
+    {
+      "apiFootball": "FC Rostov",
+      "diretta": "Bolton"
+    },
+    {
+      "apiFootball": "Khimki",
+      "diretta": "Khimik"
+    },
+    {
+      "apiFootball": "Krylia Sovetov",
+      "diretta": "Kolsass Weer"
+    },
+    {
+      "apiFootball": "Lokomotiv",
+      "diretta": "Lok. Sofia"
+    },
+    {
+      "apiFootball": "Makhachkala",
+      "diretta": "Dynamo Makhachkala U19"
+    },
+    {
+      "apiFootball": "Nizhny Novgorod",
+      "diretta": "Paradou"
+    },
+    {
+      "apiFootball": "Rubin",
+      "diretta": "Rubio Nu"
+    },
+    {
+      "apiFootball": "Spartak Moscow",
+      "diretta": "Paradou"
+    },
+    {
+      "apiFootball": "Zenit",
+      "diretta": "Weiz"
+    },
+    {
+      "apiFootball": "Ballkani",
+      "diretta": "Belgrano"
+    },
+    {
+      "apiFootball": "Borac Banja Luka",
+      "diretta": "BKMA"
+    },
+    {
+      "apiFootball": "Celje",
+      "diretta": "Celje"
+    },
+    {
+      "apiFootball": "Dečić",
+      "diretta": "SK Rapid"
+    },
+    {
+      "apiFootball": "Dinamo Batumi",
+      "diretta": "Dynamo Brest D"
+    },
+    {
+      "apiFootball": "Dinamo Minsk",
+      "diretta": "Nam Dinh"
+    },
+    {
+      "apiFootball": "Dynamo Kyiv",
+      "diretta": "Dynamo Brest D"
+    },
+    {
+      "apiFootball": "Egnatia Rrogozhinë",
+      "diretta": "Egnatia"
+    },
+    {
+      "apiFootball": "FC Differdange 03",
+      "diretta": "Liefering"
+    },
+    {
+      "apiFootball": "FC Lugano",
+      "diretta": "Lugano"
+    },
+    {
+      "apiFootball": "Fenerbahce",
+      "diretta": "Wienerberger"
+    },
+    {
+      "apiFootball": "Flora Tallinn",
+      "diretta": "Magra"
+    },
+    {
+      "apiFootball": "Hamrun Spartans",
+      "diretta": "Jadran LP"
+    },
+    {
+      "apiFootball": "HJK helsinki",
+      "diretta": "Hue"
+    },
+    {
+      "apiFootball": "KI Klaksvik",
+      "diretta": "Vlasim"
+    },
+    {
+      "apiFootball": "Larne",
+      "diretta": "Larne"
+    },
+    {
+      "apiFootball": "Lincoln Red Imps FC",
+      "diretta": "Limonest"
+    },
+    {
+      "apiFootball": "Ludogorets",
+      "diretta": "Rudes"
+    },
+    {
+      "apiFootball": "Ordabasy",
+      "diretta": "Annaba"
+    },
+    {
+      "apiFootball": "Panevėžys",
+      "diretta": "Palmeiras"
+    },
+    {
+      "apiFootball": "Petrocub",
+      "diretta": "Petrolul"
+    },
+    {
+      "apiFootball": "Pyunik Yerevan",
+      "diretta": "Pyunik"
+    },
+    {
+      "apiFootball": "Rīgas FS",
+      "diretta": "AFS"
+    },
+    {
+      "apiFootball": "Slovan Bratislava",
+      "diretta": "Van"
+    },
+    {
+      "apiFootball": "Struga",
+      "diretta": "Pregarten"
+    },
+    {
+      "apiFootball": "The New Saints",
+      "diretta": "TNS"
+    },
+    {
+      "apiFootball": "UE Santa Coloma",
+      "diretta": "Choloma"
+    },
+    {
+      "apiFootball": "Vikingur Reykjavik",
+      "diretta": "Helsingor"
+    },
+    {
+      "apiFootball": "Virtus",
+      "diretta": "Airbus"
+    },
+    {
+      "apiFootball": "Anderlecht",
+      "diretta": "Dordrecht"
+    },
+    {
+      "apiFootball": "Antwerp",
+      "diretta": "Real Aviles"
+    },
+    {
+      "apiFootball": "Beerschot Wilrijk",
+      "diretta": "Bronshoj"
+    },
+    {
+      "apiFootball": "Cercle Brugge",
+      "diretta": "Eilenburg"
+    },
+    {
+      "apiFootball": "Charleroi",
+      "diretta": "Chanmari"
+    },
+    {
+      "apiFootball": "Club Brugge KV",
+      "diretta": "Club Calor"
+    },
+    {
+      "apiFootball": "Dender",
+      "diretta": "Wiener"
+    },
+    {
+      "apiFootball": "Genk",
+      "diretta": "Genk D"
+    },
+    {
+      "apiFootball": "Gent",
+      "diretta": "Jena"
+    },
+    {
+      "apiFootball": "Kortrijk",
+      "diretta": "Kortrijk U21"
+    },
+    {
+      "apiFootball": "KV Mechelen",
+      "diretta": "Pachern"
+    },
+    {
+      "apiFootball": "KVC Westerlo",
+      "diretta": "Westerlo D"
+    },
+    {
+      "apiFootball": "OH Leuven",
+      "diretta": "Tlemcen"
+    },
+    {
+      "apiFootball": "St. Truiden",
+      "diretta": "St. Truiden"
+    },
+    {
+      "apiFootball": "Standard Liege",
+      "diretta": "St. Liege"
+    },
+    {
+      "apiFootball": "Union St. Gilloise",
+      "diretta": "Oss"
+    },
+    {
+      "apiFootball": "1.FC Köln",
+      "diretta": "Van"
+    },
+    {
+      "apiFootball": "Eintracht Braunschweig",
+      "diretta": "Braunschweig"
+    },
+    {
+      "apiFootball": "FC Kaiserslautern",
+      "diretta": "River Plate D"
+    },
+    {
+      "apiFootball": "FC Magdeburg",
+      "diretta": "Magra"
+    },
+    {
+      "apiFootball": "FC Nurnberg",
+      "diretta": "Kornburg"
+    },
+    {
+      "apiFootball": "FC Schalke 04",
+      "diretta": "Schalke II"
+    },
+    {
+      "apiFootball": "Hamburger SV",
+      "diretta": "Oss"
+    },
+    {
+      "apiFootball": "Hannover 96",
+      "diretta": "Annaba"
+    },
+    {
+      "apiFootball": "Hertha Berlin",
+      "diretta": "Furth"
+    },
+    {
+      "apiFootball": "Jahn Regensburg",
+      "diretta": "Riefensberg"
+    },
+    {
+      "apiFootball": "Karlsruher SC",
+      "diretta": "Kalsdorf"
+    },
+    {
+      "apiFootball": "Preussen Munster",
+      "diretta": "Thisted"
+    },
+    {
+      "apiFootball": "SC Paderborn 07",
+      "diretta": "Palermo"
+    },
+    {
+      "apiFootball": "SpVgg Greuther Furth",
+      "diretta": "Furth"
+    },
+    {
+      "apiFootball": "SSV ULM 1846",
+      "diretta": "Van"
+    },
+    {
+      "apiFootball": "SV Darmstadt 98",
+      "diretta": "Dresda"
+    },
+    {
+      "apiFootball": "SV Elversberg",
+      "diretta": "Elfsborg"
+    },
+    {
+      "apiFootball": "1899 Hoffenheim",
+      "diretta": "Holzheim"
+    },
+    {
+      "apiFootball": "Bayer Leverkusen",
+      "diretta": "Leverkusen"
+    },
+    {
+      "apiFootball": "Bayern Munich",
+      "diretta": "Bayern D"
+    },
+    {
+      "apiFootball": "Borussia Dortmund",
+      "diretta": "Portmore"
+    },
+    {
+      "apiFootball": "Borussia Monchengladbach",
+      "diretta": "Koflach"
+    },
+    {
+      "apiFootball": "Eintracht Frankfurt",
+      "diretta": "Erfurt"
+    },
+    {
+      "apiFootball": "FC Augsburg",
+      "diretta": "Aalborg"
+    },
+    {
+      "apiFootball": "FC Heidenheim",
+      "diretta": "Holzheim"
+    },
+    {
+      "apiFootball": "FC St. Pauli",
+      "diretta": "St. Polten"
+    },
+    {
+      "apiFootball": "FSV Mainz 05",
+      "diretta": "Azazga"
+    },
+    {
+      "apiFootball": "Holstein Kiel",
+      "diretta": "Wil"
+    },
+    {
+      "apiFootball": "RB Leipzig",
+      "diretta": "Weiz"
+    },
+    {
+      "apiFootball": "SC Freiburg",
+      "diretta": "Friedburg"
+    },
+    {
+      "apiFootball": "Union Berlin",
+      "diretta": "MO Bejaia"
+    },
+    {
+      "apiFootball": "VfB Stuttgart",
+      "diretta": "Stubai"
+    },
+    {
+      "apiFootball": "Vfl Bochum",
+      "diretta": "Sochaux"
+    },
+    {
+      "apiFootball": "VfL Wolfsburg",
+      "diretta": "Wolfsburg D"
+    },
+    {
+      "apiFootball": "Werder Bremen",
+      "diretta": "Tlemcen"
+    },
+    {
+      "apiFootball": "Avellino",
+      "diretta": "Golling"
+    },
+    {
+      "apiFootball": "Carrarese",
+      "diretta": "Cartagines"
+    },
+    {
+      "apiFootball": "Catania",
+      "diretta": "Batna"
+    },
+    {
+      "apiFootball": "Cesena",
+      "diretta": "Jena"
+    },
+    {
+      "apiFootball": "Cittadella",
+      "diretta": "Cetatea"
+    },
+    {
+      "apiFootball": "Como",
+      "diretta": "Remo"
+    },
+    {
+      "apiFootball": "Cosenza",
+      "diretta": "Mouna"
+    },
+    {
+      "apiFootball": "Cremonese",
+      "diretta": "Limonest"
+    },
+    {
+      "apiFootball": "Empoli",
+      "diretta": "Enppi"
+    },
+    {
+      "apiFootball": "Frosinone",
+      "diretta": "Roskilde"
+    },
+    {
+      "apiFootball": "Genoa",
+      "diretta": "Jena"
+    },
+    {
+      "apiFootball": "Juve Stabia",
+      "diretta": "Juventus"
+    },
+    {
+      "apiFootball": "Mantova",
+      "diretta": "Batov"
+    },
+    {
+      "apiFootball": "Monza",
+      "diretta": "Mouna"
+    },
+    {
+      "apiFootball": "Napoli",
+      "diretta": "Ascoli"
+    },
+    {
+      "apiFootball": "Padova",
+      "diretta": "Pafos"
+    },
+    {
+      "apiFootball": "Palermo",
+      "diretta": "Palermo"
+    },
+    {
+      "apiFootball": "Parma",
+      "diretta": "Arba"
+    },
+    {
+      "apiFootball": "Pisa",
+      "diretta": "Pieta"
+    },
+    {
+      "apiFootball": "Salernitana",
+      "diretta": "Al Riyadh"
+    },
+    {
+      "apiFootball": "Sassuolo",
+      "diretta": "Hasselt"
+    },
+    {
+      "apiFootball": "Torino",
+      "diretta": "Turan"
+    },
+    {
+      "apiFootball": "Torres",
+      "diretta": "Torreense"
+    },
+    {
+      "apiFootball": "Aberdeen",
+      "diretta": "Beveren"
+    },
+    {
+      "apiFootball": "Celtic",
+      "diretta": "Celtic"
+    },
+    {
+      "apiFootball": "Dundee",
+      "diretta": "Rudes"
+    },
+    {
+      "apiFootball": "Dundee Utd",
+      "diretta": "Sydney Utd"
+    },
+    {
+      "apiFootball": "Heart OF Midlothian",
+      "diretta": "Heist"
+    },
+    {
+      "apiFootball": "Hibernian",
+      "diretta": "Herediano"
+    },
+    {
+      "apiFootball": "Kilmarnock",
+      "diretta": "AEK Larnaca"
+    },
+    {
+      "apiFootball": "Motherwell",
+      "diretta": "Holywell"
+    },
+    {
+      "apiFootball": "Rangers",
+      "diretta": "Hunters"
+    },
+    {
+      "apiFootball": "Ross County",
+      "diretta": "OFI Crete"
+    },
+    {
+      "apiFootball": "ST Johnstone",
+      "diretta": "St. Polten"
+    },
+    {
+      "apiFootball": "ST Mirren",
+      "diretta": "St. Polten"
+    },
+    {
+      "apiFootball": "Blackburn",
+      "diretta": "Blackburn U21"
+    },
+    {
+      "apiFootball": "Bristol City",
+      "diretta": "Bristol City U21"
+    },
+    {
+      "apiFootball": "Burnley",
+      "diretta": "Burmoos"
+    },
+    {
+      "apiFootball": "Cardiff",
+      "diretta": "Afief"
+    },
+    {
+      "apiFootball": "Coventry",
+      "diretta": "Coventry"
+    },
+    {
+      "apiFootball": "Derby",
+      "diretta": "Derby"
+    },
+    {
+      "apiFootball": "Hull City",
+      "diretta": "Hue"
+    },
+    {
+      "apiFootball": "Leeds",
+      "diretta": "Ebbs"
+    },
+    {
+      "apiFootball": "Luton",
+      "diretta": "Lugo"
+    },
+    {
+      "apiFootball": "Middlesbrough",
+      "diretta": "Innsbruck"
+    },
+    {
+      "apiFootball": "Millwall",
+      "diretta": "Holywell"
+    },
+    {
+      "apiFootball": "Norwich",
+      "diretta": "Koflach"
+    },
+    {
+      "apiFootball": "Oxford United",
+      "diretta": "Oxford City"
+    },
+    {
+      "apiFootball": "Plymouth",
+      "diretta": "Mouna"
+    },
+    {
+      "apiFootball": "Portsmouth",
+      "diretta": "Portmore"
+    },
+    {
+      "apiFootball": "Preston",
+      "diretta": "Everton"
+    },
+    {
+      "apiFootball": "QPR",
+      "diretta": "Van"
+    },
+    {
+      "apiFootball": "Sheffield Utd",
+      "diretta": "Sydney Utd"
+    },
+    {
+      "apiFootball": "Sheffield Wednesday",
+      "diretta": "Hunfelder"
+    },
+    {
+      "apiFootball": "Stoke City",
+      "diretta": "Koge"
+    },
+    {
+      "apiFootball": "Sunderland",
+      "diretta": "Sunderland"
+    },
+    {
+      "apiFootball": "Swansea",
+      "diretta": "Twente"
+    },
+    {
+      "apiFootball": "Watford",
+      "diretta": "Aalborg"
+    },
+    {
+      "apiFootball": "West Brom",
+      "diretta": "Westerlo D"
+    },
+    {
+      "apiFootball": "Ajax",
+      "diretta": "Arba"
+    },
+    {
+      "apiFootball": "Almere City FC",
+      "diretta": "Almere City"
+    },
+    {
+      "apiFootball": "AZ Alkmaar",
+      "diretta": "Van"
+    },
+    {
+      "apiFootball": "Feyenoord",
+      "diretta": "Ferro D"
+    },
+    {
+      "apiFootball": "Fortuna Sittard",
+      "diretta": "Mouna"
+    },
+    {
+      "apiFootball": "GO Ahead Eagles",
+      "diretta": "Cartagines"
+    },
+    {
+      "apiFootball": "Groningen",
+      "diretta": "Golling"
+    },
+    {
+      "apiFootball": "Heerenveen",
+      "diretta": "Seekirchen"
+    },
+    {
+      "apiFootball": "Heracles",
+      "diretta": "Heracles"
+    },
+    {
+      "apiFootball": "NAC Breda",
+      "diretta": "Breda"
+    },
+    {
+      "apiFootball": "NEC Nijmegen",
+      "diretta": "Lech"
+    },
+    {
+      "apiFootball": "PEC Zwolle",
+      "diretta": "Zwolle"
+    },
+    {
+      "apiFootball": "PSV Eindhoven",
+      "diretta": "Oss"
+    },
+    {
+      "apiFootball": "Sparta Rotterdam",
+      "diretta": "Arba"
+    },
+    {
+      "apiFootball": "Twente",
+      "diretta": "Twente"
+    },
+    {
+      "apiFootball": "Utrecht",
+      "diretta": "Lech"
+    },
+    {
+      "apiFootball": "Waalwijk",
+      "diretta": "Waalwijk"
+    },
+    {
+      "apiFootball": "Willem II",
+      "diretta": "Willem II"
+    },
+    {
+      "apiFootball": "ADO Den Haag",
+      "diretta": "Kano"
+    },
+    {
+      "apiFootball": "Cambuur",
+      "diretta": "Chambly"
+    },
+    {
+      "apiFootball": "De Graafschap",
+      "diretta": "Meerbusch"
+    },
+    {
+      "apiFootball": "Den Bosch",
+      "diretta": "Denbigh"
+    },
+    {
+      "apiFootball": "Dordrecht",
+      "diretta": "Dordrecht"
+    },
+    {
+      "apiFootball": "Emmen",
+      "diretta": "Emden"
+    },
+    {
+      "apiFootball": "Excelsior",
+      "diretta": "Helsingor"
+    },
+    {
+      "apiFootball": "FC Eindhoven",
+      "diretta": "Eindhoven"
+    },
+    {
+      "apiFootball": "FC OSS",
+      "diretta": "Tolosa"
+    },
+    {
+      "apiFootball": "FC Volendam",
+      "diretta": "FC Volendam"
+    },
+    {
+      "apiFootball": "Helmond Sport",
+      "diretta": "Helmond"
+    },
+    {
+      "apiFootball": "Jong Ajax",
+      "diretta": "Jong Ajax"
+    },
+    {
+      "apiFootball": "Jong AZ",
+      "diretta": "Jong AZ"
+    },
+    {
+      "apiFootball": "Jong PSV",
+      "diretta": "Jong PSV"
+    },
+    {
+      "apiFootball": "Jong Utrecht",
+      "diretta": "Dordrecht"
+    },
+    {
+      "apiFootball": "MVV",
+      "diretta": "Van"
+    },
+    {
+      "apiFootball": "Roda",
+      "diretta": "Roda"
+    },
+    {
+      "apiFootball": "Telstar",
+      "diretta": "Red Star"
+    },
+    {
+      "apiFootball": "Vitesse",
+      "diretta": "Vejle"
+    },
+    {
+      "apiFootball": "VVV Venlo",
+      "diretta": "Venlo"
+    },
+    {
+      "apiFootball": "Barnsley",
+      "diretta": "Barry"
+    },
+    {
+      "apiFootball": "Birmingham",
+      "diretta": "Birmingham U21"
+    },
+    {
+      "apiFootball": "Blackpool",
+      "diretta": "Burmoos"
+    },
+    {
+      "apiFootball": "Bolton",
+      "diretta": "Bolton"
+    },
+    {
+      "apiFootball": "Bristol Rovers",
+      "diretta": "Bristol Rovers"
+    },
+    {
+      "apiFootball": "Burton Albion",
+      "diretta": "Bolton"
+    },
+    {
+      "apiFootball": "Cambridge United",
+      "diretta": "Cambridge Utd"
+    },
+    {
+      "apiFootball": "Charlton",
+      "diretta": "Marathon"
+    },
+    {
+      "apiFootball": "Crawley Town",
+      "diretta": "Chambly"
+    },
+    {
+      "apiFootball": "Exeter City",
+      "diretta": "Wiener"
+    },
+    {
+      "apiFootball": "Huddersfield",
+      "diretta": "Guilsfield"
+    },
+    {
+      "apiFootball": "Leyton Orient",
+      "diretta": "Londrina"
+    },
+    {
+      "apiFootball": "Lincoln",
+      "diretta": "Dijon"
+    },
+    {
+      "apiFootball": "Mansfield Town",
+      "diretta": "Marchfeld"
+    },
+    {
+      "apiFootball": "Northampton",
+      "diretta": "Pregarten"
+    },
+    {
+      "apiFootball": "Peterborough",
+      "diretta": "Bengaluru Utd"
+    },
+    {
+      "apiFootball": "Reading",
+      "diretta": "Golling"
+    },
+    {
+      "apiFootball": "Rotherham",
+      "diretta": "Rovers"
+    },
+    {
+      "apiFootball": "Shrewsbury",
+      "diretta": "Strasburgo"
+    },
+    {
+      "apiFootball": "Stevenage",
+      "diretta": "St. Liege"
+    },
+    {
+      "apiFootball": "Stockport County",
+      "diretta": "Oguzsport"
+    },
+    {
+      "apiFootball": "Wigan",
+      "diretta": "Van"
+    },
+    {
+      "apiFootball": "Wrexham",
+      "diretta": "Dresda"
+    },
+    {
+      "apiFootball": "Wycombe",
+      "diretta": "Khroub"
+    },
+    {
+      "apiFootball": "Accrington ST",
+      "diretta": "Brighton"
+    },
+    {
+      "apiFootball": "AFC Wimbledon",
+      "diretta": "Hilden"
+    },
+    {
+      "apiFootball": "Barrow",
+      "diretta": "Barry"
+    },
+    {
+      "apiFootball": "Bradford",
+      "diretta": "Gresford"
+    },
+    {
+      "apiFootball": "Bromley",
+      "diretta": "Kremser"
+    },
+    {
+      "apiFootball": "Carlisle",
+      "diretta": "Saprissa"
+    },
+    {
+      "apiFootball": "Cheltenham",
+      "diretta": "Schwechat"
+    },
+    {
+      "apiFootball": "Chesterfield",
+      "diretta": "Westerlo D"
+    },
+    {
+      "apiFootball": "Colchester",
+      "diretta": "Leicester"
+    },
+    {
+      "apiFootball": "Crewe",
+      "diretta": "Remo"
+    },
+    {
+      "apiFootball": "Doncaster",
+      "diretta": "Leicester"
+    },
+    {
+      "apiFootball": "Fleetwood Town",
+      "diretta": "Ferro D"
+    },
+    {
+      "apiFootball": "Gillingham",
+      "diretta": "Golling"
+    },
+    {
+      "apiFootball": "Grimsby",
+      "diretta": "Kremser"
+    },
+    {
+      "apiFootball": "Harrogate Town",
+      "diretta": "Karlovac"
+    },
+    {
+      "apiFootball": "Milton Keynes Dons",
+      "diretta": "Kriens"
+    },
+    {
+      "apiFootball": "Morecambe",
+      "diretta": "Merelbeke"
+    },
+    {
+      "apiFootball": "Newport County",
+      "diretta": "Newry City"
+    },
+    {
+      "apiFootball": "Port Vale",
+      "diretta": "Portmore"
+    },
+    {
+      "apiFootball": "Salford City",
+      "diretta": "Aalborg"
+    },
+    {
+      "apiFootball": "Swindon Town",
+      "diretta": "SV Wildon"
+    },
+    {
+      "apiFootball": "Tranmere",
+      "diretta": "Chanmari"
+    },
+    {
+      "apiFootball": "Walsall",
+      "diretta": "Hasselt"
+    },
+    {
+      "apiFootball": "AFC Fylde",
+      "diretta": "Celje"
+    },
+    {
+      "apiFootball": "Aldershot Town",
+      "diretta": "Sandersdorf"
+    },
+    {
+      "apiFootball": "Altrincham",
+      "diretta": "Al Ramtha"
+    },
+    {
+      "apiFootball": "Barnet",
+      "diretta": "Larne"
+    },
+    {
+      "apiFootball": "Boston United",
+      "diretta": "Bolton"
+    },
+    {
+      "apiFootball": "Braintree",
+      "diretta": "Brann"
+    },
+    {
+      "apiFootball": "Dagenham & Redbridge",
+      "diretta": "Magra"
+    },
+    {
+      "apiFootball": "Eastleigh",
+      "diretta": "Basilea D"
+    },
+    {
+      "apiFootball": "Ebbsfleet United",
+      "diretta": "Ebbs"
+    },
+    {
+      "apiFootball": "FC Halifax Town",
+      "diretta": "Bolivar"
+    },
+    {
+      "apiFootball": "Forest Green",
+      "diretta": "First Vienna"
+    },
+    {
+      "apiFootball": "Gateshead",
+      "diretta": "Nantes D"
+    },
+    {
+      "apiFootball": "Hartlepool",
+      "diretta": "Palermo"
+    },
+    {
+      "apiFootball": "Maidenhead",
+      "diretta": "Marchfeld"
+    },
+    {
+      "apiFootball": "Oldham",
+      "diretta": "Al Hazem"
+    },
+    {
+      "apiFootball": "Rochdale",
+      "diretta": "Sochaux"
+    },
+    {
+      "apiFootball": "Solihull Moors",
+      "diretta": "Burmoos"
+    },
+    {
+      "apiFootball": "Southend",
+      "diretta": "Sydney Utd"
+    },
+    {
+      "apiFootball": "Sutton Utd",
+      "diretta": "Ruthin"
+    },
+    {
+      "apiFootball": "Tamworth",
+      "diretta": "Taghit"
+    },
+    {
+      "apiFootball": "Wealdstone",
+      "diretta": "Kalsdorf"
+    },
+    {
+      "apiFootball": "Woking",
+      "diretta": "Golling"
+    },
+    {
+      "apiFootball": "Yeovil Town",
+      "diretta": "Weiz"
+    },
+    {
+      "apiFootball": "York",
+      "diretta": "Koge"
+    },
+    {
+      "apiFootball": "Arouca",
+      "diretta": "Arouca"
+    },
+    {
+      "apiFootball": "AVS",
+      "diretta": "AFS"
+    },
+    {
+      "apiFootball": "Benfica",
+      "diretta": "Benfica"
+    },
+    {
+      "apiFootball": "Boavista",
+      "diretta": "Bahia"
+    },
+    {
+      "apiFootball": "Casa Pia",
+      "diretta": "Azazga"
+    },
+    {
+      "apiFootball": "Estoril",
+      "diretta": "Ascoli"
+    },
+    {
+      "apiFootball": "Estrela",
+      "diretta": "Hapoel Hadera"
+    },
+    {
+      "apiFootball": "Famalicao",
+      "diretta": "Famalicao"
+    },
+    {
+      "apiFootball": "Farense",
+      "diretta": "Platense"
+    },
+    {
+      "apiFootball": "FC Porto",
+      "diretta": "Gonio"
+    },
+    {
+      "apiFootball": "GIL Vicente",
+      "diretta": "Leicester"
+    },
+    {
+      "apiFootball": "Moreirense",
+      "diretta": "Torreense"
+    },
+    {
+      "apiFootball": "Nacional",
+      "diretta": "Batna"
+    },
+    {
+      "apiFootball": "Rio Ave",
+      "diretta": "Roda"
+    },
+    {
+      "apiFootball": "Santa Clara",
+      "diretta": "GC Mascara"
+    },
+    {
+      "apiFootball": "SC Braga",
+      "diretta": "Brann"
+    },
+    {
+      "apiFootball": "Adana Demirspor",
+      "diretta": "Annaba"
+    },
+    {
+      "apiFootball": "Alanyaspor",
+      "diretta": "Antalyaspor"
+    },
+    {
+      "apiFootball": "Antalyaspor",
+      "diretta": "Antalyaspor"
+    },
+    {
+      "apiFootball": "BB Bodrumspor",
+      "diretta": "Barry"
+    },
+    {
+      "apiFootball": "Besiktas",
+      "diretta": "Besiktas"
+    },
+    {
+      "apiFootball": "Eyüpspor",
+      "diretta": "Enppi"
+    },
+    {
+      "apiFootball": "Galatasaray",
+      "diretta": "Al Talaba"
+    },
+    {
+      "apiFootball": "Gazişehir Gaziantep",
+      "diretta": "Gaziantep"
+    },
+    {
+      "apiFootball": "Goztepe",
+      "diretta": "Getafe"
+    },
+    {
+      "apiFootball": "Hatayspor",
+      "diretta": "Antalyaspor"
+    },
+    {
+      "apiFootball": "Istanbul Basaksehir",
+      "diretta": "Bahia"
+    },
+    {
+      "apiFootball": "Kasimpasa",
+      "diretta": "Kasimpasa"
+    },
+    {
+      "apiFootball": "Kayserispor",
+      "diretta": "Sandersdorf"
+    },
+    {
+      "apiFootball": "Konyaspor",
+      "diretta": "Bursaspor"
+    },
+    {
+      "apiFootball": "Rizespor",
+      "diretta": "Wiener"
+    },
+    {
+      "apiFootball": "Samsunspor",
+      "diretta": "Bursaspor"
+    },
+    {
+      "apiFootball": "Sivasspor",
+      "diretta": "Bursaspor"
+    },
+    {
+      "apiFootball": "Trabzonspor",
+      "diretta": "Bronshoj"
+    },
+    {
+      "apiFootball": "Alaves",
+      "diretta": "Alaves"
+    },
+    {
+      "apiFootball": "Athletic Club",
+      "diretta": "Emirates Club"
+    },
+    {
+      "apiFootball": "Atletico Madrid",
+      "diretta": "Al Thaid"
+    },
+    {
+      "apiFootball": "Barcelona",
+      "diretta": "Karela"
+    },
+    {
+      "apiFootball": "Celta Vigo",
+      "diretta": "Celtic"
+    },
+    {
+      "apiFootball": "Getafe",
+      "diretta": "Getafe"
+    },
+    {
+      "apiFootball": "Girona",
+      "diretta": "Dijon"
+    },
+    {
+      "apiFootball": "Las Palmas",
+      "diretta": "Al Qalah"
+    },
+    {
+      "apiFootball": "Mallorca",
+      "diretta": "Magra"
+    },
+    {
+      "apiFootball": "Osasuna",
+      "diretta": "Batna"
+    },
+    {
+      "apiFootball": "Rayo Vallecano",
+      "diretta": "Famalicao"
+    },
+    {
+      "apiFootball": "Real Betis",
+      "diretta": "Batna"
+    },
+    {
+      "apiFootball": "Real Madrid",
+      "diretta": "Real Potosi"
+    },
+    {
+      "apiFootball": "Real Sociedad",
+      "diretta": "Real Potosi"
+    },
+    {
+      "apiFootball": "Sevilla",
+      "diretta": "Siviglia"
+    },
+    {
+      "apiFootball": "Valencia",
+      "diretta": "Venezia"
+    },
+    {
+      "apiFootball": "Villarreal",
+      "diretta": "Llanelli"
+    },
+    {
+      "apiFootball": "Arsenal",
+      "diretta": "Alzenau"
+    },
+    {
+      "apiFootball": "Aston Villa",
+      "diretta": "Cliftonville"
+    },
+    {
+      "apiFootball": "Bournemouth",
+      "diretta": "Korneuburg"
+    },
+    {
+      "apiFootball": "Brentford",
+      "diretta": "Gresford"
+    },
+    {
+      "apiFootball": "Brighton",
+      "diretta": "Brighton"
+    },
+    {
+      "apiFootball": "Chelsea",
+      "diretta": "Celje"
+    },
+    {
+      "apiFootball": "Crystal Palace",
+      "diretta": "Al Qalah"
+    },
+    {
+      "apiFootball": "Everton",
+      "diretta": "Everton"
+    },
+    {
+      "apiFootball": "Fulham",
+      "diretta": "Turan"
+    },
+    {
+      "apiFootball": "Ipswich",
+      "diretta": "Ansbach"
+    },
+    {
+      "apiFootball": "Leicester",
+      "diretta": "Leicester"
+    },
+    {
+      "apiFootball": "Liverpool",
+      "diretta": "Liverpool M."
+    },
+    {
+      "apiFootball": "Manchester City",
+      "diretta": "Dubai City"
+    },
+    {
+      "apiFootball": "Manchester United",
+      "diretta": "Cancun"
+    },
+    {
+      "apiFootball": "Newcastle",
+      "diretta": "Newcastle U21"
+    },
+    {
+      "apiFootball": "Nottingham Forest",
+      "diretta": "Falesti"
+    },
+    {
+      "apiFootball": "Southampton",
+      "diretta": "Sopron"
+    },
+    {
+      "apiFootball": "Tottenham",
+      "diretta": "Hottin"
+    },
+    {
+      "apiFootball": "West Ham",
+      "diretta": "West Ham U21"
+    },
+    {
+      "apiFootball": "Wolves",
+      "diretta": "Tikves"
+    },
+    {
+      "apiFootball": "Alemannia Aachen",
+      "diretta": "Pachern"
+    },
+    {
+      "apiFootball": "Arminia Bielefeld",
+      "diretta": "Bielefeld II"
+    },
+    {
+      "apiFootball": "Borussia Hildesheim",
+      "diretta": "Holzheim"
+    },
+    {
+      "apiFootball": "Bremer Sv",
+      "diretta": "Brema D"
+    },
+    {
+      "apiFootball": "Carl Zeiss Jena",
+      "diretta": "Jena"
+    },
+    {
+      "apiFootball": "Dynamo Dresden",
+      "diretta": "Dresda"
+    },
+    {
+      "apiFootball": "Energie Cottbus",
+      "diretta": "Cottbus"
+    },
+    {
+      "apiFootball": "Erzgebirge AUE",
+      "diretta": "Hue"
+    },
+    {
+      "apiFootball": "FC 08 Villingen",
+      "diretta": "Golling"
+    },
+    {
+      "apiFootball": "FC Ingolstadt 04",
+      "diretta": "Foolad"
+    },
+    {
+      "apiFootball": "FC Saarbrücken",
+      "diretta": "Saarbrucken"
+    },
+    {
+      "apiFootball": "FC Wurzburger Kickers",
+      "diretta": "Wienerberger"
+    },
+    {
+      "apiFootball": "Greifswalder FC",
+      "diretta": "Gresford"
+    },
+    {
+      "apiFootball": "Hallescher FC",
+      "diretta": "Vejle"
+    },
+    {
+      "apiFootball": "Hansa Rostock",
+      "diretta": "Bolton"
+    },
+    {
+      "apiFootball": "Kickers Offenbach",
+      "diretta": "Klingenbach"
+    },
+    {
+      "apiFootball": "Phönix Lübeck",
+      "diretta": "VfB Lubeck"
+    },
+    {
+      "apiFootball": "Rot-weiss Essen",
+      "diretta": "Tlemcen"
+    },
+    {
+      "apiFootball": "Schott Mainz",
+      "diretta": "Hottin"
+    },
+    {
+      "apiFootball": "Sportfreunde Lotte",
+      "diretta": "Koge"
+    },
+    {
+      "apiFootball": "SV Meppen",
+      "diretta": "Leoben"
+    },
+    {
+      "apiFootball": "SV Sandhausen",
+      "diretta": "Rodinghausen"
+    },
+    {
+      "apiFootball": "SV Wehen",
+      "diretta": "Leher"
+    },
+    {
+      "apiFootball": "Teutonia Ottensen",
+      "diretta": "Europa FC"
+    },
+    {
+      "apiFootball": "TuS Koblenz",
+      "diretta": "St. Polten"
+    },
+    {
+      "apiFootball": "VfL Osnabruck",
+      "diretta": "Innsbruck"
+    },
+    {
+      "apiFootball": "VfR Aalen",
+      "diretta": "Afief"
+    },
+    {
+      "apiFootball": "Viktoria Berlin",
+      "diretta": "Viktoria Colonia"
+    },
+    {
+      "apiFootball": "Almeria",
+      "diretta": "Admira"
+    },
+    {
+      "apiFootball": "Cadiz",
+      "diretta": "Weiz"
+    },
+    {
+      "apiFootball": "Castellón",
+      "diretta": "Castellon"
+    },
+    {
+      "apiFootball": "Cordoba",
+      "diretta": "Arba"
+    },
+    {
+      "apiFootball": "Deportivo La Coruna",
+      "diretta": "Georgia"
+    },
+    {
+      "apiFootball": "Granada CF",
+      "diretta": "Annaba"
+    },
+    {
+      "apiFootball": "Malaga",
+      "diretta": "Magra"
+    },
+    {
+      "apiFootball": "Tenerife",
+      "diretta": "Genesis"
+    },
+    {
+      "apiFootball": "AC Milan",
+      "diretta": "Van"
+    },
+    {
+      "apiFootball": "AS Roma",
+      "diretta": "Roda"
+    },
+    {
+      "apiFootball": "Atalanta",
+      "diretta": "Al Talaba"
+    },
+    {
+      "apiFootball": "Bologna",
+      "diretta": "Boulogne"
+    },
+    {
+      "apiFootball": "Cagliari",
+      "diretta": "Chanmari"
+    },
+    {
+      "apiFootball": "Fiorentina",
+      "diretta": "Moreni"
+    },
+    {
+      "apiFootball": "Inter",
+      "diretta": "Wiener"
+    },
+    {
+      "apiFootball": "Juventus",
+      "diretta": "Juventus"
+    },
+    {
+      "apiFootball": "Lazio",
+      "diretta": "Bahia"
+    },
+    {
+      "apiFootball": "Lecce",
+      "diretta": "Lech"
+    },
+    {
+      "apiFootball": "Udinese",
+      "diretta": "Udinese"
+    },
+    {
+      "apiFootball": "Verona",
+      "diretta": "Jena"
+    },
+    {
+      "apiFootball": "Ajaccio",
+      "diretta": "Agadir"
+    },
+    {
+      "apiFootball": "Amiens",
+      "diretta": "Kriens"
+    },
+    {
+      "apiFootball": "Annecy",
+      "diretta": "Annecy"
+    },
+    {
+      "apiFootball": "Bastia",
+      "diretta": "Batna"
+    },
+    {
+      "apiFootball": "Bordeaux",
+      "diretta": "Sochaux"
+    },
+    {
+      "apiFootball": "Caen",
+      "diretta": "Van"
+    },
+    {
+      "apiFootball": "Dunkerque",
+      "diretta": "Dunkerque"
+    },
+    {
+      "apiFootball": "Grenoble",
+      "diretta": "Grenoble"
+    },
+    {
+      "apiFootball": "Guingamp",
+      "diretta": "Guingamp"
+    },
+    {
+      "apiFootball": "Laval",
+      "diretta": "Van"
+    },
+    {
+      "apiFootball": "Martigues",
+      "diretta": "Cartagines"
+    },
+    {
+      "apiFootball": "Paris FC",
+      "diretta": "Pafos"
+    },
+    {
+      "apiFootball": "PAU",
+      "diretta": "Van"
+    },
+    {
+      "apiFootball": "RED Star FC 93",
+      "diretta": "Red Star"
+    },
+    {
+      "apiFootball": "Rodez",
+      "diretta": "Rudes"
+    },
+    {
+      "apiFootball": "Angers",
+      "diretta": "Annecy"
+    },
+    {
+      "apiFootball": "Auxerre",
+      "diretta": "Arba"
+    },
+    {
+      "apiFootball": "Saint Etienne",
+      "diretta": "Amstetten"
+    },
+    {
+      "apiFootball": "AS Eupen",
+      "diretta": "Emden"
+    },
+    {
+      "apiFootball": "Club Brugge II",
+      "diretta": "Gent U23"
+    },
+    {
+      "apiFootball": "Deinze",
+      "diretta": "Weiz"
+    },
+    {
+      "apiFootball": "Francs Borains",
+      "diretta": "KCB"
+    },
+    {
+      "apiFootball": "KRC Genk II",
+      "diretta": "Genk U23"
+    },
+    {
+      "apiFootball": "Liège",
+      "diretta": "St. Liege"
+    },
+    {
+      "apiFootball": "Lierse Kempenzonen",
+      "diretta": "Ferro D"
+    },
+    {
+      "apiFootball": "Lokeren-Temse",
+      "diretta": "Torreense"
+    },
+    {
+      "apiFootball": "Lommel United",
+      "diretta": "Gomel"
+    },
+    {
+      "apiFootball": "Patro Eisden",
+      "diretta": "Batna"
+    },
+    {
+      "apiFootball": "RAAL La Louvière",
+      "diretta": "San Luis D"
+    },
+    {
+      "apiFootball": "RSC Anderlecht II",
+      "diretta": "RFC Liege U21"
+    },
+    {
+      "apiFootball": "RWDM",
+      "diretta": "Holbaek"
+    },
+    {
+      "apiFootball": "Seraing United",
+      "diretta": "UFC Fehring"
+    },
+    {
+      "apiFootball": "Waasland-beveren",
+      "diretta": "Beveren"
+    },
+    {
+      "apiFootball": "Zulte Waregem",
+      "diretta": "Al Hazem"
+    },
+    {
+      "apiFootball": "Jedinstvo Ub",
+      "diretta": "Heist"
+    },
+    {
+      "apiFootball": "OFK Beograd",
+      "diretta": "MO Bejaia"
+    },
+    {
+      "apiFootball": "Tekstilac Odžaci",
+      "diretta": "Celtic"
+    },
+    {
+      "apiFootball": "Albinoleffe",
+      "diretta": "Al Zulfi"
+    },
+    {
+      "apiFootball": "Alcione",
+      "diretta": "Flint"
+    },
+    {
+      "apiFootball": "Arzignano Valchiampo",
+      "diretta": "Arzignano"
+    },
+    {
+      "apiFootball": "Atalanta II",
+      "diretta": "Atlante U21"
+    },
+    {
+      "apiFootball": "Caldiero Terme",
+      "diretta": "Aerostar"
+    },
+    {
+      "apiFootball": "Clodiense",
+      "diretta": "Platense"
+    },
+    {
+      "apiFootball": "Giana Erminio",
+      "diretta": "Batna"
+    },
+    {
+      "apiFootball": "Lumezzane",
+      "diretta": "Lumezzane"
+    },
+    {
+      "apiFootball": "Novara",
+      "diretta": "Opava"
+    },
+    {
+      "apiFootball": "Pergolettese",
+      "diretta": "Merelbeke"
+    },
+    {
+      "apiFootball": "Pro Patria",
+      "diretta": "Canberra Croatia"
+    },
+    {
+      "apiFootball": "PRO Vercelli",
+      "diretta": "Rovers"
+    },
+    {
+      "apiFootball": "Renate",
+      "diretta": "Getafe"
+    },
+    {
+      "apiFootball": "Trento",
+      "diretta": "Twente"
+    },
+    {
+      "apiFootball": "Triestina",
+      "diretta": "Brescia"
+    },
+    {
+      "apiFootball": "Vicenza Virtus",
+      "diretta": "Vizela"
+    },
+    {
+      "apiFootball": "Virtus Verona",
+      "diretta": "First Vienna"
+    },
+    {
+      "apiFootball": "Arezzo",
+      "diretta": "Remo"
+    },
+    {
+      "apiFootball": "Athletic Carpi",
+      "diretta": "Arba"
+    },
+    {
+      "apiFootball": "Città di Campobasso",
+      "diretta": "La Passe"
+    },
+    {
+      "apiFootball": "Gubbio",
+      "diretta": "Gonio"
+    },
+    {
+      "apiFootball": "Legnago Salus",
+      "diretta": "Lugano"
+    },
+    {
+      "apiFootball": "Lucchese",
+      "diretta": "Udinese"
+    },
+    {
+      "apiFootball": "Milan II",
+      "diretta": "Llandudno"
+    },
+    {
+      "apiFootball": "Perugia",
+      "diretta": "Georgia"
+    },
+    {
+      "apiFootball": "Pescara",
+      "diretta": "Brescia"
+    },
+    {
+      "apiFootball": "Pianese",
+      "diretta": "Platense"
+    },
+    {
+      "apiFootball": "Pineto",
+      "diretta": "Pieta"
+    },
+    {
+      "apiFootball": "Pontedera",
+      "diretta": "Pontardawe"
+    },
+    {
+      "apiFootball": "Rimini",
+      "diretta": "Admira"
+    },
+    {
+      "apiFootball": "Sestri Levante",
+      "diretta": "Sesvete"
+    },
+    {
+      "apiFootball": "Spal",
+      "diretta": "Van"
+    },
+    {
+      "apiFootball": "Virtus Entella",
+      "diretta": "Nezla"
+    },
+    {
+      "apiFootball": "Vis Pesaro",
+      "diretta": "CS Bamako"
+    },
+    {
+      "apiFootball": "Audace Cerignola",
+      "diretta": "Legnica"
+    },
+    {
+      "apiFootball": "AZ Picerno",
+      "diretta": "Pachern"
+    },
+    {
+      "apiFootball": "Casertana",
+      "diretta": "Cacereno"
+    },
+    {
+      "apiFootball": "Cavese",
+      "diretta": "Alaves"
+    },
+    {
+      "apiFootball": "Crotone",
+      "diretta": "Choloma"
+    },
+    {
+      "apiFootball": "Foggia",
+      "diretta": "Georgia"
+    },
+    {
+      "apiFootball": "Giugliano",
+      "diretta": "Lugano"
+    },
+    {
+      "apiFootball": "Juventus U23",
+      "diretta": "Juventus"
+    },
+    {
+      "apiFootball": "Latina",
+      "diretta": "Batna"
+    },
+    {
+      "apiFootball": "Messina",
+      "diretta": "Mouna"
+    },
+    {
+      "apiFootball": "Potenza",
+      "diretta": "Batna"
+    },
+    {
+      "apiFootball": "Sorrento",
+      "diretta": "Orijent"
+    },
+    {
+      "apiFootball": "SS Monopoli",
+      "diretta": "Monaco"
+    },
+    {
+      "apiFootball": "Taranto",
+      "diretta": "Turan"
+    },
+    {
+      "apiFootball": "Team Altamura",
+      "diretta": "Nea Salamis"
+    },
+    {
+      "apiFootball": "Trapani 1905",
+      "diretta": "Turan"
+    },
+    {
+      "apiFootball": "Turris",
+      "diretta": "Turan"
+    },
+    {
+      "apiFootball": "AEK Athens FC",
+      "diretta": "AFS"
+    },
+    {
+      "apiFootball": "Aktobe",
+      "diretta": "Koge"
+    },
+    {
+      "apiFootball": "Ararat-Armenia",
+      "diretta": "Ararat-Armenia"
+    },
+    {
+      "apiFootball": "Atlètic Club d'Escaldes",
+      "diretta": "FC Volders"
+    },
+    {
+      "apiFootball": "Auda",
+      "diretta": "Arba"
+    },
+    {
+      "apiFootball": "B36 Torshavn",
+      "diretta": "Turan"
+    },
+    {
+      "apiFootball": "Bala Town",
+      "diretta": "Bala Town"
+    },
+    {
+      "apiFootball": "BK Hacken",
+      "diretta": "Hilden"
+    },
+    {
+      "apiFootball": "Botev Plovdiv",
+      "diretta": "Botev Plovdiv"
+    },
+    {
+      "apiFootball": "Brann",
+      "diretta": "Brann"
+    },
+    {
+      "apiFootball": "Bravo",
+      "diretta": "Brann"
+    },
+    {
+      "apiFootball": "Breidablik",
+      "diretta": "Grenoble"
+    },
+    {
+      "apiFootball": "Buducnost Podgorica",
+      "diretta": "Burmoos"
+    },
+    {
+      "apiFootball": "Caernarfon Town",
+      "diretta": "Caernarfon"
+    },
+    {
+      "apiFootball": "Cherno More Varna",
+      "diretta": "Caernarfon"
+    },
+    {
+      "apiFootball": "Cliftonville FC",
+      "diretta": "Cliftonville"
+    },
+    {
+      "apiFootball": "Corvinul Hunedoara",
+      "diretta": "Curtisoara"
+    },
+    {
+      "apiFootball": "Crusaders FC",
+      "diretta": "Rudes"
+    },
+    {
+      "apiFootball": "CSKA 1948",
+      "diretta": "CSKA Sofia"
+    },
+    {
+      "apiFootball": "Dinamo Tbilisi",
+      "diretta": "Merani Tbilisi"
+    },
+    {
+      "apiFootball": "Djurgardens IF",
+      "diretta": "Djurgarden D"
+    },
+    {
+      "apiFootball": "Dnipro-1",
+      "diretta": "Proxy"
+    },
+    {
+      "apiFootball": "Drita",
+      "diretta": "Arba"
+    },
+    {
+      "apiFootball": "Dunajska Streda",
+      "diretta": "SAK 1914"
+    },
+    {
+      "apiFootball": "F91 Dudelange",
+      "diretta": "Sunderland"
+    },
+    {
+      "apiFootball": "FC Astana",
+      "diretta": "Batna"
+    },
+    {
+      "apiFootball": "FC Isloch Minsk R.",
+      "diretta": "Lech"
+    },
+    {
+      "apiFootball": "FC Levadia Tallinn",
+      "diretta": "Bahia"
+    },
+    {
+      "apiFootball": "FC Noah",
+      "diretta": "Goa"
+    },
+    {
+      "apiFootball": "FC ST. Gallen",
+      "diretta": "St. Polten"
+    },
+    {
+      "apiFootball": "FC Urartu",
+      "diretta": "Grau"
+    },
+    {
+      "apiFootball": "FC Vaduz",
+      "diretta": "Van"
+    },
+    {
+      "apiFootball": "FC Zurich",
+      "diretta": "Lech"
+    },
+    {
+      "apiFootball": "Fehérvár FC",
+      "diretta": "Ferro D"
+    },
+    {
+      "apiFootball": "FK Liepaja",
+      "diretta": "Pieta"
+    },
+    {
+      "apiFootball": "FK Sarajevo",
+      "diretta": "Sariyer"
+    },
+    {
+      "apiFootball": "FK Tobol Kostanay",
+      "diretta": "Gomel"
+    },
+    {
+      "apiFootball": "FK Zalgiris Vilnius",
+      "diretta": "Palmeiras"
+    },
+    {
+      "apiFootball": "Floriana",
+      "diretta": "Londrina"
+    },
+    {
+      "apiFootball": "GAP Connah S Quay FC",
+      "diretta": "Connah's Q."
+    },
+    {
+      "apiFootball": "Hapoel Beer Sheva",
+      "diretta": "H. Beer Sheva"
+    },
+    {
+      "apiFootball": "HB",
+      "diretta": "Turan"
+    },
+    {
+      "apiFootball": "HNK Hajduk Split",
+      "diretta": "Hilden"
+    },
+    {
+      "apiFootball": "Ilves Tampere",
+      "diretta": "Tikves"
+    },
+    {
+      "apiFootball": "KuPS",
+      "diretta": "Ebbs"
+    },
+    {
+      "apiFootball": "La Fiorita",
+      "diretta": "Lafnitz"
+    },
+    {
+      "apiFootball": "Legia Warszawa",
+      "diretta": "Legnica"
+    },
+    {
+      "apiFootball": "Linfield",
+      "diretta": "Guilsfield"
+    },
+    {
+      "apiFootball": "Llapi",
+      "diretta": "Enppi"
+    },
+    {
+      "apiFootball": "Maccabi Haifa",
+      "diretta": "MS Tira"
+    },
+    {
+      "apiFootball": "Maccabi Petah Tikva",
+      "diretta": "M. Petach Tikva"
+    },
+    {
+      "apiFootball": "Magpies",
+      "diretta": "FC Copenhagen"
+    },
+    {
+      "apiFootball": "Malisheva",
+      "diretta": "GC Mascara"
+    },
+    {
+      "apiFootball": "Maribor",
+      "diretta": "Sariyer"
+    },
+    {
+      "apiFootball": "Marsaxlokk",
+      "diretta": "Marsiglia"
+    },
+    {
+      "apiFootball": "Milsami Orhei",
+      "diretta": "Magra"
+    },
+    {
+      "apiFootball": "Mornar",
+      "diretta": "Mornar"
+    },
+    {
+      "apiFootball": "Neman",
+      "diretta": "Belgrano"
+    },
+    {
+      "apiFootball": "NK Osijek",
+      "diretta": "Djijel"
+    },
+    {
+      "apiFootball": "Olimpija Ljubljana",
+      "diretta": "Ilirija"
+    },
+    {
+      "apiFootball": "Omonia Nicosia",
+      "diretta": "Mouna"
+    },
+    {
+      "apiFootball": "Pafos",
+      "diretta": "Pafos"
+    },
+    {
+      "apiFootball": "Paide",
+      "diretta": "Skive"
+    },
+    {
+      "apiFootball": "Paks",
+      "diretta": "Pafos"
+    },
+    {
+      "apiFootball": "Partizani",
+      "diretta": "Arzignano"
+    },
+    {
+      "apiFootball": "Polessya",
+      "diretta": "Tolosa"
+    },
+    {
+      "apiFootball": "Progres Niederkorn",
+      "diretta": "Proxy"
+    },
+    {
+      "apiFootball": "Puskas Academy",
+      "diretta": "Rudes"
+    },
+    {
+      "apiFootball": "Riga",
+      "diretta": "Binga"
+    },
+    {
+      "apiFootball": "Ružomberok",
+      "diretta": "Rovers"
+    },
+    {
+      "apiFootball": "Sabah FA",
+      "diretta": "Bahia"
+    },
+    {
+      "apiFootball": "Saburtalo",
+      "diretta": "Berca"
+    },
+    {
+      "apiFootball": "Sheriff Tiraspol",
+      "diretta": "Heist"
+    },
+    {
+      "apiFootball": "Shkendija",
+      "diretta": "Skikda"
+    },
+    {
+      "apiFootball": "Šiauliai",
+      "diretta": "Stubai"
+    },
+    {
+      "apiFootball": "Slask Wroclaw",
+      "diretta": "Plock"
+    },
+    {
+      "apiFootball": "Sliema Wanderers",
+      "diretta": "Skikda"
+    },
+    {
+      "apiFootball": "Spartak Trnava",
+      "diretta": "Spartak Tambov"
+    },
+    {
+      "apiFootball": "St Joseph S Fc",
+      "diretta": "Stoke U21"
+    },
+    {
+      "apiFootball": "St Patrick's Athl.",
+      "diretta": "St. Truiden"
+    },
+    {
+      "apiFootball": "Stjarnan",
+      "diretta": "Turan"
+    },
+    {
+      "apiFootball": "Sumqayıt",
+      "diretta": "Sundby"
+    },
+    {
+      "apiFootball": "Tallinna Kalev",
+      "diretta": "Al Fateh"
+    },
+    {
+      "apiFootball": "Tikveš",
+      "diretta": "Tikves"
+    },
+    {
+      "apiFootball": "Tirana",
+      "diretta": "Turan"
+    },
+    {
+      "apiFootball": "Torpedo Kutaisi",
+      "diretta": "Real Potosi"
+    },
+    {
+      "apiFootball": "Torpedo Zhodino",
+      "diretta": "Botev Plovdiv"
+    },
+    {
+      "apiFootball": "TransINVEST Vilnius",
+      "diretta": "SK Hranice"
+    },
+    {
+      "apiFootball": "Tre Penne",
+      "diretta": "Treowen"
+    },
+    {
+      "apiFootball": "Tromso",
+      "diretta": "Neom SC"
+    },
+    {
+      "apiFootball": "UNA Strassen",
+      "diretta": "Treowen"
+    },
+    {
+      "apiFootball": "vaasa PS",
+      "diretta": "Van"
+    },
+    {
+      "apiFootball": "Valur Reykjavik",
+      "diretta": "Van"
+    },
+    {
+      "apiFootball": "Velež",
+      "diretta": "FC Volders"
+    },
+    {
+      "apiFootball": "Vllaznia Shkodër",
+      "diretta": "Venezia"
+    },
+    {
+      "apiFootball": "Wisla Krakow",
+      "diretta": "Wisla U19"
+    },
+    {
+      "apiFootball": "Zimbru",
+      "diretta": "Zimbru 2"
+    },
+    {
+      "apiFootball": "Zira",
+      "diretta": "Titu"
+    },
+    {
+      "apiFootball": "Zrinjski",
+      "diretta": "Orijent"
+    },
+    {
+      "apiFootball": "Apoel Nicosia",
+      "diretta": "Afief"
+    },
+    {
+      "apiFootball": "HNK Rijeka",
+      "diretta": "Orijent"
+    },
+    {
+      "apiFootball": "IF elfsborg",
+      "diretta": "Elfsborg"
+    },
+    {
+      "apiFootball": "Maccabi Tel Aviv",
+      "diretta": "M. Tel Aviv"
+    },
+    {
+      "apiFootball": "Molde",
+      "diretta": "Mouna"
+    },
+    {
+      "apiFootball": "Panathinaikos",
+      "diretta": "Panathinaikos"
+    },
+    {
+      "apiFootball": "Servette FC",
+      "diretta": "Sesvete"
+    }
+  ]
+}
