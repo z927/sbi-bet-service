@@ -11,6 +11,9 @@ import {
   type Alert,
 } from "../signals/index.ts";
 import { configuredMajorLeagues, isMajorLeague } from "./major_leagues.ts";
+import { teamKey } from "../team_names.ts";
+import { loadTeamMapping, findMappingByApi } from "../team_mapping.ts";
+import { listLiveFixtures, listTodayFixtures } from "../api_football.ts";
 import type {
   Strategy,
   StrategyContext,
@@ -95,9 +98,24 @@ const execute = async (
 ): Promise<StrategyResult> => {
   const log = getStrategyLogger();
   const sport = context.sport ?? 1;
-  const liveMatches = (await client.listMatches(sport)).filter(
-    (match) => isLive(match) && isMajorLeague(match, hooks.allowlist),
+  const today = new Date().toISOString().slice(0, 10);
+  const afFixtures = [...(await listTodayFixtures(today)), ...(await listLiveFixtures())];
+  const mapping = loadTeamMapping();
+  const afKeys = new Set(
+    afFixtures.map((f) => {
+      const m = findMappingByApi(mapping, f.teams.home.name, f.teams.home.id);
+      const home = m?.direttaName ?? f.teams.home.name;
+      const m2 = findMappingByApi(mapping, f.teams.away.name, f.teams.away.id);
+      const away = m2?.direttaName ?? f.teams.away.name;
+      return teamKey(home, away);
+    }),
   );
+  const allMatches = await client.listMatches(sport);
+  const liveMatches = allMatches.filter((match) => {
+    if (!isLive(match) || !isMajorLeague(match, hooks.allowlist)) return false;
+    const key = teamKey(match.home, match.away);
+    return afKeys.size === 0 || afKeys.has(key);
+  });
   log.info({ sport, matches: liveMatches.length }, "live strategy started");
 
   const results: StrategyMatchResult[] = [];
