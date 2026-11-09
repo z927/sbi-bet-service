@@ -51,6 +51,7 @@ export const saveSignal = async (alert: Alert, context?: SaveSignalContext): Pro
       away_score: alert.awayScore ?? match?.away_score ?? null,
       touches: alert.touches ?? null,
       odds: alert.odds ?? null,
+      type: alert.type ?? null,
       statistics: statistics ?? null,
       match_data: match ?? null,
     });

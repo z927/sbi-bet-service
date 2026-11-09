@@ -112,6 +112,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/signals": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get stored signals
+         * @description Returns the list of stored signals with recap statistics: totalCount, winCount, loseCount, percentageWin, percentageLose, averageOdd and the signal items (home, away, matchId, tournament, homeScore, awayScore, win).
+         */
+        get: operations["getSignals"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/health": {
         parameters: {
             query?: never;
@@ -347,6 +367,38 @@ export interface components {
             monitored?: boolean;
             favouriteStrategyUsed?: boolean;
         };
+        SignalStats: {
+            totalSignals: number;
+            wins: number;
+            losses: number;
+            winRate: number | null;
+            loseRate: number | null;
+            averageOdds: number | null;
+            message?: string;
+            preAlerts: number;
+            signals: number;
+        };
+        SignalListItem: {
+            home?: string;
+            away?: string;
+            matchId?: string;
+            tournament?: string;
+            homeScore?: number | null;
+            awayScore?: number | null;
+            win?: boolean | null;
+        };
+        SignalRecap: {
+            totalCount: number;
+            loseCount: number;
+            winCount: number;
+            percentageWin: string;
+            percentageLose: string;
+            averageOdd: number;
+        };
+        SignalsResponse: {
+            recap: components["schemas"]["SignalRecap"];
+            signals: components["schemas"]["SignalListItem"][];
+        };
         SportsMap: {
             [key: string]: {
                 id?: number;
@@ -538,6 +590,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MatchModel"][];
+                };
+            };
+        };
+    };
+    getSignals: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SignalsResponse"];
                 };
             };
         };

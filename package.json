@@ -21,6 +21,7 @@
     "@fastify/swagger": "^9.9.2",
     "@fastify/swagger-ui": "^6.1.2",
     "@supabase/supabase-js": "^2.49.1",
+    "dotenv": "^18.0.10",
     "fastify": "^5.12.7",
     "google-auth-library": "^11.3.1",
     "pino": "^10.4.0",

@@ -7,7 +7,7 @@ info:
     Extracted from SBI Backend APIs v0.0.1. No property is marked required
     in the source specification; optionality is preserved here.
 servers:
-  - url: http://localhost:8080
+  - url: http://localhost:8000
     description: Upstream server listed in the source specification (HTTP; verify deployed scheme)
   - url: https://sbi-bet-service-658489904938.europe-west6.run.app
     description: Remote server
@@ -135,6 +135,23 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/MatchModel'
+  /api/v1/signals:
+    get:
+      tags:
+        - Signals
+      operationId: getSignals
+      summary: Get stored signals
+      description: >-
+        Returns the list of stored signals with recap statistics: totalCount,
+        winCount, loseCount, percentageWin, percentageLose, averageOdd and the
+        signal items (home, away, matchId, tournament, homeScore, awayScore, win).
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SignalsResponse'
   /health:
     get:
       tags:
@@ -612,7 +629,93 @@ components:
           type: boolean
         favouriteStrategyUsed:
           type: boolean
-
+    SignalStats:
+      type: object
+      properties:
+        totalSignals:
+          type: integer
+        wins:
+          type: integer
+        losses:
+          type: integer
+        winRate:
+          type: number
+          nullable: true
+        loseRate:
+          type: number
+          nullable: true
+        averageOdds:
+          type: number
+          nullable: true
+        message:
+          type: string
+        preAlerts:
+          type: integer
+        signals:
+          type: integer
+      required:
+        - totalSignals
+        - wins
+        - losses
+        - winRate
+        - loseRate
+        - averageOdds
+        - preAlerts
+        - signals
+    SignalListItem:
+      type: object
+      properties:
+        home:
+          type: string
+        away:
+          type: string
+        matchId:
+          type: string
+        tournament:
+          type: string
+        homeScore:
+          type: number
+          nullable: true
+        awayScore:
+          type: number
+          nullable: true
+        win:
+          type: boolean
+          nullable: true
+    SignalRecap:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+        loseCount:
+          type: integer
+        winCount:
+          type: integer
+        percentageWin:
+          type: string
+        percentageLose:
+          type: string
+        averageOdd:
+          type: number
+      required:
+        - totalCount
+        - loseCount
+        - winCount
+        - percentageWin
+        - percentageLose
+        - averageOdd
+    SignalsResponse:
+      type: object
+      properties:
+        recap:
+          $ref: '#/components/schemas/SignalRecap'
+        signals:
+          type: array
+          items:
+            $ref: '#/components/schemas/SignalListItem'
+      required:
+        - recap
+        - signals
     SportsMap:
       type: object
       additionalProperties:

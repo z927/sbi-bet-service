@@ -6,6 +6,7 @@ import * as schedule from "../services/schedule_service.ts";
 import * as autoSchedule from "../services/auto_schedule_service.ts";
 import * as monitoring from "../services/monitoring_service.ts";
 import * as matches from "../services/matches_service.ts";
+import * as signals from "../services/signals_service.ts";
 
 export interface RouteMetadata {
   method: "GET" | "POST";
@@ -20,6 +21,7 @@ export const SBI_ROUTES: readonly RouteMetadata[] = [
   { method: "GET", path: "/api/v1/scheduled-fixtures", operationId: "getScheduledFixtures" },
   { method: "GET", path: "/api/v1/monitored", operationId: "getMonitoredFixtures" },
   { method: "GET", path: "/api/v1/matches", operationId: "getMatches" },
+  { method: "GET", path: "/api/v1/signals", operationId: "getSignals" },
 ];
 
 const defaultItemSchema = {
@@ -104,4 +106,11 @@ export const sbiRoutes = (app: FastifyInstance): void => {
       return matches.getMatches(request.query.date);
     },
   );
+
+  app.get("/api/v1/signals", { schema: { operationId: "getSignals" } }, async (request) => {
+    request.log.info({ operationId: "getSignals" }, "signals stats requested");
+    const stats = await signals.getSignalStats();
+    request.log.info({ stats }, "signals stats computed");
+    return stats;
+  });
 }
