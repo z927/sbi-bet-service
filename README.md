@@ -257,6 +257,92 @@ Read from environment variables via `src/config.ts`:
 
 Secrets must never be committed.
 
+## Major leagues (MONITOR_MAJOR_LEAGUES)
+
+Lista delle leghe maggiori monitorate di default (da `src/services/strategies/major_leagues.ts`). Spunta le caselle man mano che verifichi la presenza nel feed diretta.it (`GET /test/scrape` mostra i nomi dei tornei usati dal feed).
+
+### Austria
+- [X] AUSTRIA: Bundesliga
+
+### Belgio
+- [X] BELGIO: Jupiler League (ex Jupiler Pro League)
+- [X] BELGIO: Challenger Pro League
+
+### Repubblica Ceca
+- [X] REPUBBLICA CECA: 1. Liga
+
+### Danimarca
+- [X] DANIMARCA: Superliga
+
+### Inghilterra
+- [ ] INGHILTERRA: Community Shield (stima, fuori stagione)
+- [X] INGHILTERRA: Premier League
+- [X] INGHILTERRA: League One
+- [X] INGHILTERRA: Championship
+- [ ] INGHILTERRA: FA Cup
+
+### Francia
+- [ ] FRANCIA: Coupe de France
+- [ ] FRANCIA: Coppa di Francia (variante italiana, backup)
+- [X] FRANCIA: Ligue 1
+- [X] FRANCIA: Ligue 2
+- [X] FRANCIA: Ligue 3 (ex National 1, rinominata 2026-27)
+
+### Germania
+- [ ] GERMANIA: DFB Pokal
+- [X] GERMANIA: 2. Bundesliga
+- [X] GERMANIA: Bundesliga
+
+### Irlanda
+- [X] IRLANDA: Irish Premier Division
+
+### Italia
+- [X] ITALIA: Serie A
+- [X] ITALIA: Serie B
+- [ ] ITALIA: Coppa Italia
+
+### Paesi Bassi
+- [X] OLANDA: Eredivisie
+- [X] OLANDA: Eerste Divisie
+- [ ] OLANDA: KNVB Beker
+
+### Portogallo
+- [X] PORTOGALLO: Liga Portugal
+- [X] PORTOGALLO: Liga Portugal 2
+
+### Romania
+- [X] ROMANIA: Superliga
+
+### Scozia
+- [X] SCOZIA: Premiership
+
+### Serbia
+- [X] SERBIA: Super Liga
+
+### Spagna
+- [X] SPAGNA: LaLiga
+- [X] SPAGNA: LaLiga2
+- [ ] SPAGNA: Copa del Rey
+
+### Svizzera
+- [X] SVIZZERA: Super League
+- [ ] SVIZZERA: Coppa di Svizzera
+
+### Turchia
+- [X] TURCHIA: Super Lig
+
+### UEFA / internazionali
+- [X] EUROPA: Champions League
+- [X] EUROPA: Champions League - Prima fase
+- [X] EUROPA: Europa League
+- [X] EUROPA: Europa League - Prima fase
+- [X] EUROPA: Conference League
+- [X] EUROPA: Conference League - Prima fase
+- [ ] EUROPA: Nations League (non verificabile, finestra internazionale)
+- [ ] MONDO: Nations League (backup)
+- [ ] EUROPA: World Cup - Qualification Europe (non verificabile)
+- [ ] MONDO: World Cup - Qualification Europe (backup)
+
 ## Logging
 
 Structured logging uses `pino` (`src/logger.ts`) with an `AsyncLocalStorage`

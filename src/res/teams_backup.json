@@ -1,0 +1,3464 @@
+[
+  {
+    "diretta": "Arsenal",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Premier League"
+  },
+  {
+    "diretta": "Manchester City",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Premier League"
+  },
+  {
+    "diretta": "Brighton",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Premier League"
+  },
+  {
+    "diretta": "Chelsea",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Premier League"
+  },
+  {
+    "diretta": "Everton",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Premier League"
+  },
+  {
+    "diretta": "Liverpool",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Premier League"
+  },
+  {
+    "diretta": "Brentford",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Premier League"
+  },
+  {
+    "diretta": "Bournemouth",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Premier League"
+  },
+  {
+    "diretta": "Tottenham",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Premier League"
+  },
+  {
+    "diretta": "Aston Villa",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Premier League"
+  },
+  {
+    "diretta": "Hull",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Premier League"
+  },
+  {
+    "diretta": "Leeds",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Premier League"
+  },
+  {
+    "diretta": "Newcastle",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Premier League"
+  },
+  {
+    "diretta": "Ipswich",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Premier League"
+  },
+  {
+    "diretta": "Fulham",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Premier League"
+  },
+  {
+    "diretta": "Coventry",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Premier League"
+  },
+  {
+    "diretta": "Manchester Utd",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Premier League"
+  },
+  {
+    "diretta": "Crystal Palace",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Premier League"
+  },
+  {
+    "diretta": "Nottingham",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Premier League"
+  },
+  {
+    "diretta": "Sunderland",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Premier League"
+  },
+  {
+    "diretta": "Lazio",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ITALIA: Serie A"
+  },
+  {
+    "diretta": "Inter",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ITALIA: Serie A"
+  },
+  {
+    "diretta": "Roma",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ITALIA: Serie A"
+  },
+  {
+    "diretta": "Como",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ITALIA: Serie A"
+  },
+  {
+    "diretta": "Milan",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ITALIA: Serie A"
+  },
+  {
+    "diretta": "Frosinone",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ITALIA: Serie A"
+  },
+  {
+    "diretta": "Juventus",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ITALIA: Serie A"
+  },
+  {
+    "diretta": "Napoli",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ITALIA: Serie A"
+  },
+  {
+    "diretta": "Bologna",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ITALIA: Serie A"
+  },
+  {
+    "diretta": "Torino",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ITALIA: Serie A"
+  },
+  {
+    "diretta": "Genoa",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ITALIA: Serie A"
+  },
+  {
+    "diretta": "Cagliari",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ITALIA: Serie A"
+  },
+  {
+    "diretta": "Atalanta",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ITALIA: Serie A"
+  },
+  {
+    "diretta": "Lecce",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ITALIA: Serie A"
+  },
+  {
+    "diretta": "Parma",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ITALIA: Serie A"
+  },
+  {
+    "diretta": "Fiorentina",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ITALIA: Serie A"
+  },
+  {
+    "diretta": "Sassuolo",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ITALIA: Serie A"
+  },
+  {
+    "diretta": "Monza",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ITALIA: Serie A"
+  },
+  {
+    "diretta": "Venezia",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ITALIA: Serie A"
+  },
+  {
+    "diretta": "Udinese",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ITALIA: Serie A"
+  },
+  {
+    "diretta": "Palermo",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ITALIA: Serie B"
+  },
+  {
+    "diretta": "Ascoli",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ITALIA: Serie B"
+  },
+  {
+    "diretta": "Modena",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ITALIA: Serie B"
+  },
+  {
+    "diretta": "Mantova",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ITALIA: Serie B"
+  },
+  {
+    "diretta": "Avellino",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ITALIA: Serie B"
+  },
+  {
+    "diretta": "Benevento",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ITALIA: Serie B"
+  },
+  {
+    "diretta": "Verona",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ITALIA: Serie B"
+  },
+  {
+    "diretta": "Pisa",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ITALIA: Serie B"
+  },
+  {
+    "diretta": "Padova",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ITALIA: Serie B"
+  },
+  {
+    "diretta": "Südtirol",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ITALIA: Serie B"
+  },
+  {
+    "diretta": "Cremonese",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ITALIA: Serie B"
+  },
+  {
+    "diretta": "Cesena",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ITALIA: Serie B"
+  },
+  {
+    "diretta": "Arezzo",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ITALIA: Serie B"
+  },
+  {
+    "diretta": "Entella",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ITALIA: Serie B"
+  },
+  {
+    "diretta": "Carrarese",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ITALIA: Serie B"
+  },
+  {
+    "diretta": "Juve Stabia",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ITALIA: Serie B"
+  },
+  {
+    "diretta": "L.R. Vicenza",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ITALIA: Serie B"
+  },
+  {
+    "diretta": "Empoli",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ITALIA: Serie B"
+  },
+  {
+    "diretta": "Sampdoria",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ITALIA: Serie B"
+  },
+  {
+    "diretta": "Catanzaro",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ITALIA: Serie B"
+  },
+  {
+    "diretta": "Feyenoord",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "OLANDA: Eredivisie"
+  },
+  {
+    "diretta": "Ajax",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "OLANDA: Eredivisie"
+  },
+  {
+    "diretta": "PSV",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "OLANDA: Eredivisie"
+  },
+  {
+    "diretta": "Twente",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "OLANDA: Eredivisie"
+  },
+  {
+    "diretta": "Alkmaar",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "OLANDA: Eredivisie"
+  },
+  {
+    "diretta": "Sittard",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "OLANDA: Eredivisie"
+  },
+  {
+    "diretta": "Heerenveen",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "OLANDA: Eredivisie"
+  },
+  {
+    "diretta": "Groningen",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "OLANDA: Eredivisie"
+  },
+  {
+    "diretta": "Cambuur",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "OLANDA: Eredivisie"
+  },
+  {
+    "diretta": "G.A. Eagles",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "OLANDA: Eredivisie"
+  },
+  {
+    "diretta": "Sparta Rotterdam",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "OLANDA: Eredivisie"
+  },
+  {
+    "diretta": "Utrecht",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "OLANDA: Eredivisie"
+  },
+  {
+    "diretta": "Zwolle",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "OLANDA: Eredivisie"
+  },
+  {
+    "diretta": "Nijmegen",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "OLANDA: Eredivisie"
+  },
+  {
+    "diretta": "Excelsior",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "OLANDA: Eredivisie"
+  },
+  {
+    "diretta": "Telstar",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "OLANDA: Eredivisie"
+  },
+  {
+    "diretta": "Den Haag",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "OLANDA: Eredivisie"
+  },
+  {
+    "diretta": "Willem II",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "OLANDA: Eredivisie"
+  },
+  {
+    "diretta": "Barcellona",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SPAGNA: LaLiga"
+  },
+  {
+    "diretta": "Atl. Madrid",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SPAGNA: LaLiga"
+  },
+  {
+    "diretta": "Real Madrid",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SPAGNA: LaLiga"
+  },
+  {
+    "diretta": "Betis",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SPAGNA: LaLiga"
+  },
+  {
+    "diretta": "Real Sociedad",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SPAGNA: LaLiga"
+  },
+  {
+    "diretta": "Siviglia",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SPAGNA: LaLiga"
+  },
+  {
+    "diretta": "Ath. Bilbao",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SPAGNA: LaLiga"
+  },
+  {
+    "diretta": "A Coruna",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SPAGNA: LaLiga"
+  },
+  {
+    "diretta": "Alaves",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SPAGNA: LaLiga"
+  },
+  {
+    "diretta": "Villarreal",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SPAGNA: LaLiga"
+  },
+  {
+    "diretta": "Celta Vigo",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SPAGNA: LaLiga"
+  },
+  {
+    "diretta": "Rayo Vallecano",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SPAGNA: LaLiga"
+  },
+  {
+    "diretta": "Getafe",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SPAGNA: LaLiga"
+  },
+  {
+    "diretta": "Espanyol",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SPAGNA: LaLiga"
+  },
+  {
+    "diretta": "Osasuna",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SPAGNA: LaLiga"
+  },
+  {
+    "diretta": "Racing Santander",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SPAGNA: LaLiga"
+  },
+  {
+    "diretta": "Elche",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SPAGNA: LaLiga"
+  },
+  {
+    "diretta": "Levante",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SPAGNA: LaLiga"
+  },
+  {
+    "diretta": "Valencia",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SPAGNA: LaLiga"
+  },
+  {
+    "diretta": "Malaga",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SPAGNA: LaLiga"
+  },
+  {
+    "diretta": "SK Rapid",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "AUSTRIA: Bundesliga"
+  },
+  {
+    "diretta": "Salzburg",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "AUSTRIA: Bundesliga"
+  },
+  {
+    "diretta": "LASK",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "AUSTRIA: Bundesliga"
+  },
+  {
+    "diretta": "Sturm Graz",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "AUSTRIA: Bundesliga"
+  },
+  {
+    "diretta": "Hartberg",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "AUSTRIA: Bundesliga"
+  },
+  {
+    "diretta": "Ried",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "AUSTRIA: Bundesliga"
+  },
+  {
+    "diretta": "Tirol",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "AUSTRIA: Bundesliga"
+  },
+  {
+    "diretta": "Altach",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "AUSTRIA: Bundesliga"
+  },
+  {
+    "diretta": "Grazer",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "AUSTRIA: Bundesliga"
+  },
+  {
+    "diretta": "A. Lustenau",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "AUSTRIA: Bundesliga"
+  },
+  {
+    "diretta": "Austria Vienna",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "AUSTRIA: Bundesliga"
+  },
+  {
+    "diretta": "Wolfsberger",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "AUSTRIA: Bundesliga"
+  },
+  {
+    "diretta": "Club Brugge",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "BELGIO: Jupiler League"
+  },
+  {
+    "diretta": "Royale Union SG",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "BELGIO: Jupiler League"
+  },
+  {
+    "diretta": "Gent",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "BELGIO: Jupiler League"
+  },
+  {
+    "diretta": "Charleroi",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "BELGIO: Jupiler League"
+  },
+  {
+    "diretta": "Anderlecht",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "BELGIO: Jupiler League"
+  },
+  {
+    "diretta": "Genk",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "BELGIO: Jupiler League"
+  },
+  {
+    "diretta": "St. Liege",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "BELGIO: Jupiler League"
+  },
+  {
+    "diretta": "Lommel SK",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "BELGIO: Jupiler League"
+  },
+  {
+    "diretta": "Westerlo",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "BELGIO: Jupiler League"
+  },
+  {
+    "diretta": "KV Mechelen",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "BELGIO: Jupiler League"
+  },
+  {
+    "diretta": "Waregem",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "BELGIO: Jupiler League"
+  },
+  {
+    "diretta": "Anversa",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "BELGIO: Jupiler League"
+  },
+  {
+    "diretta": "Beveren",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "BELGIO: Jupiler League"
+  },
+  {
+    "diretta": "Leuven",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "BELGIO: Jupiler League"
+  },
+  {
+    "diretta": "St. Truiden",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "BELGIO: Jupiler League"
+  },
+  {
+    "diretta": "RAAL La Louviere",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "BELGIO: Jupiler League"
+  },
+  {
+    "diretta": "Cercle Brugge",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "BELGIO: Jupiler League"
+  },
+  {
+    "diretta": "Kortrijk",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "BELGIO: Jupiler League"
+  },
+  {
+    "diretta": "Beerschot VA",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "BELGIO: Challenger Pro League"
+  },
+  {
+    "diretta": "Dender",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "BELGIO: Challenger Pro League"
+  },
+  {
+    "diretta": "Eupen",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "BELGIO: Challenger Pro League"
+  },
+  {
+    "diretta": "Patro Eisden",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "BELGIO: Challenger Pro League"
+  },
+  {
+    "diretta": "Francs Borains",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "BELGIO: Challenger Pro League"
+  },
+  {
+    "diretta": "Hasselt",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "BELGIO: Challenger Pro League"
+  },
+  {
+    "diretta": "Virton",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "BELGIO: Challenger Pro League"
+  },
+  {
+    "diretta": "Sporting Lokeren",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "BELGIO: Challenger Pro League"
+  },
+  {
+    "diretta": "Gent U23",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "BELGIO: Challenger Pro League"
+  },
+  {
+    "diretta": "Genk U23",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "BELGIO: Challenger Pro League"
+  },
+  {
+    "diretta": "Club Brugge U23",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "BELGIO: Challenger Pro League"
+  },
+  {
+    "diretta": "Seraing",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "BELGIO: Challenger Pro League"
+  },
+  {
+    "diretta": "K. Lierse S.K.",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "BELGIO: Challenger Pro League"
+  },
+  {
+    "diretta": "RFC Liege",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "BELGIO: Challenger Pro League"
+  },
+  {
+    "diretta": "Anderlecht U23",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "BELGIO: Challenger Pro League"
+  },
+  {
+    "diretta": "Midtjylland",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "DANIMARCA: Superliga"
+  },
+  {
+    "diretta": "FC Copenhagen",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "DANIMARCA: Superliga"
+  },
+  {
+    "diretta": "Viborg",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "DANIMARCA: Superliga"
+  },
+  {
+    "diretta": "Brondby",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "DANIMARCA: Superliga"
+  },
+  {
+    "diretta": "Nordsjaelland",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "DANIMARCA: Superliga"
+  },
+  {
+    "diretta": "Odense",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "DANIMARCA: Superliga"
+  },
+  {
+    "diretta": "Horsens",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "DANIMARCA: Superliga"
+  },
+  {
+    "diretta": "Silkeborg",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "DANIMARCA: Superliga"
+  },
+  {
+    "diretta": "Aarhus",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "DANIMARCA: Superliga"
+  },
+  {
+    "diretta": "Randers",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "DANIMARCA: Superliga"
+  },
+  {
+    "diretta": "Lyngby",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "DANIMARCA: Superliga"
+  },
+  {
+    "diretta": "Sonderjyske",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "DANIMARCA: Superliga"
+  },
+  {
+    "diretta": "PSG",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 1"
+  },
+  {
+    "diretta": "Lilla",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 1"
+  },
+  {
+    "diretta": "Lione",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 1"
+  },
+  {
+    "diretta": "Paris FC",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 1"
+  },
+  {
+    "diretta": "Rennes",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 1"
+  },
+  {
+    "diretta": "Marsiglia",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 1"
+  },
+  {
+    "diretta": "Monaco",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 1"
+  },
+  {
+    "diretta": "Nizza",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 1"
+  },
+  {
+    "diretta": "Lens",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 1"
+  },
+  {
+    "diretta": "Tolosa",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 1"
+  },
+  {
+    "diretta": "Brest",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 1"
+  },
+  {
+    "diretta": "Lorient",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 1"
+  },
+  {
+    "diretta": "Strasburgo",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 1"
+  },
+  {
+    "diretta": "Auxerre",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 1"
+  },
+  {
+    "diretta": "Angers",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 1"
+  },
+  {
+    "diretta": "Troyes",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 1"
+  },
+  {
+    "diretta": "Le Mans",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 1"
+  },
+  {
+    "diretta": "Le Havre",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 1"
+  },
+  {
+    "diretta": "St. Etienne",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 2"
+  },
+  {
+    "diretta": "Nancy",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 2"
+  },
+  {
+    "diretta": "Montpellier",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 2"
+  },
+  {
+    "diretta": "Reims",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 2"
+  },
+  {
+    "diretta": "Pau FC",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 2"
+  },
+  {
+    "diretta": "Dijon",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 2"
+  },
+  {
+    "diretta": "Metz",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 2"
+  },
+  {
+    "diretta": "Red Star",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 2"
+  },
+  {
+    "diretta": "Annecy",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 2"
+  },
+  {
+    "diretta": "Dunkerque",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 2"
+  },
+  {
+    "diretta": "Guingamp",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 2"
+  },
+  {
+    "diretta": "Boulogne",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 2"
+  },
+  {
+    "diretta": "Rodez",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 2"
+  },
+  {
+    "diretta": "Sochaux",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 2"
+  },
+  {
+    "diretta": "Grenoble",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 2"
+  },
+  {
+    "diretta": "Nantes",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 2"
+  },
+  {
+    "diretta": "Laval",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 2"
+  },
+  {
+    "diretta": "Clermont",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 2"
+  },
+  {
+    "diretta": "La Roche",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 3"
+  },
+  {
+    "diretta": "Rouen",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 3"
+  },
+  {
+    "diretta": "Versailles",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 3"
+  },
+  {
+    "diretta": "Caen",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 3"
+  },
+  {
+    "diretta": "Cannes",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 3"
+  },
+  {
+    "diretta": "Le Puy-en-Velay",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 3"
+  },
+  {
+    "diretta": "Concarneau",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 3"
+  },
+  {
+    "diretta": "Amiens",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 3"
+  },
+  {
+    "diretta": "Fleury 91",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 3"
+  },
+  {
+    "diretta": "Paris 13 Atl.",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 3"
+  },
+  {
+    "diretta": "Bastia",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 3"
+  },
+  {
+    "diretta": "Thionville",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 3"
+  },
+  {
+    "diretta": "Quevilly Rouen",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 3"
+  },
+  {
+    "diretta": "Orleans",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 3"
+  },
+  {
+    "diretta": "Valenciennes",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 3"
+  },
+  {
+    "diretta": "Villefranche",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 3"
+  },
+  {
+    "diretta": "Aubagne",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 3"
+  },
+  {
+    "diretta": "Bourg en Bresse",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "FRANCIA: Ligue 3"
+  },
+  {
+    "diretta": "Bayern",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "GERMANIA: Bundesliga"
+  },
+  {
+    "diretta": "Dortmund",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "GERMANIA: Bundesliga"
+  },
+  {
+    "diretta": "Friburgo",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "GERMANIA: Bundesliga"
+  },
+  {
+    "diretta": "RB Lipsia",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "GERMANIA: Bundesliga"
+  },
+  {
+    "diretta": "Brema",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "GERMANIA: Bundesliga"
+  },
+  {
+    "diretta": "Leverkusen",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "GERMANIA: Bundesliga"
+  },
+  {
+    "diretta": "Elversberg",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "GERMANIA: Bundesliga"
+  },
+  {
+    "diretta": "Amburgo",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "GERMANIA: Bundesliga"
+  },
+  {
+    "diretta": "Francoforte",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "GERMANIA: Bundesliga"
+  },
+  {
+    "diretta": "Magonza",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "GERMANIA: Bundesliga"
+  },
+  {
+    "diretta": "Augusta",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "GERMANIA: Bundesliga"
+  },
+  {
+    "diretta": "Stoccarda",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "GERMANIA: Bundesliga"
+  },
+  {
+    "diretta": "Hoffenheim",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "GERMANIA: Bundesliga"
+  },
+  {
+    "diretta": "Colonia",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "GERMANIA: Bundesliga"
+  },
+  {
+    "diretta": "Paderborn",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "GERMANIA: Bundesliga"
+  },
+  {
+    "diretta": "Union Berlino",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "GERMANIA: Bundesliga"
+  },
+  {
+    "diretta": "Schalke",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "GERMANIA: Bundesliga"
+  },
+  {
+    "diretta": "Monchengladbach",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "GERMANIA: Bundesliga"
+  },
+  {
+    "diretta": "Hertha",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "GERMANIA: 2. Bundesliga"
+  },
+  {
+    "diretta": "Norimberga",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "GERMANIA: 2. Bundesliga"
+  },
+  {
+    "diretta": "Wolfsburg",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "GERMANIA: 2. Bundesliga"
+  },
+  {
+    "diretta": "Kaiserslautern",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "GERMANIA: 2. Bundesliga"
+  },
+  {
+    "diretta": "Magdeburg",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "GERMANIA: 2. Bundesliga"
+  },
+  {
+    "diretta": "Heidenheim",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "GERMANIA: 2. Bundesliga"
+  },
+  {
+    "diretta": "Bielefeld",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "GERMANIA: 2. Bundesliga"
+  },
+  {
+    "diretta": "St. Pauli",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "GERMANIA: 2. Bundesliga"
+  },
+  {
+    "diretta": "Furth",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "GERMANIA: 2. Bundesliga"
+  },
+  {
+    "diretta": "Cottbus",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "GERMANIA: 2. Bundesliga"
+  },
+  {
+    "diretta": "Braunschweig",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "GERMANIA: 2. Bundesliga"
+  },
+  {
+    "diretta": "Osnabruck",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "GERMANIA: 2. Bundesliga"
+  },
+  {
+    "diretta": "Bochum",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "GERMANIA: 2. Bundesliga"
+  },
+  {
+    "diretta": "Dresda",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "GERMANIA: 2. Bundesliga"
+  },
+  {
+    "diretta": "Hannover",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "GERMANIA: 2. Bundesliga"
+  },
+  {
+    "diretta": "Karlsruher",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "GERMANIA: 2. Bundesliga"
+  },
+  {
+    "diretta": "Darmstadt",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "GERMANIA: 2. Bundesliga"
+  },
+  {
+    "diretta": "Kiel",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "GERMANIA: 2. Bundesliga"
+  },
+  {
+    "diretta": "Middlesbrough",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Championship"
+  },
+  {
+    "diretta": "Wolves",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Championship"
+  },
+  {
+    "diretta": "Birmingham",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Championship"
+  },
+  {
+    "diretta": "Stoke",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Championship"
+  },
+  {
+    "diretta": "Swansea",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Championship"
+  },
+  {
+    "diretta": "West Brom",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Championship"
+  },
+  {
+    "diretta": "Southampton",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Championship"
+  },
+  {
+    "diretta": "West Ham",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Championship"
+  },
+  {
+    "diretta": "Sheffield Utd",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Championship"
+  },
+  {
+    "diretta": "Portsmouth",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Championship"
+  },
+  {
+    "diretta": "QPR",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Championship"
+  },
+  {
+    "diretta": "Norwich",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Championship"
+  },
+  {
+    "diretta": "Millwall",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Championship"
+  },
+  {
+    "diretta": "Blackburn",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Championship"
+  },
+  {
+    "diretta": "Bristol City",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Championship"
+  },
+  {
+    "diretta": "Wrexham",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Championship"
+  },
+  {
+    "diretta": "Bolton",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Championship"
+  },
+  {
+    "diretta": "Cardiff",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Championship"
+  },
+  {
+    "diretta": "Lincoln",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Championship"
+  },
+  {
+    "diretta": "Watford",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Championship"
+  },
+  {
+    "diretta": "Charlton",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Championship"
+  },
+  {
+    "diretta": "Burnley",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Championship"
+  },
+  {
+    "diretta": "Derby",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Championship"
+  },
+  {
+    "diretta": "Preston",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: Championship"
+  },
+  {
+    "diretta": "Heracles",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "OLANDA: Eerste Divisie"
+  },
+  {
+    "diretta": "Venlo",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "OLANDA: Eerste Divisie"
+  },
+  {
+    "diretta": "Almere City",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "OLANDA: Eerste Divisie"
+  },
+  {
+    "diretta": "FC Emmen",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "OLANDA: Eerste Divisie"
+  },
+  {
+    "diretta": "Breda",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "OLANDA: Eerste Divisie"
+  },
+  {
+    "diretta": "Roda",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "OLANDA: Eerste Divisie"
+  },
+  {
+    "diretta": "FC Volendam",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "OLANDA: Eerste Divisie"
+  },
+  {
+    "diretta": "Den Bosch",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "OLANDA: Eerste Divisie"
+  },
+  {
+    "diretta": "Vitesse",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "OLANDA: Eerste Divisie"
+  },
+  {
+    "diretta": "Maastricht",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "OLANDA: Eerste Divisie"
+  },
+  {
+    "diretta": "Waalwijk",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "OLANDA: Eerste Divisie"
+  },
+  {
+    "diretta": "Jong AZ",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "OLANDA: Eerste Divisie"
+  },
+  {
+    "diretta": "Jong PSV",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "OLANDA: Eerste Divisie"
+  },
+  {
+    "diretta": "Jong Ajax",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "OLANDA: Eerste Divisie"
+  },
+  {
+    "diretta": "De Graafschap",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "OLANDA: Eerste Divisie"
+  },
+  {
+    "diretta": "Oss",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "OLANDA: Eerste Divisie"
+  },
+  {
+    "diretta": "Helmond",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "OLANDA: Eerste Divisie"
+  },
+  {
+    "diretta": "Dordrecht",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "OLANDA: Eerste Divisie"
+  },
+  {
+    "diretta": "Eindhoven",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "OLANDA: Eerste Divisie"
+  },
+  {
+    "diretta": "Jong Utrecht",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "OLANDA: Eerste Divisie"
+  },
+  {
+    "diretta": "FC Porto",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "PORTOGALLO: Liga Portugal"
+  },
+  {
+    "diretta": "Benfica",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "PORTOGALLO: Liga Portugal"
+  },
+  {
+    "diretta": "Sporting",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "PORTOGALLO: Liga Portugal"
+  },
+  {
+    "diretta": "Santa Clara",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "PORTOGALLO: Liga Portugal"
+  },
+  {
+    "diretta": "Arouca",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "PORTOGALLO: Liga Portugal"
+  },
+  {
+    "diretta": "Academico Viseu",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "PORTOGALLO: Liga Portugal"
+  },
+  {
+    "diretta": "Gil Vicente",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "PORTOGALLO: Liga Portugal"
+  },
+  {
+    "diretta": "Braga",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "PORTOGALLO: Liga Portugal"
+  },
+  {
+    "diretta": "Moreirense",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "PORTOGALLO: Liga Portugal"
+  },
+  {
+    "diretta": "Famalicao",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "PORTOGALLO: Liga Portugal"
+  },
+  {
+    "diretta": "Alverca",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "PORTOGALLO: Liga Portugal"
+  },
+  {
+    "diretta": "Estrela",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "PORTOGALLO: Liga Portugal"
+  },
+  {
+    "diretta": "Guimaraes",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "PORTOGALLO: Liga Portugal"
+  },
+  {
+    "diretta": "Maritimo",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "PORTOGALLO: Liga Portugal"
+  },
+  {
+    "diretta": "Nacional",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "PORTOGALLO: Liga Portugal"
+  },
+  {
+    "diretta": "Rio Ave",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "PORTOGALLO: Liga Portugal"
+  },
+  {
+    "diretta": "Casa Pia",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "PORTOGALLO: Liga Portugal"
+  },
+  {
+    "diretta": "Estoril",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "PORTOGALLO: Liga Portugal"
+  },
+  {
+    "diretta": "Sporting B",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "PORTOGALLO: Liga Portugal 2"
+  },
+  {
+    "diretta": "Penafiel",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "PORTOGALLO: Liga Portugal 2"
+  },
+  {
+    "diretta": "Lusitania FC",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "PORTOGALLO: Liga Portugal 2"
+  },
+  {
+    "diretta": "Benfica B",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "PORTOGALLO: Liga Portugal 2"
+  },
+  {
+    "diretta": "Farense",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "PORTOGALLO: Liga Portugal 2"
+  },
+  {
+    "diretta": "Academica",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "PORTOGALLO: Liga Portugal 2"
+  },
+  {
+    "diretta": "Tondela",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "PORTOGALLO: Liga Portugal 2"
+  },
+  {
+    "diretta": "Vizela",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "PORTOGALLO: Liga Portugal 2"
+  },
+  {
+    "diretta": "Leiria",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "PORTOGALLO: Liga Portugal 2"
+  },
+  {
+    "diretta": "AFS",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "PORTOGALLO: Liga Portugal 2"
+  },
+  {
+    "diretta": "Portimonense",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "PORTOGALLO: Liga Portugal 2"
+  },
+  {
+    "diretta": "Torreense",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "PORTOGALLO: Liga Portugal 2"
+  },
+  {
+    "diretta": "Leixoes",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "PORTOGALLO: Liga Portugal 2"
+  },
+  {
+    "diretta": "Amarante",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "PORTOGALLO: Liga Portugal 2"
+  },
+  {
+    "diretta": "Chaves",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "PORTOGALLO: Liga Portugal 2"
+  },
+  {
+    "diretta": "FC Porto B",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "PORTOGALLO: Liga Portugal 2"
+  },
+  {
+    "diretta": "Felgueiras",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "PORTOGALLO: Liga Portugal 2"
+  },
+  {
+    "diretta": "Feirense",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "PORTOGALLO: Liga Portugal 2"
+  },
+  {
+    "diretta": "Slavia Praga",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "REPUBBLICA CECA: 1. Liga"
+  },
+  {
+    "diretta": "Mlada Boleslav",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "REPUBBLICA CECA: 1. Liga"
+  },
+  {
+    "diretta": "Sigma Olomouc",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "REPUBBLICA CECA: 1. Liga"
+  },
+  {
+    "diretta": "Sparta Praga",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "REPUBBLICA CECA: 1. Liga"
+  },
+  {
+    "diretta": "Liberec",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "REPUBBLICA CECA: 1. Liga"
+  },
+  {
+    "diretta": "Teplice",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "REPUBBLICA CECA: 1. Liga"
+  },
+  {
+    "diretta": "Bohemians",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "REPUBBLICA CECA: 1. Liga"
+  },
+  {
+    "diretta": "Jablonec",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "REPUBBLICA CECA: 1. Liga"
+  },
+  {
+    "diretta": "Brno",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "REPUBBLICA CECA: 1. Liga"
+  },
+  {
+    "diretta": "Plzen",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "REPUBBLICA CECA: 1. Liga"
+  },
+  {
+    "diretta": "Hradec Kralove",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "REPUBBLICA CECA: 1. Liga"
+  },
+  {
+    "diretta": "Pardubice",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "REPUBBLICA CECA: 1. Liga"
+  },
+  {
+    "diretta": "Ostrava",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "REPUBBLICA CECA: 1. Liga"
+  },
+  {
+    "diretta": "Artis Brno",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "REPUBBLICA CECA: 1. Liga"
+  },
+  {
+    "diretta": "Slovacko",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "REPUBBLICA CECA: 1. Liga"
+  },
+  {
+    "diretta": "Zlin",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "REPUBBLICA CECA: 1. Liga"
+  },
+  {
+    "diretta": "Din. Bucuresti",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ROMANIA: Superliga"
+  },
+  {
+    "diretta": "Univ. Craiova",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ROMANIA: Superliga"
+  },
+  {
+    "diretta": "Rapid Bucarest",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ROMANIA: Superliga"
+  },
+  {
+    "diretta": "Petrolul",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ROMANIA: Superliga"
+  },
+  {
+    "diretta": "U. Cluj",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ROMANIA: Superliga"
+  },
+  {
+    "diretta": "Farul Constanta",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ROMANIA: Superliga"
+  },
+  {
+    "diretta": "FCSB",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ROMANIA: Superliga"
+  },
+  {
+    "diretta": "Corvinul",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ROMANIA: Superliga"
+  },
+  {
+    "diretta": "CFR Cluj",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ROMANIA: Superliga"
+  },
+  {
+    "diretta": "UTA Arad",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ROMANIA: Superliga"
+  },
+  {
+    "diretta": "FC Arges",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ROMANIA: Superliga"
+  },
+  {
+    "diretta": "Sepsi Sf. Gheorghe",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ROMANIA: Superliga"
+  },
+  {
+    "diretta": "Botosani",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ROMANIA: Superliga"
+  },
+  {
+    "diretta": "Otelul",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ROMANIA: Superliga"
+  },
+  {
+    "diretta": "FC Voluntari",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ROMANIA: Superliga"
+  },
+  {
+    "diretta": "Csikszereda M. Ciuc",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "ROMANIA: Superliga"
+  },
+  {
+    "diretta": "Celtic",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SCOZIA: Premiership"
+  },
+  {
+    "diretta": "Rangers",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SCOZIA: Premiership"
+  },
+  {
+    "diretta": "Hearts",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SCOZIA: Premiership"
+  },
+  {
+    "diretta": "Falkirk",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SCOZIA: Premiership"
+  },
+  {
+    "diretta": "Dundee FC",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SCOZIA: Premiership"
+  },
+  {
+    "diretta": "Dundee Utd",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SCOZIA: Premiership"
+  },
+  {
+    "diretta": "St. Johnstone",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SCOZIA: Premiership"
+  },
+  {
+    "diretta": "St. Mirren",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SCOZIA: Premiership"
+  },
+  {
+    "diretta": "Motherwell",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SCOZIA: Premiership"
+  },
+  {
+    "diretta": "Aberdeen",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SCOZIA: Premiership"
+  },
+  {
+    "diretta": "Kilmarnock",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SCOZIA: Premiership"
+  },
+  {
+    "diretta": "Hibernian",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SCOZIA: Premiership"
+  },
+  {
+    "diretta": "Stella Rossa",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SERBIA: Super Liga"
+  },
+  {
+    "diretta": "Vojvodina",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SERBIA: Super Liga"
+  },
+  {
+    "diretta": "Zeleznicar Pancevo",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SERBIA: Super Liga"
+  },
+  {
+    "diretta": "Radnicki 1923",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SERBIA: Super Liga"
+  },
+  {
+    "diretta": "IMT Novi Beograd",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SERBIA: Super Liga"
+  },
+  {
+    "diretta": "Radnik",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SERBIA: Super Liga"
+  },
+  {
+    "diretta": "Cukaricki",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SERBIA: Super Liga"
+  },
+  {
+    "diretta": "Mladost",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SERBIA: Super Liga"
+  },
+  {
+    "diretta": "Partizan",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SERBIA: Super Liga"
+  },
+  {
+    "diretta": "Novi Pazar",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SERBIA: Super Liga"
+  },
+  {
+    "diretta": "OFK Belgrado",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SERBIA: Super Liga"
+  },
+  {
+    "diretta": "Macva",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SERBIA: Super Liga"
+  },
+  {
+    "diretta": "Radnicki Nis",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SERBIA: Super Liga"
+  },
+  {
+    "diretta": "Zemun",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SERBIA: Super Liga"
+  },
+  {
+    "diretta": "Castellon",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SPAGNA: LaLiga 2"
+  },
+  {
+    "diretta": "Almeria",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SPAGNA: LaLiga 2"
+  },
+  {
+    "diretta": "Eibar",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SPAGNA: LaLiga 2"
+  },
+  {
+    "diretta": "Granada",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SPAGNA: LaLiga 2"
+  },
+  {
+    "diretta": "Maiorca",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SPAGNA: LaLiga 2"
+  },
+  {
+    "diretta": "Gijon",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SPAGNA: LaLiga 2"
+  },
+  {
+    "diretta": "Girona",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SPAGNA: LaLiga 2"
+  },
+  {
+    "diretta": "Burgos CF",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SPAGNA: LaLiga 2"
+  },
+  {
+    "diretta": "Oviedo",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SPAGNA: LaLiga 2"
+  },
+  {
+    "diretta": "Sabadell",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SPAGNA: LaLiga 2"
+  },
+  {
+    "diretta": "Las Palmas",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SPAGNA: LaLiga 2"
+  },
+  {
+    "diretta": "Cordoba",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SPAGNA: LaLiga 2"
+  },
+  {
+    "diretta": "Valladolid",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SPAGNA: LaLiga 2"
+  },
+  {
+    "diretta": "Tenerife",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SPAGNA: LaLiga 2"
+  },
+  {
+    "diretta": "Eldense",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SPAGNA: LaLiga 2"
+  },
+  {
+    "diretta": "Celta Vigo B",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SPAGNA: LaLiga 2"
+  },
+  {
+    "diretta": "Leganes",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SPAGNA: LaLiga 2"
+  },
+  {
+    "diretta": "Andorra",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SPAGNA: LaLiga 2"
+  },
+  {
+    "diretta": "Real Sociedad B",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SPAGNA: LaLiga 2"
+  },
+  {
+    "diretta": "Cadice",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SPAGNA: LaLiga 2"
+  },
+  {
+    "diretta": "Albacete",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SPAGNA: LaLiga 2"
+  },
+  {
+    "diretta": "Ceuta",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SPAGNA: LaLiga 2"
+  },
+  {
+    "diretta": "Lugano",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SVIZZERA: Super League"
+  },
+  {
+    "diretta": "Young Boys",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SVIZZERA: Super League"
+  },
+  {
+    "diretta": "Sion",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SVIZZERA: Super League"
+  },
+  {
+    "diretta": "Zurigo",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SVIZZERA: Super League"
+  },
+  {
+    "diretta": "St. Gallen",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SVIZZERA: Super League"
+  },
+  {
+    "diretta": "Servette",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SVIZZERA: Super League"
+  },
+  {
+    "diretta": "Basilea",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SVIZZERA: Super League"
+  },
+  {
+    "diretta": "Luzern",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SVIZZERA: Super League"
+  },
+  {
+    "diretta": "Thun",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SVIZZERA: Super League"
+  },
+  {
+    "diretta": "Vaduz",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SVIZZERA: Super League"
+  },
+  {
+    "diretta": "Grasshoppers",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SVIZZERA: Super League"
+  },
+  {
+    "diretta": "Lausanne",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "SVIZZERA: Super League"
+  },
+  {
+    "diretta": "Galatasaray",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "TURCHIA: Super Lig"
+  },
+  {
+    "diretta": "Amedspor",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "TURCHIA: Super Lig"
+  },
+  {
+    "diretta": "Trabzonspor",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "TURCHIA: Super Lig"
+  },
+  {
+    "diretta": "Kasimpasa",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "TURCHIA: Super Lig"
+  },
+  {
+    "diretta": "Besiktas",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "TURCHIA: Super Lig"
+  },
+  {
+    "diretta": "Fenerbahce",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "TURCHIA: Super Lig"
+  },
+  {
+    "diretta": "Corum",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "TURCHIA: Super Lig"
+  },
+  {
+    "diretta": "Kocaelispor",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "TURCHIA: Super Lig"
+  },
+  {
+    "diretta": "Goztepe",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "TURCHIA: Super Lig"
+  },
+  {
+    "diretta": "Basaksehir",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "TURCHIA: Super Lig"
+  },
+  {
+    "diretta": "Erzurumspor",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "TURCHIA: Super Lig"
+  },
+  {
+    "diretta": "Alanyaspor",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "TURCHIA: Super Lig"
+  },
+  {
+    "diretta": "Rizespor",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "TURCHIA: Super Lig"
+  },
+  {
+    "diretta": "Genclerbirligi",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "TURCHIA: Super Lig"
+  },
+  {
+    "diretta": "Konyaspor",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "TURCHIA: Super Lig"
+  },
+  {
+    "diretta": "Gaziantep",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "TURCHIA: Super Lig"
+  },
+  {
+    "diretta": "Samsunspor",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "TURCHIA: Super Lig"
+  },
+  {
+    "diretta": "Eyupspor",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "TURCHIA: Super Lig"
+  },
+  {
+    "diretta": "PSG",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Champions League"
+  },
+  {
+    "diretta": "Real Madrid",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Champions League"
+  },
+  {
+    "diretta": "Arsenal",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Champions League"
+  },
+  {
+    "diretta": "Como",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Champions League"
+  },
+  {
+    "diretta": "Barcellona",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Champions League"
+  },
+  {
+    "diretta": "Aston Villa",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Champions League"
+  },
+  {
+    "diretta": "Manchester City",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Champions League"
+  },
+  {
+    "diretta": "Liverpool",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Champions League"
+  },
+  {
+    "diretta": "Club Brugge",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Champions League"
+  },
+  {
+    "diretta": "Sporting",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Champions League"
+  },
+  {
+    "diretta": "Betis",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Champions League"
+  },
+  {
+    "diretta": "Dortmund",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Champions League"
+  },
+  {
+    "diretta": "Bayern",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Champions League"
+  },
+  {
+    "diretta": "Stoccarda",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Champions League"
+  },
+  {
+    "diretta": "Inter",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Champions League"
+  },
+  {
+    "diretta": "LASK",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Champions League"
+  },
+  {
+    "diretta": "Manchester Utd",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Champions League"
+  },
+  {
+    "diretta": "Galatasaray",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Champions League"
+  },
+  {
+    "diretta": "Fenerbahce",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Champions League"
+  },
+  {
+    "diretta": "Roma",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Champions League"
+  },
+  {
+    "diretta": "Shakhtar",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Champions League"
+  },
+  {
+    "diretta": "Viking",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Champions League"
+  },
+  {
+    "diretta": "Atl. Madrid",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Champions League"
+  },
+  {
+    "diretta": "PSV",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Champions League"
+  },
+  {
+    "diretta": "Bodo/Glimt",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Champions League"
+  },
+  {
+    "diretta": "FC Porto",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Champions League"
+  },
+  {
+    "diretta": "Napoli",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Champions League"
+  },
+  {
+    "diretta": "Villarreal",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Champions League"
+  },
+  {
+    "diretta": "AEK",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Champions League"
+  },
+  {
+    "diretta": "RB Lipsia",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Champions League"
+  },
+  {
+    "diretta": "Sabah FC",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Champions League"
+  },
+  {
+    "diretta": "Feyenoord",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Champions League"
+  },
+  {
+    "diretta": "Lens",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Champions League"
+  },
+  {
+    "diretta": "Slavia Praga",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Champions League"
+  },
+  {
+    "diretta": "Lilla",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Champions League"
+  },
+  {
+    "diretta": "Slovan Bratislava",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Champions League"
+  },
+  {
+    "diretta": "Benfica",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Europa League"
+  },
+  {
+    "diretta": "Bournemouth",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Europa League"
+  },
+  {
+    "diretta": "Ferencvaros",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Europa League"
+  },
+  {
+    "diretta": "Royale Union SG",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Europa League"
+  },
+  {
+    "diretta": "Juventus",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Europa League"
+  },
+  {
+    "diretta": "Olympiakos",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Europa League"
+  },
+  {
+    "diretta": "Leverkusen",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Europa League"
+  },
+  {
+    "diretta": "Besiktas",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Europa League"
+  },
+  {
+    "diretta": "Din. Zagabria",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Europa League"
+  },
+  {
+    "diretta": "Levski",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Europa League"
+  },
+  {
+    "diretta": "Sunderland",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Europa League"
+  },
+  {
+    "diretta": "Nijmegen",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Europa League"
+  },
+  {
+    "diretta": "Lione",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Europa League"
+  },
+  {
+    "diretta": "Alkmaar",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Europa League"
+  },
+  {
+    "diretta": "Anderlecht",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Europa League"
+  },
+  {
+    "diretta": "OFI Crete",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Europa League"
+  },
+  {
+    "diretta": "Rennes",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Europa League"
+  },
+  {
+    "diretta": "Omonia",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Europa League"
+  },
+  {
+    "diretta": "Torreense",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Europa League"
+  },
+  {
+    "diretta": "Real Sociedad",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Europa League"
+  },
+  {
+    "diretta": "Crystal Palace",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Europa League"
+  },
+  {
+    "diretta": "Sparta Praga",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Europa League"
+  },
+  {
+    "diretta": "Hoffenheim",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Europa League"
+  },
+  {
+    "diretta": "Sturm Graz",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Europa League"
+  },
+  {
+    "diretta": "Celje",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Europa League"
+  },
+  {
+    "diretta": "Salzburg",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Europa League"
+  },
+  {
+    "diretta": "Celta Vigo",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Europa League"
+  },
+  {
+    "diretta": "Milan",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Europa League"
+  },
+  {
+    "diretta": "Jagiellonia",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Europa League"
+  },
+  {
+    "diretta": "Plzen",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Europa League"
+  },
+  {
+    "diretta": "Marsiglia",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Europa League"
+  },
+  {
+    "diretta": "Celtic",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Europa League"
+  },
+  {
+    "diretta": "H. Beer Sheva",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Europa League"
+  },
+  {
+    "diretta": "Lilleström",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Europa League"
+  },
+  {
+    "diretta": "Lech",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Europa League"
+  },
+  {
+    "diretta": "Ararat-Armenia",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Europa League"
+  },
+  {
+    "diretta": "Lugano",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Conference League"
+  },
+  {
+    "diretta": "Panathinaikos",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Conference League"
+  },
+  {
+    "diretta": "Twente",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Conference League"
+  },
+  {
+    "diretta": "Monaco",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Conference League"
+  },
+  {
+    "diretta": "Brighton",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Conference League"
+  },
+  {
+    "diretta": "Brann",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Conference League"
+  },
+  {
+    "diretta": "FC Copenhagen",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Conference League"
+  },
+  {
+    "diretta": "Univ. Craiova",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Conference League"
+  },
+  {
+    "diretta": "Mjallby",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Conference League"
+  },
+  {
+    "diretta": "St. Truiden",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Conference League"
+  },
+  {
+    "diretta": "Ajax",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Conference League"
+  },
+  {
+    "diretta": "Trabzonspor",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Conference League"
+  },
+  {
+    "diretta": "Hajduk Split",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Conference League"
+  },
+  {
+    "diretta": "Friburgo",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Conference League"
+  },
+  {
+    "diretta": "Stella Rossa",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Conference League"
+  },
+  {
+    "diretta": "Atalanta",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Conference League"
+  },
+  {
+    "diretta": "Braga",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Conference League"
+  },
+  {
+    "diretta": "Gent",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Conference League"
+  },
+  {
+    "diretta": "Riga FC",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Conference League"
+  },
+  {
+    "diretta": "Thun",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Conference League"
+  },
+  {
+    "diretta": "Borac Banja Luka",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Conference League"
+  },
+  {
+    "diretta": "Lincoln",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Conference League"
+  },
+  {
+    "diretta": "Jablonec",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Conference League"
+  },
+  {
+    "diretta": "Aarhus",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Conference League"
+  },
+  {
+    "diretta": "Nordsjaelland",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Conference League"
+  },
+  {
+    "diretta": "Egnatia",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Conference League"
+  },
+  {
+    "diretta": "Kairat Almaty",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Conference League"
+  },
+  {
+    "diretta": "CSKA Sofia",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Conference League"
+  },
+  {
+    "diretta": "Iberia 1999",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Conference League"
+  },
+  {
+    "diretta": "Pafos",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Conference League"
+  },
+  {
+    "diretta": "Getafe",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Conference League"
+  },
+  {
+    "diretta": "Hearts",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Conference League"
+  },
+  {
+    "diretta": "KuPS",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Conference League"
+  },
+  {
+    "diretta": "Midtjylland",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Conference League"
+  },
+  {
+    "diretta": "Inter Escaldes",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Conference League"
+  },
+  {
+    "diretta": "Kauno Zalgiris",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "EUROPA: Conference League"
+  },
+  {
+    "diretta": "Shamrock Rovers",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "IRLANDA: Premier Division"
+  },
+  {
+    "diretta": "Bohemians",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "IRLANDA: Premier Division"
+  },
+  {
+    "diretta": "St. Patricks",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "IRLANDA: Premier Division"
+  },
+  {
+    "diretta": "Shelbourne",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "IRLANDA: Premier Division"
+  },
+  {
+    "diretta": "Derry City",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "IRLANDA: Premier Division"
+  },
+  {
+    "diretta": "Dundalk",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "IRLANDA: Premier Division"
+  },
+  {
+    "diretta": "Waterford",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "IRLANDA: Premier Division"
+  },
+  {
+    "diretta": "Galway",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "IRLANDA: Premier Division"
+  },
+  {
+    "diretta": "Drogheda",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "IRLANDA: Premier Division"
+  },
+  {
+    "diretta": "Sligo Rovers",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "IRLANDA: Premier Division"
+  },
+  {
+    "diretta": "Huddersfield",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: League One"
+  },
+  {
+    "diretta": "Stockport",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: League One"
+  },
+  {
+    "diretta": "Oxford Utd",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: League One"
+  },
+  {
+    "diretta": "Luton",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: League One"
+  },
+  {
+    "diretta": "Plymouth",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: League One"
+  },
+  {
+    "diretta": "Reading",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: League One"
+  },
+  {
+    "diretta": "Bradford City",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: League One"
+  },
+  {
+    "diretta": "Cambridge Utd",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: League One"
+  },
+  {
+    "diretta": "Sheffield Wed",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: League One"
+  },
+  {
+    "diretta": "Leicester",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: League One"
+  },
+  {
+    "diretta": "Mansfield",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: League One"
+  },
+  {
+    "diretta": "Milton Keynes",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: League One"
+  },
+  {
+    "diretta": "Wycombe",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: League One"
+  },
+  {
+    "diretta": "Leyton Orient",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: League One"
+  },
+  {
+    "diretta": "Burton",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: League One"
+  },
+  {
+    "diretta": "Stevenage",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: League One"
+  },
+  {
+    "diretta": "Notts County",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: League One"
+  },
+  {
+    "diretta": "Wimbledon",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: League One"
+  },
+  {
+    "diretta": "Blackpool",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: League One"
+  },
+  {
+    "diretta": "Doncaster",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: League One"
+  },
+  {
+    "diretta": "Wigan",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: League One"
+  },
+  {
+    "diretta": "Peterborough",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: League One"
+  },
+  {
+    "diretta": "Barnsley",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: League One"
+  },
+  {
+    "diretta": "Bromley",
+    "apifootball": null,
+    "apifootballLeague": null,
+    "direttaLeague": "INGHILTERRA: League One"
+  }
+]

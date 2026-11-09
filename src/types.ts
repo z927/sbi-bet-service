@@ -6,3 +6,4 @@ export type DefaultItem = components["schemas"]["DefaultItem"];
 export type FavouriteItem = components["schemas"]["FavouriteItem"];
 export type FixtureDto = components["schemas"]["FixtureDto"];
 export type MatchModel = components["schemas"]["MatchModel"];
+export type SignalStats = components["schemas"]["SignalStats"];

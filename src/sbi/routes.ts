@@ -6,6 +6,8 @@ import * as schedule from "../services/schedule_service.ts";
 import * as autoSchedule from "../services/auto_schedule_service.ts";
 import * as monitoring from "../services/monitoring_service.ts";
 import * as matches from "../services/matches_service.ts";
+import * as signals from "../services/signals_service.ts";
+import * as settle from "../services/signals/settle_service.ts";
 
 export interface RouteMetadata {
   method: "GET" | "POST";
@@ -20,6 +22,8 @@ export const SBI_ROUTES: readonly RouteMetadata[] = [
   { method: "GET", path: "/api/v1/scheduled-fixtures", operationId: "getScheduledFixtures" },
   { method: "GET", path: "/api/v1/monitored", operationId: "getMonitoredFixtures" },
   { method: "GET", path: "/api/v1/matches", operationId: "getMatches" },
+  { method: "GET", path: "/api/v1/signals", operationId: "getSignals" },
+  { method: "GET", path: "/api/v1/signals/settle", operationId: "settleSignals" },
 ];
 
 const defaultItemSchema = {
@@ -56,6 +60,14 @@ const dayQuerySchema = {
 const dateQuerySchema = {
   type: "object",
   properties: { date: { type: "string" } },
+} as const;
+
+const dateRangeQuerySchema = {
+  type: "object",
+  properties: {
+    from: { type: "string" },
+    to: { type: "string" },
+  },
 } as const;
 
 const assertIsoDate = (value: string | undefined, field: string): void => {
@@ -102,6 +114,40 @@ export const sbiRoutes = (app: FastifyInstance): void => {
     (request) => {
       assertIsoDate(request.query.date, "date");
       return matches.getMatches(request.query.date);
+    },
+  );
+
+  app.get<{ Querystring: { from?: string; to?: string } }>(
+    "/api/v1/signals",
+    { schema: { operationId: "getSignals", querystring: dateRangeQuerySchema } },
+    async (request) => {
+      const { from, to } = request.query;
+      if (from !== undefined && !isIsoDate(from)) {
+        throw new ValidationError("from must be a valid ISO date (YYYY-MM-DD)");
+      }
+      if (to !== undefined && !isIsoDate(to)) {
+        throw new ValidationError("to must be a valid ISO date (YYYY-MM-DD)");
+      }
+      const stats = await signals.getSignalStats({ from, to });
+      request.log.info({ stats }, "signals stats computed");
+      return stats;
+    },
+  );
+
+  app.get<{ Querystring: { date?: string } }>(
+    "/api/v1/signals/settle",
+    { schema: { operationId: "settleSignals", querystring: dateQuerySchema } },
+    async (request) => {
+      const { date } = request.query;
+      if (date !== undefined && !isIsoDate(date)) {
+        throw new ValidationError("date must be a valid ISO date (YYYY-MM-DD)");
+      }
+      const result = await settle.settleSignals(date);
+      return {
+        settled: result.settled,
+        skipped: result.skipped,
+        message: `Settled ${result.settled} signal(s), skipped ${result.skipped}`,
+      };
     },
   );
 }

@@ -112,6 +112,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/signals": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get stored signals
+         * @description Returns the list of stored signals with recap statistics: totalCount, winCount, loseCount, percentageWin, percentageLose, averageOdd and the signal items (home, away, matchId, tournament, homeScore, awayScore, matchDate, type, win). Optionally filter by matchDate with from/to query parameters (ISO dates YYYY-MM-DD). The type field distinguishes pre-alerts ("pre-alert") from actual signals ("signal").
+         */
+        get: operations["getSignals"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/signals/settle": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Settle signals against API-Football final scores
+         * @description Reads unresolved signals (win is null), matches them to API-Football fixtures for the given date, and updates the final score and win/lose outcome on each signal.
+         */
+        get: operations["settleSignals"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/health": {
         parameters: {
             query?: never;
@@ -347,6 +387,45 @@ export interface components {
             monitored?: boolean;
             favouriteStrategyUsed?: boolean;
         };
+        SignalStats: {
+            totalSignals: number;
+            wins: number;
+            losses: number;
+            winRate: number | null;
+            loseRate: number | null;
+            averageOdds: number | null;
+            message?: string;
+            preAlerts: number;
+            signals: number;
+        };
+        SignalListItem: {
+            home?: string;
+            away?: string;
+            matchId?: string;
+            tournament?: string;
+            homeScore?: number | null;
+            awayScore?: number | null;
+            matchDate?: string | null;
+            type?: string | null;
+            win?: boolean | null;
+        };
+        SignalRecap: {
+            totalCount: number;
+            loseCount: number;
+            winCount: number;
+            percentageWin: string;
+            percentageLose: string;
+            averageOdd: number;
+        };
+        SignalsResponse: {
+            recap: components["schemas"]["SignalRecap"];
+            signals: components["schemas"]["SignalListItem"][];
+        };
+        SettleSignalResponse: {
+            settled: number;
+            skipped: number;
+            message: string;
+        };
         SportsMap: {
             [key: string]: {
                 id?: number;
@@ -538,6 +617,63 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["MatchModel"][];
+                };
+            };
+        };
+    };
+    getSignals: {
+        parameters: {
+            query?: {
+                /** @description ISO date (YYYY-MM-DD), inclusive lower bound for matchDate */
+                from?: string;
+                /** @description ISO date (YYYY-MM-DD), inclusive upper bound for matchDate */
+                to?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SignalsResponse"];
+                };
+            };
+        };
+    };
+    settleSignals: {
+        parameters: {
+            query?: {
+                /** @description ISO date (YYYY-MM-DD) of the fixtures to settle. Defaults to today. */
+                date?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SettleSignalResponse"];
+                };
+            };
+            /** @description Validation error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationError"];
                 };
             };
         };

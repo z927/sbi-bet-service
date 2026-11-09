@@ -12,6 +12,8 @@ export const DEFAULT_WIN_RATE = 80;
 
 const TELEGRAM_API = "https://api.telegram.org";
 
+export let lastTelegramMessage: string | null = null;
+
 const COUNTRY_FLAGS: Record<string, string> = {
   italia: "🇮🇹",
   inghilterra: "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
@@ -138,9 +140,11 @@ export const sendTelegram = async (
   if (config === null) {
     return false;
   }
+  const telegramText = formatAlert(alert);
+  lastTelegramMessage = telegramText;
   const body = JSON.stringify({
     chat_id: config.chatId,
-    text: formatAlert(alert),
+    text: telegramText,
   });
   const response = await fetch(`${TELEGRAM_API}/bot${config.token}/sendMessage`, {
     method: "POST",
@@ -148,8 +152,8 @@ export const sendTelegram = async (
     body,
   });
   if (!response.ok) {
-    const text = (await response.text()).slice(0, 120);
-    throw new Error(`Telegram HTTP ${response.status}: ${text}`);
+    const responseText = (await response.text()).slice(0, 120);
+    throw new Error(`Telegram HTTP ${response.status}: ${responseText}`);
   }
   return true;
 }
@@ -161,9 +165,11 @@ export const sendPreAlertTelegram = async (
   if (config === null) {
     return false;
   }
+  const telegramText = formatPreAlert(alert);
+  lastTelegramMessage = telegramText;
   const body = JSON.stringify({
     chat_id: config.chatId,
-    text: formatPreAlert(alert),
+    text: telegramText,
   });
   const response = await fetch(`${TELEGRAM_API}/bot${config.token}/sendMessage`, {
     method: "POST",
@@ -171,8 +177,8 @@ export const sendPreAlertTelegram = async (
     body,
   });
   if (!response.ok) {
-    const text = (await response.text()).slice(0, 120);
-    throw new Error(`Telegram HTTP ${response.status}: ${text}`);
+    const responseText = (await response.text()).slice(0, 120);
+    throw new Error(`Telegram HTTP ${response.status}: ${responseText}`);
   }
   return true;
 }

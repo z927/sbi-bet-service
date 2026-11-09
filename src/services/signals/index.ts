@@ -82,6 +82,7 @@ const maybeSendPreAlert = async (
     value: snapshot.ratio,
     threshold,
     text: period === "first_half" ? "Alert Goal Over 0.5 HT" : "Alert Goal Over 0.5 FT",
+    type: "pre-alert",
     tournament: match.tournament ?? "",
     country: match.country ?? "",
     homeScore: match.home_score,
@@ -169,6 +170,7 @@ const recheckPreAlerts = async (
     value: snapshot.ratio,
     threshold,
     text: period === "first_half" ? "Alert Goal Over 0.5 HT" : "Alert Goal Over 0.5 FT",
+    type: "pre-alert",
     tournament: currentMatch.tournament ?? stored.alert.tournament,
     country: currentMatch.country ?? stored.alert.country,
     homeScore: currentMatch.home_score,
@@ -207,7 +209,7 @@ export const evaluateSignals = (
     const alert = signal.evaluate(match, statistics);
     if (alert !== null) {
       fired.add(key);
-      alerts.push(alert);
+      alerts.push({ ...alert, type: "signal" });
       getStrategyLogger().info(
         { rule: alert.rule, minute: alert.minute, value: alert.value, threshold: alert.threshold },
         "signal fired",
@@ -285,7 +287,7 @@ export { firstHalfMinutes, matchMinute, matchPeriod, secondHalfMinutes } from ".
 export type { MatchPeriod } from "./match_minutes.ts";
 export { touchSnapshot, TOUCH_STAT_NAME, TOUCH_CATEGORY } from "./touch_stats.ts";
 export type { TouchSnapshot } from "./touch_stats.ts";
-export { getTelegramConfig, sendTelegram, sendPreAlertTelegram, countryFlag, getWinRate, stripCountryPrefix, TELEGRAM_BOT_TOKEN_ENV, TELEGRAM_CHAT_ID_ENV, WIN_RATE_ENV, DEFAULT_WIN_RATE } from "./telegram.ts";
+export { getTelegramConfig, sendTelegram, sendPreAlertTelegram, lastTelegramMessage, countryFlag, getWinRate, stripCountryPrefix, TELEGRAM_BOT_TOKEN_ENV, TELEGRAM_CHAT_ID_ENV, WIN_RATE_ENV, DEFAULT_WIN_RATE } from "./telegram.ts";
 export { attachLiveOdds, resolveLiveOdds, DEFAULT_ODDS_GEO } from "./live_odds.ts";
 export type { AlertOddsResolver } from "./live_odds.ts";
 export type { Alert } from "./alert.ts";

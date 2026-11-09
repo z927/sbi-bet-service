@@ -9,6 +9,7 @@ export interface Alert {
   value: number | null;
   threshold: number;
   text: string;
+  type?: "pre-alert" | "signal";
   tournament?: string;
   country?: string;
   homeScore?: number | null;
