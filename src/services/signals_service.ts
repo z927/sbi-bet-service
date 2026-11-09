@@ -131,7 +131,7 @@ export const getSignalStats = async (filter?: { from?: string; to?: string }): P
       getStrategyLogger().info({ component: "signals_service", source: "supabase", rowsRead: rows.length }, "supabase select completed");
       const { from, to } = filter ?? {};
       const filteredRows = rows.filter((r) => isDateInRange(r.created_at ?? null, from, to));
-      const signalsList = filteredRows.map(toSignalListRow);
+      const signalsList = filteredRows.map(toSignalListRow).sort(sortByMatchDateDesc);
       const recap = buildRecap(filteredRows);
       const response: SignalsResponse = { recap, signals: signalsList };
       getStrategyLogger().info({ component: "signals_service", source: "supabase", recap, filtered: filteredRows.length }, "signals returned from supabase");
@@ -154,11 +154,31 @@ export const getSignalStats = async (filter?: { from?: string; to?: string }): P
       awayScore: null,
       matchDate: null,
       win: s.win,
-    }));
+    }))
+    .sort(sortByMatchDateDesc);
   const recap = buildRecapFromMemory(signals.filter(() => isDateInRange(null, from, to)));
   const response: SignalsResponse = { recap, signals: signalsList };
   getStrategyLogger().info({ component: "signals_service", source: "memory", recap }, "signals returned from memory");
   return response;
+};
+
+const sortByMatchDateDesc = (a: SignalListRow, b: SignalListRow): number => {
+  if (a.matchDate === null && b.matchDate === null) {
+    return 0;
+  }
+  if (a.matchDate === null) {
+    return 1;
+  }
+  if (b.matchDate === null) {
+    return -1;
+  }
+  if (a.matchDate > b.matchDate) {
+    return -1;
+  }
+  if (a.matchDate < b.matchDate) {
+    return 1;
+  }
+  return 0;
 };
 
 const isDateInRange = (value: string | null, from?: string, to?: string): boolean => {
