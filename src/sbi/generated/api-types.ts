@@ -121,7 +121,7 @@ export interface paths {
         };
         /**
          * Get stored signals
-         * @description Returns the list of stored signals with recap statistics: totalCount, winCount, loseCount, percentageWin, percentageLose, averageOdd and the signal items (home, away, matchId, tournament, homeScore, awayScore, win).
+         * @description Returns the list of stored signals with recap statistics: totalCount, winCount, loseCount, percentageWin, percentageLose, averageOdd and the signal items (home, away, matchId, tournament, homeScore, awayScore, matchDate, win). Optionally filter by matchDate with from/to query parameters (ISO dates YYYY-MM-DD).
          */
         get: operations["getSignals"];
         put?: never;
@@ -622,7 +622,12 @@ export interface operations {
     };
     getSignals: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description ISO date (YYYY-MM-DD), inclusive lower bound for matchDate */
+                from?: string;
+                /** @description ISO date (YYYY-MM-DD), inclusive upper bound for matchDate */
+                to?: string;
+            };
             header?: never;
             path?: never;
             cookie?: never;

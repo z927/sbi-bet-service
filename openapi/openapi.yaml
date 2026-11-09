@@ -144,7 +144,24 @@ paths:
       description: >-
         Returns the list of stored signals with recap statistics: totalCount,
         winCount, loseCount, percentageWin, percentageLose, averageOdd and the
-        signal items (home, away, matchId, tournament, homeScore, awayScore, win).
+        signal items (home, away, matchId, tournament, homeScore, awayScore,
+        matchDate, win). Optionally filter by matchDate with from/to query
+        parameters (ISO dates YYYY-MM-DD).
+      parameters:
+        - name: from
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+          description: ISO date (YYYY-MM-DD), inclusive lower bound for matchDate
+        - name: to
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+          description: ISO date (YYYY-MM-DD), inclusive upper bound for matchDate
       responses:
         '200':
           description: OK

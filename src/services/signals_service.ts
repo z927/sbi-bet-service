@@ -105,7 +105,7 @@ const toSignalListRow = (row: {
   win: row.win ?? null,
 });
 
-export const getSignalStats = async (): Promise<SignalsResponse> => {
+export const getSignalStats = async (filter?: { from?: string; to?: string }): Promise<SignalsResponse> => {
   getStrategyLogger().info({ component: "signals_service" }, "getSignalStats called");
   const supabase = getClient();
   if (supabase) {
@@ -129,10 +129,12 @@ export const getSignalStats = async (): Promise<SignalsResponse> => {
         quota?: number | null;
       }[];
       getStrategyLogger().info({ component: "signals_service", source: "supabase", rowsRead: rows.length }, "supabase select completed");
-      const signalsList = rows.map(toSignalListRow);
-      const recap = buildRecap(rows);
+      const { from, to } = filter ?? {};
+      const filteredRows = rows.filter((r) => isDateInRange(r.created_at ?? null, from, to));
+      const signalsList = filteredRows.map(toSignalListRow);
+      const recap = buildRecap(filteredRows);
       const response: SignalsResponse = { recap, signals: signalsList };
-      getStrategyLogger().info({ component: "signals_service", source: "supabase", recap }, "signals returned from supabase");
+      getStrategyLogger().info({ component: "signals_service", source: "supabase", recap, filtered: filteredRows.length }, "signals returned from supabase");
       return response;
     } catch (exc) {
       getStrategyLogger().error({ err: exc, component: "signals_service" }, "signals read failed");
@@ -140,20 +142,40 @@ export const getSignalStats = async (): Promise<SignalsResponse> => {
   }
 
   getStrategyLogger().info({ component: "signals_service", source: "memory" }, "reading signals from in-memory store");
-  const signalsList = signals.map((s) => ({
-    home: s.home,
-    away: s.away,
-    matchId: s.matchId,
-    tournament: "",
-    homeScore: null,
-    awayScore: null,
-    matchDate: null,
-    win: s.win,
-  }));
-  const recap = buildRecapFromMemory(signals);
+  const { from, to } = filter ?? {};
+  const signalsList = signals
+    .filter(() => isDateInRange(null, from, to))
+    .map((s) => ({
+      home: s.home,
+      away: s.away,
+      matchId: s.matchId,
+      tournament: "",
+      homeScore: null,
+      awayScore: null,
+      matchDate: null,
+      win: s.win,
+    }));
+  const recap = buildRecapFromMemory(signals.filter(() => isDateInRange(null, from, to)));
   const response: SignalsResponse = { recap, signals: signalsList };
   getStrategyLogger().info({ component: "signals_service", source: "memory", recap }, "signals returned from memory");
   return response;
+};
+
+const isDateInRange = (value: string | null, from?: string, to?: string): boolean => {
+  if (from === undefined && to === undefined) {
+    return true;
+  }
+  if (!value) {
+    return false;
+  }
+  const day = value.slice(0, 10);
+  if (from !== undefined && day < from) {
+    return false;
+  }
+  if (to !== undefined && day > to) {
+    return false;
+  }
+  return true;
 };
 
 const buildRecap = (rows: {

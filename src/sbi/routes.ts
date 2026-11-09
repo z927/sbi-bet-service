@@ -62,6 +62,14 @@ const dateQuerySchema = {
   properties: { date: { type: "string" } },
 } as const;
 
+const dateRangeQuerySchema = {
+  type: "object",
+  properties: {
+    from: { type: "string" },
+    to: { type: "string" },
+  },
+} as const;
+
 const assertIsoDate = (value: string | undefined, field: string): void => {
   if (value !== undefined && !isIsoDate(value)) {
     throw new ValidationError(`${field} must be a valid ISO date (YYYY-MM-DD)`);
@@ -109,12 +117,22 @@ export const sbiRoutes = (app: FastifyInstance): void => {
     },
   );
 
-  app.get("/api/v1/signals", { schema: { operationId: "getSignals" } }, async (request) => {
-    request.log.info({ operationId: "getSignals" }, "signals stats requested");
-    const stats = await signals.getSignalStats();
-    request.log.info({ stats }, "signals stats computed");
-    return stats;
-  });
+  app.get<{ Querystring: { from?: string; to?: string } }>(
+    "/api/v1/signals",
+    { schema: { operationId: "getSignals", querystring: dateRangeQuerySchema } },
+    async (request) => {
+      const { from, to } = request.query;
+      if (from !== undefined && !isIsoDate(from)) {
+        throw new ValidationError("from must be a valid ISO date (YYYY-MM-DD)");
+      }
+      if (to !== undefined && !isIsoDate(to)) {
+        throw new ValidationError("to must be a valid ISO date (YYYY-MM-DD)");
+      }
+      const stats = await signals.getSignalStats({ from, to });
+      request.log.info({ stats }, "signals stats computed");
+      return stats;
+    },
+  );
 
   app.get<{ Querystring: { date?: string } }>(
     "/api/v1/signals/settle",

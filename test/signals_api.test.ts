@@ -117,6 +117,43 @@ test("GET /api/v1/signals reset clears the list", async () => {
   assert.equal(body.recap.totalCount, 0);
 });
 
+test("GET /api/v1/signals with from/to returns empty when in-memory signals have no matchDate", async () => {
+  signals.setSignals([makeSignal()]);
+  const response = await app.inject({
+    method: "GET",
+    url: "/api/v1/signals?from=2026-01-01&to=2026-12-31",
+  });
+  assert.equal(response.statusCode, 200);
+  const body = response.json() as SignalsResponse;
+  assert.equal(body.signals.length, 0);
+  assert.equal(body.recap.totalCount, 0);
+});
+
+test("GET /api/v1/signals without from/to returns all in-memory signals", async () => {
+  signals.setSignals([makeSignal(), makeSignal({ id: "s2", matchId: "m2" })]);
+  const response = await app.inject({ method: "GET", url: "/api/v1/signals" });
+  assert.equal(response.statusCode, 200);
+  const body = response.json() as SignalsResponse;
+  assert.equal(body.signals.length, 2);
+  assert.equal(body.recap.totalCount, 2);
+});
+
+test("GET /api/v1/signals returns 422 on invalid from date", async () => {
+  const response = await app.inject({
+    method: "GET",
+    url: "/api/v1/signals?from=not-a-date",
+  });
+  assert.equal(response.statusCode, 422);
+});
+
+test("GET /api/v1/signals returns 422 on invalid to date", async () => {
+  const response = await app.inject({
+    method: "GET",
+    url: "/api/v1/signals?to=not-a-date",
+  });
+  assert.equal(response.statusCode, 422);
+});
+
 test("GET /api/v1/signals/settle returns 200 with zero settled when no unresolved signals", async () => {
   const response = await app.inject({
     method: "GET",
