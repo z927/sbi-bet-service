@@ -30,6 +30,45 @@ export interface SaveSignalContext {
   statistics?: Statistics;
 }
 
+export interface UnsettledSignal {
+  match_id: string;
+  home: string | null;
+  away: string | null;
+  rule: string | null;
+}
+
+export const getUnsettledSignals = async (): Promise<UnsettledSignal[] | null> => {
+  let supabase: SupabaseClient;
+  try {
+    supabase = getClient();
+  } catch (exc) {
+    getStrategyLogger().error({ err: exc, component: "signals_repo" }, "getUnsettledSignals client failed");
+    return null;
+  }
+  const { data, error } = await supabase.from("signals").select("match_id, home, away, rule").is("win", null);
+  if (error) {
+    getStrategyLogger().error({ err: error, component: "signals_repo" }, "getUnsettledSignals failed");
+    return null;
+  }
+  return (data ?? []) as UnsettledSignal[];
+};
+
+export const updateSignalResult = async (
+  matchId: string,
+  patch: { homeScore: number; awayScore: number; win: boolean },
+): Promise<void> => {
+  const supabase = getClient();
+  const { error } = await supabase.from("signals").update({
+    home_score: patch.homeScore,
+    away_score: patch.awayScore,
+    win: patch.win,
+  }).eq("match_id", matchId);
+  if (error) {
+    getStrategyLogger().error({ err: error, component: "signals_repo", matchId }, "updateSignalResult failed");
+    throw error;
+  }
+};
+
 export const saveSignal = async (alert: Alert, context?: SaveSignalContext): Promise<void> => {
   try {
     const supabase = getClient();

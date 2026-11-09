@@ -152,6 +152,35 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SignalsResponse'
+  /api/v1/signals/settle:
+    post:
+      tags:
+        - Signals
+      operationId: settleSignals
+      summary: Settle signals against API-Football final scores
+      description: >-
+        Reads unresolved signals (win is null), matches them to API-Football
+        fixtures for the given date, and updates the final score and win/lose
+        outcome on each signal.
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SettleSignalRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SettleSignalResponse'
+        '422':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
   /health:
     get:
       tags:
@@ -716,6 +745,26 @@ components:
       required:
         - recap
         - signals
+    SettleSignalRequest:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+          description: ISO date (YYYY-MM-DD) of the fixtures to settle. Defaults to today.
+    SettleSignalResponse:
+      type: object
+      properties:
+        settled:
+          type: integer
+        skipped:
+          type: integer
+        message:
+          type: string
+      required:
+        - settled
+        - skipped
+        - message
     SportsMap:
       type: object
       additionalProperties:

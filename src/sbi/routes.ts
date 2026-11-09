@@ -7,6 +7,7 @@ import * as autoSchedule from "../services/auto_schedule_service.ts";
 import * as monitoring from "../services/monitoring_service.ts";
 import * as matches from "../services/matches_service.ts";
 import * as signals from "../services/signals_service.ts";
+import * as settle from "../services/signals/settle_service.ts";
 
 export interface RouteMetadata {
   method: "GET" | "POST";
@@ -22,6 +23,7 @@ export const SBI_ROUTES: readonly RouteMetadata[] = [
   { method: "GET", path: "/api/v1/monitored", operationId: "getMonitoredFixtures" },
   { method: "GET", path: "/api/v1/matches", operationId: "getMatches" },
   { method: "GET", path: "/api/v1/signals", operationId: "getSignals" },
+  { method: "POST", path: "/api/v1/signals/settle", operationId: "settleSignals" },
 ];
 
 const defaultItemSchema = {
@@ -113,4 +115,21 @@ export const sbiRoutes = (app: FastifyInstance): void => {
     request.log.info({ stats }, "signals stats computed");
     return stats;
   });
+
+  app.post<{ Body: { date?: string } }>(
+    "/api/v1/signals/settle",
+    { schema: { operationId: "settleSignals" } },
+    async (request) => {
+      const { date } = request.body ?? {};
+      if (date !== undefined && !isIsoDate(date)) {
+        throw new ValidationError("date must be a valid ISO date (YYYY-MM-DD)");
+      }
+      const result = await settle.settleSignals(date);
+      return {
+        settled: result.settled,
+        skipped: result.skipped,
+        message: `Settled ${result.settled} signal(s), skipped ${result.skipped}`,
+      };
+    },
+  );
 }

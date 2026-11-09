@@ -132,6 +132,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/signals/settle": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Settle signals against API-Football final scores
+         * @description Reads unresolved signals (win is null), matches them to API-Football fixtures for the given date, and updates the final score and win/lose outcome on each signal.
+         */
+        post: operations["settleSignals"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/health": {
         parameters: {
             query?: never;
@@ -399,6 +419,18 @@ export interface components {
             recap: components["schemas"]["SignalRecap"];
             signals: components["schemas"]["SignalListItem"][];
         };
+        SettleSignalRequest: {
+            /**
+             * Format: date
+             * @description ISO date (YYYY-MM-DD) of the fixtures to settle. Defaults to today.
+             */
+            date?: string;
+        };
+        SettleSignalResponse: {
+            settled: number;
+            skipped: number;
+            message: string;
+        };
         SportsMap: {
             [key: string]: {
                 id?: number;
@@ -610,6 +642,39 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SignalsResponse"];
+                };
+            };
+        };
+    };
+    settleSignals: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["SettleSignalRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SettleSignalResponse"];
+                };
+            };
+            /** @description Validation error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationError"];
                 };
             };
         };

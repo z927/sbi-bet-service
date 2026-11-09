@@ -114,3 +114,37 @@ test("GET /api/v1/signals reset clears the list", async () => {
   const body = response.json() as SignalsResponse;
   assert.equal(body.recap.totalCount, 0);
 });
+
+test("POST /api/v1/signals/settle returns 200 with zero settled when no unresolved signals", async () => {
+  const response = await app.inject({
+    method: "POST",
+    url: "/api/v1/signals/settle",
+    body: {},
+  });
+  assert.equal(response.statusCode, 200);
+  const body = response.json();
+  assert.equal(typeof body.settled, "number");
+  assert.equal(typeof body.skipped, "number");
+  assert.equal(typeof body.message, "string");
+});
+
+test("POST /api/v1/signals/settle returns 422 on invalid date", async () => {
+  const response = await app.inject({
+    method: "POST",
+    url: "/api/v1/signals/settle",
+    body: { date: "not-a-date" },
+  });
+  assert.equal(response.statusCode, 422);
+});
+
+test("POST /api/v1/signals/settle accepts optional date", async () => {
+  const response = await app.inject({
+    method: "POST",
+    url: "/api/v1/signals/settle",
+    body: { date: "2026-11-09" },
+  });
+  assert.equal(response.statusCode, 200);
+  const body = response.json();
+  assert.equal(typeof body.settled, "number");
+  assert.equal(typeof body.skipped, "number");
+});
