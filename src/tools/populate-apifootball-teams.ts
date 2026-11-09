@@ -12,7 +12,7 @@ const SEASONS = ["2026", "2025", "2024"];
 const TEAMS_PATH = "src/res/teams.json";
 const DELAY_MS = 2500;
 
-async function apiFetch(path: string, retries = 3) {
+async function apiFetch(path: string, retries = 3): Promise<any> {
   for (let i = 0; i < retries; i++) {
     const res = await fetch(`${API_BASE}${path}`, {
       headers: {
