@@ -51,7 +51,7 @@ test("GET /api/v1/signals returns 200 with empty recap and signals", async () =>
   assert.equal(body.signals.length, 0);
 });
 
-test("GET /api/v1/signals returns list with required fields", async () => {
+test("GET /api/v1/signals returns list with required fields including matchDate", async () => {
   signals.setSignals([
     makeSignal({ id: "s1", home: "Inter", away: "Milan", matchId: "m1", win: true }),
     makeSignal({ id: "s2", home: "Juventus", away: "Roma", matchId: "m2", win: false }),
@@ -76,6 +76,7 @@ test("GET /api/v1/signals returns list with required fields", async () => {
   assert.equal(row.tournament, "");
   assert.equal(row.homeScore, null);
   assert.equal(row.awayScore, null);
+  assert.equal(row.matchDate, null);
   assert.equal(row.win, true);
 
   const row2 = body.signals[1] as SignalListRow;
@@ -99,6 +100,7 @@ test("GET /api/v1/signals exposes all wire fields", async () => {
   assert.ok("tournament" in row);
   assert.ok("homeScore" in row);
   assert.ok("awayScore" in row);
+  assert.ok("matchDate" in row);
   assert.ok("win" in row);
   assert.ok("recap" in body);
 });
@@ -115,11 +117,10 @@ test("GET /api/v1/signals reset clears the list", async () => {
   assert.equal(body.recap.totalCount, 0);
 });
 
-test("POST /api/v1/signals/settle returns 200 with zero settled when no unresolved signals", async () => {
+test("GET /api/v1/signals/settle returns 200 with zero settled when no unresolved signals", async () => {
   const response = await app.inject({
-    method: "POST",
+    method: "GET",
     url: "/api/v1/signals/settle",
-    body: {},
   });
   assert.equal(response.statusCode, 200);
   const body = response.json();
@@ -128,20 +129,18 @@ test("POST /api/v1/signals/settle returns 200 with zero settled when no unresolv
   assert.equal(typeof body.message, "string");
 });
 
-test("POST /api/v1/signals/settle returns 422 on invalid date", async () => {
+test("GET /api/v1/signals/settle returns 422 on invalid date", async () => {
   const response = await app.inject({
-    method: "POST",
-    url: "/api/v1/signals/settle",
-    body: { date: "not-a-date" },
+    method: "GET",
+    url: "/api/v1/signals/settle?date=not-a-date",
   });
   assert.equal(response.statusCode, 422);
 });
 
-test("POST /api/v1/signals/settle accepts optional date", async () => {
+test("GET /api/v1/signals/settle accepts optional date", async () => {
   const response = await app.inject({
-    method: "POST",
-    url: "/api/v1/signals/settle",
-    body: { date: "2026-11-09" },
+    method: "GET",
+    url: "/api/v1/signals/settle?date=2026-11-09",
   });
   assert.equal(response.statusCode, 200);
   const body = response.json();

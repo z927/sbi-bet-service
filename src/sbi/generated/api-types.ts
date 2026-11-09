@@ -139,13 +139,13 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
-        put?: never;
         /**
          * Settle signals against API-Football final scores
          * @description Reads unresolved signals (win is null), matches them to API-Football fixtures for the given date, and updates the final score and win/lose outcome on each signal.
          */
-        post: operations["settleSignals"];
+        get: operations["settleSignals"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -405,6 +405,7 @@ export interface components {
             tournament?: string;
             homeScore?: number | null;
             awayScore?: number | null;
+            matchDate?: string | null;
             win?: boolean | null;
         };
         SignalRecap: {
@@ -418,13 +419,6 @@ export interface components {
         SignalsResponse: {
             recap: components["schemas"]["SignalRecap"];
             signals: components["schemas"]["SignalListItem"][];
-        };
-        SettleSignalRequest: {
-            /**
-             * Format: date
-             * @description ISO date (YYYY-MM-DD) of the fixtures to settle. Defaults to today.
-             */
-            date?: string;
         };
         SettleSignalResponse: {
             settled: number;
@@ -648,16 +642,15 @@ export interface operations {
     };
     settleSignals: {
         parameters: {
-            query?: never;
+            query?: {
+                /** @description ISO date (YYYY-MM-DD) of the fixtures to settle. Defaults to today. */
+                date?: string;
+            };
             header?: never;
             path?: never;
             cookie?: never;
         };
-        requestBody?: {
-            content: {
-                "application/json": components["schemas"]["SettleSignalRequest"];
-            };
-        };
+        requestBody?: never;
         responses: {
             /** @description OK */
             200: {

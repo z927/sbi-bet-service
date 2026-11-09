@@ -23,6 +23,7 @@ export interface SignalListRow {
   tournament: string;
   homeScore: number | null;
   awayScore: number | null;
+  matchDate: string | null;
   win: boolean | null;
 }
 
@@ -91,6 +92,7 @@ const toSignalListRow = (row: {
   tournament?: string | null;
   home_score?: number | null;
   away_score?: number | null;
+  created_at?: string | null;
   win?: boolean | null;
 }): SignalListRow => ({
   home: row.home ?? "",
@@ -99,6 +101,7 @@ const toSignalListRow = (row: {
   tournament: row.tournament ?? "",
   homeScore: row.home_score ?? null,
   awayScore: row.away_score ?? null,
+  matchDate: row.created_at ?? null,
   win: row.win ?? null,
 });
 
@@ -120,6 +123,7 @@ export const getSignalStats = async (): Promise<SignalsResponse> => {
         tournament?: string | null;
         home_score?: number | null;
         away_score?: number | null;
+        created_at?: string | null;
         win?: boolean | null;
         result?: string | null;
         quota?: number | null;
@@ -143,6 +147,7 @@ export const getSignalStats = async (): Promise<SignalsResponse> => {
     tournament: "",
     homeScore: null,
     awayScore: null,
+    matchDate: null,
     win: s.win,
   }));
   const recap = buildRecapFromMemory(signals);

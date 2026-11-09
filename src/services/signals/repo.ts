@@ -35,6 +35,7 @@ export interface UnsettledSignal {
   home: string | null;
   away: string | null;
   rule: string | null;
+  created_at: string | null;
 }
 
 export const getUnsettledSignals = async (): Promise<UnsettledSignal[] | null> => {
@@ -45,7 +46,7 @@ export const getUnsettledSignals = async (): Promise<UnsettledSignal[] | null> =
     getStrategyLogger().error({ err: exc, component: "signals_repo" }, "getUnsettledSignals client failed");
     return null;
   }
-  const { data, error } = await supabase.from("signals").select("match_id, home, away, rule").is("win", null);
+  const { data, error } = await supabase.from("signals").select("match_id, home, away, rule, created_at").is("win", null);
   if (error) {
     getStrategyLogger().error({ err: error, component: "signals_repo" }, "getUnsettledSignals failed");
     return null;

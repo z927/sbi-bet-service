@@ -23,7 +23,7 @@ export const SBI_ROUTES: readonly RouteMetadata[] = [
   { method: "GET", path: "/api/v1/monitored", operationId: "getMonitoredFixtures" },
   { method: "GET", path: "/api/v1/matches", operationId: "getMatches" },
   { method: "GET", path: "/api/v1/signals", operationId: "getSignals" },
-  { method: "POST", path: "/api/v1/signals/settle", operationId: "settleSignals" },
+  { method: "GET", path: "/api/v1/signals/settle", operationId: "settleSignals" },
 ];
 
 const defaultItemSchema = {
@@ -116,11 +116,11 @@ export const sbiRoutes = (app: FastifyInstance): void => {
     return stats;
   });
 
-  app.post<{ Body: { date?: string } }>(
+  app.get<{ Querystring: { date?: string } }>(
     "/api/v1/signals/settle",
-    { schema: { operationId: "settleSignals" } },
+    { schema: { operationId: "settleSignals", querystring: dateQuerySchema } },
     async (request) => {
-      const { date } = request.body ?? {};
+      const { date } = request.query;
       if (date !== undefined && !isIsoDate(date)) {
         throw new ValidationError("date must be a valid ISO date (YYYY-MM-DD)");
       }
