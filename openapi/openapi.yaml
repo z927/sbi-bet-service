@@ -145,8 +145,9 @@ paths:
         Returns the list of stored signals with recap statistics: totalCount,
         winCount, loseCount, percentageWin, percentageLose, averageOdd and the
         signal items (home, away, matchId, tournament, homeScore, awayScore,
-        matchDate, win). Optionally filter by matchDate with from/to query
-        parameters (ISO dates YYYY-MM-DD).
+        matchDate, type, win). Optionally filter by matchDate with from/to query
+        parameters (ISO dates YYYY-MM-DD). The type field distinguishes
+        pre-alerts ("pre-alert") from actual signals ("signal").
       parameters:
         - name: from
           in: query
@@ -728,6 +729,9 @@ components:
           type: number
           nullable: true
         matchDate:
+          type: string
+          nullable: true
+        type:
           type: string
           nullable: true
         win:

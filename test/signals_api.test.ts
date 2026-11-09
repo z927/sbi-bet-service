@@ -101,8 +101,23 @@ test("GET /api/v1/signals exposes all wire fields", async () => {
   assert.ok("homeScore" in row);
   assert.ok("awayScore" in row);
   assert.ok("matchDate" in row);
+  assert.ok("type" in row);
   assert.ok("win" in row);
   assert.ok("recap" in body);
+});
+
+test("GET /api/v1/signals items carry the type field", async () => {
+  signals.setSignals([
+    makeSignal({ id: "s1", home: "Inter", away: "Milan", matchId: "m1", type: "pre-alert" }),
+    makeSignal({ id: "s2", home: "Juventus", away: "Roma", matchId: "m2", type: "signal" }),
+  ]);
+
+  const response = await app.inject({ method: "GET", url: "/api/v1/signals" });
+  assert.equal(response.statusCode, 200);
+  const body = response.json() as SignalsResponse;
+  assert.equal(body.signals.length, 2);
+  assert.equal(body.signals[0]!.type, "pre-alert");
+  assert.equal(body.signals[1]!.type, "signal");
 });
 
 test("GET /api/v1/signals reset clears the list", async () => {

@@ -121,7 +121,7 @@ export interface paths {
         };
         /**
          * Get stored signals
-         * @description Returns the list of stored signals with recap statistics: totalCount, winCount, loseCount, percentageWin, percentageLose, averageOdd and the signal items (home, away, matchId, tournament, homeScore, awayScore, matchDate, win). Optionally filter by matchDate with from/to query parameters (ISO dates YYYY-MM-DD).
+         * @description Returns the list of stored signals with recap statistics: totalCount, winCount, loseCount, percentageWin, percentageLose, averageOdd and the signal items (home, away, matchId, tournament, homeScore, awayScore, matchDate, type, win). Optionally filter by matchDate with from/to query parameters (ISO dates YYYY-MM-DD). The type field distinguishes pre-alerts ("pre-alert") from actual signals ("signal").
          */
         get: operations["getSignals"];
         put?: never;
@@ -406,6 +406,7 @@ export interface components {
             homeScore?: number | null;
             awayScore?: number | null;
             matchDate?: string | null;
+            type?: string | null;
             win?: boolean | null;
         };
         SignalRecap: {

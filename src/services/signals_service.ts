@@ -24,6 +24,7 @@ export interface SignalListRow {
   homeScore: number | null;
   awayScore: number | null;
   matchDate: string | null;
+  type: string | null;
   win: boolean | null;
 }
 
@@ -93,6 +94,7 @@ const toSignalListRow = (row: {
   home_score?: number | null;
   away_score?: number | null;
   created_at?: string | null;
+  type?: string | null;
   win?: boolean | null;
 }): SignalListRow => ({
   home: row.home ?? "",
@@ -102,6 +104,7 @@ const toSignalListRow = (row: {
   homeScore: row.home_score ?? null,
   awayScore: row.away_score ?? null,
   matchDate: row.created_at ?? null,
+  type: row.type ?? null,
   win: row.win ?? null,
 });
 
@@ -124,6 +127,7 @@ export const getSignalStats = async (filter?: { from?: string; to?: string }): P
         home_score?: number | null;
         away_score?: number | null;
         created_at?: string | null;
+        type?: string | null;
         win?: boolean | null;
         result?: string | null;
         quota?: number | null;
@@ -153,6 +157,7 @@ export const getSignalStats = async (filter?: { from?: string; to?: string }): P
       homeScore: null,
       awayScore: null,
       matchDate: null,
+      type: s.type ?? null,
       win: s.win,
     }))
     .sort(sortByMatchDateDesc);
