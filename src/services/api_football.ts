@@ -8,7 +8,7 @@ export interface ApiFootballFixture {
   direttaMatch?: import("../scraper/models.ts").Match;
 }
 
-const apiKey = (): string => process.env.API_FOOTBALL_API_KEY ?? "";
+const apiKey = (): string => process.env.API_FOOTBALL_KEY ?? "";
 
 const httpGet = async (path: string): Promise<unknown> => {
   const res = await fetch(`${API_FOOTBALL_BASE_URL}${path}`, {
