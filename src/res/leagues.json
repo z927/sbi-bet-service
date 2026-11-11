@@ -1,0 +1,344 @@
+[
+  {
+    "leagueId": 218,
+    "direttaLeagueId": "GbYvzOTG",
+    "name": "Bundesliga",
+    "type": "League",
+    "logo": "https://media.api-sports.io/football/leagues/218.png",
+    "countryName": "Austria",
+    "countryFlag": "https://media.api-sports.io/flags/at.svg"
+  },
+  {
+    "leagueId": 144,
+    "direttaLeagueId": "MFaWsPnS",
+    "name": "Jupiler Pro League",
+    "type": "League",
+    "logo": "https://media.api-sports.io/football/leagues/144.png",
+    "countryName": "Belgium",
+    "countryFlag": "https://media.api-sports.io/flags/be.svg"
+  },
+  {
+    "leagueId": 145,
+    "direttaLeagueId": "SMoGqfCb",
+    "name": "Challenger Pro League",
+    "type": "League",
+    "logo": "https://media.api-sports.io/football/leagues/145.png",
+    "countryName": "Belgium",
+    "countryFlag": "https://media.api-sports.io/flags/be.svg"
+  },
+  {
+    "leagueId": 345,
+    "direttaLeagueId": "bNFMkskm",
+    "name": "Czech Liga",
+    "type": "League",
+    "logo": "https://media.api-sports.io/football/leagues/345.png",
+    "countryName": "Czech-Republic",
+    "countryFlag": "https://media.api-sports.io/flags/cz.svg"
+  },
+  {
+    "leagueId": 119,
+    "direttaLeagueId": "b3gDmFWi",
+    "name": "Superliga",
+    "type": "League",
+    "logo": "https://media.api-sports.io/football/leagues/119.png",
+    "countryName": "Denmark",
+    "countryFlag": "https://media.api-sports.io/flags/dk.svg"
+  },
+  {
+    "leagueId": 39,
+    "direttaLeagueId": "CfoA8Dmm",
+    "name": "Premier League",
+    "type": "League",
+    "logo": "https://media.api-sports.io/football/leagues/39.png",
+    "countryName": "England",
+    "countryFlag": "https://media.api-sports.io/flags/gb.svg"
+  },
+  {
+    "leagueId": 41,
+    "direttaLeagueId": "fBE45JPc",
+    "name": "League One",
+    "type": "League",
+    "logo": "https://media.api-sports.io/football/leagues/41.png",
+    "countryName": "England",
+    "countryFlag": "https://media.api-sports.io/flags/gb.svg"
+  },
+  {
+    "leagueId": 40,
+    "direttaLeagueId": "40zsPsC5",
+    "name": "Championship",
+    "type": "League",
+    "logo": "https://media.api-sports.io/football/leagues/40.png",
+    "countryName": "England",
+    "countryFlag": "https://media.api-sports.io/flags/gb.svg"
+  },
+  {
+    "leagueId": 45,
+    "direttaLeagueId": "44GuzaQN",
+    "name": "FA Cup",
+    "type": "Cup",
+    "logo": "https://media.api-sports.io/football/leagues/45.png",
+    "countryName": "England",
+    "countryFlag": "https://media.api-sports.io/flags/gb.svg"
+  },
+  {
+    "leagueId": 66,
+    "direttaLeagueId": "23luRq4T",
+    "name": "Coupe de France",
+    "type": "Cup",
+    "logo": "https://media.api-sports.io/football/leagues/66.png",
+    "countryName": "France",
+    "countryFlag": "https://media.api-sports.io/flags/fr.svg"
+  },
+  {
+    "leagueId": 61,
+    "direttaLeagueId": "CQF28KxR",
+    "name": "Ligue 1",
+    "type": "League",
+    "logo": "https://media.api-sports.io/football/leagues/61.png",
+    "countryName": "France",
+    "countryFlag": "https://media.api-sports.io/flags/fr.svg"
+  },
+  {
+    "leagueId": 62,
+    "direttaLeagueId": "zX0tEFE6",
+    "name": "Ligue 2",
+    "type": "League",
+    "logo": "https://media.api-sports.io/football/leagues/62.png",
+    "countryName": "France",
+    "countryFlag": "https://media.api-sports.io/flags/fr.svg"
+  },
+  {
+    "leagueId": 63,
+    "direttaLeagueId": "C0SGHlLb",
+    "name": "National 1",
+    "type": "League",
+    "logo": "https://media.api-sports.io/football/leagues/63.png",
+    "countryName": "France",
+    "countryFlag": "https://media.api-sports.io/flags/fr.svg"
+  },
+  {
+    "leagueId": 81,
+    "direttaLeagueId": "2csVjrB4",
+    "name": "DFB Pokal",
+    "type": "Cup",
+    "logo": "https://media.api-sports.io/football/leagues/81.png",
+    "countryName": "Germany",
+    "countryFlag": "https://media.api-sports.io/flags/de.svg"
+  },
+  {
+    "leagueId": 79,
+    "direttaLeagueId": "6khmdCet",
+    "name": "2. Bundesliga",
+    "type": "League",
+    "logo": "https://media.api-sports.io/football/leagues/79.png",
+    "countryName": "Germany",
+    "countryFlag": "https://media.api-sports.io/flags/de.svg"
+  },
+  {
+    "leagueId": 78,
+    "direttaLeagueId": "jg0MwVuC",
+    "name": "Bundesliga",
+    "type": "League",
+    "logo": "https://media.api-sports.io/football/leagues/78.png",
+    "countryName": "Germany",
+    "countryFlag": "https://media.api-sports.io/flags/de.svg"
+  },
+  {
+    "leagueId": 357,
+    "direttaLeagueId": "KlMdlOKF",
+    "name": "Premier Division",
+    "type": "League",
+    "logo": "https://media.api-sports.io/football/leagues/357.png",
+    "countryName": "Ireland",
+    "countryFlag": "https://media.api-sports.io/flags/ie.svg"
+  },
+  {
+    "leagueId": 135,
+    "direttaLeagueId": "CfujcOgK",
+    "name": "Serie A",
+    "type": "League",
+    "logo": "https://media.api-sports.io/football/leagues/135.png",
+    "countryName": "Italy",
+    "countryFlag": "https://media.api-sports.io/flags/it.svg"
+  },
+  {
+    "leagueId": 136,
+    "direttaLeagueId": "WvMMi2Hs",
+    "name": "Serie B",
+    "type": "League",
+    "logo": "https://media.api-sports.io/football/leagues/136.png",
+    "countryName": "Italy",
+    "countryFlag": "https://media.api-sports.io/flags/it.svg"
+  },
+  {
+    "leagueId": 137,
+    "direttaLeagueId": "fgs8qKsB",
+    "name": "Coppa Italia",
+    "type": "Cup",
+    "logo": "https://media.api-sports.io/football/leagues/137.png",
+    "countryName": "Italy",
+    "countryFlag": "https://media.api-sports.io/flags/it.svg"
+  },
+  {
+    "leagueId": 89,
+    "direttaLeagueId": "lAP5a3zg",
+    "name": "Eerste Divisie",
+    "type": "League",
+    "logo": "https://media.api-sports.io/football/leagues/89.png",
+    "countryName": "Netherlands",
+    "countryFlag": "https://media.api-sports.io/flags/nl.svg"
+  },
+  {
+    "leagueId": 90,
+    "direttaLeagueId": "KAmfRuZi",
+    "name": "KNVB Beker",
+    "type": "Cup",
+    "logo": "https://media.api-sports.io/football/leagues/90.png",
+    "countryName": "Netherlands",
+    "countryFlag": "https://media.api-sports.io/flags/nl.svg"
+  },
+  {
+    "leagueId": 88,
+    "direttaLeagueId": "zm1be8bD",
+    "name": "Eredivisie",
+    "type": "League",
+    "logo": "https://media.api-sports.io/football/leagues/88.png",
+    "countryName": "Netherlands",
+    "countryFlag": "https://media.api-sports.io/flags/nl.svg"
+  },
+  {
+    "leagueId": 94,
+    "direttaLeagueId": "hhJ7LFzn",
+    "name": "Primeira Liga",
+    "type": "League",
+    "logo": "https://media.api-sports.io/football/leagues/94.png",
+    "countryName": "Portugal",
+    "countryFlag": "https://media.api-sports.io/flags/pt.svg"
+  },
+  {
+    "leagueId": 95,
+    "direttaLeagueId": "lKCGJg5b",
+    "name": "Segunda Liga",
+    "type": "League",
+    "logo": "https://media.api-sports.io/football/leagues/95.png",
+    "countryName": "Portugal",
+    "countryFlag": "https://media.api-sports.io/flags/pt.svg"
+  },
+  {
+    "leagueId": 283,
+    "direttaLeagueId": "pOcTEGTq",
+    "name": "Liga I",
+    "type": "League",
+    "logo": "https://media.api-sports.io/football/leagues/283.png",
+    "countryName": "Romania",
+    "countryFlag": "https://media.api-sports.io/flags/ro.svg"
+  },
+  {
+    "leagueId": 179,
+    "direttaLeagueId": "KEufRGVb",
+    "name": "Premiership",
+    "type": "League",
+    "logo": "https://media.api-sports.io/football/leagues/179.png",
+    "countryName": "Scotland",
+    "countryFlag": "https://media.api-sports.io/flags/gb.svg"
+  },
+  {
+    "leagueId": 286,
+    "direttaLeagueId": "4lK02Iz8",
+    "name": "Super Liga",
+    "type": "League",
+    "logo": "https://media.api-sports.io/football/leagues/286.png",
+    "countryName": "Serbia",
+    "countryFlag": "https://media.api-sports.io/flags/rs.svg"
+  },
+  {
+    "leagueId": 143,
+    "direttaLeagueId": "hv02y875",
+    "name": "Copa del Rey",
+    "type": "Cup",
+    "logo": "https://media.api-sports.io/football/leagues/143.png",
+    "countryName": "Spain",
+    "countryFlag": "https://media.api-sports.io/flags/es.svg"
+  },
+  {
+    "leagueId": 140,
+    "direttaLeagueId": "dWdJXP6U",
+    "name": "La Liga",
+    "type": "League",
+    "logo": "https://media.api-sports.io/football/leagues/140.png",
+    "countryName": "Spain",
+    "countryFlag": "https://media.api-sports.io/flags/es.svg"
+  },
+  {
+    "leagueId": 141,
+    "direttaLeagueId": "42oxhTin",
+    "name": "Segunda División",
+    "type": "League",
+    "logo": "https://media.api-sports.io/football/leagues/141.png",
+    "countryName": "Spain",
+    "countryFlag": "https://media.api-sports.io/flags/es.svg"
+  },
+  {
+    "leagueId": 207,
+    "direttaLeagueId": "8xZTDSnQ",
+    "name": "Super League",
+    "type": "League",
+    "logo": "https://media.api-sports.io/football/leagues/207.png",
+    "countryName": "Switzerland",
+    "countryFlag": "https://media.api-sports.io/flags/ch.svg"
+  },
+  {
+    "leagueId": 209,
+    "direttaLeagueId": "lABoK0Iq",
+    "name": "Schweizer Cup",
+    "type": "Cup",
+    "logo": "https://media.api-sports.io/football/leagues/209.png",
+    "countryName": "Switzerland",
+    "countryFlag": "https://media.api-sports.io/flags/ch.svg"
+  },
+  {
+    "leagueId": 2,
+    "direttaLeagueId": "vT1iNRGq",
+    "name": "UEFA Champions League",
+    "type": "Cup",
+    "logo": "https://media.api-sports.io/football/leagues/2.png",
+    "countryName": "World",
+    "countryFlag": null
+  },
+  {
+    "leagueId": 848,
+    "direttaLeagueId": "8WHkz50k",
+    "name": "UEFA Europa Conference League",
+    "type": "Cup",
+    "logo": "https://media.api-sports.io/football/leagues/848.png",
+    "countryName": "World",
+    "countryFlag": null
+  },
+  {
+    "leagueId": 3,
+    "direttaLeagueId": "OjQOTQKa",
+    "name": "UEFA Europa League",
+    "type": "Cup",
+    "logo": "https://media.api-sports.io/football/leagues/3.png",
+    "countryName": "World",
+    "countryFlag": null
+  },
+  {
+    "leagueId": 5,
+    "direttaLeagueId": "A1uGXGgK",
+    "name": "UEFA Nations League",
+    "type": "League",
+    "logo": "https://media.api-sports.io/football/leagues/5.png",
+    "countryName": "World",
+    "countryFlag": null
+  },
+  {
+    "leagueId": 204,
+    "direttaLeagueId": "2TRNmxYR",
+    "name": "1. Lig",
+    "type": "League",
+    "logo": "https://media.api-sports.io/football/leagues/32.png",
+    "countryName": "Turkey",
+    "countryFlag": null
+  }
+]

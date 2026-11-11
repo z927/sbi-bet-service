@@ -29,7 +29,7 @@ npm run hooks          # una tantum: attiva gli hook git in .githooks/
 
 | Script | Description |
 | --- | --- |
-| `npm run generate` | Regenerate `src/sbi/generated/api-types.ts` from `openapi/openapi.yaml` (openapi-typescript). |
+| `npm run generate` | Regenerate `src/bet-api/generated/api-types.ts` from `openapi/openapi.yaml` (openapi-typescript). |
 | `npm run typecheck` | Type-check the project with `tsc --noEmit`. |
 | `npm run build` | **Build command**: `generate` + `typecheck`. |
 | `npm run dev` | Run with `node --watch` (auto-restart). |
@@ -51,7 +51,7 @@ npm run dev      # http://127.0.0.1:8000
 
 The SBI request/response **types** are generated from the contract:
 
-- Output: `src/sbi/generated/api-types.ts` (do not edit by hand).
+- Output: `src/bet-api/generated/api-types.ts` (do not edit by hand).
 
 The running server **serves the contract file itself** at `/openapi.json`
 (via `@fastify/swagger` static mode), so the published document can never drift
@@ -147,6 +147,68 @@ mapped to `502` with `{ detail }`.
 sample, error }`. `ok: false` with `error` set means the scrape failed; results
 are still persisted to SQLite when the scrape succeeds.
 
+### Team identity mapping (diretta.it ↔ API-Football)
+
+Canonical teams live in Supabase, with provider-specific ids kept separate so
+odds/API-Football data and diretta.it live statistics can be joined. The schema
+is in `supabase/migrations/20261031120000_team_mapping.sql` (`teams`,
+`team_provider_mappings`, `team_aliases`, `fixture_links`). Apply it with the
+Supabase CLI (`supabase db push` after linking the project) or paste the
+migration into the SQL editor. The existing `SUPABASE_URL` /
+`SUPABASE_SERVICE_ROLE_KEY` settings are used; without them the module falls
+back to an in-memory store (tests, local dev).
+
+| Method | Path | Description |
+| --- | --- | --- |
+| GET | `/mapping/teams` | List canonical teams. |
+| POST | `/mapping/teams` | Create a canonical team (`name`, optional `country`, `aliases`). |
+| GET | `/mapping/teams/resolve` | Resolve a provider team (`provider`, `providerTeamId`, `name`, `country`, `autoLink`). |
+| POST | `/mapping/teams/sync` | Sync API-Football and diretta teams for a league (`leagueId`, optional `season`, `direttaTournamentId`, `dryRun`). |
+| GET | `/mapping/teams/:teamId/aliases` | List aliases for a canonical team. |
+| POST | `/mapping/teams/:teamId/aliases` | Add an alias (`alias`, optional `source`). |
+| GET | `/mapping/mappings` | List provider mappings, optionally filtered by `status`. |
+| PUT | `/mapping/mappings` | Upsert a mapping (`teamId`, `provider`, `providerTeamId`, …). |
+| POST | `/mapping/mappings/:mappingId/status` | Confirm or reject a mapping (`status`). |
+| PUT | `/mapping/fixtures` | Link a canonical fixture to diretta/API-Football ids. |
+| GET | `/mapping/fixtures/resolve` | Resolve a fixture by `date`, `homeTeamId`, `awayTeamId`. |
+| POST | `/mapping/seasons/sync` | Bulk-sync one league/season from API-Football (`leagueId`, optional `season`, `direttaTournamentId`, `dryRun`, `maxFixtures`). |
+
+Resolution order: exact `(provider, providerTeamId)` → exact normalized alias →
+fuzzy match. Exact-id and alias matches are stored as `confirmed`; fuzzy matches
+(score ≥ `0.82`) are stored as `pending` for manual review. Rejected mappings are
+reported as `rejected` and are not silently rematched.
+
+#### Season sync
+
+`POST /mapping/seasons/sync` treats API-Football as the season spine:
+
+1. resolves the **current season** from `/leagues` (`seasons[].current`) unless
+   `season` is provided;
+2. imports every team of the season as a canonical team (existing provider id or
+   exact alias first, otherwise a new team);
+3. upserts every fixture as a `fixture_link` with the API-Football fixture id;
+4. stores the league mapping API-Football ↔ diretta in `league_links` when
+   `direttaTournamentId` is supplied;
+5. is idempotent and does not overwrite an existing `direttaMatchId`.
+
+#### Team sync
+
+`POST /mapping/teams/sync` is the single entry point for reconciling teams
+between the two providers. It imports the API-Football teams of a league/season
+first, then collects the diretta teams observed in the live feed for the
+`direttaTournamentId` (falling back to the stored `league_links` value). For each
+provider team it reuses an existing mapping, then an exact normalized alias, then
+a fuzzy match; only unmatched teams create a new canonical team. Fuzzy matches
+are stored as `pending` for manual review. `dryRun: true` reports the work
+without writing anything. The season's `league_links` row is created/updated when
+`direttaTournamentId` is supplied.
+
+Diretta matches are linked incrementally: when a match is observed in the live
+feed, its `home_id`/`away_id` resolve to canonical teams and the existing
+`fixture_link` for that date/teams supplies the API-Football fixture id. Set
+`dryRun: true` to get the report without writing anything. Requires
+`API_FOOTBALL_KEY`; upstream errors return `502`.
+
 ## Layout
 
 ```
@@ -157,6 +219,18 @@ src/
   config.ts                 env-driven settings
   validation.ts             ISO date validation
   types.ts                  re-exported contract types
+  clients/
+    apifootball/
+      client.ts             API-Football client (leagues, teams, fixtures)
+    diretta/                diretta.it client, una risorsa per file
+      transport.ts          HTTP + parsing del feed delimited (~ ¬ ÷)
+      matches.ts            elenco gare (+ minuto live)
+      match.ts              dettaglio match
+      statistics.ts         statistiche
+      events.ts             incidenti (gol, cartellini, ...)
+      lineups.ts            formazioni
+      odds.ts               quote (GraphQL)
+      index.ts              oggetto `client` aggregato
   cloud_scheduler/
     client.ts               GCP Cloud Scheduler REST client (ADC auth)
   services/
@@ -168,23 +242,22 @@ src/
       major_leagues.ts      env allowlist of major leagues
       live_matches_strategy.ts  live (major) matches -> statistics
     signals/                goal-over-0.5 evaluation, live odds, Telegram, persistence
-  sbi/
+  bet-api/
     generated/api-types.ts  openapi-typescript output
     routes.ts               /api/v1 routes + route metadata
   scraper/
-    client/                 diretta.it client, una risorsa per file
-      transport.ts          HTTP + parsing del feed delimited (~ ¬ ÷)
-      matches.ts            elenco gare (+ minuto live)
-      match.ts              dettaglio match
-      statistics.ts         statistiche
-      events.ts             incidenti (gol, cartellini, ...)
-      lineups.ts            formazioni
-      odds.ts               quote (GraphQL)
-      index.ts              oggetto `client` aggregato
     db.ts                   node:sqlite persistence
     service.ts              TTL cache + orchestrazione (collect/enrich)
     routes.ts               scraper routes
     models.ts               response types
+  mapping/
+    normalize.ts            name normalization + fuzzy scoring
+    repo.ts                 Supabase persistence + in-memory fallback
+    service.ts              resolve/create/confirm business logic
+    routes.ts               /mapping routes
+    models.ts               mapping types
+supabase/
+  migrations/               SQL schema (teams, mappings, aliases, leagues, fixtures)
 test/
   contract.test.ts          routes vs contract, served /openapi.json
   sbi.test.ts               SBI endpoint behavior
@@ -192,6 +265,8 @@ test/
   strategies.test.ts        monitor strategy: major-league filter, stats, failures
   cron.test.ts              GCP cron builder + day matching (pure)
   auto_schedule.test.ts     auto-schedule orchestration (stubbed scheduler, mocked feed)
+  mapping.test.ts           team resolution, aliases, pending review, fixture links
+  season_sync.test.ts       current-season sync, idempotency, dry-run (mocked API-Football)
 ```
 
 Dependency direction: `router -> service -> db/client`.
@@ -208,6 +283,12 @@ Read from environment variables via `src/config.ts`:
   di default è la `version` di `package.json`, che è la source of truth.
 - `DIRETTA_DB` — SQLite file (default `data/diretta.db`).
 - `DIRETTA_CACHE_TTL` — matches cache TTL in seconds (default `15`).
+- `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` — Supabase persistence (matches,
+  team/league/fixture mapping). Without them the mapping module uses an
+  in-memory store (local dev/tests).
+- `API_FOOTBALL_BASE_URL`, `API_FOOTBALL_KEY` — API-Football provider used by
+  `POST /mapping/seasons/sync` (default base URL
+  `https://v3.football.api-sports.io`).
 - `MONITOR_MAJOR_LEAGUES` — comma-separated major-league allowlist (exact full
   diretta.it tournament name like `"ITALIA: Serie A"`, or diretta.it id);
   empty/unset falls back to the built-in list of major European leagues and UEFA

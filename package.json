@@ -1,5 +1,5 @@
 {
-  "name": "diretta-scraper",
+  "name": "sbi-bet-service",
   "version": "0.3.8",
   "description": "Node/TypeScript backend: SBI Schedule/Monitoring/Matches APIs + diretta.it live scraper",
   "type": "module",
@@ -8,7 +8,7 @@
     "node": ">=22.6"
   },
   "scripts": {
-    "generate": "openapi-typescript openapi/openapi.yaml -o src/sbi/generated/api-types.ts",
+    "generate": "openapi-typescript openapi/openapi.yaml -o src/bet-api/generated/api-types.ts",
     "typecheck": "tsc --noEmit",
     "build": "npm run generate && npm run typecheck",
     "dev": "node --watch src/main.ts",

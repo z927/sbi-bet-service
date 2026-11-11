@@ -240,3 +240,26 @@ export const deleteAll = async (): Promise<void> => {
   const supabase = getClient();
   await supabase.from("matches").delete().neq("id", "");
 };
+
+export const findMatchByTeams = async (home: string, away: string): Promise<Match | null> => {
+  if (isMemoryMode()) {
+    for (const match of memoryMatches.values()) {
+      if (match.home?.toLowerCase() === home.toLowerCase() && match.away?.toLowerCase() === away.toLowerCase()) {
+        return match;
+      }
+    }
+    return null;
+  }
+
+  const supabase = getClient();
+  const { data, error } = await supabase
+    .from("matches")
+    .select("data")
+    .ilike("home", home)
+    .ilike("away", away)
+    .maybeSingle();
+  if (error) {
+    throw error;
+  }
+  return (data as any)?.data as Match ?? null;
+};

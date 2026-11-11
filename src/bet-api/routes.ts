@@ -10,7 +10,7 @@ import * as signals from "../services/signals_service.ts";
 import * as settle from "../services/signals/settle_service.ts";
 
 export interface RouteMetadata {
-  method: "GET" | "POST";
+  method: "GET" | "POST" | "PUT";
   path: string;
   operationId: string;
 }

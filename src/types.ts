@@ -1,4 +1,4 @@
-import type { components } from "./sbi/generated/api-types.ts";
+import type { components } from "./bet-api/generated/api-types.ts";
 
 export type BaseResponse = components["schemas"]["BaseResponse"];
 export type ScheduleRequest = components["schemas"]["ScheduleRequest"];

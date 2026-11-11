@@ -1,5 +1,5 @@
 import { getLogger } from "../logger.ts";
-import { client, FeedError, feedName, liveMinute } from "./client/index.ts";
+import { client, FeedError, feedName, liveMinute } from "../clients/diretta/index.ts";
 import * as db from "./db.ts";
 import type { Match, ScrapeTestResponse, Statistics } from "./models.ts";
 

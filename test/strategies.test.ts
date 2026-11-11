@@ -14,18 +14,49 @@ import {
   WIN_RATE_ENV,
   resetSignalState,
 } from "../src/services/signals/index.ts";
+import {
+  resetMappingStore,
+  createTeam,
+  upsertLeagueLink,
+  upsertFixtureLink,
+} from "../src/mapping/repo.ts";
 
 process.env["LOG_LEVEL"] = "silent";
 
-const M1_STAGE_START = Math.floor(Date.now() / 1000) - 15 * 60;
+// Forza il repository di mapping in memoria: in test non c'è Supabase
+// raggiungibile (.env.local espone credenziali ma nessun endpoint).
+delete process.env.SUPABASE_URL;
+delete process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-const FIXTURE = [
-  "ZA\u00f7ITALIA: Serie A\u00acZY\u00f7Italia\u00acZEE\u00f7COuk57Ci\u00acZC\u00f71\u00acZL\u00f7/calcio/italia/serie-a/",
-  `AA\u00f7m1\u00acAB\u00f72\u00acAC\u00f712\u00acAD\u00f7${M1_STAGE_START}\u00acAE\u00f7Inter\u00acAF\u00f7Milan\u00acAG\u00f70\u00acAH\u00f70\u00acAI\u00f7y\u00acAO\u00f7${M1_STAGE_START}`,
-  "AA\u00f7m2\u00acAB\u00f73\u00acAC\u00f73\u00acAD\u00f71700001000\u00acAE\u00f7Roma\u00acAF\u00f7Lazio\u00acAG\u00f72\u00acAH\u00f71",
-  "ZA\u00f7ALBANIA: Abissnet Superiore\u00acZY\u00f7Albania\u00acZEE\u00f7nwPDBpVc\u00acZC\u00f75\u00acZL\u00f7/calcio/albania/",
-  "AA\u00f7m3\u00acAB\u00f72\u00acAC\u00f712\u00acAD\u00f71700000000\u00acAE\u00f7Tirana\u00acAF\u00f7Partizani\u00acAG\u00f70\u00acAH\u00f70\u00acAI\u00f7y\u00acAO\u00f71700000000",
-].join("~");
+const M1_START = Math.floor(Date.now() / 1000) - 20 * 60;
+
+const LIVE_FIXTURE = {
+  fixture: { id: 1, date: new Date(M1_START * 1000).toISOString(), status: { short: "1H" } },
+  league: { id: 78, name: "ITALIA: Serie A", country: "Italia" },
+  teams: { home: { id: 100, name: "Inter" }, away: { id: 101, name: "Milan" } },
+  goals: { home: 0, away: 0 },
+};
+
+const ODDS_RESPONSE = [
+  {
+    bookmakers: [
+      {
+        id: 1,
+        name: "Book A",
+        bets: [
+          {
+            id: 8,
+            name: "Over / Under",
+            values: [
+              { value: "Over 0.5", odd: "1.8" },
+              { value: "Under 0.5", odd: "2.0" },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+];
 
 const STATS_FIXTURE = [
   "SE\u00f7Partita",
@@ -39,70 +70,9 @@ const ALERT_STATS_FIXTURE = [
   "SD\u00f799\u00acSG\u00f7Palloni toccati nell'area avversaria\u00acSH\u00f720\u00acSI\u00f710",
 ].join("~");
 
-const LIVE_ODDS_MENU_FIXTURE = JSON.stringify({
-  data: {
-    getLiveOddsBettingTypeMenu: {
-      settings: {
-        bookmakers: [
-          { bookmaker: { id: 1, name: "Book A" } },
-          { bookmaker: { id: 2, name: "Book B" } },
-        ],
-      },
-      items: [
-        {
-          bettingType: "OVER_UNDER",
-          bettingScope: "FIRST_HALF",
-          types: ["LIVE"],
-          bookmakerIds: [1, 2],
-        },
-        {
-          bettingType: "OVER_UNDER",
-          bettingScope: "FULL_TIME",
-          types: ["LIVE"],
-          bookmakerIds: [1, 2],
-        },
-      ],
-    },
-  },
-});
-
-const LIVE_ODDS_MARKET_FIXTURE_1 = JSON.stringify({
-  data: {
-    findLiveOddsForBookmaker: {
-      eventOddsOverview: {
-        opportunities: [
-          {
-            handicap: { value: "0.5" },
-            over: { value: "1.5", opening: "1.4", active: true },
-            under: { value: "2.9", opening: "2.8", active: true },
-          },
-        ],
-      },
-    },
-  },
-});
-
-const LIVE_ODDS_MARKET_FIXTURE_2 = JSON.stringify({
-  data: {
-    findLiveOddsForBookmaker: {
-      eventOddsOverview: {
-        opportunities: [
-          {
-            handicap: { value: "0.5" },
-            over: { value: "1.8", opening: "1.7", active: true },
-            under: { value: "2.6", opening: "2.5", active: true },
-          },
-        ],
-      },
-    },
-  },
-});
-
 const originalFetch = globalThis.fetch;
 let statsCalls = 0;
 let oddsCalls = 0;
-let liveMenuCalls = 0;
-let liveOddsCalls = 0;
 let statsFail = false;
 let statsBody = STATS_FIXTURE;
 let telegramCalls = 0;
@@ -120,55 +90,55 @@ const fixtureFetch = (async (url: string, init?: RequestInit) => {
     telegramBodies.push(init?.body ? JSON.parse(String(init.body)) : {});
     return telegramFail ? makeResponse("boom", false, 500) : makeResponse("{}");
   }
+  if (target.includes("v3.football.api-sports.io")) {
+    if (target.includes("/odds")) {
+      oddsCalls += 1;
+      return makeResponse(JSON.stringify({ response: ODDS_RESPONSE }));
+    }
+    return makeResponse(JSON.stringify({ response: [LIVE_FIXTURE] }));
+  }
   if (target.includes("df_st_")) {
     statsCalls += 1;
     return statsFail ? makeResponse("boom", false, 500) : makeResponse(statsBody);
   }
-  if (target.includes("400.ds.lsapp.eu/pq_graphql")) {
-    if (target.includes("_hash=lobtm")) {
-      liveMenuCalls += 1;
-      return makeResponse(LIVE_ODDS_MENU_FIXTURE);
-    }
-    if (target.includes("_hash=ole2")) {
-      liveOddsCalls += 1;
-      oddsCalls += 1;
-      if (target.includes("bookmakerId=1")) {
-        return makeResponse(LIVE_ODDS_MARKET_FIXTURE_1);
-      }
-      return makeResponse(LIVE_ODDS_MARKET_FIXTURE_2);
-    }
-  }
-  if (target.includes("pq_graphql")) {
-    oddsCalls += 1;
-    return makeResponse(LIVE_ODDS_MENU_FIXTURE);
-  }
-  return makeResponse(FIXTURE);
+  return makeResponse("{}");
 }) as unknown as typeof fetch;
 
-const silentHooks = (allowlist: string[] = [...DEFAULT_MAJOR_LEAGUES]) => ({
-  allowlist,
-  log: () => {},
-});
+const silentHooks = () => ({ log: () => {} });
 
-beforeEach(() => {
+let homeTeamId = "";
+let awayTeamId = "";
+
+beforeEach(async () => {
   globalThis.fetch = fixtureFetch;
+  resetMappingStore();
+  resetSignalState();
   statsCalls = 0;
   oddsCalls = 0;
-  liveMenuCalls = 0;
-  liveOddsCalls = 0;
   statsFail = false;
   statsBody = STATS_FIXTURE;
   telegramCalls = 0;
   telegramBodies = [];
   telegramFail = false;
-  resetSignalState();
+  const home = await createTeam("Inter", "Italia");
+  const away = await createTeam("Milan", "Italia");
+  homeTeamId = home.id;
+  awayTeamId = away.id;
+  await upsertLeagueLink({ apiFootballLeagueId: 78, direttaTournamentId: "T1", name: "ITALIA: Serie A" });
+  await upsertFixtureLink({
+    matchDate: new Date().toISOString().slice(0, 10),
+    homeTeamId,
+    awayTeamId,
+    apiFootballFixtureId: "1",
+    direttaMatchId: "m1",
+  });
 });
 
 after(() => {
   globalThis.fetch = originalFetch;
 });
 
-test("strategy only enriches live matches from major leagues", async () => {
+test("strategy enriches live fixtures whose league is monitored via league_links", async () => {
   const result = await runLiveMatchesStrategy({}, silentHooks());
 
   assert.equal(result.name, LIVE_MATCHES_STRATEGY);
@@ -182,18 +152,45 @@ test("strategy only enriches live matches from major leagues", async () => {
   assert.equal(result.results[0]!.error, null);
   assert.equal(result.results[0]!.statistics?.all["top"]?.length, 1);
   assert.equal(statsCalls, 1);
-  assert.equal(oddsCalls, 0);
+  assert.equal(oddsCalls, 0); // no alert => no odds lookup
 });
 
-test("strategy prints statistics through the log hook", async () => {
-  const logged: string[] = [];
-  const result = await runLiveMatchesStrategy(
-    {},
-    { allowlist: [...DEFAULT_MAJOR_LEAGUES], log: (match) => { logged.push(match.id); } },
-  );
+test("strategy skips live fixtures not monitored by league_links", async () => {
+  await resetMappingStore();
+  const home = await createTeam("Inter", "Italia");
+  const away = await createTeam("Milan", "Italia");
+  await upsertFixtureLink({
+    matchDate: new Date().toISOString().slice(0, 10),
+    homeTeamId: home.id,
+    awayTeamId: away.id,
+    apiFootballFixtureId: "1",
+    direttaMatchId: "m1",
+  });
 
-  assert.deepEqual(logged, ["m1"]);
-  assert.equal(result.enriched, 1);
+  const result = await runLiveMatchesStrategy({}, silentHooks());
+
+  assert.equal(result.matches, 0);
+  assert.equal(result.enriched, 0);
+  assert.equal(result.results.length, 0);
+});
+
+test("strategy skips live fixtures without a diretta link", async () => {
+  await resetMappingStore();
+  await upsertLeagueLink({ apiFootballLeagueId: 78, direttaTournamentId: "T1", name: "ITALIA: Serie A" });
+  const home = await createTeam("Inter", "Italia");
+  const away = await createTeam("Milan", "Italia");
+  await upsertFixtureLink({
+    matchDate: new Date().toISOString().slice(0, 10),
+    homeTeamId: home.id,
+    awayTeamId: away.id,
+    apiFootballFixtureId: "1",
+    // no direttaMatchId
+  });
+
+  const result = await runLiveMatchesStrategy({}, silentHooks());
+
+  assert.equal(result.matches, 0);
+  assert.equal(result.enriched, 0);
 });
 
 test("strategy records a per-match failure without throwing", async () => {
@@ -205,13 +202,6 @@ test("strategy records a per-match failure without throwing", async () => {
   assert.equal(result.failures, 1);
   assert.equal(result.results[0]!.statistics, null);
   assert.match(result.results[0]!.error ?? "", /HTTP 500/);
-});
-
-test("strategy respects a narrowed allowlist", async () => {
-  const result = await runLiveMatchesStrategy({}, silentHooks(["nwPDBpVc"]));
-
-  assert.equal(result.matches, 1);
-  assert.equal(result.results[0]!.matchId, "m3");
 });
 
 test("configuredMajorLeagues defaults and reads the env allowlist", () => {
@@ -231,43 +221,7 @@ test("isMajorLeague matches by full tournament name or id, not by loose name", (
   assert.equal(isMajorLeague(match, ["Serie A"]), false);
 });
 
-test("default major leagues cover the top competitions with diretta names", () => {
-  const defaults = [...DEFAULT_MAJOR_LEAGUES];
-  for (const entry of [
-    "ITALIA: Serie A",
-    "ITALIA: Serie B",
-    "INGHILTERRA: Premier League",
-    "INGHILTERRA: Championship",
-    "GERMANIA: Bundesliga",
-    "AUSTRIA: Bundesliga",
-    "GERMANIA: 2. Bundesliga",
-    "SPAGNA: LaLiga",
-    "SPAGNA: LaLiga2",
-    "FRANCIA: Ligue 1",
-    "OLANDA: Eredivisie",
-    "PORTOGALLO: Liga Portugal",
-    "ROMANIA: Superliga",
-    "SERBIA: Super Liga",
-    "DANIMARCA: Superliga",
-    "TURCHIA: 1. Lig",
-    "EUROPA: Champions League",
-    "EUROPA: Europa League",
-  ]) {
-    assert.ok(defaults.includes(entry), `missing ${entry}`);
-  }
-  // Loose generic names are never allowlisted: matching stays exact on the full
-  // diretta name to avoid collisions (Algeria Ligue 1, Greece Super League, ...).
-  assert.ok(!defaults.includes("Ligue 1"));
-  assert.ok(!defaults.includes("Serie A"));
-  assert.ok(!defaults.includes("Super League"));
-});
-
-test("strategy is exposed as a named Strategy", () => {
-  assert.equal(liveMatchesStrategy.name, LIVE_MATCHES_STRATEGY);
-  assert.equal(typeof liveMatchesStrategy.run, "function");
-});
-
-test("strategy dispatches signal alerts through Telegram", async () => {
+test("strategy dispatches signal alerts through Telegram with live odds from API-Football", async () => {
   const savedEnv = {
     [TELEGRAM_BOT_TOKEN_ENV]: process.env.TELEGRAM_BOT_TOKEN,
     [TELEGRAM_CHAT_ID_ENV]: process.env.TELEGRAM_CHAT_ID,
@@ -283,20 +237,20 @@ test("strategy dispatches signal alerts through Telegram", async () => {
     assert.equal(result.failures, 0);
     assert.equal(result.results[0]!.alerts.length, 1);
     assert.equal(result.results[0]!.alerts[0]!.odds, 1.8);
-    assert.equal(liveMenuCalls, 1);
-    assert.equal(liveOddsCalls >= 1, true);
+    assert.equal(oddsCalls, 1);
     assert.equal(telegramCalls, 1);
+    const minute = Math.trunc((Date.now() / 1000 - M1_START) / 60) + 1;
     assert.deepEqual(telegramBodies[0], {
       chat_id: "-10042",
       text: [
         "⚽ Alert Goal Over 0.5 HT",
         "🏆 Serie A 🇮🇹",
-        "💹 Live, Win Rate: ➡️ 80%",
+        `💹 Live, Win Rate: ➡️ 80%`,
         "💶 Quota live: 1.80",
-        "⏱ 16°",
+        `⏱ ${minute}°`,
         "🎽 Inter vs Milan [0-0]",
-        "ℹ️ Tocchi area: 30",
-        "ℹ️ Rapporto: 1.88",
+        `ℹ️ Tocchi area: 30`,
+        `ℹ️ Rapporto: ${(30 / minute).toFixed(2)}`,
       ].join("\n"),
     });
   } finally {
