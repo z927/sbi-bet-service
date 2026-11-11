@@ -1,5 +1,5 @@
 import { fetchFeed, toInt } from "./transport.ts";
-import type { StatCategory, Statistics } from "../models.ts";
+import type { StatCategory, Statistics } from "../../scraper/models.ts";
 
 const PERIOD_KEYS: Record<string, string> = {
   partita: "all",

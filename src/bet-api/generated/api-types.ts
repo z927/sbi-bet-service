@@ -322,6 +322,60 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/mapping/diretta/tournaments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List diretta tournaments */
+        get: operations["listDirettaTournaments"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/mapping/diretta/teams": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get diretta team names for a tournament */
+        get: operations["getDirettaTeams"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/mapping/leagues/auto-sync": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Auto-sync leagues from diretta.it monitoring list to API-Football
+         * @description Discovers tournaments used by the monitoring allowlist on diretta.it, matches them to API-Football leagues, links them in league_links, and optionally runs seasons/teams sync.
+         */
+        post: operations["autoSyncLeagues"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -465,6 +519,197 @@ export interface components {
         };
         NotFoundError: {
             detail: string;
+        };
+        /** @enum {string} */
+        Provider: "diretta" | "api_football";
+        /** @enum {string} */
+        MappingStatus: "confirmed" | "pending" | "rejected";
+        /** @enum {string} */
+        MappingSource: "manual" | "id" | "alias" | "fuzzy";
+        /** @enum {string} */
+        ResolveStatus: "matched" | "pending" | "unmatched" | "rejected";
+        Team: {
+            id: string;
+            name: string;
+            country: string | null;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        TeamAlias: {
+            id: string;
+            teamId: string;
+            alias: string;
+            normalized: string;
+            source: string;
+            /** Format: date-time */
+            createdAt: string;
+        };
+        TeamProviderMapping: {
+            id: string;
+            teamId: string;
+            provider: components["schemas"]["Provider"];
+            providerTeamId: string;
+            rawName: string;
+            country: string | null;
+            confidence: number;
+            status: components["schemas"]["MappingStatus"];
+            source: components["schemas"]["MappingSource"];
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        FixtureLink: {
+            id: string;
+            /** Format: date */
+            matchDate: string;
+            homeTeamId: string;
+            awayTeamId: string;
+            direttaMatchId: string | null;
+            apiFootballFixtureId: string | null;
+            /** Format: date-time */
+            kickoffAt: string | null;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        TeamCandidate: {
+            team: components["schemas"]["Team"];
+            confidence: number;
+        };
+        ResolveTeamResult: {
+            status: components["schemas"]["ResolveStatus"];
+            team: components["schemas"]["Team"] | null;
+            mapping: components["schemas"]["TeamProviderMapping"] | null;
+            confidence: number;
+            candidates: components["schemas"]["TeamCandidate"][];
+        };
+        CreateTeamRequest: {
+            name: string;
+            country?: string | null;
+            aliases?: string[];
+        };
+        AddTeamAliasRequest: {
+            alias: string;
+            source?: string;
+        };
+        UpsertMappingRequest: {
+            teamId: string;
+            provider: components["schemas"]["Provider"];
+            providerTeamId: string;
+            rawName?: string;
+            country?: string | null;
+            confidence?: number;
+            status?: components["schemas"]["MappingStatus"];
+            source?: components["schemas"]["MappingSource"];
+        };
+        MappingStatusRequest: {
+            status: components["schemas"]["MappingStatus"];
+        };
+        SyncSeasonRequest: {
+            leagueId: number;
+            season?: number;
+            direttaTournamentId?: string;
+            dryRun?: boolean;
+            maxFixtures?: number;
+        };
+        SyncSeasonLeague: {
+            apiFootballId: number;
+            name: string;
+            country: string;
+            season: number;
+            seasonStart: string;
+            seasonEnd: string;
+            current: boolean;
+        };
+        SyncSeasonTeamsCounts: {
+            seen: number;
+            created: number;
+            mapped: number;
+        };
+        SyncSeasonFixturesCounts: {
+            seen: number;
+            created: number;
+            updated: number;
+            skipped: number;
+        };
+        SyncSeasonReport: {
+            league: components["schemas"]["SyncSeasonLeague"];
+            dryRun: boolean;
+            teams: components["schemas"]["SyncSeasonTeamsCounts"];
+            fixtures: components["schemas"]["SyncSeasonFixturesCounts"];
+            errors: string[];
+        };
+        SyncTeamsRequest: {
+            leagueId: number;
+            season?: number;
+            direttaTournamentId?: string;
+            dryRun?: boolean;
+        };
+        ProviderTeamSyncCounts: {
+            seen: number;
+            created: number;
+            mapped: number;
+            pending: number;
+            unmatched: number;
+        };
+        SyncTeamsReport: {
+            league: components["schemas"]["SyncSeasonLeague"];
+            direttaTournamentId: string;
+            dryRun: boolean;
+            apiFootball: components["schemas"]["ProviderTeamSyncCounts"];
+            diretta: components["schemas"]["ProviderTeamSyncCounts"];
+            errors: string[];
+        };
+        UpsertFixtureLinkRequest: {
+            /** Format: date */
+            matchDate: string;
+            homeTeamId: string;
+            awayTeamId: string;
+            direttaMatchId?: string | null;
+            apiFootballFixtureId?: string | null;
+            /** Format: date-time */
+            kickoffAt?: string | null;
+        };
+        AutoSyncLeaguesRequest: {
+            /** @default true */
+            dryRun: boolean;
+            /** @default false */
+            apply: boolean;
+            season?: number;
+            /** @default true */
+            runTeamsSync: boolean;
+            /** @default true */
+            runSeasonSync: boolean;
+        };
+        AutoSyncLeaguesResult: {
+            direttaTournamentId: string;
+            tournament: string;
+            country?: string;
+            /** @enum {string} */
+            status: "already_linked" | "matched" | "unmatched" | "linked" | "synced" | "skipped";
+            apiFootballLeagueId?: number;
+            apiFootballLeagueName?: string;
+            apiFootballCountry?: string;
+            score?: number;
+            seasonSync?: components["schemas"]["SyncSeasonReport"];
+            teamsSync?: components["schemas"]["SyncTeamsReport"];
+            error?: string;
+        };
+        AutoSyncLeaguesReport: {
+            dryRun: boolean;
+            applied: boolean;
+            fetchedDiretta: number;
+            relevant: number;
+            alreadyLinked: number;
+            matched: number;
+            createdLinks: number;
+            failed: number;
+            errors: string[];
+            results: components["schemas"]["AutoSyncLeaguesResult"][];
         };
     };
     responses: never;
@@ -977,6 +1222,95 @@ export interface operations {
             };
             /** @description Validation error */
             422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationError"];
+                };
+            };
+        };
+    };
+    listDirettaTournaments: {
+        parameters: {
+            query?: {
+                filter?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": {
+                        tournamentId?: string;
+                        tournament?: string;
+                    }[];
+                };
+            };
+        };
+    };
+    getDirettaTeams: {
+        parameters: {
+            query: {
+                tournamentId: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string[];
+                };
+            };
+        };
+    };
+    autoSyncLeagues: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["AutoSyncLeaguesRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AutoSyncLeaguesReport"];
+                };
+            };
+            /** @description Validation error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationError"];
+                };
+            };
+            /** @description Upstream error */
+            502: {
                 headers: {
                     [name: string]: unknown;
                 };

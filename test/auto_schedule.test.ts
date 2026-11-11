@@ -8,12 +8,13 @@ import type {
   SchedulerJob,
 } from "../src/cloud_scheduler/client.ts";
 import { ConflictError } from "../src/errors.ts";
-import { FeedError } from "../src/scraper/client/transport.ts";
+import { FeedError } from "../src/clients/diretta/transport.ts";
 import type { AppLogger } from "../src/logger.ts";
 import * as db from "../src/scraper/db.ts";
+import { resetMappingStore, upsertLeagueLink } from "../src/mapping/repo.ts";
 import { removeDb, useTempDb } from "./support.ts";
 
-process.env["LOG_LEVEL"] = "silent";
+process.env["LOG_LEVEL"] = "debug";
 process.env["GCP_PROJECT_ID"] = "test-project";
 process.env["GCP_REGION"] = "europe-west6";
 process.env["GCP_JOB_ID"] = "test-job";
@@ -21,13 +22,16 @@ process.env["MONITOR_JOB_TARGET_BASE_URL"] = "https://svc.example.run.app/";
 process.env["SCHEDULER_TIME_ZONE"] = "UTC";
 process.env["MONITOR_LEAD_MINUTES"] = "5";
 process.env["MONITOR_MAJOR_LEAGUES"] = "ITALIA: Serie A,INGHILTERRA: Premier League";
+process.env["SUPABASE_URL"] = "";
+process.env["SUPABASE_SERVICE_ROLE_KEY"] = "";
 
 const DB_FILE = useTempDb("auto-schedule");
 const originalFetch = globalThis.fetch;
 
 const FIELD = "\u00ac";
 const KV = "\u00f7";
-const BASE = Math.floor(Date.now() / 1000);
+// Use a fixed future timestamp (1 year from now) to ensure fixtures are always upcoming
+const BASE = Math.floor(Date.now() / 1000) + 365 * 24 * 3600;
 const future = (seconds: number) => BASE + seconds;
 
 const league = (name: string, id: string, country: string): string =>
@@ -40,6 +44,28 @@ const detail = (end: number | null): string =>
 const makeResponse = (body: string): Response => {
   return { ok: true, status: 200, text: async () => body } as unknown as Response;
 }
+
+// Helper to compute fixture start times for today
+const today = new Date().toISOString().split("T")[0];
+const fixtureStart1 = Math.floor(new Date(`${today}T23:00:00+00:00`).getTime() / 1000); // Inter vs Milan
+const fixtureStart2 = Math.floor(new Date(`${today}T23:30:00+00:00`).getTime() / 1000); // Arsenal vs Chelsea
+
+// API Football response builders
+const apiFootballLeague = (id: number, name: string, country: string) => ({
+  league: { id, name, country, logo: "", flag: "", season: 2024, round: "Regular Season" },
+  fixture: { id: 0, date: "", timestamp: 0, timezone: "UTC", periods: { first: 0, second: 0 }, venue: { id: 0, name: "", city: "" }, status: { long: "", short: "", elapsed: 0 } },
+  teams: { home: { id: 0, name: "", logo: "", winner: false }, away: { id: 0, name: "", logo: "", winner: false } },
+  goals: { home: 0, away: 0 },
+  score: { halftime: { home: 0, away: 0 }, fulltime: { home: 0, away: 0 }, extratime: { home: 0, away: 0 }, penalty: { home: 0, away: 0 } },
+});
+
+const apiFootballFixture = (fixtureId: number, date: string, homeId: number, homeName: string, awayId: number, awayName: string, leagueId: number, leagueName: string, country: string) => ({
+  fixture: { id: fixtureId, date, timestamp: Math.floor(new Date(date).getTime() / 1000), timezone: "UTC", periods: { first: 0, second: 0 }, venue: { id: 0, name: "", city: "" }, status: { long: "Not Started", short: "NS", elapsed: 0 } },
+  league: { id: leagueId, name: leagueName, country, logo: "", flag: "", season: 2024, round: "Regular Season" },
+  teams: { home: { id: homeId, name: homeName, logo: "", winner: false }, away: { id: awayId, name: awayName, logo: "", winner: false } },
+  goals: { home: null, away: null },
+  score: { halftime: { home: 0, away: 0 }, fulltime: { home: 0, away: 0 }, extratime: { home: 0, away: 0 }, penalty: { home: 0, away: 0 } },
+});
 
 interface RecordedCall {
   op: "get" | "create" | "update" | "delete";
@@ -108,7 +134,59 @@ class StubScheduler implements SchedulerClient {
   }
 }
 
-const buildFeed = (): string => {
+const buildApiFootballFixtures = (): any[] => {
+  const today = new Date().toISOString().split("T")[0];
+  // Use a time later today (23:00) to ensure fixtures are upcoming
+  const futureTimeToday = `${today}T23:00:00+00:00`;
+  const laterToday = `${today}T23:30:00+00:00`;
+  return [
+    // Inter vs Milan - Serie A (monitored via league_links) - today at 23:00
+    apiFootballFixture(1001, futureTimeToday, 505, "Inter", 487, "Milan", 135, "Serie A", "Italy"),
+    // Roma vs Lazio - Serie A (monitored) - already started (earlier today)
+    apiFootballFixture(1002, new Date(Date.now() - 3600 * 1000).toISOString(), 487, "Roma", 505, "Lazio", 135, "Serie A", "Italy"),
+    // Arsenal vs Chelsea - Premier League (monitored via league_links) - today at 23:30
+    apiFootballFixture(1003, laterToday, 42, "Arsenal", 49, "Chelsea", 39, "Premier League", "England"),
+    // Padova vs Vicenza - Serie C (NOT in league_links) - today at 23:00
+    apiFootballFixture(1004, futureTimeToday, 999, "Padova", 998, "Vicenza", 999, "Serie C", "Italy"),
+  ];
+};
+
+const mockFetch = (apiFixtures: any[], direttaFeed: string): void => {
+  globalThis.fetch = (async (url: string) => {
+    const target = String(url);
+    
+    // API Football fixtures endpoint - filter by date query parameter
+    if (target.includes("v3.football.api-sports.io/fixtures")) {
+      const urlObj = new URL(target);
+      const requestedDate = urlObj.searchParams.get("date");
+      let filteredFixtures = apiFixtures;
+      if (requestedDate) {
+        filteredFixtures = apiFixtures.filter(f => f.fixture.date.startsWith(requestedDate));
+      }
+      return makeResponse(JSON.stringify({ response: filteredFixtures }));
+    }
+    
+    // Diretta match detail endpoints
+    if (target.includes("dc_1_m1")) {
+      return makeResponse(detail(future(3600 + 7000)));
+    }
+    if (target.includes("dc_1_m3")) {
+      return makeResponse(detail(null));
+    }
+    if (target.includes("dc_1_m4")) {
+      return makeResponse(detail(future(3600 + 7000)));
+    }
+    
+    // Diretta match list endpoint
+    if (target.includes("f_1_0_3_it_1")) {
+      return makeResponse(direttaFeed);
+    }
+    
+    return makeResponse(direttaFeed);
+  }) as unknown as typeof fetch;
+};
+
+const buildDirettaFeed = (): string => {
   return [
     league("ITALIA: Serie A", "COuk57Ci", "Italia"),
     fixture("m1", future(3600), "Inter", "Milan"),
@@ -118,20 +196,7 @@ const buildFeed = (): string => {
     league("ITALIA: Serie C", "CzESFqCV", "Italia"),
     fixture("m4", future(3600), "Padova", "Vicenza"),
   ].join("~");
-}
-
-const mockFeedFetch = (feed: string): void => {
-  globalThis.fetch = (async (url: string) => {
-    const target = String(url);
-    if (target.includes("dc_1_m1")) {
-      return makeResponse(detail(future(3600 + 7000)));
-    }
-    if (target.includes("dc_1_m3")) {
-      return makeResponse(detail(null));
-    }
-    return makeResponse(feed);
-  }) as unknown as typeof fetch;
-}
+};
 
 let stub: StubScheduler;
 
@@ -142,7 +207,12 @@ before(() => {
 beforeEach(async () => {
   stub = new StubScheduler();
   await db.deleteAll();
-  mockFeedFetch(buildFeed());
+  // Reset mapping store and populate league_links (the source of truth for monitored leagues)
+  resetMappingStore();
+  await upsertLeagueLink({ apiFootballLeagueId: 135, direttaTournamentId: "COuk57Ci", name: "ITALIA: Serie A" });
+  await upsertLeagueLink({ apiFootballLeagueId: 39, direttaTournamentId: "Cp0ZbF2i", name: "INGHILTERRA: Premier League" });
+  // NOTE: Serie C (999) is intentionally NOT linked, so it will be rejected.
+  mockFetch(buildApiFootballFixtures(), buildDirettaFeed());
 });
 
 after(() => {
@@ -150,7 +220,7 @@ after(() => {
   removeDb(DB_FILE);
 });
 
-test("filters major leagues, persists monitored fixtures and creates a single job", async () => {
+test("filters by league_links, persists monitored fixtures with both IDs and creates a single job", async () => {
   const result = await autoScheduleEvents(stub);
   assert.equal(result.statusCode, 200);
   assert.match(result.message ?? "", /2 fixtures monitored/);
@@ -161,12 +231,21 @@ test("filters major leagues, persists monitored fixtures and creates a single jo
 
   const m1 = (await db.getMatch("m1"))!;
   assert.equal((m1 as any)["monitored"], true);
-  assert.equal((m1 as any)["begin_monitoring_time"], future(3600) - 300);
-  assert.equal((m1 as any)["end_monitoring_time"], future(3600 + 7000));
+  assert.equal((m1 as any)["begin_monitoring_time"], fixtureStart1 - 300);
+  assert.ok((m1 as any)["end_monitoring_time"] > fixtureStart1);
 
   const m3 = (await db.getMatch("m3"))!;
   assert.equal((m3 as any)["monitored"], true);
-  assert.equal((m3 as any)["end_monitoring_time"], future(7200) + 7200);
+  // m3 detail feed returns null, so fallback to start + 2h
+  assert.equal((m3 as any)["end_monitoring_time"], fixtureStart2 + 7200);
+
+  // Verify scheduled_fixtures has both fixture_id (API Football) and match_id (Diretta)
+  const scheduled = await (await import("../src/services/scheduled_fixtures_repo.ts")).getScheduledFixtures();
+  const byFixture = new Map(scheduled.map((s: any) => [s.fixture_id, s]));
+  assert.ok(byFixture.has(1001), "fixture 1001 (Inter-Milan) should be in scheduled_fixtures");
+  assert.ok(byFixture.has(1003), "fixture 1003 (Arsenal-Chelsea) should be in scheduled_fixtures");
+  assert.equal((byFixture.get(1001) as any).match_id, "m1");
+  assert.equal((byFixture.get(1003) as any).match_id, "m3");
 
   const created = stub.calls.find((call) => call.op === "create");
   assert.ok(created);
@@ -190,19 +269,28 @@ test("filters major leagues, persists monitored fixtures and creates a single jo
 test("continues when a detail feed fails and falls back to start + 2h", async () => {
   globalThis.fetch = (async (url: string) => {
     const target = String(url);
+    if (target.includes("v3.football.api-sports.io/fixtures")) {
+      return makeResponse(JSON.stringify({ response: buildApiFootballFixtures() }));
+    }
     if (target.includes("dc_1_m1")) {
       throw new FeedError("mock detail failure");
     }
     if (target.includes("dc_1_m3")) {
       return makeResponse(detail(null));
     }
-    return makeResponse(buildFeed());
+    if (target.includes("dc_1_m4")) {
+      return makeResponse(detail(future(3600 + 7000)));
+    }
+    if (target.includes("f_1_0_3_it_1")) {
+      return makeResponse(buildDirettaFeed());
+    }
+    return makeResponse(buildDirettaFeed());
   }) as unknown as typeof fetch;
 
   const result = await autoScheduleEvents(stub);
   assert.equal(result.statusCode, 200);
   const m1 = (await db.getMatch("m1"))!;
-  assert.equal((m1 as any)["end_monitoring_time"], future(3600) + 7200);
+  assert.equal((m1 as any)["end_monitoring_time"], fixtureStart1 + 7200);
 });
 
 test("returns 409 when the existing job already fires today", async () => {
@@ -239,13 +327,14 @@ test("updates the existing job when its schedule is from another day", async () 
 });
 
 test("deletes the job and returns 200 when no upcoming major-league matches exist", async () => {
-  globalThis.fetch = (async () =>
-    makeResponse([
-      league("ITALIA: Serie A", "COuk57Ci", "Italia"),
-      fixture("m1", future(-3600), "Inter", "Milan"),
-      league("ITALIA: Serie C", "CzESFqCV", "Italia"),
-      fixture("m4", future(3600), "Padova", "Vicenza"),
-    ].join("~"))) as unknown as typeof fetch;
+  const today = new Date().toISOString().split("T")[0];
+  const noUpcomingFixtures = [
+    // All matches already started (earlier today)
+    apiFootballFixture(1001, new Date(Date.now() - 3600 * 1000).toISOString(), 487, "Inter", 505, "Milan", 135, "Serie A", "Italy"),
+    apiFootballFixture(1002, new Date(Date.now() - 7200 * 1000).toISOString(), 42, "Arsenal", 49, "Chelsea", 39, "Premier League", "England"),
+  ];
+  
+  mockFetch(noUpcomingFixtures, buildDirettaFeed());
 
   stub.jobs.set("test-job", {
     name: "projects/test-project/locations/europe-west6/jobs/test-job",
@@ -254,7 +343,7 @@ test("deletes the job and returns 200 when no upcoming major-league matches exis
   });
   const result = await autoScheduleEvents(stub);
   assert.equal(result.statusCode, 200);
-  assert.match(result.message ?? "", /no upcoming major-league matches/);
+  assert.match(result.message ?? "", /no valid fixtures to schedule/);
   assert.ok(stub.calls.some((call) => call.op === "delete" && call.jobId === "test-job"));
   assert.equal(await db.countMatches(), 0);
 });
@@ -287,8 +376,15 @@ test("uses the configured cron step minutes", async () => {
 });
 
 test("propagates feed failures from the matches list", async () => {
-  globalThis.fetch = (async () => {
-    throw new FeedError("mock feed failure");
+  globalThis.fetch = (async (url: string) => {
+    const target = String(url);
+    if (target.includes("f_1_0_3_it_1")) {
+      throw new FeedError("mock feed failure");
+    }
+    if (target.includes("v3.football.api-sports.io/fixtures")) {
+      return makeResponse(JSON.stringify({ response: buildApiFootballFixtures() }));
+    }
+    return makeResponse(buildDirettaFeed());
   }) as unknown as typeof fetch;
   await assert.rejects(autoScheduleEvents(stub), (error: unknown) => {
     assert.ok(error instanceof FeedError);
@@ -299,13 +395,19 @@ test("propagates feed failures from the matches list", async () => {
 test("treats a zero end_time as missing and falls back to start + 2h", async () => {
   globalThis.fetch = (async (url: string) => {
     const target = String(url);
+    if (target.includes("v3.football.api-sports.io/fixtures")) {
+      return makeResponse(JSON.stringify({ response: buildApiFootballFixtures() }));
+    }
     if (target.includes("dc_1_m1")) {
       return makeResponse(detail(0));
     }
     if (target.includes("dc_1_m3")) {
       return makeResponse(detail(0));
     }
-    return makeResponse(buildFeed());
+    if (target.includes("f_1_0_3_it_1")) {
+      return makeResponse(buildDirettaFeed());
+    }
+    return makeResponse(buildDirettaFeed());
   }) as unknown as typeof fetch;
 
   const log = new RecordingLogger();
@@ -314,7 +416,7 @@ test("treats a zero end_time as missing and falls back to start + 2h", async () 
   assert.match(result.message ?? "", /job test-job scheduled at/);
 
   const m1 = (await db.getMatch("m1"))!;
-  assert.equal((m1 as any)["end_monitoring_time"], future(3600) + 7200);
+  assert.equal((m1 as any)["end_monitoring_time"], fixtureStart1 + 7200);
   assert.ok(log.find("warn", "match detail has no end_time: falling back to start + 2h"));
 
   const created = stub.calls.find((call) => call.op === "create");
@@ -326,7 +428,7 @@ test("logs the effective settings, the match selection and the scheduler outcome
   const result = await autoScheduleEvents(stub, log);
   assert.equal(result.statusCode, 200);
 
-  const started = log.find("info", "auto-schedule started");
+  const started = log.find("info", "auto-schedule started (league-links driven)");
   assert.ok(started);
   assert.equal(started.obj["gcpJobId"], "test-job");
   assert.equal(started.obj["schedulerEnabled"], true);
@@ -334,16 +436,17 @@ test("logs the effective settings, the match selection and the scheduler outcome
   assert.equal(started.obj["schedulerTimeZone"], "UTC");
   assert.equal(started.obj["monitorLeadMinutes"], 5);
 
-  const fetched = log.find("info", "match list fetched");
+  const fetched = log.find("info", "API Football fixtures fetched");
   assert.ok(fetched);
   assert.equal(fetched.obj["fetched"], 4);
 
-  const selection = log.find("info", "match selection completed");
+  const selection = log.find("info", "fixture selection completed");
   assert.ok(selection);
-  assert.equal(selection.obj["upcoming"], 2);
+  assert.equal(selection.obj["valid"], 2);
   assert.equal(selection.obj["rejectedByLeague"], 1);
   assert.equal(selection.obj["alreadyStarted"], 1);
   assert.equal(selection.obj["missingStartTime"], 0);
+  assert.equal(selection.obj["noLeagueLink"], 1);
 
   const created = log.find("info", "creating cloud scheduler job");
   assert.ok(created);
@@ -355,33 +458,41 @@ test("logs the effective settings, the match selection and the scheduler outcome
 });
 
 test("logs the rejection breakdown when no upcoming major-league match is found", async () => {
-  globalThis.fetch = (async () =>
-    makeResponse([
-      league("ITALIA: Serie C", "CzESFqCV", "Italia"),
-      fixture("m4", future(3600), "Padova", "Vicenza"),
-    ].join("~"))) as unknown as typeof fetch;
+  const today = new Date().toISOString().split("T")[0];
+  const noUpcomingFixtures = [
+    // Only non-monitored league (no league_link for 999)
+    apiFootballFixture(1004, `${today}T23:00:00+00:00`, 999, "Padova", 998, "Vicenza", 999, "Serie C", "Italy"),
+  ];
+  
+  mockFetch(noUpcomingFixtures, buildDirettaFeed());
 
   const log = new RecordingLogger();
   const result = await autoScheduleEvents(stub, log);
   assert.equal(result.statusCode, 200);
 
-  const warning = log.find("warn", "no upcoming major-league matches found: nothing to schedule");
+  const warning = log.find("warn", "no valid fixtures to schedule");
   assert.ok(warning);
-  assert.equal(warning.obj["rejectedByLeague"], 1);
-  assert.deepEqual(warning.obj["rejectedLeagues"], [{ tournament: "ITALIA: Serie C", count: 1 }]);
-  assert.deepEqual(warning.obj["allowlist"], ["ITALIA: Serie A", "INGHILTERRA: Premier League"]);
+  const rejectedByLeague = warning.obj["rejectedByLeague"] as Array<{ tournament: string; count: number }>;
+  assert.equal(rejectedByLeague.length, 1);
+  assert.deepEqual(rejectedByLeague, [{ tournament: "Italy: Serie C", count: 1 }]);
 });
 
 test("logs the fallback used when the match detail feed fails", async () => {
   globalThis.fetch = (async (url: string) => {
     const target = String(url);
+    if (target.includes("v3.football.api-sports.io/fixtures")) {
+      return makeResponse(JSON.stringify({ response: buildApiFootballFixtures() }));
+    }
     if (target.includes("dc_1_m1")) {
       throw new FeedError("mock detail failure");
     }
     if (target.includes("dc_1_m3")) {
       return makeResponse(detail(null));
     }
-    return makeResponse(buildFeed());
+    if (target.includes("f_1_0_3_it_1")) {
+      return makeResponse(buildDirettaFeed());
+    }
+    return makeResponse(buildDirettaFeed());
   }) as unknown as typeof fetch;
 
   const log = new RecordingLogger();
@@ -423,7 +534,7 @@ test("logs the missing scheduler configuration", async () => {
     assert.ok(warning);
     assert.deepEqual(warning.obj["missing"], ["MONITOR_JOB_TARGET_BASE_URL"]);
 
-    const started = log.find("info", "auto-schedule started");
+    const started = log.find("info", "auto-schedule started (league-links driven)");
     assert.ok(started);
     assert.equal(started.obj["schedulerEnabled"], false);
     assert.deepEqual(started.obj["missingSchedulerSettings"], ["MONITOR_JOB_TARGET_BASE_URL"]);
@@ -433,8 +544,15 @@ test("logs the missing scheduler configuration", async () => {
 });
 
 test("logs a failure raised while listing the matches", async () => {
-  globalThis.fetch = (async () => {
-    throw new FeedError("mock feed failure");
+  globalThis.fetch = (async (url: string) => {
+    const target = String(url);
+    if (target.includes("f_1_0_3_it_1")) {
+      throw new FeedError("mock feed failure");
+    }
+    if (target.includes("v3.football.api-sports.io/fixtures")) {
+      return makeResponse(JSON.stringify({ response: buildApiFootballFixtures() }));
+    }
+    return makeResponse(buildDirettaFeed());
   }) as unknown as typeof fetch;
 
   const log = new RecordingLogger();

@@ -1,5 +1,5 @@
 import { fetchFeed, toInt, type FeedRecord } from "./transport.ts";
-import type { Match } from "../models.ts";
+import type { Match } from "../../scraper/models.ts";
 
 export const SPORTS: Record<number, string> = {
   1: "calcio",

@@ -10,6 +10,11 @@ import { removeDb, useTempDb } from "./support.ts";
 process.env["LOG_LEVEL"] = "silent";
 const DB_FILE = useTempDb("sbi");
 
+// Forza il repository di mapping in memoria: in test non c'è Supabase
+// raggiungibile (.env.local espone credenziali ma nessun endpoint).
+delete process.env.SUPABASE_URL;
+delete process.env.SUPABASE_SERVICE_ROLE_KEY;
+
 const originalFetch = globalThis.fetch;
 const FIXTURE = [
   "ZA\u00f7ITALIA: Serie A\u00acZY\u00f7Italia\u00acZEE\u00f7COuk57Ci\u00acZC\u00f71\u00acZL\u00f7/calcio/italia/serie-a/",

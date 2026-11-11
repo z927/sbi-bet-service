@@ -1,4 +1,4 @@
-import type { Odds, OddsMarket, OddsMarketSelector, OddsOutcome } from "../models.ts";
+import type { Odds, OddsMarket, OddsMarketSelector, OddsOutcome } from "../../scraper/models.ts";
 import { BASE_URL, httpGet } from "./transport.ts";
 
 const ODDS_URL = "https://global.ds.lsapp.eu/odds/pq_graphql";

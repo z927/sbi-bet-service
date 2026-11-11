@@ -1,16 +1,14 @@
-import { client } from "../../scraper/client/index.ts";
-import type { Match, Statistics } from "../../scraper/models.ts";
+import { client } from "../../clients/diretta/index.ts";
+import type { Match, OddsMarketSelector, Statistics } from "../../scraper/models.ts";
 import { getStrategyLogger, runWithLogContext, runWithNewLogTrace } from "../../logger.ts";
+import { getLiveOdds, listLiveFixtures } from "../api_football.ts";
+import { getFixtureLinkByApiFootballId, listLeagueLinks } from "../../mapping/repo.ts";
 import {
   attachLiveOdds,
   dispatchAlerts,
   evaluateSignalsWithPreAlert,
-  matchMinute,
-  matchPeriod,
-  touchSnapshot,
   type Alert,
 } from "../signals/index.ts";
-import { configuredMajorLeagues, isMajorLeague } from "./major_leagues.ts";
 import type {
   Strategy,
   StrategyContext,
@@ -21,12 +19,10 @@ import type {
 export const LIVE_MATCHES_STRATEGY = "live-matches-statistics";
 
 export interface LiveMatchesStrategyHooks {
-  allowlist: string[];
   log: (match: Match, statistics: Statistics) => void;
 }
 
 const defaultHooks = (): LiveMatchesStrategyHooks => ({
-  allowlist: configuredMajorLeagues(),
   log: (match: Match, statistics: Statistics) => {
     getStrategyLogger().info(
       { matchId: match.id, home: match.home, away: match.away, statistics },
@@ -35,38 +31,53 @@ const defaultHooks = (): LiveMatchesStrategyHooks => ({
   },
 });
 
-const isLive = (match: Match): boolean => {
-  return match.is_live === true;
-}
-
 interface MatchOutcome {
   statistics: Statistics | null;
   alerts: Alert[];
   error: string | null;
 }
 
-const logMatchProgress = (match: Match, statistics: Statistics): void => {
-  const log = getStrategyLogger();
-  const period = matchPeriod(match);
-  const minute = matchMinute(match);
-  if (minute !== null) {
-    log.info({ minute, period }, "match minute");
+const API_FOOTBALL_STAGE: Record<string, number | null> = {
+  "1H": 12,
+  "2H": 13,
+  "HT": 38,
+  "FT": 3,
+  "LIVE": null,
+  "NS": null,
+};
+
+const findOverUnderOdd = (bookmakers: unknown[]): number | null => {
+  for (const bm of bookmakers) {
+    const bets = (bm as { bets?: unknown[] }).bets ?? [];
+    for (const bet of bets) {
+      const values = (bet as { values?: unknown[] }).values ?? [];
+      for (const v of values) {
+        const val = v as { value?: string; odd?: string | number };
+        const odd = Number(val.odd);
+        if (typeof val.value === "string" && val.value.toLowerCase().includes("over") && Number.isFinite(odd)) {
+          return odd;
+        }
+      }
+    }
   }
-  if (period === null) {
-    return;
+  return null;
+};
+
+const resolveApiFootballOdds = async (
+  fixtureId: number,
+  oddsMarket: OddsMarketSelector | undefined,
+): Promise<number | null> => {
+  if (!oddsMarket || oddsMarket.betType !== "OVER_UNDER" || oddsMarket.selection !== "OVER") {
+    return null;
   }
-  const snapshot = touchSnapshot(match, statistics, period);
-  if (snapshot === null) {
-    return;
-  }
-  log.info(
-    { minute, period, touches: snapshot.touches, ratio: Number(snapshot.ratio.toFixed(2)) },
-    "touch ratio",
-  );
+  const odds = await getLiveOdds(fixtureId);
+  const allBookmakers = odds.flatMap((o) => o.bookmakers ?? []);
+  return findOverUnderOdd(allBookmakers);
 };
 
 const runMatch = async (
   match: Match,
+  oddsResolver: (alert: Alert) => Promise<number | null>,
   hooks: LiveMatchesStrategyHooks,
 ): Promise<MatchOutcome> => {
   const log = getStrategyLogger();
@@ -74,10 +85,9 @@ const runMatch = async (
   try {
     const statistics = await client.getStatistics(match.id);
     hooks.log(match, statistics);
-    logMatchProgress(match, statistics);
     const alerts = await evaluateSignalsWithPreAlert(match, statistics, undefined, { match, statistics });
     if (alerts.length > 0) {
-      await attachLiveOdds(alerts);
+      await attachLiveOdds(alerts, oddsResolver);
     }
     await dispatchAlerts(alerts, undefined, { match, statistics });
     log.info({ alerts: alerts.length }, "match strategy completed");
@@ -89,33 +99,78 @@ const runMatch = async (
   }
 };
 
+const toMatch = (
+  fixture: NonNullable<Awaited<ReturnType<typeof listLiveFixtures>>>[number],
+  direttaMatchId: string,
+): Match => {
+  const stageId = API_FOOTBALL_STAGE[fixture.fixture.status.short ?? ""] ?? null;
+  const stageStart = stageId !== null
+    ? Math.floor(new Date(fixture.fixture.date).getTime() / 1000)
+    : null;
+  return {
+    id: direttaMatchId,
+    sport: 1,
+    tournament: fixture.league.name,
+    country: fixture.league.country,
+    tournament_id: "",
+    home: fixture.teams.home.name,
+    away: fixture.teams.away.name,
+    home_score: fixture.goals.home ?? null,
+    away_score: fixture.goals.away ?? null,
+    status: fixture.fixture.status.short ?? "",
+    status_code: null,
+    stage_id: stageId,
+    stage_start: stageStart,
+    is_live: true,
+    minute: null,
+  };
+};
+
 const execute = async (
   context: StrategyContext,
   hooks: LiveMatchesStrategyHooks,
 ): Promise<StrategyResult> => {
   const log = getStrategyLogger();
-  const sport = context.sport ?? 1;
-  const liveMatches = (await client.listMatches(sport)).filter(
-    (match) => isLive(match) && isMajorLeague(match, hooks.allowlist),
+  const liveFixtures = await listLiveFixtures();
+  log.info({ fixtures: liveFixtures.length }, "live fixtures fetched from API-Football");
+
+  const leagueLinks = await listLeagueLinks();
+  const monitoredLeagueIds = new Set(
+    leagueLinks
+      .filter((link) => link.direttaTournamentId !== null && link.direttaTournamentId !== "")
+      .map((link) => link.apiFootballLeagueId),
   );
-  log.info({ sport, matches: liveMatches.length }, "live strategy started");
+  log.info({ monitoredLeagues: monitoredLeagueIds.size }, "monitored leagues from league_links");
 
   const results: StrategyMatchResult[] = [];
-  for (const match of liveMatches) {
+  for (const fixture of liveFixtures) {
+    const leagueId = fixture.league.id;
+    if (!monitoredLeagueIds.has(leagueId)) continue;
+
+    const fixtureId = String(fixture.fixture.id);
+    const link = await getFixtureLinkByApiFootballId(fixtureId);
+    if (!link?.direttaMatchId) {
+      log.warn({ fixtureId, leagueId }, "no diretta link for live fixture");
+      continue;
+    }
+
+    const apiFootballFixtureId = fixture.fixture.id;
+    const match = toMatch(fixture, link.direttaMatchId);
     const base = { matchId: match.id, home: match.home ?? "", away: match.away ?? "" };
     const matchContext = {
       strategy: LIVE_MATCHES_STRATEGY,
       match: `${base.home} - ${base.away}`,
       fixtureId: match.id,
     };
-    const outcome = await runWithNewLogTrace(matchContext, () => runMatch(match, hooks));
+    const oddsResolver = (alert: Alert) => resolveApiFootballOdds(apiFootballFixtureId, alert.oddsMarket);
+    const outcome = await runWithNewLogTrace(matchContext, () => runMatch(match, oddsResolver, hooks));
     results.push({ ...base, ...outcome });
   }
 
   const failures = results.filter((result) => result.error !== null).length;
   const result: StrategyResult = {
     name: LIVE_MATCHES_STRATEGY,
-    matches: liveMatches.length,
+    matches: results.length,
     enriched: results.length - failures,
     failures,
     results,
