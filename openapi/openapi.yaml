@@ -253,6 +253,8 @@ paths:
 
   /mapping/leagues/auto-sync:
     post:
+      tags:
+        - Team Mapping
       operationId: autoSyncLeagues
       summary: Auto-sync leagues from diretta.it monitoring list to API-Football
       description: Discovers tournaments used by the monitoring allowlist on diretta.it, matches them to API-Football leagues, links them in league_links, and optionally runs seasons/teams sync.
