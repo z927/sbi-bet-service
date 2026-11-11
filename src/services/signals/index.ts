@@ -288,7 +288,7 @@ export type { MatchPeriod } from "./match_minutes.ts";
 export { touchSnapshot, TOUCH_STAT_NAME, TOUCH_CATEGORY } from "./touch_stats.ts";
 export type { TouchSnapshot } from "./touch_stats.ts";
 export { getTelegramConfig, sendTelegram, sendPreAlertTelegram, lastTelegramMessage, countryFlag, getWinRate, stripCountryPrefix, TELEGRAM_BOT_TOKEN_ENV, TELEGRAM_CHAT_ID_ENV, WIN_RATE_ENV, DEFAULT_WIN_RATE } from "./telegram.ts";
-export { attachLiveOdds, resolveLiveOdds, DEFAULT_ODDS_GEO } from "./live_odds.ts";
+export { attachLiveOdds } from "./live_odds.ts";
 export type { AlertOddsResolver } from "./live_odds.ts";
 export type { Alert } from "./alert.ts";
 export type { Signal } from "./signal.ts";
