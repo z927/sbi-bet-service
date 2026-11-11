@@ -5,6 +5,8 @@ import * as syncService from "../services/sync-service.ts";
 
 export const MAPPING_ROUTES: readonly RouteMetadata[] = [
   { method: "POST", path: "/mapping/leagues/auto-sync", operationId: "autoSyncLeagues" },
+  { method: "GET", path: "/mapping/diretta/tournaments", operationId: "listDirettaTournaments" },
+  { method: "GET", path: "/mapping/diretta/teams", operationId: "getDirettaTeams" },
 ];
 
 export const mappingRoutes = (app: FastifyInstance): void => {
