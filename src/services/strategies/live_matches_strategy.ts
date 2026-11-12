@@ -2,7 +2,8 @@ import { client } from "../../clients/diretta/index.ts";
 import type { Match, OddsMarketSelector, Statistics } from "../../scraper/models.ts";
 import { getStrategyLogger, runWithLogContext, runWithNewLogTrace } from "../../logger.ts";
 import { getLiveOdds, listLiveFixtures } from "../api_football.ts";
-import { getFixtureLinkByApiFootballId, listLeagueLinks } from "../../mapping/repo.ts";
+import { listLeagueLinks } from "../../mapping/repo.ts";
+import { getScheduledFixture } from "../scheduled_fixtures_repo.ts";
 import {
   attachLiveOdds,
   dispatchAlerts,
@@ -147,15 +148,15 @@ const execute = async (
     const leagueId = fixture.league.id;
     if (!monitoredLeagueIds.has(leagueId)) continue;
 
-    const fixtureId = String(fixture.fixture.id);
-    const link = await getFixtureLinkByApiFootballId(fixtureId);
-    if (!link?.direttaMatchId) {
+    const fixtureId = fixture.fixture.id;
+    const scheduled = await getScheduledFixture(fixtureId);
+    if (!scheduled?.match_id) {
       log.warn({ fixtureId, leagueId }, "no diretta link for live fixture");
       continue;
     }
 
     const apiFootballFixtureId = fixture.fixture.id;
-    const match = toMatch(fixture, link.direttaMatchId);
+    const match = toMatch(fixture, scheduled.match_id);
     const base = { matchId: match.id, home: match.home ?? "", away: match.away ?? "" };
     const matchContext = {
       strategy: LIVE_MATCHES_STRATEGY,

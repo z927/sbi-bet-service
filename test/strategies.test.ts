@@ -18,8 +18,8 @@ import {
   resetMappingStore,
   createTeam,
   upsertLeagueLink,
-  upsertFixtureLink,
 } from "../src/mapping/repo.ts";
+import { upsertScheduledFixtures, deleteAllScheduledFixtures } from "../src/services/scheduled_fixtures_repo.ts";
 
 process.env["LOG_LEVEL"] = "silent";
 
@@ -113,6 +113,7 @@ beforeEach(async () => {
   globalThis.fetch = fixtureFetch;
   resetMappingStore();
   resetSignalState();
+  await deleteAllScheduledFixtures();
   statsCalls = 0;
   oddsCalls = 0;
   statsFail = false;
@@ -125,13 +126,6 @@ beforeEach(async () => {
   homeTeamId = home.id;
   awayTeamId = away.id;
   await upsertLeagueLink({ apiFootballLeagueId: 78, direttaTournamentId: "T1", name: "ITALIA: Serie A" });
-  await upsertFixtureLink({
-    matchDate: new Date().toISOString().slice(0, 10),
-    homeTeamId,
-    awayTeamId,
-    apiFootballFixtureId: "1",
-    direttaMatchId: "m1",
-  });
 });
 
 after(() => {
@@ -139,6 +133,17 @@ after(() => {
 });
 
 test("strategy enriches live fixtures whose league is monitored via league_links", async () => {
+  await upsertScheduledFixtures([{
+    fixture_id: 1,
+    match_id: "m1",
+    api_football_league_id: 78,
+    api_football_league_name: "ITALIA: Serie A",
+    home_team: "Inter",
+    away_team: "Milan",
+    kickoff_time: new Date(M1_START * 1000).toISOString(),
+    begin_monitoring_time: new Date((M1_START - 60) * 1000).toISOString(),
+    end_monitoring_time: new Date((M1_START + 120) * 1000).toISOString(),
+  }]);
   const result = await runLiveMatchesStrategy({}, silentHooks());
 
   assert.equal(result.name, LIVE_MATCHES_STRATEGY);
@@ -159,13 +164,17 @@ test("strategy skips live fixtures not monitored by league_links", async () => {
   await resetMappingStore();
   const home = await createTeam("Inter", "Italia");
   const away = await createTeam("Milan", "Italia");
-  await upsertFixtureLink({
-    matchDate: new Date().toISOString().slice(0, 10),
-    homeTeamId: home.id,
-    awayTeamId: away.id,
-    apiFootballFixtureId: "1",
-    direttaMatchId: "m1",
-  });
+  await upsertScheduledFixtures([{
+    fixture_id: 1,
+    match_id: "m1",
+    api_football_league_id: 78,
+    api_football_league_name: "ITALIA: Serie A",
+    home_team: "Inter",
+    away_team: "Milan",
+    kickoff_time: new Date().toISOString(),
+    begin_monitoring_time: new Date().toISOString(),
+    end_monitoring_time: new Date().toISOString(),
+  }]);
 
   const result = await runLiveMatchesStrategy({}, silentHooks());
 
@@ -179,13 +188,6 @@ test("strategy skips live fixtures without a diretta link", async () => {
   await upsertLeagueLink({ apiFootballLeagueId: 78, direttaTournamentId: "T1", name: "ITALIA: Serie A" });
   const home = await createTeam("Inter", "Italia");
   const away = await createTeam("Milan", "Italia");
-  await upsertFixtureLink({
-    matchDate: new Date().toISOString().slice(0, 10),
-    homeTeamId: home.id,
-    awayTeamId: away.id,
-    apiFootballFixtureId: "1",
-    // no direttaMatchId
-  });
 
   const result = await runLiveMatchesStrategy({}, silentHooks());
 
@@ -195,6 +197,17 @@ test("strategy skips live fixtures without a diretta link", async () => {
 
 test("strategy records a per-match failure without throwing", async () => {
   statsFail = true;
+  await upsertScheduledFixtures([{
+    fixture_id: 1,
+    match_id: "m1",
+    api_football_league_id: 78,
+    api_football_league_name: "ITALIA: Serie A",
+    home_team: "Inter",
+    away_team: "Milan",
+    kickoff_time: new Date(M1_START * 1000).toISOString(),
+    begin_monitoring_time: new Date((M1_START - 60) * 1000).toISOString(),
+    end_monitoring_time: new Date((M1_START + 120) * 1000).toISOString(),
+  }]);
   const result = await runLiveMatchesStrategy({}, silentHooks());
 
   assert.equal(result.matches, 1);
@@ -231,6 +244,17 @@ test("strategy dispatches signal alerts through Telegram with live odds from API
   process.env.TELEGRAM_CHAT_ID = "-10042";
   delete process.env[WIN_RATE_ENV];
   statsBody = ALERT_STATS_FIXTURE;
+  await upsertScheduledFixtures([{
+    fixture_id: 1,
+    match_id: "m1",
+    api_football_league_id: 78,
+    api_football_league_name: "ITALIA: Serie A",
+    home_team: "Inter",
+    away_team: "Milan",
+    kickoff_time: new Date(M1_START * 1000).toISOString(),
+    begin_monitoring_time: new Date((M1_START - 60) * 1000).toISOString(),
+    end_monitoring_time: new Date((M1_START + 120) * 1000).toISOString(),
+  }]);
   try {
     const result = await runLiveMatchesStrategy({}, silentHooks());
 
@@ -269,6 +293,17 @@ test("strategy does not fail the match when the Telegram dispatch errors", async
   delete process.env[WIN_RATE_ENV];
   statsBody = ALERT_STATS_FIXTURE;
   telegramFail = true;
+  await upsertScheduledFixtures([{
+    fixture_id: 1,
+    match_id: "m1",
+    api_football_league_id: 78,
+    api_football_league_name: "ITALIA: Serie A",
+    home_team: "Inter",
+    away_team: "Milan",
+    kickoff_time: new Date(M1_START * 1000).toISOString(),
+    begin_monitoring_time: new Date((M1_START - 60) * 1000).toISOString(),
+    end_monitoring_time: new Date((M1_START + 120) * 1000).toISOString(),
+  }]);
   const originalError = console.error;
   console.error = () => {};
   try {
