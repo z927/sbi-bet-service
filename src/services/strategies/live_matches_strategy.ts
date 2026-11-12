@@ -100,6 +100,15 @@ const runMatch = async (
       "match touch stats",
     );
     const alerts = await evaluateSignalsWithPreAlert(match, statistics, undefined, { match, statistics });
+    log.info(
+      {
+        matchId: match.id,
+        alerts: alerts.length,
+        touches: snapshot?.touches ?? null,
+        ratio: snapshot?.ratio ?? null,
+      },
+      "match signals evaluated",
+    );
     if (alerts.length > 0) {
       await attachLiveOdds(alerts, oddsResolver);
     }
