@@ -1,7 +1,10 @@
 import { readFile } from "node:fs/promises";
+import { fileURLToPath } from "node:url";
+import { join, dirname } from "node:path";
 import { upsertTeams, initTeamsRepo } from "../services/teams_repo.ts";
 
-const TEAMS_JSON_PATH = "src/res/teams_merged.json";
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const TEAMS_JSON_PATH = join(__dirname, "..", "res", "teams.json");
 
 type TeamEntry = {
   diretta: string;
@@ -26,7 +29,6 @@ async function main() {
     api_football_id: t.apifootball,
     api_football_name: t.apifootballTeamName,
     api_football_league_id: t.apifootballLeague,
-    api_football_league_name: null,
     country: t.country ?? null,
   }));
 
