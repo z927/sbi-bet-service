@@ -8,6 +8,7 @@ import {
   attachLiveOdds,
   dispatchAlerts,
   evaluateSignalsWithPreAlert,
+  isZeroZero,
   type Alert,
 } from "../signals/index.ts";
 import { touchSnapshot } from "../signals/touch_stats.ts";
@@ -83,10 +84,14 @@ const runMatch = async (
   oddsResolver: (alert: Alert) => Promise<number | null>,
   hooks: LiveMatchesStrategyHooks,
 ): Promise<MatchOutcome> => {
-  const log = getStrategyLogger();
-  log.info({ matchId: match.id }, "match strategy started");
-  try {
-    const statistics = await client.getStatistics(match.id);
+    const log = getStrategyLogger();
+    log.info({ matchId: match.id }, "match strategy started");
+    try {
+      if (!isZeroZero(match)) {
+        log.info({ matchId: match.id, score: `${match.home_score ?? 0}-${match.away_score ?? 0}` }, "match strategy skipped (score not 0-0)");
+        return { statistics: null, alerts: [], error: null };
+      }
+      const statistics = await client.getStatistics(match.id);
     hooks.log(match, statistics);
     const period = matchPeriod(match);
     const snapshot = period ? touchSnapshot(match, statistics, period) : null;
