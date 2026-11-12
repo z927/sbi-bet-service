@@ -1,7 +1,7 @@
 const API_FOOTBALL_BASE_URL = "https://v3.football.api-sports.io";
 
 export interface ApiFootballFixture {
-  fixture: { id: number; date: string; status: { short: string } };
+  fixture: { id: number; date: string; status: { short: string; elapsed?: number | null } };
   league: { id: number; name: string; country: string };
   teams: { home: { id: number; name: string }; away: { id: number; name: string } };
   goals: { home: number | null; away: number | null };

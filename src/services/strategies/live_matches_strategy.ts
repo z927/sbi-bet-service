@@ -10,6 +10,8 @@ import {
   evaluateSignalsWithPreAlert,
   type Alert,
 } from "../signals/index.ts";
+import { touchSnapshot } from "../signals/touch_stats.ts";
+import { matchPeriod } from "../signals/match_minutes.ts";
 import type {
   Strategy,
   StrategyContext,
@@ -86,6 +88,17 @@ const runMatch = async (
   try {
     const statistics = await client.getStatistics(match.id);
     hooks.log(match, statistics);
+    const period = matchPeriod(match);
+    const snapshot = period ? touchSnapshot(match, statistics, period) : null;
+    log.info(
+      {
+        matchId: match.id,
+        minute: match.minute,
+        touches: snapshot?.touches ?? null,
+        ratio: snapshot?.ratio ?? null,
+      },
+      "match touch stats",
+    );
     const alerts = await evaluateSignalsWithPreAlert(match, statistics, undefined, { match, statistics });
     if (alerts.length > 0) {
       await attachLiveOdds(alerts, oddsResolver);
@@ -123,7 +136,7 @@ const toMatch = (
     stage_id: stageId,
     stage_start: stageStart,
     is_live: true,
-    minute: null,
+    minute: fixture.fixture.status.elapsed == null ? null : String(fixture.fixture.status.elapsed),
   };
 };
 
