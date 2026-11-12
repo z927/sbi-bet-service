@@ -1,6 +1,6 @@
 {
   "name": "sbi-bet-service",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "description": "Node/TypeScript backend: SBI Schedule/Monitoring/Matches APIs + diretta.it live scraper",
   "type": "module",
   "private": true,
