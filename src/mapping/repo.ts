@@ -485,15 +485,20 @@ export const getFixtureLinkByApiFootballId = async (fixtureId: string): Promise<
 
 export const getLeagueLink = async (apiFootballLeagueId: number): Promise<LeagueLink | null> => {
   if (isMemoryMode()) {
-    return memory.leagues.get(String(apiFootballLeagueId)) ?? null;
+    for (const link of memory.leagues.values()) {
+      if (link.apiFootballLeagueId === apiFootballLeagueId) {
+        return link;
+      }
+    }
+    return null;
   }
   const { data, error } = await getClient()
     .from("league_links")
     .select("*")
     .eq("api_football_league_id", apiFootballLeagueId)
-    .maybeSingle();
+    .limit(1);
   if (error) throw error;
-  return data ? toLeague(data as LeagueRow) : null;
+  return data?.[0] ? toLeague(data[0] as LeagueRow) : null;
 };
 
 export const listLeagueLinks = async (): Promise<LeagueLink[]> => {
@@ -510,7 +515,7 @@ export const upsertLeagueLink = async (input: UpsertLeagueLinkInput): Promise<Le
   if (input.direttaTournamentId !== undefined) values["diretta_tournament_id"] = input.direttaTournamentId;
   if (input.name !== undefined) values["name"] = input.name;
   if (isMemoryMode()) {
-    const key = String(input.apiFootballLeagueId);
+    const key = `${input.apiFootballLeagueId}:${input.direttaTournamentId ?? ""}`;
     const existing = memory.leagues.get(key);
     const timestamp = nowIso();
     const link: LeagueLink = {
@@ -529,7 +534,7 @@ export const upsertLeagueLink = async (input: UpsertLeagueLinkInput): Promise<Le
   }
   const { data, error } = await getClient()
     .from("league_links")
-    .upsert(values, { onConflict: "api_football_league_id" })
+    .upsert(values, { onConflict: "api_football_league_id,diretta_tournament_id" })
     .select("*")
     .single();
   if (error) throw error;
