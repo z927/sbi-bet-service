@@ -22,6 +22,19 @@ const findStatItem = (
   return periodCategory.find((item) => item.name === name) ?? null;
 };
 
+const SECOND_HALF_OFFSET = 45;
+
+const periodMinutes = (
+  match: Match,
+  period: MatchPeriod,
+): number | null => {
+  const minute = match.minute == null ? null : Number.parseInt(match.minute, 10);
+  if (minute !== null && Number.isFinite(minute) && minute > 0) {
+    return period === "second_half" ? Math.max(1, minute - SECOND_HALF_OFFSET) : minute;
+  }
+  return period === "second_half" ? secondHalfMinutes(match) : firstHalfMinutes(match);
+};
+
 export const touchSnapshot = (
   match: Match,
   statistics: Statistics,
@@ -36,7 +49,7 @@ export const touchSnapshot = (
   if (Number.isNaN(home) || Number.isNaN(away)) {
     return null;
   }
-  const minutes = period === "second_half" ? secondHalfMinutes(match) : firstHalfMinutes(match);
+  const minutes = periodMinutes(match, period);
   if (minutes === null || minutes <= 0) {
     return null;
   }

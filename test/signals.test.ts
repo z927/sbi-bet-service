@@ -24,6 +24,7 @@ import {
   resetSignalState,
   secondHalfMinutes,
   sendTelegram,
+  touchSnapshot,
   type Alert,
   type Signal,
 } from "../src/services/signals/index.ts";
@@ -328,6 +329,31 @@ test("matchMinute returns null outside the halves", () => {
   assert.equal(matchMinute(signalMatch({ stage_id: 20 })), null);
   assert.equal(matchMinute(signalMatch({ stage_id: 12, stage_start: null })), null);
   assert.equal(matchMinute(signalMatch({ stage_id: null })), null);
+});
+
+test("touchSnapshot ratio uses the match minute for first-half stats", () => {
+  const match = signalMatch({ minute: "39" });
+  const snapshot = touchSnapshot(match, touchStats("12", "15"), "first_half");
+
+  assert.ok(snapshot);
+  assert.equal(snapshot.touches, 27);
+  assert.ok(Math.abs(snapshot.ratio! - 27 / 39) < 1e-9);
+});
+
+test("touchSnapshot ratio uses minutes into the second half", () => {
+  const match = signalMatch({ stage_id: 13, minute: "69" });
+  const snapshot = touchSnapshot(match, touchStatsSecondHalf("7", "8"), "second_half");
+
+  assert.ok(snapshot);
+  assert.equal(snapshot.touches, 15);
+  assert.ok(Math.abs(snapshot.ratio! - 15 / 24) < 1e-9);
+});
+
+test("touchSnapshot falls back to stage-derived minutes when match.minute is missing", () => {
+  const match = signalMatch({ minute: null, stage_id: 20 });
+  const snapshot = touchSnapshot(match, touchStats("10", "10"), "first_half");
+
+  assert.equal(snapshot, null);
 });
 
 test("goalOverSignal fires a first-half alert on a 0-0 in the 15'-35' window", () => {
