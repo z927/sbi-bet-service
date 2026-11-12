@@ -9,8 +9,10 @@ import { buildCron, cronHitsDay } from "./cron.ts";
 import { getLogger, type AppLogger } from "../logger.ts";
 import { listTodayFixtures, type ApiFootballFixture } from "./api_football.ts";
 import { upsertScheduledFixtures, initScheduledFixturesRepo } from "./scheduled_fixtures_repo.ts";
+import { getTeams } from "../services/teams_repo.ts";
 import { listLeagueLinks } from "../mapping/repo.ts";
 import type { LeagueLink } from "../mapping/models.ts";
+import { normalizeTeamName } from "../mapping/normalize.ts";
 
 const SPORT_CALCIO = 1;
 const FALLBACK_END_OFFSET_SECONDS = 2 * 60 * 60;
@@ -61,23 +63,6 @@ interface MatchedFixture {
   fixture: ApiFootballFixture;
   direttaMatch: Match;
   leagueLink: LeagueLink;
-}
-
-const normalizeTeamName = (name: string): string => {
-  return name.toLowerCase().trim().replace(/[^\w\s]/g, "").replace(/\s+/g, " ");
-}
-
-const findDirettaMatch = (apiFixture: ApiFootballFixture, direttaMatches: Match[]): Match | null => {
-  const normHome = normalizeTeamName(apiFixture.teams.home.name);
-  const normAway = normalizeTeamName(apiFixture.teams.away.name);
-  const direttaMatch = direttaMatches.find(m =>
-    normalizeTeamName(m.home ?? "").includes(normHome) &&
-    normalizeTeamName(m.away ?? "").includes(normAway)
-  );
-  if (direttaMatch) {
-    return direttaMatch;
-  }
-  return null;
 }
 
 const enrichWindows = async (matches: Match[], leadMinutes: number, log: AppLogger): Promise<void> => {
@@ -162,6 +147,39 @@ export const autoScheduleEvents = async (
     }
     log.info({ direttaFetched: direttaMatches.length, direttaFiltered: direttaMatchesByTournament.size }, "Diretta matches filtered by diretta_tournament_id");
 
+    // Carica le squadre dal repo teams: diretta_name -> team (bridge col feed Diretta)
+    // e api_football_id -> team (bridge con API Football).
+    const teams = await getTeams();
+    const direttaNameToTeam = new Map<string, typeof teams[number]>();
+    const apiFootballIdToTeam = new Map<number, typeof teams[number]>();
+    for (const team of teams) {
+      direttaNameToTeam.set(normalizeTeamName(team.diretta_name), team);
+      if (team.api_football_id !== null) {
+        apiFootballIdToTeam.set(team.api_football_id, team);
+      }
+    }
+
+    const resolveDirettaTeams = (m: Match): { home: typeof teams[number] | null; away: typeof teams[number] | null } => ({
+      home: direttaNameToTeam.get(normalizeTeamName(m.home ?? "")) ?? null,
+      away: direttaNameToTeam.get(normalizeTeamName(m.away ?? "")) ?? null,
+    });
+
+    // Indicizza le partite Diretta per torneo + coppia di squadre (via diretta_name).
+    const direttaByTournamentAndPair = new Map<string, Map<string, Match>>();
+    for (const match of direttaMatches) {
+      const tid = match.tournament_id;
+      if (!tid || !direttaTournamentIds.has(tid)) continue;
+      const { home, away } = resolveDirettaTeams(match);
+      if (!home || !away) continue;
+      let byPair = direttaByTournamentAndPair.get(tid);
+      if (!byPair) {
+        byPair = new Map();
+        direttaByTournamentAndPair.set(tid, byPair);
+      }
+      const pairKey = [home.id, away.id].sort().join("|");
+      byPair.set(pairKey, match);
+    }
+
     // 3. Recupera le partite da API Football (drives the logic)
     const apiFixtures = await listTodayFixtures(today);
     log.info({ fetched: apiFixtures.length, date: today }, "API Football fixtures fetched");
@@ -175,8 +193,8 @@ export const autoScheduleEvents = async (
       return baseResponse("Auto-schedule completed: no fixtures from API Football", 200);
     }
 
-    // 4. Filtra le API Football per campionato monitorato (league_links.api_football_league_id)
-    //    e associa la corrispondente partita Diretta (per diretta_tournament_id + nomi squadre)
+    // 4. Filtra le API Football per campionato monitorato e associa la partita Diretta
+    //    tramite le squadre del repo teams (diretta_name + api_football_id).
     const validFixtures: MatchedFixture[] = [];
     const rejectedLeagues: { tournament: string; count: number }[] = [];
     const rejectedLeagueMap = new Map<string, number>();
@@ -211,8 +229,16 @@ export const autoScheduleEvents = async (
         continue;
       }
 
-      const candidates = direttaMatchesByTournament.get(leagueLink.direttaTournamentId) ?? [];
-      const direttaMatch = findDirettaMatch(fixture, candidates);
+      const homeTeam = apiFootballIdToTeam.get(fixture.teams.home.id);
+      const awayTeam = apiFootballIdToTeam.get(fixture.teams.away.id);
+      let direttaMatch: Match | null = null;
+      if (homeTeam && awayTeam) {
+        const byPair = direttaByTournamentAndPair.get(leagueLink.direttaTournamentId);
+        if (byPair) {
+          const pairKey = [homeTeam.id, awayTeam.id].sort().join("|");
+          direttaMatch = byPair.get(pairKey) ?? null;
+        }
+      }
       if (!direttaMatch) {
         noDirettaMatch += 1;
         log.warn({ fixtureId: fixture.fixture.id, home: fixture.teams.home.name, away: fixture.teams.away.name, league: `${fixture.league.country}: ${fixture.league.name}`, direttaTournamentId: leagueLink.direttaTournamentId }, "no Diretta match found for fixture");

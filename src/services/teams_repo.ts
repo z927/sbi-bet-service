@@ -7,7 +7,6 @@ export interface Team {
   api_football_id: number | null;
   api_football_name: string | null;
   api_football_league_id: number | null;
-  api_football_league_name: string | null;
   country: string | null;
   created_at: string;
   updated_at: string;
@@ -18,7 +17,6 @@ export interface TeamInput {
   api_football_id: number | null;
   api_football_name: string | null;
   api_football_league_id: number | null;
-  api_football_league_name: string | null;
   country: string | null;
 }
 
@@ -98,64 +96,21 @@ export const upsertTeams = async (teams: TeamInput[]): Promise<number> => {
   let stored = 0;
 
   for (const team of teams) {
-    // Resolve or create the canonical team row by name + country.
-    let teamId: string;
-    const { data: found } = await supabase
+    const { error: teamError } = await supabase
       .from("teams")
-      .select("id")
-      .eq("name", team.diretta_name)
-      .eq("country", team.country ?? null)
-      .maybeSingle();
-
-    if (found?.id) {
-      teamId = found.id;
-    } else {
-      const { data: inserted, error: insertError } = await supabase
-        .from("teams")
-        .insert({ name: team.diretta_name, country: team.country ?? null, updated_at: timestamp })
-        .select("id")
-        .single();
-      if (insertError) throw insertError;
-      teamId = inserted!.id;
-    }
-
-    // Upsert the API-Football provider mapping when an id is known.
-    if (team.api_football_id !== null && team.api_football_id !== undefined) {
-      const { error: afError } = await supabase
-        .from("team_provider_mappings")
-        .upsert(
-          {
-            team_id: teamId,
-            provider: "api_football",
-            provider_team_id: String(team.api_football_id),
-            raw_name: team.api_football_name ?? team.diretta_name,
-            country: team.country ?? null,
-            confidence: 1,
-            status: "confirmed",
-            source: "manual",
-          },
-          { onConflict: "provider,provider_team_id" },
-        );
-      if (afError) throw afError;
-    }
-
-    // Upsert the diretta provider mapping keyed by the diretta team name.
-    const { error: direttaError } = await supabase
-      .from("team_provider_mappings")
       .upsert(
         {
-          team_id: teamId,
-          provider: "diretta",
-          provider_team_id: team.diretta_name,
-          raw_name: team.diretta_name,
+          id: team.diretta_name.toLowerCase().replace(/\s+/g, "_"),
+          diretta_name: team.diretta_name,
+          api_football_id: team.api_football_id,
+          api_football_name: team.api_football_name,
+          api_football_league_id: team.api_football_league_id,
           country: team.country ?? null,
-          confidence: 1,
-          status: "confirmed",
-          source: "manual",
+          updated_at: timestamp,
         },
-        { onConflict: "provider,provider_team_id" },
+        { onConflict: "id" },
       );
-    if (direttaError) throw direttaError;
+    if (teamError) throw teamError;
 
     stored += 1;
   }
@@ -171,18 +126,17 @@ export const getTeams = async (): Promise<Team[]> => {
   const supabase = getClient();
   const { data, error } = await supabase
     .from("teams")
-    .select("id, name, country, created_at, updated_at")
-    .order("name");
+    .select("id, diretta_name, api_football_id, api_football_name, api_football_league_id, country, created_at, updated_at")
+    .order("diretta_name");
   if (error) {
     throw error;
   }
-  return ((data ?? []) as Array<{ id: string; name: string; country: string | null; created_at: string; updated_at: string }>).map((row) => ({
+  return ((data ?? []) as Array<{ id: string; diretta_name: string; api_football_id: number | null; api_football_name: string | null; api_football_league_id: number | null; country: string | null; created_at: string; updated_at: string }>).map((row) => ({
     id: row.id,
-    diretta_name: row.name,
-    api_football_id: null,
-    api_football_name: null,
-    api_football_league_id: null,
-    api_football_league_name: null,
+    diretta_name: row.diretta_name,
+    api_football_id: row.api_football_id,
+    api_football_name: row.api_football_name,
+    api_football_league_id: row.api_football_league_id,
     country: row.country,
     created_at: row.created_at,
     updated_at: row.updated_at,
@@ -198,8 +152,8 @@ export const getTeam = async (direttaName: string): Promise<Team | null> => {
   const supabase = getClient();
   const { data, error } = await supabase
     .from("teams")
-    .select("id, name, country, created_at, updated_at")
-    .eq("name", direttaName)
+    .select("id, diretta_name, api_football_id, api_football_name, api_football_league_id, country, created_at, updated_at")
+    .eq("diretta_name", direttaName)
     .maybeSingle();
   if (error) {
     throw error;
@@ -207,14 +161,13 @@ export const getTeam = async (direttaName: string): Promise<Team | null> => {
   if (!data) {
     return null;
   }
-  const row = data as { id: string; name: string; country: string | null; created_at: string; updated_at: string };
+  const row = data as { id: string; diretta_name: string; api_football_id: number | null; api_football_name: string | null; api_football_league_id: number | null; country: string | null; created_at: string; updated_at: string };
   return {
     id: row.id,
-    diretta_name: row.name,
-    api_football_id: null,
-    api_football_name: null,
-    api_football_league_id: null,
-    api_football_league_name: null,
+    diretta_name: row.diretta_name,
+    api_football_id: row.api_football_id,
+    api_football_name: row.api_football_name,
+    api_football_league_id: row.api_football_league_id,
     country: row.country,
     created_at: row.created_at,
     updated_at: row.updated_at,
@@ -259,7 +212,7 @@ export const getTeamByApiFootballId = async (apiFootballId: number): Promise<Tea
 
   const { data: team, error: teamError } = await supabase
     .from("teams")
-    .select("id, name, country, created_at, updated_at")
+    .select("id, diretta_name, api_football_id, api_football_name, api_football_league_id, country, created_at, updated_at")
     .eq("id", (mapping as { team_id: string }).team_id)
     .maybeSingle();
   if (teamError) {
@@ -269,14 +222,13 @@ export const getTeamByApiFootballId = async (apiFootballId: number): Promise<Tea
     return null;
   }
 
-  const row = team as { id: string; name: string; country: string | null; created_at: string; updated_at: string };
+  const row = team as { id: string; diretta_name: string; api_football_id: number | null; api_football_name: string | null; api_football_league_id: number | null; country: string | null; created_at: string; updated_at: string };
   return {
     id: row.id,
-    diretta_name: row.name,
-    api_football_id: apiFootballId,
-    api_football_name: (mapping as { raw_name: string | null }).raw_name ?? row.name ?? null,
-    api_football_league_id: null,
-    api_football_league_name: null,
+    diretta_name: row.diretta_name,
+    api_football_id: row.api_football_id ?? apiFootballId,
+    api_football_name: row.api_football_name ?? (mapping as { raw_name: string | null }).raw_name ?? row.diretta_name ?? null,
+    api_football_league_id: row.api_football_league_id,
     country: row.country ?? (mapping as { country: string | null }).country ?? null,
     created_at: row.created_at,
     updated_at: row.updated_at,

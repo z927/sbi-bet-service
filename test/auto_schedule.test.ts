@@ -12,6 +12,7 @@ import { FeedError } from "../src/clients/diretta/transport.ts";
 import type { AppLogger } from "../src/logger.ts";
 import * as db from "../src/scraper/db.ts";
 import { resetMappingStore, upsertLeagueLink } from "../src/mapping/repo.ts";
+import { upsertTeams, deleteAllTeams, initTeamsRepo } from "../src/services/teams_repo.ts";
 import { removeDb, useTempDb } from "./support.ts";
 
 process.env["LOG_LEVEL"] = "debug";
@@ -212,6 +213,15 @@ beforeEach(async () => {
   await upsertLeagueLink({ apiFootballLeagueId: 135, direttaTournamentId: "COuk57Ci", name: "ITALIA: Serie A" });
   await upsertLeagueLink({ apiFootballLeagueId: 39, direttaTournamentId: "Cp0ZbF2i", name: "INGHILTERRA: Premier League" });
   // NOTE: Serie C (999) is intentionally NOT linked, so it will be rejected.
+  // Populate the teams table (diretta_name <-> api_football_id bridge used for Diretta matching).
+  deleteAllTeams();
+  initTeamsRepo();
+  await upsertTeams([
+    { diretta_name: "Inter", api_football_id: 505, api_football_name: "Inter", api_football_league_id: 135, country: "Italy" },
+    { diretta_name: "Milan", api_football_id: 487, api_football_name: "Milan", api_football_league_id: 135, country: "Italy" },
+    { diretta_name: "Arsenal", api_football_id: 42, api_football_name: "Arsenal", api_football_league_id: 39, country: "England" },
+    { diretta_name: "Chelsea", api_football_id: 49, api_football_name: "Chelsea", api_football_league_id: 39, country: "England" },
+  ]);
   mockFetch(buildApiFootballFixtures(), buildDirettaFeed());
 });
 

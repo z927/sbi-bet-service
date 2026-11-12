@@ -13,7 +13,6 @@ const SAMPLE_TEAMS: TeamInput[] = [
     api_football_id: 42,
     api_football_name: "Arsenal",
     api_football_league_id: 39,
-    api_football_league_name: "Premier League",
     country: "England",
   },
   {
@@ -21,7 +20,6 @@ const SAMPLE_TEAMS: TeamInput[] = [
     api_football_id: 49,
     api_football_name: "Chelsea",
     api_football_league_id: 39,
-    api_football_league_name: "Premier League",
     country: "England",
   },
   {
@@ -29,7 +27,6 @@ const SAMPLE_TEAMS: TeamInput[] = [
     api_football_id: 487,
     api_football_name: "Lazio",
     api_football_league_id: 135,
-    api_football_league_name: "Serie A",
     country: "Italy",
   },
   {
@@ -37,7 +34,6 @@ const SAMPLE_TEAMS: TeamInput[] = [
     api_football_id: null,
     api_football_name: null,
     api_football_league_id: null,
-    api_football_league_name: null,
     country: null,
   },
 ];
