@@ -64,6 +64,7 @@ interface HttpResult {
 
 export const createSchedulerClient = (settings: Settings = getSettings()): SchedulerClient => {
   const base = `${API_BASE}/projects/${settings.gcpProjectId}/locations/${settings.gcpRegion}/jobs`;
+  const resourceNameBase = `projects/${settings.gcpProjectId}/locations/${settings.gcpRegion}/jobs`;
 
   const call = async (method: string, url: string, body?: unknown): Promise<HttpResult> => {
     const token = await accessToken();
@@ -112,13 +113,13 @@ export const createSchedulerClient = (settings: Settings = getSettings()): Sched
     },
 
     async createJob(jobId: string, input: JobScheduleInput): Promise<SchedulerJob> {
-      const { text } = await call("POST", base, { name: `${base}/${jobId}`, ...toJobResource(input) });
+      const { text } = await call("POST", base, { name: `${resourceNameBase}/${jobId}`, ...toJobResource(input) });
       return JSON.parse(text) as SchedulerJob;
     },
 
     async updateJob(jobId: string, input: JobScheduleInput): Promise<SchedulerJob> {
       const url = `${base}/${jobId}?updateMask=schedule,timeZone,httpTarget`;
-      const { text } = await call("PATCH", url, { name: `${base}/${jobId}`, ...toJobResource(input) });
+      const { text } = await call("PATCH", url, { name: `${resourceNameBase}/${jobId}`, ...toJobResource(input) });
       return JSON.parse(text) as SchedulerJob;
     },
 
