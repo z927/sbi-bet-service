@@ -212,25 +212,32 @@ export const autoScheduleEvents = async (
       });
     log.info({ direttaFilteredSample }, "Diretta filtered matches sample with team resolution");
 
-    // Indicizza le partite Diretta per torneo + coppia di squadre (via diretta_name).
-    const direttaByTournamentAndPair = new Map<string, Map<string, Match>>();
+    // Indicizza le partite Diretta per torneo e squadra (via diretta_name).
+    // Un match è indicizzato sotto home.id e sotto away.id: basta che partecipi
+    // una delle due squadre per essere abbinato al fixture di API Football.
+    const direttaByTournamentAndTeam = new Map<string, Map<string, Match[]>>();
     for (const match of direttaMatches) {
       const tid = match.tournament_id;
       if (!tid || !direttaTournamentIds.has(tid)) continue;
       const { home, away } = resolveDirettaTeams(match);
-      if (!home || !away) continue;
-      let byPair = direttaByTournamentAndPair.get(tid);
-      if (!byPair) {
-        byPair = new Map();
-        direttaByTournamentAndPair.set(tid, byPair);
+      if (!home && !away) continue;
+      let byTeam = direttaByTournamentAndTeam.get(tid);
+      if (!byTeam) {
+        byTeam = new Map();
+        direttaByTournamentAndTeam.set(tid, byTeam);
       }
-      const pairKey = [home.id, away.id].sort().join("|");
-      byPair.set(pairKey, match);
+      const add = (teamId: string) => {
+        const arr = byTeam.get(teamId) ?? [];
+        arr.push(match);
+        byTeam.set(teamId, arr);
+      };
+      if (home) add(home.id);
+      if (away) add(away.id);
     }
 
-    const direttaIndexedTournaments = Array.from(direttaByTournamentAndPair.keys());
-    const direttaIndexedMatchesCount = Array.from(direttaByTournamentAndPair.values()).reduce(
-      (sum, byPair) => sum + byPair.size,
+    const direttaIndexedTournaments = Array.from(direttaByTournamentAndTeam.keys());
+    const direttaIndexedMatchesCount = Array.from(direttaByTournamentAndTeam.values()).reduce(
+      (sum, byTeam) => sum + byTeam.size,
       0,
     );
     log.info(
@@ -241,11 +248,17 @@ export const autoScheduleEvents = async (
         direttaIndexedMatches: direttaIndexedMatchesCount,
         direttaIndexedTournamentIds: direttaIndexedTournaments,
       },
-      "Diretta matches indexed by tournament and pair",
+      "Diretta matches indexed by tournament and team",
     );
 
-    const direttaSampleMatches = Array.from(direttaByTournamentAndPair.values())
-      .flatMap((byPair) => Array.from(byPair.values()))
+    const direttaSampleMatches = Array.from(
+      new Map(
+        Array.from(direttaByTournamentAndTeam.values())
+          .flatMap((byTeam) => Array.from(byTeam.values()))
+          .flat()
+          .map((m) => [m.id, m]),
+      ).values(),
+    )
       .slice(0, 20)
       .map((m) => {
         const { home, away } = resolveDirettaTeams(m);
@@ -255,6 +268,7 @@ export const autoScheduleEvents = async (
           away: m.away,
           tournamentId: m.tournament_id,
           tournament: m.tournament,
+          startTime: m.start_time,
           homeResolved: !!home,
           homeTeamId: home?.id,
           homeTeamDirettaName: home?.diretta_name,
@@ -287,6 +301,7 @@ export const autoScheduleEvents = async (
     let alreadyStarted = 0;
     let noLeagueLink = 0;
     let noDirettaMatch = 0;
+    const usedMatchIds = new Set<string>();
 
     for (const fixture of apiFixtures) {
       const leagueId = fixture.league.id;
@@ -323,7 +338,12 @@ export const autoScheduleEvents = async (
         apiFootballIdToTeam.get(fixture.teams.away.id) ??
         apiFootballNameToTeam.get(fixture.teams.away.name);
 
-      if (!homeTeam || !awayTeam) {
+      const homeTeamId = homeTeam == null ? null : homeTeam.id;
+      const homeTeamDirettaName = homeTeam == null ? null : homeTeam.diretta_name;
+      const awayTeamId = awayTeam == null ? null : awayTeam.id;
+      const awayTeamDirettaName = awayTeam == null ? null : awayTeam.diretta_name;
+
+      if (!homeTeam && !awayTeam) {
         log.warn(
           {
             fixtureId: fixture.fixture.id,
@@ -331,46 +351,56 @@ export const autoScheduleEvents = async (
             away: fixture.teams.away.name,
             league: `${fixture.league.country}: ${fixture.league.name}`,
             homeTeamResolved: !!homeTeam,
-            homeTeamId: homeTeam?.id,
-            homeTeamDirettaName: homeTeam?.diretta_name,
+            homeTeamId,
+            homeTeamDirettaName,
             awayTeamResolved: !!awayTeam,
-            awayTeamId: awayTeam?.id,
-            awayTeamDirettaName: awayTeam?.diretta_name,
+            awayTeamId,
+            awayTeamDirettaName,
             apiFootballHomeId: fixture.teams.home.id,
             apiFootballHomeName: fixture.teams.home.name,
             apiFootballAwayId: fixture.teams.away.id,
             apiFootballAwayName: fixture.teams.away.name,
           },
-          "team resolution failed for fixture: skipping",
+          "no team resolved for fixture: skipping",
         );
         continue;
       }
 
       let direttaMatch: Match | null = null;
-      if (homeTeam && awayTeam) {
-        const pairKey = [homeTeam.id, awayTeam.id].sort().join("|");
+      const resolvedTeamIds: string[] = [];
+      if (homeTeam) resolvedTeamIds.push(homeTeam.id);
+      if (awayTeam) resolvedTeamIds.push(awayTeam.id);
+
+      if (resolvedTeamIds.length > 0) {
         for (const link of leagueLink) {
-          const byPair = direttaByTournamentAndPair.get(link.direttaTournamentId!);
-          if (byPair) {
-            direttaMatch = byPair.get(pairKey) ?? null;
+          const byTeam = direttaByTournamentAndTeam.get(link.direttaTournamentId!);
+          if (!byTeam) continue;
+          const candidates = new Set<Match>();
+          for (const teamId of resolvedTeamIds) {
+            const cands = byTeam.get(teamId) ?? [];
+            for (const m of cands) {
+              if (usedMatchIds.has(m.id)) continue;
+              candidates.add(m);
+            }
+          }
+          for (const m of candidates) {
+            direttaMatch = m;
+            usedMatchIds.add(m.id);
             log.debug(
               {
                 fixtureId: fixture.fixture.id,
                 home: fixture.teams.home.name,
                 away: fixture.teams.away.name,
-                homeTeamId: homeTeam.id,
-                awayTeamId: awayTeam.id,
+                resolvedTeamIds,
                 direttaTournamentId: link.direttaTournamentId,
-                pairKey,
-                direttaMatchFound: direttaMatch !== null,
-                direttaMatchId: direttaMatch?.id,
+                direttaMatchFound: true,
+                direttaMatchId: m.id,
               },
-              "diretta pair lookup",
+              "diretta match lookup (any resolved team)",
             );
-            if (direttaMatch) {
-              break;
-            }
+            break;
           }
+          if (direttaMatch) break;
         }
       }
       if (!direttaMatch) {
@@ -381,10 +411,10 @@ export const autoScheduleEvents = async (
             home: fixture.teams.home.name,
             away: fixture.teams.away.name,
             league: `${fixture.league.country}: ${fixture.league.name}`,
-            homeTeamId: homeTeam.id,
-            awayTeamId: awayTeam.id,
-            homeTeamDirettaName: homeTeam.diretta_name,
-            awayTeamDirettaName: awayTeam.diretta_name,
+            homeTeamId,
+            awayTeamId,
+            homeTeamDirettaName,
+            awayTeamDirettaName,
             direttaTournamentId: leagueLink[0]?.direttaTournamentId,
           },
           "no Diretta match found for fixture",
