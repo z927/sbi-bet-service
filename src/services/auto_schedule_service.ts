@@ -148,14 +148,18 @@ export const autoScheduleEvents = async (
     log.info({ direttaFetched: direttaMatches.length, direttaFiltered: direttaMatchesByTournament.size }, "Diretta matches filtered by diretta_tournament_id");
 
     // Carica le squadre dal repo teams: diretta_name -> team (bridge col feed Diretta)
-    // e api_football_id -> team (bridge con API Football).
+    // e api_football_id / api_football_name -> team (bridge con API Football).
     const teams = await getTeams();
     const direttaNameToTeam = new Map<string, typeof teams[number]>();
     const apiFootballIdToTeam = new Map<number, typeof teams[number]>();
+    const apiFootballNameToTeam = new Map<string, typeof teams[number]>();
     for (const team of teams) {
       direttaNameToTeam.set(normalizeTeamName(team.diretta_name), team);
       if (team.api_football_id !== null) {
         apiFootballIdToTeam.set(team.api_football_id, team);
+      }
+      if (team.api_football_name) {
+        apiFootballNameToTeam.set(normalizeTeamName(team.api_football_name), team);
       }
     }
 
@@ -229,8 +233,14 @@ export const autoScheduleEvents = async (
         continue;
       }
 
-      const homeTeam = apiFootballIdToTeam.get(fixture.teams.home.id);
-      const awayTeam = apiFootballIdToTeam.get(fixture.teams.away.id);
+      // Cerca in Supabase (tabella teams) il team canonico per home e away,
+      // prima per api_football_id poi per nome (api_football_name / diretta_name).
+      const homeTeam =
+        apiFootballIdToTeam.get(fixture.teams.home.id) ??
+        apiFootballNameToTeam.get(normalizeTeamName(fixture.teams.home.name));
+      const awayTeam =
+        apiFootballIdToTeam.get(fixture.teams.away.id) ??
+        apiFootballNameToTeam.get(normalizeTeamName(fixture.teams.away.name));
       let direttaMatch: Match | null = null;
       if (homeTeam && awayTeam) {
         const byPair = direttaByTournamentAndPair.get(leagueLink.direttaTournamentId);
@@ -238,6 +248,20 @@ export const autoScheduleEvents = async (
           const pairKey = [homeTeam.id, awayTeam.id].sort().join("|");
           direttaMatch = byPair.get(pairKey) ?? null;
         }
+      }
+      // Fallback: match diretto per nome normalizzato quando le squadre non sono in tabella teams
+      if (!direttaMatch) {
+        const normHome = normalizeTeamName(fixture.teams.home.name);
+        const normAway = normalizeTeamName(fixture.teams.away.name);
+        const candidates = direttaMatchesByTournament.get(leagueLink.direttaTournamentId) ?? [];
+        direttaMatch = candidates.find((m) => {
+          const dHome = normalizeTeamName(m.home ?? "");
+          const dAway = normalizeTeamName(m.away ?? "");
+          return (
+            (dHome.includes(normHome) && dAway.includes(normAway)) ||
+            (dHome.includes(normAway) && dAway.includes(normHome))
+          );
+        }) ?? null;
       }
       if (!direttaMatch) {
         noDirettaMatch += 1;
