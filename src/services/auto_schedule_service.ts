@@ -239,6 +239,20 @@ export const autoScheduleEvents = async (
           direttaMatch = byPair.get(pairKey) ?? null;
         }
       }
+      // Fallback: match diretto per nome normalizzato quando le squadre non sono in tabella teams
+      if (!direttaMatch) {
+        const normHome = normalizeTeamName(fixture.teams.home.name);
+        const normAway = normalizeTeamName(fixture.teams.away.name);
+        const candidates = direttaMatchesByTournament.get(leagueLink.direttaTournamentId) ?? [];
+        direttaMatch = candidates.find((m) => {
+          const dHome = normalizeTeamName(m.home ?? "");
+          const dAway = normalizeTeamName(m.away ?? "");
+          return (
+            (dHome.includes(normHome) && dAway.includes(normAway)) ||
+            (dHome.includes(normAway) && dAway.includes(normHome))
+          );
+        }) ?? null;
+      }
       if (!direttaMatch) {
         noDirettaMatch += 1;
         log.warn({ fixtureId: fixture.fixture.id, home: fixture.teams.home.name, away: fixture.teams.away.name, league: `${fixture.league.country}: ${fixture.league.name}`, direttaTournamentId: leagueLink.direttaTournamentId }, "no Diretta match found for fixture");
