@@ -5,7 +5,7 @@ import { getSettings } from "./config.ts";
 
 const envFile = [".env.local", ".env"].find((file) => existsSync(file));
 if (envFile) {
-  dotenvConfig({ path: envFile });
+  dotenvConfig({ path: envFile, override: true });
 }
 
 const settings = getSettings();

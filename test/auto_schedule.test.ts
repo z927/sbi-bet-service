@@ -574,3 +574,41 @@ test("logs a failure raised while listing the matches", async () => {
   assert.ok(failure);
   assert.ok(failure.obj["err"] instanceof FeedError);
 });
+
+test("does not match fixtures when teams are missing from the repo (no fuzzy fallback)", async () => {
+  const kickoff = new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString();
+  const apiFixtures = [
+    apiFootballFixture(2001, kickoff, 777, "Türkiye", 778, "Belgium", 10, "UEFA Nations League", "World"),
+  ];
+  const direttaFeed = [
+    league("World: UEFA Nations League", "A1uGXGgK", "World"),
+    fixture("m10", future(3600), "Turkey", "Belgium"),
+  ].join("~");
+
+  globalThis.fetch = (async (url: string) => {
+    const target = String(url);
+    if (target.includes("v3.football.api-sports.io/fixtures")) {
+      return makeResponse(JSON.stringify({ response: apiFixtures }));
+    }
+    if (target.includes("dc_1_m10")) {
+      return makeResponse(detail(future(3600 + 7000)));
+    }
+    if (target.includes("f_1_0_3_it_1")) {
+      return makeResponse(direttaFeed);
+    }
+    return makeResponse(direttaFeed);
+  }) as unknown as typeof fetch;
+
+  resetMappingStore();
+  await upsertLeagueLink({ apiFootballLeagueId: 10, direttaTournamentId: "A1uGXGgK", name: "World: UEFA Nations League" });
+  deleteAllTeams();
+  initTeamsRepo();
+
+  const result = await autoScheduleEvents(stub);
+  assert.equal(result.statusCode, 200);
+  assert.match(result.message ?? "", /no valid fixtures to schedule/);
+
+  const scheduled = await (await import("../src/services/scheduled_fixtures_repo.ts")).getScheduledFixtures();
+  const byFixture = new Map(scheduled.map((s: any) => [s.fixture_id, s]));
+  assert.ok(!byFixture.has(2001), "fixture 2001 should not be matched without teams in the repo");
+});
