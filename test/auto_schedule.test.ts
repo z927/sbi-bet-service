@@ -115,10 +115,10 @@ class StubScheduler implements SchedulerClient {
     return this.jobs.get(jobId) ?? null;
   }
 
-  async createJob(input: JobScheduleInput): Promise<SchedulerJob> {
-    this.calls.push({ op: "create", jobId: "test-job", input });
-    const job: SchedulerJob = { name: "projects/test-project/locations/europe-west6/jobs/test-job", ...input };
-    this.jobs.set("test-job", job);
+  async createJob(jobId: string, input: JobScheduleInput): Promise<SchedulerJob> {
+    this.calls.push({ op: "create", jobId, input });
+    const job: SchedulerJob = { name: `projects/test-project/locations/europe-west6/jobs/${jobId}`, ...input };
+    this.jobs.set(jobId, job);
     return job;
   }
 

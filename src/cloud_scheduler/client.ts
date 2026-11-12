@@ -34,7 +34,7 @@ export interface SchedulerJob {
 
 export interface SchedulerClient {
   getJob(jobId: string): Promise<SchedulerJob | null>;
-  createJob(input: JobScheduleInput): Promise<SchedulerJob>;
+  createJob(jobId: string, input: JobScheduleInput): Promise<SchedulerJob>;
   updateJob(jobId: string, input: JobScheduleInput): Promise<SchedulerJob>;
   deleteJob(jobId: string): Promise<void>;
 }
@@ -111,8 +111,8 @@ export const createSchedulerClient = (settings: Settings = getSettings()): Sched
       return JSON.parse(text) as SchedulerJob;
     },
 
-    async createJob(input: JobScheduleInput): Promise<SchedulerJob> {
-      const { text } = await call("POST", base, toJobResource(input));
+    async createJob(jobId: string, input: JobScheduleInput): Promise<SchedulerJob> {
+      const { text } = await call("POST", base, { name: `${base}/${jobId}`, ...toJobResource(input) });
       return JSON.parse(text) as SchedulerJob;
     },
 

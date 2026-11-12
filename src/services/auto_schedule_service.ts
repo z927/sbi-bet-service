@@ -583,7 +583,7 @@ export const autoScheduleEvents = async (
         { jobId: settings.gcpJobId, schedule: cron, uri: input.httpTarget.uri, action: "create" },
         "creating cloud scheduler job",
       );
-      await scheduler.createJob(input);
+      await scheduler.createJob(settings.gcpJobId, input);
     }
     const response = baseResponse(
       `Auto-schedule completed: ${validFixtures.length} fixtures monitored, job ${settings.gcpJobId} scheduled at ${cron}`,
