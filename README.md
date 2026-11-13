@@ -260,7 +260,7 @@ supabase/
   migrations/               SQL schema (teams, mappings, aliases, leagues, fixtures)
 test/
   contract.test.ts          routes vs contract, served /openapi.json
-  sbi.test.ts               SBI endpoint behavior
+  api.test.ts               SBI endpoint behavior
   scraper.test.ts           scraper routes, parsing, cache, persistence (mocked fetch)
   strategies.test.ts        monitor strategy: major-league filter, stats, failures
   cron.test.ts              GCP cron builder + day matching (pure)

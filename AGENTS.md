@@ -104,7 +104,7 @@ src/
     models.ts               response types
 test/
   contract.test.ts
-  sbi.test.ts
+  api.test.ts
   scraper.test.ts
 openapi/
   openapi.yaml
