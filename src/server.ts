@@ -2,6 +2,7 @@ import { randomUUID } from "node:crypto";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import Fastify, { LogController, type FastifyInstance } from "fastify";
+import cors from "@fastify/cors";
 import swagger from "@fastify/swagger";
 import swaggerUi from "@fastify/swagger-ui";
 import type { FastifyError, FastifyReply, FastifyRequest } from "fastify";
@@ -45,6 +46,12 @@ export const buildServer = async (): Promise<FastifyInstance> => {
       "request completed",
     );
     done();
+  });
+
+  await app.register(cors, {
+    origin: settings.corsOrigin,
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["content-type", "x-request-id"],
   });
 
   initDb();

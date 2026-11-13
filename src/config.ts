@@ -18,6 +18,7 @@ export interface Settings {
   schedulerTimeZone: string;
   monitorLeadMinutes: number;
   schedulerCronStepMinutes: number;
+  corsOrigin: string | string[];
   supabaseUrl: string;
   supabaseServiceRoleKey: string;
   apiFootballBaseUrl: string;
@@ -25,6 +26,16 @@ export interface Settings {
 }
 
 const DEFAULT_UPSTREAM = "https://bet-service-658489904938.europe-west6.run.app";
+const DEFAULT_CORS_ORIGIN = "https://sbi-prematch.lovable.app";
+
+const parseCorsOrigin = (value: string | undefined): string | string[] => {
+  const raw = (value ?? DEFAULT_CORS_ORIGIN).trim();
+  if (raw === "") return DEFAULT_CORS_ORIGIN;
+  const parts = raw.split(",").map((part) => part.trim()).filter(Boolean);
+  if (parts.length === 0) return DEFAULT_CORS_ORIGIN;
+  if (parts.length === 1) return parts[0]!;
+  return parts;
+};
 
 const loadEnvFileIfPresent = (file: string): void => {
   const path = resolve(process.cwd(), file);
@@ -78,6 +89,7 @@ export const getSettings = (env: NodeJS.ProcessEnv = process.env): Settings => {
     schedulerTimeZone: env.SCHEDULER_TIME_ZONE ?? "Africa/Freetown",
     monitorLeadMinutes: Number.isNaN(lead) || lead < 0 ? 0 : lead,
     schedulerCronStepMinutes: Number.isNaN(step) || step < 1 || step > 59 ? 10 : step,
+    corsOrigin: parseCorsOrigin(env.CORS_ORIGIN),
     supabaseUrl: env.SUPABASE_URL ?? "",
     supabaseServiceRoleKey: env.SUPABASE_SERVICE_ROLE_KEY ?? "",
     apiFootballBaseUrl: env.API_FOOTBALL_BASE_URL ?? "https://v3.football.api-sports.io",
