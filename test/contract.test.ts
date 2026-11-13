@@ -5,7 +5,7 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse } from "yaml";
 import packageJson from "../package.json" with { type: "json" };
-import { SBI_ROUTES } from "../src/bet-api/routes.ts";
+import { API_ROUTES } from "../src/bet-api/routes.ts";
 import { MAPPING_ROUTES } from "../src/mapping/routes.ts";
 import { buildServer } from "../src/server.ts";
 import { removeDb, useTempDb } from "./support.ts";
@@ -24,7 +24,7 @@ const contract = parse(readFileSync(CONTRACT_PATH, "utf8")) as {
   paths: Record<string, Record<string, { operationId?: string }>>;
 };
 
-const ROUTES = [...SBI_ROUTES, ...MAPPING_ROUTES];
+const ROUTES = [...API_ROUTES, ...MAPPING_ROUTES];
 
 test("implemented routes match the contract paths, methods and operationIds", () => {
   for (const route of ROUTES) {
