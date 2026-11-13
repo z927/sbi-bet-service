@@ -7,7 +7,7 @@ import swaggerUi from "@fastify/swagger-ui";
 import type { FastifyError, FastifyReply, FastifyRequest } from "fastify";
 import { getSettings } from "./config.ts";
 import { ConflictError, ValidationError, baseResponse } from "./errors.ts";
-import { sbiRoutes } from "./bet-api/routes.ts";
+import { apiRoutes } from "./bet-api/routes.ts";
 import { mappingRoutes } from "./mapping/routes.ts";
 import { initDb } from "./scraper/db.ts";
 import { getLogger, runWithLogContext } from "./logger.ts";
@@ -83,7 +83,7 @@ export const buildServer = async (): Promise<FastifyInstance> => {
 
   app.get("/openapi.json", () => app.swagger());
 
-  app.register(sbiRoutes);
+  app.register(apiRoutes);
   app.register(mappingRoutes);
 
   return app as unknown as FastifyInstance;

@@ -237,6 +237,16 @@ export interface components {
             time?: components["schemas"]["TimeDto"];
             period?: string;
         };
+        MonitoredFixture: {
+            fixtureId?: number;
+            league?: string;
+            homeTeam?: string;
+            awayTeam?: string;
+            startTime?: string;
+            beginMonitoringTime?: string;
+            endMonitoringTime?: string;
+            info?: string;
+        };
         LeagueDto: {
             name?: string;
             country?: string;
@@ -635,7 +645,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["FixtureDto"][];
+                    "application/json": components["schemas"]["MonitoredFixture"][];
                 };
             };
         };

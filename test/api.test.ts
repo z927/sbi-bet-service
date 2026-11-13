@@ -5,10 +5,11 @@ import type { FastifyInstance } from "fastify";
 import * as schedule from "../src/services/schedule_service.ts";
 import * as monitoring from "../src/services/monitoring_service.ts";
 import * as matches from "../src/services/matches_service.ts";
+import { upsertScheduledFixtures, deleteAllScheduledFixtures } from "../src/services/scheduled_fixtures_repo.ts";
 import { removeDb, useTempDb } from "./support.ts";
 
 process.env["LOG_LEVEL"] = "silent";
-const DB_FILE = useTempDb("sbi");
+const DB_FILE = useTempDb("api");
 
 // Forza il repository di mapping in memoria: in test non c'è Supabase
 // raggiungibile (.env.local espone credenziali ma nessun endpoint).
@@ -42,10 +43,11 @@ after(async () => {
   removeDb(DB_FILE);
 });
 
-beforeEach(() => {
+beforeEach(async () => {
   schedule.reset();
   monitoring.reset();
   matches.reset();
+  await deleteAllScheduledFixtures();
 });
 
 test("POST /api/v1/schedule returns 200 BaseResponse", async () => {
@@ -106,6 +108,55 @@ test("GET /api/v1/monitor runs the live strategy and returns BaseResponse", asyn
   const monitored = await app.inject({ method: "GET", url: "/api/v1/monitored" });
   assert.equal(monitored.statusCode, 200);
   assert.deepEqual(monitored.json(), []);
+});
+
+test("GET /api/v1/monitored returns today's scheduled fixtures mapped to MonitoredFixture", async () => {
+  const now = new Date();
+  const today = now.toISOString().slice(0, 10);
+  const tomorrow = new Date(now.getTime() + 86400000).toISOString().slice(0, 10);
+  const [y, m, dd] = today.split("-");
+  const expectedDay = `${dd}-${m}-${y}`;
+
+  await upsertScheduledFixtures([
+    {
+      fixture_id: 42,
+      match_id: "m42",
+      api_football_league_id: 135,
+      api_football_league_name: "ITALIA: Serie A",
+      home_team: "Inter",
+      away_team: "Milan",
+      kickoff_time: `${today}T14:00:00.000Z`,
+      begin_monitoring_time: `${today}T13:00:00.000Z`,
+      end_monitoring_time: `${today}T16:00:00.000Z`,
+    },
+    {
+      fixture_id: 43,
+      match_id: "m43",
+      api_football_league_id: 135,
+      api_football_league_name: "ITALIA: Serie A",
+      home_team: "Juventus",
+      away_team: "Roma",
+      kickoff_time: `${tomorrow}T14:00:00.000Z`,
+      begin_monitoring_time: `${tomorrow}T13:00:00.000Z`,
+      end_monitoring_time: `${tomorrow}T16:00:00.000Z`,
+    },
+  ]);
+
+  const monitored = await app.inject({ method: "GET", url: "/api/v1/monitored" });
+  assert.equal(monitored.statusCode, 200);
+  const body = monitored.json();
+  assert.equal(Array.isArray(body), true);
+  assert.equal(body.length, 1, "only today's fixture should be returned");
+
+  const [dto] = body;
+  assert.equal(dto.fixtureId, 42);
+  assert.equal(dto.league, "Serie A");
+  assert.equal(dto.homeTeam, "Inter");
+  assert.equal(dto.awayTeam, "Milan");
+  assert.equal(dto.info, "scheduled");
+  assert.equal(dto.startTime, expectedDay);
+  assert.equal(dto.beginMonitoringTime, `${expectedDay} 13:00`);
+  assert.equal(dto.endMonitoringTime, `${expectedDay} 16:00`);
 });
 
 test("POST /api/v1/monitor is not part of the contract", async () => {

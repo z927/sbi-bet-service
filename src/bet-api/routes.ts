@@ -15,7 +15,7 @@ export interface RouteMetadata {
   operationId: string;
 }
 
-export const SBI_ROUTES: readonly RouteMetadata[] = [
+export const API_ROUTES: readonly RouteMetadata[] = [
   { method: "POST", path: "/api/v1/schedule", operationId: "scheduleEvents" },
   { method: "GET", path: "/api/v1/auto-schedule", operationId: "autoScheduleEvents" },
   { method: "GET", path: "/api/v1/monitor", operationId: "monitorFixtures" },
@@ -76,7 +76,7 @@ const assertIsoDate = (value: string | undefined, field: string): void => {
   }
 }
 
-export const sbiRoutes = (app: FastifyInstance): void => {
+export const apiRoutes = (app: FastifyInstance): void => {
   app.post<{ Body: ScheduleRequest; Querystring: { day?: string } }>(
     "/api/v1/schedule",
     {

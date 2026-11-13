@@ -112,7 +112,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/FixtureDto'
+                  $ref: '#/components/schemas/MonitoredFixture'
   /api/v1/matches:
     get:
       tags:
@@ -339,6 +339,25 @@ components:
         time:
           $ref: '#/components/schemas/TimeDto'
         period:
+          type: string
+    MonitoredFixture:
+      type: object
+      properties:
+        fixtureId:
+          type: integer
+        league:
+          type: string
+        homeTeam:
+          type: string
+        awayTeam:
+          type: string
+        startTime:
+          type: string
+        beginMonitoringTime:
+          type: string
+        endMonitoringTime:
+          type: string
+        info:
           type: string
     LeagueDto:
       type: object
