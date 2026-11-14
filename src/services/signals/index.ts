@@ -42,36 +42,36 @@ const inWindow = (minute: number, min: number, max: number): boolean => {
 const maybeSendPreAlert = async (
   match: Match,
   statistics: Statistics,
-): Promise<void> => {
+): Promise<Alert | null> => {
   if (!isZeroZero(match)) {
-    return;
+    return null;
   }
   const period = matchPeriod(match);
   if (period === null) {
-    return;
+    return null;
   }
   const minute = matchMinute(match);
   if (minute === null) {
-    return;
+    return null;
   }
   const key = `${match.id}:${GOAL_OVER_SIGNAL}`;
   if (fired.has(key) || preAlerted.has(key)) {
-    return;
+    return null;
   }
   const window = period === "first_half" ? FIRST_HALF_WINDOW : SECOND_HALF_WINDOW;
   if (minute >= window.min) {
-    return;
+    return null;
   }
   if (minute < PRE_ALERT_MINUTE) {
-    return;
+    return null;
   }
   const snapshot = touchSnapshot(match, statistics, period);
   if (snapshot === null) {
-    return;
+    return null;
   }
   const threshold = getGoalRatioThreshold();
   if (snapshot.ratio < threshold) {
-    return;
+    return null;
   }
   const alert: Alert = {
     rule: GOAL_OVER_SIGNAL,
@@ -106,11 +106,12 @@ const maybeSendPreAlert = async (
       { err: exc, rule: alert.rule, matchId: alert.matchId },
       "pre-alert dispatch failed",
     );
+    return null;
   }
-  await saveSignal(alert, { match, statistics });
   preAlerted.add(key);
   preAlertCheckAt.set(key, Date.now() + PRE_ALERT_RECHECK_MINUTES * 60 * 1000);
   preAlertData.set(key, { match, statistics, alert, minute });
+  return alert;
 };
 
 const recheckPreAlerts = async (
@@ -189,7 +190,6 @@ const recheckPreAlerts = async (
     { rule: alert.rule, minute: alert.minute, value: alert.value, threshold: alert.threshold },
     "pre-alert confirmed",
   );
-  await dispatchAlerts([alert], sendTelegram, context ?? { match: currentMatch, statistics: currentStatistics });
   return [alert];
 }
 
@@ -237,7 +237,10 @@ export const evaluateSignalsWithPreAlert = async (
   if (preAlerts.length > 0) {
     return preAlerts;
   }
-  await maybeSendPreAlert(match, statistics);
+  const preAlert = await maybeSendPreAlert(match, statistics);
+  if (preAlert !== null) {
+    return [preAlert];
+  }
   return evaluateSignals(match, statistics, signals);
 }
 
