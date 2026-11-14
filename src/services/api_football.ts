@@ -21,7 +21,7 @@ const httpGet = async (path: string): Promise<unknown> => {
 
 export const listTodayFixtures = async (date: string): Promise<ApiFootballFixture[]> => {
   try {
-    const data = (await httpGet(`/fixtures?date=${date}&status=NS&timezone=Europe/Rome`)) as { response?: ApiFootballFixture[] };
+    const data = (await httpGet(`/fixtures?date=${date}&timezone=Europe/Rome`)) as { response?: ApiFootballFixture[] };
     return data.response ?? [];
   } catch {
     return [];

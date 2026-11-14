@@ -64,7 +64,7 @@ interface MatchedFixture {
   leagueLink: LeagueLink;
 }
 
-const enrichWindows = async (matches: Match[], leadMinutes: number, log: AppLogger): Promise<void> => {
+const enrichWindows = async (matches: Match[], leadMinutes: number, nowEpoch: number, log: AppLogger): Promise<void> => {
   await pool(matches, DETAIL_WORKERS, async (match) => {
     const start = asEpoch(match.start_time);
     if (start === null) {
@@ -84,7 +84,8 @@ const enrichWindows = async (matches: Match[], leadMinutes: number, log: AppLogg
       if (!(exc instanceof FeedError)) throw exc;
       log.warn({ err: exc, matchId: match.id, home: match.home, away: match.away }, "match detail feed failed: falling back to start + 2h");
     }
-    match["begin_monitoring_time"] = start - leadMinutes * 60;
+    const begin = start < nowEpoch ? nowEpoch : start - leadMinutes * 60;
+    match["begin_monitoring_time"] = begin;
     match["end_monitoring_time"] = endTime ?? start + FALLBACK_END_OFFSET_SECONDS;
     match["monitored"] = true;
     log.debug({ matchId: match.id, home: match.home, away: match.away, startTime: start, beginMonitoringTime: match["begin_monitoring_time"], endMonitoringTime: match["end_monitoring_time"], usedFallbackEnd: endTime === null }, "monitoring window computed");
@@ -326,7 +327,14 @@ export const autoScheduleEvents = async (
         missingStartTime += 1;
         continue;
       }
-      if (start < nowEpoch) {
+      const statusShort = fixture.fixture.status.short;
+      const isFinished =
+        statusShort === "FT" ||
+        statusShort === "AET" ||
+        statusShort === "PEN" ||
+        statusShort === "ABAN" ||
+        statusShort === "WO";
+      if (isFinished) {
         alreadyStarted += 1;
         continue;
       }
@@ -486,7 +494,7 @@ export const autoScheduleEvents = async (
       sport: SPORT_CALCIO,
     }));
 
-    await enrichWindows(matchesToEnrich, settings.monitorLeadMinutes, log);
+    await enrichWindows(matchesToEnrich, settings.monitorLeadMinutes, nowEpoch, log);
 
     // 6. Salva su scheduled_fixtures con sia matchId (Diretta) che fixtureId (API Football)
     const fixturesToStore = validFixtures.map((f, idx) => {

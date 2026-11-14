@@ -55,10 +55,19 @@
   },
   {
     "leagueId": 41,
-    "direttaLeagueId": "fBE45JPc",
+    "direttaLeagueId": "rJSMG3H0",
     "name": "League One",
     "type": "League",
     "logo": "https://media.api-sports.io/football/leagues/41.png",
+    "countryName": "England",
+    "countryFlag": "https://media.api-sports.io/flags/gb.svg"
+  },
+  {
+    "leagueId": 42,
+    "direttaLeagueId": "0MwU4NW6",
+    "name": "League Two",
+    "type": "League",
+    "logo": "https://media.api-sports.io/football/leagues/42.png",
     "countryName": "England",
     "countryFlag": "https://media.api-sports.io/flags/gb.svg"
   },
@@ -181,7 +190,7 @@
   },
   {
     "leagueId": 89,
-    "direttaLeagueId": "lAP5a3zg",
+    "direttaLeagueId": "6Nl8nagD",
     "name": "Eerste Divisie",
     "type": "League",
     "logo": "https://media.api-sports.io/football/leagues/89.png",
@@ -271,7 +280,7 @@
   },
   {
     "leagueId": 141,
-    "direttaLeagueId": "42oxhTin",
+    "direttaLeagueId": "vZiPmPJi",
     "name": "Segunda División",
     "type": "League",
     "logo": "https://media.api-sports.io/football/leagues/141.png",
