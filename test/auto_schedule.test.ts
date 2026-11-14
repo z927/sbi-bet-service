@@ -29,6 +29,25 @@ process.env["SUPABASE_SERVICE_ROLE_KEY"] = "";
 const DB_FILE = useTempDb("auto-schedule");
 const originalFetch = globalThis.fetch;
 
+// Mock Date so now / today / fixture start times are deterministic.
+// Use noon UTC today as the fixed "now" so 23:00 fixtures are always in the future.
+const OriginalDate = globalThis.Date as typeof Date;
+const todayStr = new OriginalDate().toISOString().split("T")[0];
+const FIXED_EPOCH_SECONDS = Math.floor(new OriginalDate(`${todayStr}T12:00:00+00:00`).getTime() / 1000);
+const FIXED_EPOCH_MS = FIXED_EPOCH_SECONDS * 1000;
+
+function FixedDate(this: unknown, ...args: any[]): any {
+  if (args.length === 0) {
+    return new OriginalDate(FIXED_EPOCH_MS);
+  }
+  return new OriginalDate(args[0]);
+}
+Object.defineProperty(FixedDate, "now", { value: () => FIXED_EPOCH_MS, configurable: true, writable: true });
+Object.defineProperty(FixedDate, "parse", { value: OriginalDate.parse, configurable: true, writable: true });
+Object.defineProperty(FixedDate, "UTC", { value: OriginalDate.UTC, configurable: true, writable: true });
+
+globalThis.Date = FixedDate as unknown as typeof Date;
+
 const FIELD = "\u00ac";
 const KV = "\u00f7";
 // Use a fixed future timestamp (1 year from now) to ensure fixtures are always upcoming
@@ -228,6 +247,7 @@ beforeEach(async () => {
 after(() => {
   globalThis.fetch = originalFetch;
   removeDb(DB_FILE);
+  globalThis.Date = OriginalDate;
 });
 
 test("filters by league_links, persists monitored fixtures with both IDs and creates a single job", async () => {
