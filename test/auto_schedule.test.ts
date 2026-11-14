@@ -60,8 +60,8 @@ const apiFootballLeague = (id: number, name: string, country: string) => ({
   score: { halftime: { home: 0, away: 0 }, fulltime: { home: 0, away: 0 }, extratime: { home: 0, away: 0 }, penalty: { home: 0, away: 0 } },
 });
 
-const apiFootballFixture = (fixtureId: number, date: string, homeId: number, homeName: string, awayId: number, awayName: string, leagueId: number, leagueName: string, country: string) => ({
-  fixture: { id: fixtureId, date, timestamp: Math.floor(new Date(date).getTime() / 1000), timezone: "UTC", periods: { first: 0, second: 0 }, venue: { id: 0, name: "", city: "" }, status: { long: "Not Started", short: "NS", elapsed: 0 } },
+const apiFootballFixture = (fixtureId: number, date: string, homeId: number, homeName: string, awayId: number, awayName: string, leagueId: number, leagueName: string, country: string, statusShort: string = "NS") => ({
+  fixture: { id: fixtureId, date, timestamp: Math.floor(new Date(date).getTime() / 1000), timezone: "UTC", periods: { first: 0, second: 0 }, venue: { id: 0, name: "", city: "" }, status: { long: "", short: statusShort, elapsed: 0 } },
   league: { id: leagueId, name: leagueName, country, logo: "", flag: "", season: 2024, round: "Regular Season" },
   teams: { home: { id: homeId, name: homeName, logo: "", winner: false }, away: { id: awayId, name: awayName, logo: "", winner: false } },
   goals: { home: null, away: null },
@@ -339,9 +339,9 @@ test("updates the existing job when its schedule is from another day", async () 
 test("deletes the job and returns 200 when no upcoming major-league matches exist", async () => {
   const today = new Date().toISOString().split("T")[0];
   const noUpcomingFixtures = [
-    // All matches already started (earlier today)
-    apiFootballFixture(1001, new Date(Date.now() - 3600 * 1000).toISOString(), 487, "Inter", 505, "Milan", 135, "Serie A", "Italy"),
-    apiFootballFixture(1002, new Date(Date.now() - 7200 * 1000).toISOString(), 42, "Arsenal", 49, "Chelsea", 39, "Premier League", "England"),
+    // All matches already finished (earlier today)
+    apiFootballFixture(1001, new Date(Date.now() - 3600 * 1000).toISOString(), 487, "Inter", 505, "Milan", 135, "Serie A", "Italy", "FT"),
+    apiFootballFixture(1002, new Date(Date.now() - 7200 * 1000).toISOString(), 42, "Arsenal", 49, "Chelsea", 39, "Premier League", "England", "FT"),
   ];
   
   mockFetch(noUpcomingFixtures, buildDirettaFeed());
@@ -454,7 +454,7 @@ test("logs the effective settings, the match selection and the scheduler outcome
   assert.ok(selection);
   assert.equal(selection.obj["valid"], 2);
   assert.equal(selection.obj["rejectedByLeague"], 1);
-  assert.equal(selection.obj["alreadyStarted"], 1);
+  assert.equal(selection.obj["alreadyStarted"], 0);
   assert.equal(selection.obj["missingStartTime"], 0);
   assert.equal(selection.obj["noLeagueLink"], 1);
 
