@@ -19,6 +19,10 @@ export const matchPeriod = (match: Match): MatchPeriod | null => {
 }
 
 export const matchMinute = (match: Match, now = Date.now() / 1000): number | null => {
+  const live = match.minute == null ? null : Number.parseInt(match.minute, 10);
+  if (live !== null && Number.isFinite(live) && live > 0) {
+    return live;
+  }
   const stage = match.stage_id;
   const start = match.stage_start;
   if (!start) {

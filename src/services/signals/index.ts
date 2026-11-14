@@ -107,6 +107,7 @@ const maybeSendPreAlert = async (
       "pre-alert dispatch failed",
     );
   }
+  await saveSignal(alert, { match, statistics });
   preAlerted.add(key);
   preAlertCheckAt.set(key, Date.now() + PRE_ALERT_RECHECK_MINUTES * 60 * 1000);
   preAlertData.set(key, { match, statistics, alert, minute });
