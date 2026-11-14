@@ -45,11 +45,11 @@ const ODDS_RESPONSE = [
         name: "Book A",
         bets: [
           {
-            id: 8,
-            name: "Over / Under",
+            id: 24,
+            name: "Over/Under Line (1st Half)",
             values: [
-              { value: "Over 0.5", odd: "1.8" },
-              { value: "Under 0.5", odd: "2.0" },
+              { value: "Over", odd: "1.8", handicap: "0.5" },
+              { value: "Under", odd: "2.0", handicap: "0.5" },
             ],
           },
         ],
