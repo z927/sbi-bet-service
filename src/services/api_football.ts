@@ -28,16 +28,27 @@ export const listTodayFixtures = async (date: string): Promise<ApiFootballFixtur
   }
 };
 
+export interface ApiFootballOddValue {
+  value: string;
+  odd: string | number;
+  handicap: string | number;
+  main?: boolean;
+  suspended?: boolean;
+}
+
+export interface ApiFootballBet {
+  id: number;
+  name: string;
+  values: ApiFootballOddValue[];
+}
+
 export interface ApiFootballOdd {
-  bookmakers?: Array<{
-    id: number;
-    name: string;
-    bets?: Array<{
-      id: number;
-      name: string;
-      values?: Array<{ value: string; odd: string | number }>;
-    }>;
-  }>;
+  fixture: { id: number; status: { long: string; elapsed: number; seconds: string } };
+  league: { id: number; season: number };
+  teams: { home: { id: number; goals: number }; away: { id: number; goals: number } };
+  status: { stopped: boolean; blocked: boolean; finished: boolean };
+  update: string;
+  odds: ApiFootballBet[];
 }
 
 export const getLiveOdds = async (fixtureId: number): Promise<ApiFootballOdd[]> => {

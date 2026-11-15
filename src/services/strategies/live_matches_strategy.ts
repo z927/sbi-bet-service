@@ -50,8 +50,6 @@ const API_FOOTBALL_STAGE: Record<string, number | null> = {
   "NS": null,
 };
 
-const BET365 = "bet365";
-
 const handicapFromValue = (value: string): number | null => {
   const match = value.match(/(\d+(?:\.\d+)?)/);
   if (!match) {
@@ -71,15 +69,10 @@ const OVER_UNDER_LINE_SECOND_HALF_NAME = "Match Goals";
 const OVER_UNDER_LINE_FULL_TIME_ID = 36;
 const OVER_UNDER_LINE_FULL_TIME_NAME = "Over/Under Line";
 
-interface OddBookmakerLookup {
+interface OddLookup {
   odd: number | null;
-  bookmaker: string | null;
   betName: string | null;
 }
-
-const isBet365 = (bookmaker: { name?: string }): boolean => {
-  return String(bookmaker.name ?? "").toLowerCase().includes(BET365);
-};
 
 const targetBetsForScope = (scope: string): Array<{ id: number; name: string }> => {
   if (scope === "FIRST_HALF") {
@@ -98,25 +91,14 @@ const targetBetsForScope = (scope: string): Array<{ id: number; name: string }> 
 };
 
 const findOverUnderOdd = (
-  bookmakers: unknown[],
+  bets: unknown[],
   handicap: number,
   scope: string,
-): OddBookmakerLookup => {
+): OddLookup => {
   const targets = targetBetsForScope(scope);
   if (targets.length === 0) {
-    return { odd: null, bookmaker: null, betName: null };
+    return { odd: null, betName: null };
   }
-  const ordered = [...bookmakers].sort((a, b) => {
-    const aFirst = isBet365(a as { name?: string });
-    const bFirst = isBet365(b as { name?: string });
-    if (aFirst && !bFirst) {
-      return -1;
-    }
-    if (!aFirst && bFirst) {
-      return 1;
-    }
-    return 0;
-  });
   const isTargetBet = (bet: unknown): { id: number; name: string } | null => {
     const betId = (bet as { id?: unknown }).id;
     const betName = String((bet as { name?: string }).name ?? "");
@@ -130,40 +112,36 @@ const findOverUnderOdd = (
     }
     return null;
   };
-  for (const bm of ordered) {
-    const bookmaker = bm as { name?: string; bets?: unknown[] };
-    const bets = bookmaker.bets ?? [];
-    for (const bet of bets) {
-      const target = isTargetBet(bet);
-      if (!target) {
+  for (const bet of bets) {
+    const target = isTargetBet(bet);
+    if (!target) {
+      continue;
+    }
+    const values = (bet as { values?: unknown[] }).values ?? [];
+    for (const v of values) {
+      const val = v as { value?: string; odd?: string | number; handicap?: unknown };
+      if (val.value !== "Over") {
         continue;
       }
-      const values = (bet as { values?: unknown[] }).values ?? [];
-      for (const v of values) {
-        const val = v as { value?: string; odd?: string | number; handicap?: unknown };
-        if (val.value !== "Over") {
+      const betHandicap = val.handicap;
+      if (betHandicap !== undefined && betHandicap !== null) {
+        if (String(betHandicap) !== String(handicap)) {
           continue;
         }
-        const betHandicap = val.handicap;
-        if (betHandicap !== undefined && betHandicap !== null) {
-          if (String(betHandicap) !== String(handicap)) {
-            continue;
-          }
-        } else {
-          const h = handicapFromValue(String(val.value ?? ""));
-          if (h === null || h !== handicap) {
-            continue;
-          }
-        }
-        const odd = Number(val.odd);
-        if (!Number.isFinite(odd)) {
+      } else {
+        const h = handicapFromValue(String(val.value ?? ""));
+        if (h === null || h !== handicap) {
           continue;
         }
-        return { odd, bookmaker: bookmaker.name ?? null, betName: target.name };
       }
+      const odd = Number(val.odd);
+      if (!Number.isFinite(odd)) {
+        continue;
+      }
+      return { odd, betName: target.name };
     }
   }
-  return { odd: null, bookmaker: null, betName: null };
+  return { odd: null, betName: null };
 };
 
 const resolveApiFootballOdds = async (
@@ -178,15 +156,14 @@ const resolveApiFootballOdds = async (
     { fixtureId, rawOdds: odds },
     "live odds raw payload [troubleshooting]",
   );
-  const allBookmakers = odds.flatMap((o) => o.bookmakers ?? []);
-  const { odd, bookmaker, betName } = findOverUnderOdd(allBookmakers, oddsMarket.handicap, oddsMarket.scope);
+  const allBets = odds.flatMap((o) => o.odds ?? []);
+  const { odd, betName } = findOverUnderOdd(allBets, oddsMarket.handicap, oddsMarket.scope);
   getStrategyLogger().info(
     {
       fixtureId,
       handicap: oddsMarket.handicap,
       scope: oddsMarket.scope,
       betName,
-      bookmaker,
       odd,
     },
     "live odds resolved",

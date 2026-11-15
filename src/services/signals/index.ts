@@ -133,34 +133,46 @@ const recheckPreAlerts = async (
   if (checkAt && Date.now() < checkAt) {
     return [];
   }
-  preAlerted.delete(key);
-  preAlertCheckAt.delete(key);
-  const stored = preAlertData.get(key);
-  preAlertData.delete(key);
-  if (!stored) {
-    return [];
-  }
   if (!isZeroZero(currentMatch)) {
+    preAlerted.delete(key);
+    preAlertCheckAt.delete(key);
+    preAlertData.delete(key);
     return [];
   }
   const period = matchPeriod(currentMatch);
   if (period === null) {
+    preAlerted.delete(key);
+    preAlertCheckAt.delete(key);
+    preAlertData.delete(key);
     return [];
   }
   const minute = matchMinute(currentMatch);
   if (minute === null) {
+    preAlerted.delete(key);
+    preAlertCheckAt.delete(key);
+    preAlertData.delete(key);
     return [];
   }
   const window = period === "first_half" ? FIRST_HALF_WINDOW : SECOND_HALF_WINDOW;
   if (!inWindow(minute, window.min, window.max)) {
+    preAlertCheckAt.set(key, Date.now() + PRE_ALERT_RECHECK_MINUTES * 60 * 1000);
     return [];
   }
   const snapshot = touchSnapshot(currentMatch, currentStatistics, period);
   if (snapshot === null) {
+    preAlertCheckAt.set(key, Date.now() + PRE_ALERT_RECHECK_MINUTES * 60 * 1000);
     return [];
   }
   const threshold = getGoalRatioThreshold();
   if (snapshot.ratio < threshold) {
+    preAlertCheckAt.set(key, Date.now() + PRE_ALERT_RECHECK_MINUTES * 60 * 1000);
+    return [];
+  }
+  const stored = preAlertData.get(key);
+  preAlerted.delete(key);
+  preAlertCheckAt.delete(key);
+  preAlertData.delete(key);
+  if (!stored) {
     return [];
   }
   const alert: Alert = {
