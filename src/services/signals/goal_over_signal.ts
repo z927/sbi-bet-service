@@ -79,7 +79,7 @@ export const goalOverSignal: Signal = {
       touches: snapshot.touches,
       oddsMarket: {
         ...GOAL_OVER_MARKET,
-        scope: period === "first_half" ? "FIRST_HALF" : "FULL_TIME",
+        scope: period === "first_half" ? "FIRST_HALF" : "SECOND_HALF",
       },
     };
   },

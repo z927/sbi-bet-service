@@ -15,6 +15,7 @@ import {
   countryFlag,
   dispatchAlerts,
   evaluateSignals,
+  evaluateSignalsWithPreAlert,
   firstHalfMinutes,
   getTelegramConfig,
   getWinRate,
@@ -418,7 +419,7 @@ test("goalOverSignal fires a second-half alert on a 0-0 in the 60'-80' window", 
   assert.equal(alert.touches, 20);
   assert.deepEqual(alert.oddsMarket, {
     betType: "OVER_UNDER",
-    scope: "FULL_TIME",
+    scope: "SECOND_HALF",
     handicap: 0.5,
     selection: "OVER",
   });
@@ -459,6 +460,45 @@ test("goalOverSignal stays silent in the second half when second-half stats are 
     null,
   );
   assert.equal(goalOverSignal.evaluate(match, touchStatsSecondHalf("2", "2")), null);
+});
+
+test("goalOverSignal stays silent at the 5th minute of the second half (outside the 60'-80' signal window)", () => {
+  const now = Math.floor(Date.now() / 1000);
+  const match = goalMatch({
+    id: "sh5",
+    stage_id: 13,
+    stage_start: now - 240,
+    minute: "50",
+  });
+
+  assert.equal(matchPeriod(match), "second_half");
+  assert.equal(matchMinute(match), 50);
+  assert.equal(goalOverSignal.evaluate(match, touchStatsSecondHalf("4", "4")), null);
+});
+
+test("evaluateSignalsWithPreAlert does not emit a normal signal while a pre-alert is pending", async () => {
+  const now = Math.floor(Date.now() / 1000);
+  const match = goalMatch({
+    id: "shpa",
+    stage_id: 13,
+    stage_start: now - 240,
+    minute: "50",
+  });
+  const stats = {
+    all: {},
+    first_half: {},
+    second_half: {
+      attack: [{ id: 1, name: "Palloni toccati nell'area avversaria", home: "4", away: "4" }],
+    },
+  };
+
+  const first = await evaluateSignalsWithPreAlert(match, stats);
+  assert.equal(first.length, 1);
+  assert.equal(first[0]!.type, "pre-alert");
+  assert.equal(first[0]!.text, "Alert Goal Over 0.5 FT");
+
+  const second = await evaluateSignalsWithPreAlert(match, stats);
+  assert.equal(second.length, 0);
 });
 
 test("goalOverSignal honors the ratio threshold env override", () => {

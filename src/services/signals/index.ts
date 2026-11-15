@@ -92,7 +92,7 @@ const maybeSendPreAlert = async (
       betType: "OVER_UNDER",
       handicap: 0.5,
       selection: "OVER",
-      scope: period === "first_half" ? "FIRST_HALF" : "FULL_TIME",
+      scope: period === "first_half" ? "FIRST_HALF" : "SECOND_HALF",
     },
   };
   try {
@@ -182,7 +182,7 @@ const recheckPreAlerts = async (
       betType: "OVER_UNDER",
       handicap: 0.5,
       selection: "OVER",
-      scope: period === "first_half" ? "FIRST_HALF" : "FULL_TIME",
+      scope: period === "first_half" ? "FIRST_HALF" : "SECOND_HALF",
     },
   };
   fired.add(key);
@@ -233,9 +233,13 @@ export const evaluateSignalsWithPreAlert = async (
     preAlertData.delete(key);
     return [];
   }
+  const key = `${match.id}:${GOAL_OVER_SIGNAL}`;
   const preAlerts = await recheckPreAlerts(match, statistics, context);
   if (preAlerts.length > 0) {
     return preAlerts;
+  }
+  if (preAlerted.has(key)) {
+    return [];
   }
   const preAlert = await maybeSendPreAlert(match, statistics);
   if (preAlert !== null) {
