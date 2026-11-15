@@ -58,6 +58,53 @@ const ODDS_RESPONSE = [
   },
 ];
 
+const SECOND_HALF_ODDS = [
+  {
+    bookmakers: [
+      {
+        id: 1,
+        name: "Book A",
+        bets: [
+          {
+            id: 25,
+            name: "Match Goals",
+            values: [
+              { value: "Over", odd: "1.85", handicap: "0.5" },
+              { value: "Under", odd: "2.0", handicap: "0.5" },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+];
+
+const SECOND_HALF_FALLBACK_ODDS = [
+  {
+    bookmakers: [
+      {
+        id: 1,
+        name: "Book A",
+        bets: [
+          {
+            id: 36,
+            name: "Over/Under Line",
+            values: [
+              { value: "Over", odd: "1.9", handicap: "0.5" },
+              { value: "Under", odd: "2.0", handicap: "0.5" },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+];
+
+const SECOND_HALF_FIXTURE = {
+  ...LIVE_FIXTURE,
+  fixture: { ...LIVE_FIXTURE.fixture, status: { short: "2H" } },
+};
+
 const STATS_FIXTURE = [
   "SE\u00f7Partita",
   "SF\u00f7Statistiche Top",
@@ -73,6 +120,8 @@ const ALERT_STATS_FIXTURE = [
 const originalFetch = globalThis.fetch;
 let statsCalls = 0;
 let oddsCalls = 0;
+let liveFixtures = [LIVE_FIXTURE];
+let oddsResponse = { response: ODDS_RESPONSE };
 let statsFail = false;
 let statsBody = STATS_FIXTURE;
 let telegramCalls = 0;
@@ -93,9 +142,9 @@ const fixtureFetch = (async (url: string, init?: RequestInit) => {
   if (target.includes("v3.football.api-sports.io")) {
     if (target.includes("/odds")) {
       oddsCalls += 1;
-      return makeResponse(JSON.stringify({ response: ODDS_RESPONSE }));
+      return makeResponse(JSON.stringify(oddsResponse));
     }
-    return makeResponse(JSON.stringify({ response: [LIVE_FIXTURE] }));
+    return makeResponse(JSON.stringify({ response: liveFixtures }));
   }
   if (target.includes("df_st_")) {
     statsCalls += 1;
@@ -116,6 +165,8 @@ beforeEach(async () => {
   await deleteAllScheduledFixtures();
   statsCalls = 0;
   oddsCalls = 0;
+  liveFixtures = [LIVE_FIXTURE];
+  oddsResponse = { response: ODDS_RESPONSE };
   statsFail = false;
   statsBody = STATS_FIXTURE;
   telegramCalls = 0;
@@ -277,6 +328,107 @@ test("strategy dispatches signal alerts through Telegram with live odds from API
         `ℹ️ Rapporto: ${(30 / minute).toFixed(2)}`,
       ].join("\n"),
     });
+  } finally {
+    restoreEnv(savedEnv);
+  }
+});
+
+test("strategy resolves second-half live odds from bet id 25 Match Goals (Over 0.5)", async () => {
+  const savedEnv = {
+    [TELEGRAM_BOT_TOKEN_ENV]: process.env.TELEGRAM_BOT_TOKEN,
+    [TELEGRAM_CHAT_ID_ENV]: process.env.TELEGRAM_CHAT_ID,
+    [WIN_RATE_ENV]: process.env[WIN_RATE_ENV],
+  };
+  process.env.TELEGRAM_BOT_TOKEN = "test-token";
+  process.env.TELEGRAM_CHAT_ID = "-10042";
+  delete process.env[WIN_RATE_ENV];
+  // 2 tempo statistiche top per il secondo tempo
+  const secondHalfStats = [
+    "SE\u00f72 tempo",
+    "SF\u00f7Attacco",
+    "SD\u00f799\u00acSG\u00f7Palloni toccati nell'area avversaria\u00acSH\u00f712\u00acSI\u00f78",
+  ].join("~");
+  statsBody = secondHalfStats;
+  liveFixtures = [SECOND_HALF_FIXTURE];
+  oddsResponse = { response: SECOND_HALF_ODDS };
+  await upsertScheduledFixtures([{
+    fixture_id: 1,
+    match_id: "m1",
+    api_football_league_id: 78,
+    api_football_league_name: "ITALIA: Serie A",
+    home_team: "Inter",
+    away_team: "Milan",
+    kickoff_time: new Date(M1_START * 1000).toISOString(),
+    begin_monitoring_time: new Date((M1_START - 60) * 1000).toISOString(),
+    end_monitoring_time: new Date((M1_START + 120) * 1000).toISOString(),
+  }]);
+  try {
+    const result = await runLiveMatchesStrategy({}, silentHooks());
+
+    assert.equal(result.failures, 0);
+    assert.equal(result.results.length, 1);
+    assert.equal(result.results[0]!.alerts.length, 1);
+    const alert = result.results[0]!.alerts[0]!;
+    assert.equal(alert.text, "Alert Goal Over 0.5 FT");
+    assert.deepEqual(alert.oddsMarket, {
+      betType: "OVER_UNDER",
+      scope: "SECOND_HALF",
+      handicap: 0.5,
+      selection: "OVER",
+    });
+    assert.equal(alert.odds, 1.85);
+    assert.equal(oddsCalls, 1);
+    assert.equal(telegramCalls, 1);
+    assert.match(String(telegramBodies[0]?.text), /💶 Quota live: 1\.85/);
+  } finally {
+    restoreEnv(savedEnv);
+  }
+});
+
+test("strategy falls back to bet id 36 Over/Under Line when id 25 is missing (second half)", async () => {
+  const savedEnv = {
+    [TELEGRAM_BOT_TOKEN_ENV]: process.env.TELEGRAM_BOT_TOKEN,
+    [TELEGRAM_CHAT_ID_ENV]: process.env.TELEGRAM_CHAT_ID,
+    [WIN_RATE_ENV]: process.env[WIN_RATE_ENV],
+  };
+  process.env.TELEGRAM_BOT_TOKEN = "test-token";
+  process.env.TELEGRAM_CHAT_ID = "-10042";
+  delete process.env[WIN_RATE_ENV];
+  const secondHalfStats = [
+    "SE\u00f72 tempo",
+    "SF\u00f7Attacco",
+    "SD\u00f799\u00acSG\u00f7Palloni toccati nell'area avversaria\u00acSH\u00f712\u00acSI\u00f78",
+  ].join("~");
+  statsBody = secondHalfStats;
+  liveFixtures = [SECOND_HALF_FIXTURE];
+  oddsResponse = { response: SECOND_HALF_FALLBACK_ODDS };
+  await upsertScheduledFixtures([{
+    fixture_id: 1,
+    match_id: "m1",
+    api_football_league_id: 78,
+    api_football_league_name: "ITALIA: Serie A",
+    home_team: "Inter",
+    away_team: "Milan",
+    kickoff_time: new Date(M1_START * 1000).toISOString(),
+    begin_monitoring_time: new Date((M1_START - 60) * 1000).toISOString(),
+    end_monitoring_time: new Date((M1_START + 120) * 1000).toISOString(),
+  }]);
+  try {
+    const result = await runLiveMatchesStrategy({}, silentHooks());
+
+    assert.equal(result.failures, 0);
+    assert.equal(result.results[0]!.alerts.length, 1);
+    const alert = result.results[0]!.alerts[0]!;
+    assert.equal(alert.text, "Alert Goal Over 0.5 FT");
+    assert.deepEqual(alert.oddsMarket, {
+      betType: "OVER_UNDER",
+      scope: "SECOND_HALF",
+      handicap: 0.5,
+      selection: "OVER",
+    });
+    assert.equal(alert.odds, 1.9);
+    assert.equal(oddsCalls, 1);
+    assert.match(String(telegramBodies[0]?.text), /💶 Quota live: 1\.9/);
   } finally {
     restoreEnv(savedEnv);
   }

@@ -66,6 +66,8 @@ const handicapFromValue = (value: string): number | null => {
 
 const OVER_UNDER_LINE_FIRST_HALF_ID = 24;
 const OVER_UNDER_LINE_FIRST_HALF_NAME = "Over/Under Line (1st Half)";
+const OVER_UNDER_LINE_SECOND_HALF_ID = 25;
+const OVER_UNDER_LINE_SECOND_HALF_NAME = "Match Goals";
 const OVER_UNDER_LINE_FULL_TIME_ID = 36;
 const OVER_UNDER_LINE_FULL_TIME_NAME = "Over/Under Line";
 
@@ -79,14 +81,20 @@ const isBet365 = (bookmaker: { name?: string }): boolean => {
   return String(bookmaker.name ?? "").toLowerCase().includes(BET365);
 };
 
-const targetBetForScope = (scope: string): { id: number; name: string } | null => {
+const targetBetsForScope = (scope: string): Array<{ id: number; name: string }> => {
   if (scope === "FIRST_HALF") {
-    return { id: OVER_UNDER_LINE_FIRST_HALF_ID, name: OVER_UNDER_LINE_FIRST_HALF_NAME };
+    return [{ id: OVER_UNDER_LINE_FIRST_HALF_ID, name: OVER_UNDER_LINE_FIRST_HALF_NAME }];
+  }
+  if (scope === "SECOND_HALF") {
+    return [
+      { id: OVER_UNDER_LINE_SECOND_HALF_ID, name: OVER_UNDER_LINE_SECOND_HALF_NAME },
+      { id: OVER_UNDER_LINE_FULL_TIME_ID, name: OVER_UNDER_LINE_FULL_TIME_NAME },
+    ];
   }
   if (scope === "FULL_TIME") {
-    return { id: OVER_UNDER_LINE_FULL_TIME_ID, name: OVER_UNDER_LINE_FULL_TIME_NAME };
+    return [{ id: OVER_UNDER_LINE_FULL_TIME_ID, name: OVER_UNDER_LINE_FULL_TIME_NAME }];
   }
-  return null;
+  return [];
 };
 
 const findOverUnderOdd = (
@@ -94,8 +102,8 @@ const findOverUnderOdd = (
   handicap: number,
   scope: string,
 ): OddBookmakerLookup => {
-  const target = targetBetForScope(scope);
-  if (!target) {
+  const targets = targetBetsForScope(scope);
+  if (targets.length === 0) {
     return { odd: null, bookmaker: null, betName: null };
   }
   const ordered = [...bookmakers].sort((a, b) => {
@@ -109,16 +117,25 @@ const findOverUnderOdd = (
     }
     return 0;
   });
+  const isTargetBet = (bet: unknown): { id: number; name: string } | null => {
+    const betId = (bet as { id?: unknown }).id;
+    const betName = String((bet as { name?: string }).name ?? "");
+    for (const target of targets) {
+      if (
+        (betId !== undefined && betId !== null && Number(betId) === target.id) ||
+        betName === target.name
+      ) {
+        return target;
+      }
+    }
+    return null;
+  };
   for (const bm of ordered) {
     const bookmaker = bm as { name?: string; bets?: unknown[] };
     const bets = bookmaker.bets ?? [];
     for (const bet of bets) {
-      const betId = (bet as { id?: unknown }).id;
-      const betName = String((bet as { name?: string }).name ?? "");
-      const isTargetBet =
-        (betId !== undefined && betId !== null && Number(betId) === target.id) ||
-        betName === target.name;
-      if (!isTargetBet) {
+      const target = isTargetBet(bet);
+      if (!target) {
         continue;
       }
       const values = (bet as { values?: unknown[] }).values ?? [];
@@ -142,7 +159,7 @@ const findOverUnderOdd = (
         if (!Number.isFinite(odd)) {
           continue;
         }
-        return { odd, bookmaker: bookmaker.name ?? null, betName };
+        return { odd, bookmaker: bookmaker.name ?? null, betName: target.name };
       }
     }
   }
