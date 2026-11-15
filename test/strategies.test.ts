@@ -39,19 +39,18 @@ const LIVE_FIXTURE = {
 
 const ODDS_RESPONSE = [
   {
-    bookmakers: [
+    fixture: { id: 1, status: { long: "First Half", elapsed: 20, seconds: "20:00" } },
+    league: { id: 78, season: 2026 },
+    teams: { home: { id: 100, goals: 0 }, away: { id: 101, goals: 0 } },
+    status: { stopped: false, blocked: false, finished: false },
+    update: new Date().toISOString(),
+    odds: [
       {
-        id: 1,
-        name: "Book A",
-        bets: [
-          {
-            id: 24,
-            name: "Over/Under Line (1st Half)",
-            values: [
-              { value: "Over", odd: "1.8", handicap: "0.5" },
-              { value: "Under", odd: "2.0", handicap: "0.5" },
-            ],
-          },
+        id: 24,
+        name: "Over/Under Line (1st Half)",
+        values: [
+          { value: "Over", odd: "1.8", handicap: "0.5", main: true, suspended: false },
+          { value: "Under", odd: "2.0", handicap: "0.5", main: true, suspended: false },
         ],
       },
     ],
@@ -60,19 +59,18 @@ const ODDS_RESPONSE = [
 
 const SECOND_HALF_ODDS = [
   {
-    bookmakers: [
+    fixture: { id: 1, status: { long: "Second Half", elapsed: 60, seconds: "60:00" } },
+    league: { id: 78, season: 2026 },
+    teams: { home: { id: 100, goals: 0 }, away: { id: 101, goals: 0 } },
+    status: { stopped: false, blocked: false, finished: false },
+    update: new Date().toISOString(),
+    odds: [
       {
-        id: 1,
-        name: "Book A",
-        bets: [
-          {
-            id: 25,
-            name: "Match Goals",
-            values: [
-              { value: "Over", odd: "1.85", handicap: "0.5" },
-              { value: "Under", odd: "2.0", handicap: "0.5" },
-            ],
-          },
+        id: 25,
+        name: "Match Goals",
+        values: [
+          { value: "Over", odd: "1.85", handicap: "0.5", main: true, suspended: false },
+          { value: "Under", odd: "2.0", handicap: "0.5", main: true, suspended: false },
         ],
       },
     ],
@@ -81,19 +79,18 @@ const SECOND_HALF_ODDS = [
 
 const SECOND_HALF_FALLBACK_ODDS = [
   {
-    bookmakers: [
+    fixture: { id: 1, status: { long: "Second Half", elapsed: 60, seconds: "60:00" } },
+    league: { id: 78, season: 2026 },
+    teams: { home: { id: 100, goals: 0 }, away: { id: 101, goals: 0 } },
+    status: { stopped: false, blocked: false, finished: false },
+    update: new Date().toISOString(),
+    odds: [
       {
-        id: 1,
-        name: "Book A",
-        bets: [
-          {
-            id: 36,
-            name: "Over/Under Line",
-            values: [
-              { value: "Over", odd: "1.9", handicap: "0.5" },
-              { value: "Under", odd: "2.0", handicap: "0.5" },
-            ],
-          },
+        id: 36,
+        name: "Over/Under Line",
+        values: [
+          { value: "Over", odd: "1.9", handicap: "0.5", main: true, suspended: false },
+          { value: "Under", odd: "2.0", handicap: "0.5", main: true, suspended: false },
         ],
       },
     ],
