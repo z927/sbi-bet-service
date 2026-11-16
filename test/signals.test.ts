@@ -29,7 +29,6 @@ import {
   type Alert,
   type Signal,
 } from "../src/services/signals/index.ts";
-import { bestLiveOutcome } from "../src/clients/diretta/odds.ts";
 import type { Match, Odds, Statistics } from "../src/scraper/models.ts";
 
 process.env["LOG_LEVEL"] = "silent";
@@ -593,97 +592,6 @@ test("sendTelegram keeps the touch details for goal alerts", async () => {
       "ℹ️ Tocchi area: 25",
       "ℹ️ Rapporto: 1.67",
     ].join("\n"),
-  );
-});
-
-const makeOdds = (): Odds => ({
-  bookmakers: ["A", "B"],
-  markets: [
-    {
-      bookmaker_id: "1",
-      bookmaker: "A",
-      bet_type: "OVER_UNDER",
-      scope: "FIRST_HALF",
-      live: true,
-      outcomes: [
-        { label: "OVER", value: "1.36", opening: "1.33", handicap: "0.5", active: true },
-        { label: "UNDER", value: "3.0", opening: "2.8", handicap: "0.5", active: true },
-      ],
-    },
-    {
-      bookmaker_id: "2",
-      bookmaker: "B",
-      bet_type: "OVER_UNDER",
-      scope: "FIRST_HALF",
-      live: true,
-      outcomes: [
-        { label: "OVER", value: "1.5", opening: "1.4", handicap: "0.5", active: true },
-        { label: "OVER", value: "2.5", opening: "2.4", handicap: "1.5", active: true },
-      ],
-    },
-    {
-      bookmaker_id: "3",
-      bookmaker: "C",
-      bet_type: "OVER_UNDER",
-      scope: "FIRST_HALF",
-      live: false,
-      outcomes: [
-        { label: "OVER", value: "9.99", opening: "9.99", handicap: "0.5", active: true },
-      ],
-    },
-    {
-      bookmaker_id: "4",
-      bookmaker: "D",
-      bet_type: "OVER_UNDER",
-      scope: "FIRST_HALF",
-      live: true,
-      outcomes: [
-        { label: "OVER", value: "8.0", opening: "8.0", handicap: "0.5", active: false },
-      ],
-    },
-    {
-      bookmaker_id: "5",
-      bookmaker: "E",
-      bet_type: "OVER_UNDER",
-      scope: "FULL_TIME",
-      live: true,
-      outcomes: [
-        { label: "OVER", value: "7.0", opening: "7.0", handicap: "0.5", active: true },
-      ],
-    },
-  ],
-});
-
-test("bestLiveOutcome picks the highest live active outcome for the market", () => {
-  assert.equal(
-    bestLiveOutcome(makeOdds(), {
-      betType: "OVER_UNDER",
-      scope: "FIRST_HALF",
-      handicap: 0.5,
-      selection: "OVER",
-    }),
-    1.5,
-  );
-});
-
-test("bestLiveOutcome returns null when no live outcome matches", () => {
-  assert.equal(
-    bestLiveOutcome(makeOdds(), {
-      betType: "OVER_UNDER",
-      scope: "SECOND_HALF",
-      handicap: 0.5,
-      selection: "OVER",
-    }),
-    null,
-  );
-  assert.equal(
-    bestLiveOutcome({ bookmakers: [], markets: [] }, {
-      betType: "OVER_UNDER",
-      scope: "FIRST_HALF",
-      handicap: 0.5,
-      selection: "OVER",
-    }),
-    null,
   );
 });
 

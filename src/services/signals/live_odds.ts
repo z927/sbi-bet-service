@@ -13,6 +13,10 @@ export const attachLiveOdds = async (
     }
     try {
       alert.odds = await resolver(alert);
+      getStrategyLogger().info(
+        { rule: alert.rule, matchId: alert.matchId, oddsMarket: alert.oddsMarket, odd: alert.odds },
+        "live odds attached",
+      );
     } catch (exc) {
       alert.odds = null;
       getStrategyLogger().error(
