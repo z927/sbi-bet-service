@@ -16,6 +16,17 @@ import { upsertTeams, deleteAllTeams, initTeamsRepo } from "../src/services/team
 import { removeDb, useTempDb } from "./support.ts";
 
 process.env["LOG_LEVEL"] = "debug";
+const _origEnv = {
+  GCP_PROJECT_ID: process.env.GCP_PROJECT_ID,
+  GCP_REGION: process.env.GCP_REGION,
+  GCP_JOB_ID: process.env.GCP_JOB_ID,
+  MONITOR_JOB_TARGET_BASE_URL: process.env.MONITOR_JOB_TARGET_BASE_URL,
+  SCHEDULER_TIME_ZONE: process.env.SCHEDULER_TIME_ZONE,
+  MONITOR_LEAD_MINUTES: process.env.MONITOR_LEAD_MINUTES,
+  MONITOR_MAJOR_LEAGUES: process.env.MONITOR_MAJOR_LEAGUES,
+  SUPABASE_URL: process.env.SUPABASE_URL,
+  SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
+};
 process.env["GCP_PROJECT_ID"] = "test-project";
 process.env["GCP_REGION"] = "europe-west6";
 process.env["GCP_JOB_ID"] = "test-job";
@@ -248,6 +259,10 @@ after(() => {
   globalThis.fetch = originalFetch;
   removeDb(DB_FILE);
   globalThis.Date = OriginalDate;
+  for (const [k, v] of Object.entries(_origEnv)) {
+    if (v === undefined) delete process.env[k];
+    else process.env[k] = v;
+  }
 });
 
 test("filters by league_links, persists monitored fixtures with both IDs and creates a single job", async () => {
