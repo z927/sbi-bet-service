@@ -33,6 +33,8 @@ const fixtureFetch = (async (url: string) =>
 let app: FastifyInstance;
 
 before(async () => {
+  delete process.env.GCP_PROJECT_ID;
+  delete process.env.MONITOR_JOB_TARGET_BASE_URL;
   globalThis.fetch = fixtureFetch;
   app = await buildServer();
 });
@@ -90,12 +92,23 @@ test("POST /api/v1/schedule rejects invalid body with 422", async () => {
 });
 
 test("GET /api/v1/auto-schedule returns BaseResponse (scheduler unconfigured: 200 twice)", async () => {
-  const first = await app.inject({ method: "GET", url: "/api/v1/auto-schedule" });
-  assert.equal(first.statusCode, 200);
-  assert.equal(typeof first.json().message, "string");
-  assert.equal(first.json().statusCode, 200);
-  const second = await app.inject({ method: "GET", url: "/api/v1/auto-schedule" });
-  assert.equal(second.statusCode, 200);
+  const gcpProjectId = process.env.GCP_PROJECT_ID;
+  const monitorJobTargetBaseUrl = process.env.MONITOR_JOB_TARGET_BASE_URL;
+  delete process.env.GCP_PROJECT_ID;
+  delete process.env.MONITOR_JOB_TARGET_BASE_URL;
+  try {
+    const first = await app.inject({ method: "GET", url: "/api/v1/auto-schedule" });
+    assert.equal(first.statusCode, 200);
+    assert.equal(typeof first.json().message, "string");
+    assert.equal(first.json().statusCode, 200);
+    const second = await app.inject({ method: "GET", url: "/api/v1/auto-schedule" });
+    assert.equal(second.statusCode, 200);
+  } finally {
+    if (gcpProjectId === undefined) delete process.env.GCP_PROJECT_ID;
+    else process.env.GCP_PROJECT_ID = gcpProjectId;
+    if (monitorJobTargetBaseUrl === undefined) delete process.env.MONITOR_JOB_TARGET_BASE_URL;
+    else process.env.MONITOR_JOB_TARGET_BASE_URL = monitorJobTargetBaseUrl;
+  }
 });
 
 test("GET /api/v1/monitor runs the live strategy and returns BaseResponse", async () => {
