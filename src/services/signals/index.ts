@@ -184,7 +184,7 @@ const recheckPreAlerts = async (
     value: snapshot.ratio,
     threshold,
     text: period === "first_half" ? "Alert Goal Over 0.5 HT" : "Alert Goal Over 0.5 FT",
-    type: "pre-alert",
+    type: "signal",
     tournament: currentMatch.tournament ?? stored.alert.tournament,
     country: currentMatch.country ?? stored.alert.country,
     homeScore: currentMatch.home_score,
@@ -263,7 +263,7 @@ export const evaluateSignalsWithPreAlert = async (
 export const dispatchAlerts = async (
   alerts: readonly Alert[],
   sender: (alert: Alert) => Promise<boolean> = sendTelegram,
-  context?: { match?: Match; statistics?: Statistics },
+  context?: { match?: Match; statistics?: Statistics; fixtureId?: number },
 ): Promise<void> => {
   for (const alert of alerts) {
     try {
