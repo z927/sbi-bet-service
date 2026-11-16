@@ -121,6 +121,11 @@ export const autoScheduleEvents = async (
     "auto-schedule started (league-links driven)",
   );
 
+  if (missingSchedulerSettings(settings).length > 0) {
+    log.warn({ missing: missingSchedulerSettings(settings) }, "cloud scheduler not configured: auto-schedule skipped");
+    return baseResponse("Auto-schedule skipped: Cloud Scheduler not configured", 200);
+  }
+
   try {
     // 1. Carica i link di lega da Supabase: mappa api_football_league_id -> diretta_tournament_id
     //    Una stessa lega API-Football puo' avere piu' tornei Diretta (es. Nations League A/B/C/D).
