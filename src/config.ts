@@ -26,7 +26,7 @@ export interface Settings {
 }
 
 const DEFAULT_UPSTREAM = "https://bet-service-658489904938.europe-west6.run.app";
-const DEFAULT_CORS_ORIGIN = "https://sbi-prematch.lovable.app";
+const DEFAULT_CORS_ORIGIN = "https://sbi-dashboard.lovable.app";
 
 const parseCorsOrigin = (value: string | undefined): string | string[] => {
   const raw = (value ?? DEFAULT_CORS_ORIGIN).trim();
