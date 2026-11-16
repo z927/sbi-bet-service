@@ -36,6 +36,9 @@ after(async () => {
 
 beforeEach(() => {
   signals.reset();
+  signals.resetSupabaseClient();
+  process.env.SUPABASE_URL = "";
+  process.env.SUPABASE_SERVICE_ROLE_KEY = "";
 });
 
 test("GET /api/v1/signals returns 200 with empty recap and signals", async () => {

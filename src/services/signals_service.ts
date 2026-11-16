@@ -90,6 +90,11 @@ export const reset = (): void => {
   signals.length = 0;
 };
 
+export const resetSupabaseClient = (): void => {
+  client = null;
+  clientResolved = false;
+};
+
 const toSignalListRow = (row: {
   home?: string | null;
   away?: string | null;
