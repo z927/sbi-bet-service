@@ -175,6 +175,7 @@ const runMatch = async (
   match: Match,
   oddsResolver: (alert: Alert) => Promise<number | null>,
   hooks: LiveMatchesStrategyHooks,
+  fixtureId: number,
 ): Promise<MatchOutcome> => {
     const log = getStrategyLogger();
     log.info({ matchId: match.id }, "match strategy started");
@@ -209,7 +210,7 @@ const runMatch = async (
     if (alerts.length > 0) {
       await attachLiveOdds(alerts, oddsResolver);
     }
-    await dispatchAlerts(alerts, undefined, { match, statistics });
+    await dispatchAlerts(alerts, undefined, { match, statistics, fixtureId });
     log.info({ alerts: alerts.length }, "match strategy completed");
     return { statistics, alerts, error: null };
   } catch (exc) {
@@ -283,7 +284,7 @@ const execute = async (
       fixtureId: match.id,
     };
     const oddsResolver = (alert: Alert) => resolveApiFootballOdds(apiFootballFixtureId, alert.oddsMarket);
-    const outcome = await runWithNewLogTrace(matchContext, () => runMatch(match, oddsResolver, hooks));
+    const outcome = await runWithNewLogTrace(matchContext, () => runMatch(match, oddsResolver, hooks, apiFootballFixtureId));
     results.push({ ...base, ...outcome });
   }
 

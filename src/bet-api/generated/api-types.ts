@@ -141,7 +141,7 @@ export interface paths {
         };
         /**
          * Settle signals against API-Football final scores
-         * @description Reads unresolved signals (win is null), matches them to API-Football fixtures for the given date, and updates the final score and win/lose outcome on each signal.
+         * @description Reads unresolved signals (win is null), matches them to API-Football fixtures for the given date range (defaults to today), and updates the final score and win/lose outcome on each signal.
          */
         get: operations["settleSignals"];
         put?: never;
@@ -318,6 +318,10 @@ export interface components {
         SettleSignalResponse: {
             settled: number;
             skipped: number;
+            skippedDetails?: {
+                matchId?: string;
+                reason?: string;
+            }[];
             message: string;
         };
         ValidationError: {
@@ -700,8 +704,10 @@ export interface operations {
     settleSignals: {
         parameters: {
             query?: {
-                /** @description ISO date (YYYY-MM-DD) of the fixtures to settle. Defaults to today. */
-                date?: string;
+                /** @description ISO date (YYYY-MM-DD) start of the settlement range. Defaults to today. */
+                from?: string;
+                /** @description ISO date (YYYY-MM-DD) end of the settlement range. Defaults to today. */
+                to?: string;
             };
             header?: never;
             path?: never;

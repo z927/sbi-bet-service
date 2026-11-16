@@ -14,6 +14,8 @@ export interface SignalItem {
   win: boolean | null;
   quota: number | null;
   type: "pre-alert" | "signal" | null;
+  homeScoreHt: number | null;
+  awayScoreHt: number | null;
 }
 
 export interface SignalListRow {
@@ -23,6 +25,8 @@ export interface SignalListRow {
   tournament: string;
   homeScore: number | null;
   awayScore: number | null;
+  homeScoreHt: number | null;
+  awayScoreHt: number | null;
   matchDate: string | null;
   type: string | null;
   win: boolean | null;
@@ -93,6 +97,8 @@ const toSignalListRow = (row: {
   tournament?: string | null;
   home_score?: number | null;
   away_score?: number | null;
+  home_score_ht?: number | null;
+  away_score_ht?: number | null;
   created_at?: string | null;
   type?: string | null;
   win?: boolean | null;
@@ -103,18 +109,25 @@ const toSignalListRow = (row: {
   tournament: row.tournament ?? "",
   homeScore: row.home_score ?? null,
   awayScore: row.away_score ?? null,
+  homeScoreHt: row.home_score_ht ?? null,
+  awayScoreHt: row.away_score_ht ?? null,
   matchDate: row.created_at ?? null,
   type: row.type ?? null,
   win: row.win ?? null,
 });
 
-export const getSignalStats = async (filter?: { from?: string; to?: string }): Promise<SignalsResponse> => {
+export const getSignalStats = async (filter?: { from?: string; to?: string; type?: string }): Promise<SignalsResponse> => {
   getStrategyLogger().info({ component: "signals_service" }, "getSignalStats called");
+  const { from, to, type } = filter ?? {};
   const supabase = getClient();
   if (supabase) {
     try {
       getStrategyLogger().info({ component: "signals_service", source: "supabase" }, "reading signals from supabase");
-      const { data, error } = await supabase.from("signals").select("*");
+      let query = supabase.from("signals").select("*");
+      if (type) {
+        query = query.eq("type", type);
+      }
+      const { data, error } = await query;
       if (error) {
         getStrategyLogger().error({ err: error, component: "signals_service" }, "supabase select failed");
         throw error;
@@ -146,8 +159,8 @@ export const getSignalStats = async (filter?: { from?: string; to?: string }): P
   }
 
   getStrategyLogger().info({ component: "signals_service", source: "memory" }, "reading signals from in-memory store");
-  const { from, to } = filter ?? {};
   const signalsList = signals
+    .filter((s) => type === undefined || s.type === type)
     .filter(() => isDateInRange(null, from, to))
     .map((s) => ({
       home: s.home,
@@ -156,12 +169,14 @@ export const getSignalStats = async (filter?: { from?: string; to?: string }): P
       tournament: "",
       homeScore: null,
       awayScore: null,
+      homeScoreHt: s.homeScoreHt ?? null,
+      awayScoreHt: s.awayScoreHt ?? null,
       matchDate: null,
       type: s.type ?? null,
       win: s.win,
     }))
     .sort(sortByMatchDateDesc);
-  const recap = buildRecapFromMemory(signals.filter(() => isDateInRange(null, from, to)));
+  const recap = buildRecapFromMemory(signals.filter((s) => type === undefined || s.type === type).filter(() => isDateInRange(null, from, to)));
   const response: SignalsResponse = { recap, signals: signalsList };
   getStrategyLogger().info({ component: "signals_service", source: "memory", recap }, "signals returned from memory");
   return response;

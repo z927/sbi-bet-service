@@ -19,6 +19,8 @@ const makeSignal = (overrides: Partial<SignalItem> = {}): SignalItem => ({
   quota: null,
   win: null,
   type: "signal",
+  homeScoreHt: null,
+  awayScoreHt: null,
   ...overrides,
 });
 
@@ -76,6 +78,8 @@ test("GET /api/v1/signals returns list with required fields including matchDate"
   assert.equal(row.tournament, "");
   assert.equal(row.homeScore, null);
   assert.equal(row.awayScore, null);
+  assert.equal(row.homeScoreHt, null);
+  assert.equal(row.awayScoreHt, null);
   assert.equal(row.matchDate, null);
   assert.equal(row.win, true);
 
@@ -98,12 +102,14 @@ test("GET /api/v1/signals exposes all wire fields", async () => {
   assert.ok("away" in row);
   assert.ok("matchId" in row);
   assert.ok("tournament" in row);
-  assert.ok("homeScore" in row);
-  assert.ok("awayScore" in row);
-  assert.ok("matchDate" in row);
-  assert.ok("type" in row);
-  assert.ok("win" in row);
-  assert.ok("recap" in body);
+    assert.ok("homeScore" in row);
+    assert.ok("awayScore" in row);
+    assert.ok("homeScoreHt" in row);
+    assert.ok("awayScoreHt" in row);
+    assert.ok("matchDate" in row);
+    assert.ok("type" in row);
+    assert.ok("win" in row);
+    assert.ok("recap" in body);
 });
 
 test("GET /api/v1/signals items carry the type field", async () => {
@@ -179,23 +185,52 @@ test("GET /api/v1/signals/settle returns 200 with zero settled when no unresolve
   assert.equal(typeof body.settled, "number");
   assert.equal(typeof body.skipped, "number");
   assert.equal(typeof body.message, "string");
+  assert.ok(Array.isArray(body.skippedDetails));
 });
 
-test("GET /api/v1/signals/settle returns 422 on invalid date", async () => {
+test("GET /api/v1/signals/settle accepts from/to range", async () => {
   const response = await app.inject({
     method: "GET",
-    url: "/api/v1/signals/settle?date=not-a-date",
-  });
-  assert.equal(response.statusCode, 422);
-});
-
-test("GET /api/v1/signals/settle accepts optional date", async () => {
-  const response = await app.inject({
-    method: "GET",
-    url: "/api/v1/signals/settle?date=2026-11-09",
+    url: "/api/v1/signals/settle?from=2026-11-01&to=2026-11-30",
   });
   assert.equal(response.statusCode, 200);
   const body = response.json();
   assert.equal(typeof body.settled, "number");
   assert.equal(typeof body.skipped, "number");
+  assert.equal(typeof body.message, "string");
+});
+
+test("GET /api/v1/signals/settle accepts single from date", async () => {
+  const response = await app.inject({
+    method: "GET",
+    url: "/api/v1/signals/settle?from=2026-11-09",
+  });
+  assert.equal(response.statusCode, 200);
+  const body = response.json();
+  assert.equal(typeof body.settled, "number");
+  assert.equal(typeof body.skipped, "number");
+});
+
+test("GET /api/v1/signals/settle returns 422 on invalid from date", async () => {
+  const response = await app.inject({
+    method: "GET",
+    url: "/api/v1/signals/settle?from=not-a-date",
+  });
+  assert.equal(response.statusCode, 422);
+});
+
+test("GET /api/v1/signals/settle returns 422 on invalid to date", async () => {
+  const response = await app.inject({
+    method: "GET",
+    url: "/api/v1/signals/settle?to=not-a-date",
+  });
+  assert.equal(response.statusCode, 422);
+});
+
+test("GET /api/v1/signals/settle returns 422 when from is after to", async () => {
+  const response = await app.inject({
+    method: "GET",
+    url: "/api/v1/signals/settle?from=2026-12-01&to=2026-11-01",
+  });
+  assert.equal(response.statusCode, 422);
 });

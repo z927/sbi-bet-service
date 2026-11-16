@@ -28,6 +28,9 @@ const getClient = (): SupabaseClient => {
 export interface SaveSignalContext {
   match?: Match;
   statistics?: Statistics;
+  fixtureId?: number;
+  homeScoreHt?: number | null;
+  awayScoreHt?: number | null;
 }
 
 export interface UnsettledSignal {
@@ -35,7 +38,11 @@ export interface UnsettledSignal {
   home: string | null;
   away: string | null;
   rule: string | null;
+  text: string | null;
   created_at: string | null;
+  fixture_id: number | null;
+  home_score_ht: number | null;
+  away_score_ht: number | null;
 }
 
 export const getUnsettledSignals = async (): Promise<UnsettledSignal[] | null> => {
@@ -46,7 +53,7 @@ export const getUnsettledSignals = async (): Promise<UnsettledSignal[] | null> =
     getStrategyLogger().error({ err: exc, component: "signals_repo" }, "getUnsettledSignals client failed");
     return null;
   }
-  const { data, error } = await supabase.from("signals").select("match_id, home, away, rule, created_at").is("win", null);
+  const { data, error } = await supabase.from("signals").select("match_id, home, away, rule, text, created_at, fixture_id, home_score_ht, away_score_ht").is("win", null);
   if (error) {
     getStrategyLogger().error({ err: error, component: "signals_repo" }, "getUnsettledSignals failed");
     return null;
@@ -56,14 +63,23 @@ export const getUnsettledSignals = async (): Promise<UnsettledSignal[] | null> =
 
 export const updateSignalResult = async (
   matchId: string,
-  patch: { homeScore: number; awayScore: number; win: boolean },
+  patch: { homeScore: number; awayScore: number; win?: boolean; homeScoreHt?: number | null; awayScoreHt?: number | null },
 ): Promise<void> => {
   const supabase = getClient();
-  const { error } = await supabase.from("signals").update({
+  const update: { home_score: number; away_score: number; win?: boolean; home_score_ht?: number | null; away_score_ht?: number | null } = {
     home_score: patch.homeScore,
     away_score: patch.awayScore,
-    win: patch.win,
-  }).eq("match_id", matchId);
+  };
+  if (patch.win !== undefined) {
+    update.win = patch.win;
+  }
+  if (patch.homeScoreHt !== undefined) {
+    update.home_score_ht = patch.homeScoreHt;
+  }
+  if (patch.awayScoreHt !== undefined) {
+    update.away_score_ht = patch.awayScoreHt;
+  }
+  const { error } = await supabase.from("signals").update(update).eq("match_id", matchId);
   if (error) {
     getStrategyLogger().error({ err: error, component: "signals_repo", matchId }, "updateSignalResult failed");
     throw error;
@@ -89,11 +105,14 @@ export const saveSignal = async (alert: Alert, context?: SaveSignalContext): Pro
       text: alert.text,
       home_score: alert.homeScore ?? match?.home_score ?? null,
       away_score: alert.awayScore ?? match?.away_score ?? null,
+      home_score_ht: context?.homeScoreHt ?? null,
+      away_score_ht: context?.awayScoreHt ?? null,
       touches: alert.touches ?? null,
       odds: alert.odds ?? null,
       type: alert.type ?? null,
       statistics: statistics ?? null,
       match_data: match ?? null,
+      fixture_id: context?.fixtureId ?? null,
     });
   } catch (err) {
     getStrategyLogger().error(

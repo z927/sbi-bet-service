@@ -62,6 +62,15 @@ const dateQuerySchema = {
   properties: { date: { type: "string" } },
 } as const;
 
+const signalListQuerySchema = {
+  type: "object",
+  properties: {
+    from: { type: "string" },
+    to: { type: "string" },
+    type: { type: "string", enum: ["pre-alert", "signal"] },
+  },
+} as const;
+
 const dateRangeQuerySchema = {
   type: "object",
   properties: {
@@ -117,9 +126,26 @@ export const apiRoutes = (app: FastifyInstance): void => {
     },
   );
 
-  app.get<{ Querystring: { from?: string; to?: string } }>(
+  app.get<{ Querystring: { from?: string; to?: string; type?: string } }>(
     "/api/v1/signals",
-    { schema: { operationId: "getSignals", querystring: dateRangeQuerySchema } },
+    { schema: { operationId: "getSignals", querystring: signalListQuerySchema } },
+    async (request) => {
+      const { from, to, type } = request.query;
+      if (from !== undefined && !isIsoDate(from)) {
+        throw new ValidationError("from must be a valid ISO date (YYYY-MM-DD)");
+      }
+      if (to !== undefined && !isIsoDate(to)) {
+        throw new ValidationError("to must be a valid ISO date (YYYY-MM-DD)");
+      }
+      const stats = await signals.getSignalStats({ from, to, type });
+      request.log.info({ stats }, "signals stats computed");
+      return stats;
+    },
+  );
+
+  app.get<{ Querystring: { from?: string; to?: string } }>(
+    "/api/v1/signals/settle",
+    { schema: { operationId: "settleSignals", querystring: dateRangeQuerySchema } },
     async (request) => {
       const { from, to } = request.query;
       if (from !== undefined && !isIsoDate(from)) {
@@ -128,24 +154,14 @@ export const apiRoutes = (app: FastifyInstance): void => {
       if (to !== undefined && !isIsoDate(to)) {
         throw new ValidationError("to must be a valid ISO date (YYYY-MM-DD)");
       }
-      const stats = await signals.getSignalStats({ from, to });
-      request.log.info({ stats }, "signals stats computed");
-      return stats;
-    },
-  );
-
-  app.get<{ Querystring: { date?: string } }>(
-    "/api/v1/signals/settle",
-    { schema: { operationId: "settleSignals", querystring: dateQuerySchema } },
-    async (request) => {
-      const { date } = request.query;
-      if (date !== undefined && !isIsoDate(date)) {
-        throw new ValidationError("date must be a valid ISO date (YYYY-MM-DD)");
+      if (from !== undefined && to !== undefined && from > to) {
+        throw new ValidationError("from must be before or equal to to");
       }
-      const result = await settle.settleSignals(date);
+      const result = await settle.settleSignals({ from, to });
       return {
         settled: result.settled,
         skipped: result.skipped,
+        skippedDetails: result.skippedDetails,
         message: `Settled ${result.settled} signal(s), skipped ${result.skipped}`,
       };
     },

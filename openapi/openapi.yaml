@@ -178,16 +178,23 @@ paths:
       summary: Settle signals against API-Football final scores
       description: >-
         Reads unresolved signals (win is null), matches them to API-Football
-        fixtures for the given date, and updates the final score and win/lose
-        outcome on each signal.
+        fixtures for the given date range (defaults to today), and updates the
+        final score and win/lose outcome on each signal.
       parameters:
-        - name: date
+        - name: from
           in: query
           required: false
           schema:
             type: string
             format: date
-          description: ISO date (YYYY-MM-DD) of the fixtures to settle. Defaults to today.
+          description: ISO date (YYYY-MM-DD) start of the settlement range. Defaults to today.
+        - name: to
+          in: query
+          required: false
+          schema:
+            type: string
+            format: date
+          description: ISO date (YYYY-MM-DD) end of the settlement range. Defaults to today.
       responses:
         '200':
           description: OK
@@ -522,6 +529,15 @@ components:
           type: integer
         skipped:
           type: integer
+        skippedDetails:
+          type: array
+          items:
+            type: object
+            properties:
+              matchId:
+                type: string
+              reason:
+                type: string
         message:
           type: string
       required:
