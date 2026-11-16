@@ -71,7 +71,7 @@ export interface ApiFootballOdd {
 
 export const getLiveOdds = async (fixtureId: number): Promise<ApiFootballOdd[]> => {
   try {
-    const data = (await httpGet(`/odds?fixture=${fixtureId}`)) as { response?: ApiFootballOdd[] };
+    const data = (await httpGet(`/odds/live?fixture=${fixtureId}`)) as { response?: ApiFootballOdd[] };
     return data.response ?? [];
   } catch {
     return [];
