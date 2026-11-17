@@ -301,6 +301,9 @@ export interface components {
             awayScore?: number | null;
             matchDate?: string | null;
             type?: string | null;
+            text?: string | null;
+            minute?: number | null;
+            odds?: number | null;
             win?: boolean | null;
         };
         SignalRecap: {
