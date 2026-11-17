@@ -14,6 +14,7 @@ export interface SignalItem {
   win: boolean | null;
   quota: number | null;
   type: "pre-alert" | "signal" | null;
+  text: string | null;
   homeScoreHt: number | null;
   awayScoreHt: number | null;
 }
@@ -29,6 +30,9 @@ export interface SignalListRow {
   awayScoreHt: number | null;
   matchDate: string | null;
   type: string | null;
+  text: string | null;
+  minute: number | null;
+  odds: number | null;
   win: boolean | null;
 }
 
@@ -106,6 +110,9 @@ const toSignalListRow = (row: {
   away_score_ht?: number | null;
   created_at?: string | null;
   type?: string | null;
+  text?: string | null;
+  minute?: number | null;
+  odds?: number | null;
   win?: boolean | null;
 }): SignalListRow => ({
   home: row.home ?? "",
@@ -118,6 +125,9 @@ const toSignalListRow = (row: {
   awayScoreHt: row.away_score_ht ?? null,
   matchDate: row.created_at ?? null,
   type: row.type ?? null,
+  text: row.text ?? null,
+  minute: row.minute ?? null,
+  odds: row.odds ?? null,
   win: row.win ?? null,
 });
 
@@ -146,9 +156,11 @@ export const getSignalStats = async (filter?: { from?: string; to?: string; type
         away_score?: number | null;
         created_at?: string | null;
         type?: string | null;
+        text?: string | null;
+        minute?: number | null;
+        odds?: number | null;
         win?: boolean | null;
         result?: string | null;
-        quota?: number | null;
       }[];
       getStrategyLogger().info({ component: "signals_service", source: "supabase", rowsRead: rows.length }, "supabase select completed");
       const { from, to } = filter ?? {};
@@ -178,6 +190,9 @@ export const getSignalStats = async (filter?: { from?: string; to?: string; type
       awayScoreHt: s.awayScoreHt ?? null,
       matchDate: null,
       type: s.type ?? null,
+      text: s.text ?? null,
+      minute: s.minute ?? null,
+      odds: s.quota ?? null,
       win: s.win,
     }))
     .sort(sortByMatchDateDesc);

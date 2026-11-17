@@ -19,6 +19,7 @@ const makeSignal = (overrides: Partial<SignalItem> = {}): SignalItem => ({
   quota: null,
   win: null,
   type: "signal",
+  text: null,
   homeScoreHt: null,
   awayScoreHt: null,
   ...overrides,
@@ -111,6 +112,9 @@ test("GET /api/v1/signals exposes all wire fields", async () => {
     assert.ok("awayScoreHt" in row);
     assert.ok("matchDate" in row);
     assert.ok("type" in row);
+    assert.ok("text" in row);
+    assert.ok("minute" in row);
+    assert.ok("odds" in row);
     assert.ok("win" in row);
     assert.ok("recap" in body);
 });
@@ -127,6 +131,46 @@ test("GET /api/v1/signals items carry the type field", async () => {
   assert.equal(body.signals.length, 2);
   assert.equal(body.signals[0]!.type, "pre-alert");
   assert.equal(body.signals[1]!.type, "signal");
+});
+
+test("GET /api/v1/signals items carry the text field", async () => {
+  signals.setSignals([
+    makeSignal({
+      id: "s1",
+      home: "Inter",
+      away: "Milan",
+      matchId: "m1",
+      type: "signal",
+      text: "Alert Goal Over 0.5 HT",
+    }),
+  ]);
+
+  const response = await app.inject({ method: "GET", url: "/api/v1/signals" });
+  assert.equal(response.statusCode, 200);
+  const body = response.json() as SignalsResponse;
+  assert.equal(body.signals.length, 1);
+  assert.equal(body.signals[0]!.text, "Alert Goal Over 0.5 HT");
+});
+
+test("GET /api/v1/signals items carry the odds field", async () => {
+  signals.setSignals([
+    makeSignal({
+      id: "s1",
+      home: "Inter",
+      away: "Milan",
+      matchId: "m1",
+      type: "signal",
+      quota: 1.85,
+      minute: 22,
+    }),
+  ]);
+
+  const response = await app.inject({ method: "GET", url: "/api/v1/signals" });
+  assert.equal(response.statusCode, 200);
+  const body = response.json() as SignalsResponse;
+  assert.equal(body.signals.length, 1);
+  assert.equal(body.signals[0]!.odds, 1.85);
+  assert.equal(body.signals[0]!.minute, 22);
 });
 
 test("GET /api/v1/signals reset clears the list", async () => {
