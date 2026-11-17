@@ -282,7 +282,7 @@ test("isMajorLeague matches by full tournament name or id, not by loose name", (
   assert.equal(isMajorLeague(match, ["Serie A"]), false);
 });
 
-test("strategy dispatches signal alerts through Telegram with live odds from API-Football", async () => {
+test("strategy dispatches a pre-alert through Telegram with live odds from API-Football", async () => {
   const savedEnv = {
     [TELEGRAM_BOT_TOKEN_ENV]: process.env.TELEGRAM_BOT_TOKEN,
     [TELEGRAM_CHAT_ID_ENV]: process.env.TELEGRAM_CHAT_ID,
@@ -292,6 +292,7 @@ test("strategy dispatches signal alerts through Telegram with live odds from API
   process.env.TELEGRAM_CHAT_ID = "-10042";
   delete process.env[WIN_RATE_ENV];
   statsBody = ALERT_STATS_FIXTURE;
+  liveFixtures = [{ ...LIVE_FIXTURE, fixture: { ...LIVE_FIXTURE.fixture, status: { short: "1H", elapsed: 10 } as { short: string; elapsed?: number } } }];
   await upsertScheduledFixtures([{
     fixture_id: 1,
     match_id: "m1",
@@ -308,21 +309,26 @@ test("strategy dispatches signal alerts through Telegram with live odds from API
 
     assert.equal(result.failures, 0);
     assert.equal(result.results[0]!.alerts.length, 1);
-    assert.equal(result.results[0]!.alerts[0]!.odds, 1.8);
+    const alert = result.results[0]!.alerts[0]!;
+    assert.equal(alert.type, "pre-alert");
+    assert.equal(alert.text, "Alert Goal Over 0.5 HT");
+    assert.equal(alert.odds, 1.8);
     assert.equal(oddsCalls, 1);
     assert.equal(telegramCalls, 1);
-    const minute = Math.trunc((Date.now() / 1000 - M1_START) / 60) + 1;
+    const minute = 10;
     assert.deepEqual(telegramBodies[0], {
       chat_id: "-10042",
       text: [
-        "⚽ Alert Goal Over 0.5 HT",
+        "👀 PRE-ALERT - Partita da monitorare",
+        "⚽ Goal Over 0.5 (potenziale) HT",
         "🏆 Serie A 🇮🇹",
-        `💹 Live, Win Rate: ➡️ 80%`,
+        "💹 Live, Win Rate: ➡️ 80%",
         "💶 Quota live: 1.80",
         `⏱ ${minute}°`,
         "🎽 Inter vs Milan [0-0]",
         `ℹ️ Tocchi area: 30`,
         `ℹ️ Rapporto: ${(30 / minute).toFixed(2)}`,
+        "⏳ Verrà ricontrollata tra ~5 min se rimane 0-0",
       ].join("\n"),
     });
   } finally {
@@ -343,10 +349,10 @@ test("strategy resolves second-half live odds from bet id 25 Match Goals (Over 0
   const secondHalfStats = [
     "SE\u00f72 tempo",
     "SF\u00f7Attacco",
-    "SD\u00f799\u00acSG\u00f7Palloni toccati nell'area avversaria\u00acSH\u00f712\u00acSI\u00f78",
+    "SD\u00f799\u00acSG\u00f7Palloni toccati nell'area avversaria\u00acSH\u00f740\u00acSI\u00f740",
   ].join("~");
   statsBody = secondHalfStats;
-  liveFixtures = [SECOND_HALF_FIXTURE];
+  liveFixtures = [{ ...SECOND_HALF_FIXTURE, fixture: { ...SECOND_HALF_FIXTURE.fixture, status: { short: "2H", elapsed: 55 } as { short: string; elapsed?: number } } }];
   oddsResponse = { response: SECOND_HALF_ODDS };
   await upsertScheduledFixtures([{
     fixture_id: 1,
@@ -367,6 +373,7 @@ test("strategy resolves second-half live odds from bet id 25 Match Goals (Over 0
     assert.equal(result.results[0]!.alerts.length, 1);
     const alert = result.results[0]!.alerts[0]!;
     assert.equal(alert.text, "Alert Goal Over 0.5 FT");
+    assert.equal(alert.type, "pre-alert");
     assert.deepEqual(alert.oddsMarket, {
       betType: "OVER_UNDER",
       scope: "SECOND_HALF",
@@ -394,10 +401,10 @@ test("strategy falls back to bet id 36 Over/Under Line when id 25 is missing (se
   const secondHalfStats = [
     "SE\u00f72 tempo",
     "SF\u00f7Attacco",
-    "SD\u00f799\u00acSG\u00f7Palloni toccati nell'area avversaria\u00acSH\u00f712\u00acSI\u00f78",
+    "SD\u00f799\u00acSG\u00f7Palloni toccati nell'area avversaria\u00acSH\u00f740\u00acSI\u00f740",
   ].join("~");
   statsBody = secondHalfStats;
-  liveFixtures = [SECOND_HALF_FIXTURE];
+  liveFixtures = [{ ...SECOND_HALF_FIXTURE, fixture: { ...SECOND_HALF_FIXTURE.fixture, status: { short: "2H", elapsed: 55 } as { short: string; elapsed?: number } } }];
   oddsResponse = { response: SECOND_HALF_FALLBACK_ODDS };
   await upsertScheduledFixtures([{
     fixture_id: 1,
@@ -417,6 +424,7 @@ test("strategy falls back to bet id 36 Over/Under Line when id 25 is missing (se
     assert.equal(result.results[0]!.alerts.length, 1);
     const alert = result.results[0]!.alerts[0]!;
     assert.equal(alert.text, "Alert Goal Over 0.5 FT");
+    assert.equal(alert.type, "pre-alert");
     assert.deepEqual(alert.oddsMarket, {
       betType: "OVER_UNDER",
       scope: "SECOND_HALF",
@@ -441,6 +449,7 @@ test("strategy does not fail the match when the Telegram dispatch errors", async
   process.env.TELEGRAM_CHAT_ID = "-10042";
   delete process.env[WIN_RATE_ENV];
   statsBody = ALERT_STATS_FIXTURE;
+  liveFixtures = [{ ...LIVE_FIXTURE, fixture: { ...LIVE_FIXTURE.fixture, status: { short: "1H", elapsed: 10 } as { short: string; elapsed?: number } } }];
   telegramFail = true;
   await upsertScheduledFixtures([{
     fixture_id: 1,
@@ -463,6 +472,9 @@ test("strategy does not fail the match when the Telegram dispatch errors", async
     assert.equal(result.results[0]!.error, null);
     assert.ok(result.results[0]!.statistics);
     assert.equal(result.results[0]!.alerts.length, 1);
+    assert.equal(result.results[0]!.alerts[0]!.type, "pre-alert");
+    // telegram failure must not fail the match: the pre-alert is still produced and the
+    // dispatch attempt is logged (telegramCalls == 1) even though delivery errors.
     assert.equal(telegramCalls, 1);
   } finally {
     console.error = originalError;

@@ -15,7 +15,8 @@ const preAlerted = new Set<string>();
 const preAlertCheckAt = new Map<string, number>();
 const preAlertData = new Map<string, { match: Match; statistics: Statistics; alert: Alert; minute: number | null }>();
 
-export const PRE_ALERT_MINUTE = 10;
+export const PRE_ALERT_MINUTE_FIRST_HALF = 10;
+export const PRE_ALERT_MINUTE_SECOND_HALF = 55;
 export const PRE_ALERT_RATIO_FACTOR = 0.8;
 export const PRE_ALERT_RECHECK_MINUTES = 5;
 
@@ -59,10 +60,12 @@ const maybeSendPreAlert = async (
     return null;
   }
   const window = period === "first_half" ? FIRST_HALF_WINDOW : SECOND_HALF_WINDOW;
+  const preAlertMinute =
+    period === "first_half" ? PRE_ALERT_MINUTE_FIRST_HALF : PRE_ALERT_MINUTE_SECOND_HALF;
   if (minute >= window.min) {
     return null;
   }
-  if (minute < PRE_ALERT_MINUTE) {
+  if (minute < preAlertMinute || minute >= preAlertMinute + PRE_ALERT_RECHECK_MINUTES) {
     return null;
   }
   const snapshot = touchSnapshot(match, statistics, period);
@@ -95,19 +98,10 @@ const maybeSendPreAlert = async (
       scope: period === "first_half" ? "FIRST_HALF" : "SECOND_HALF",
     },
   };
-  try {
-    await sendPreAlertTelegram(alert);
-    getStrategyLogger().info(
-      { rule: alert.rule, minute: alert.minute, value: alert.value, threshold: alert.threshold },
-      "pre-alert detected",
-    );
-  } catch (exc) {
-    getStrategyLogger().error(
-      { err: exc, rule: alert.rule, matchId: alert.matchId },
-      "pre-alert dispatch failed",
-    );
-    return null;
-  }
+  getStrategyLogger().info(
+    { rule: alert.rule, minute: alert.minute, value: alert.value, threshold: alert.threshold },
+    "pre-alert detected",
+  );
   preAlerted.add(key);
   preAlertCheckAt.set(key, Date.now() + PRE_ALERT_RECHECK_MINUTES * 60 * 1000);
   preAlertData.set(key, { match, statistics, alert, minute });
@@ -266,8 +260,9 @@ export const dispatchAlerts = async (
   context?: { match?: Match; statistics?: Statistics; fixtureId?: number },
 ): Promise<void> => {
   for (const alert of alerts) {
+    const send = alert.type === "pre-alert" ? sendPreAlertTelegram : sender;
     try {
-      await sender(alert);
+      await send(alert);
     } catch (exc) {
       getStrategyLogger().error(
         { err: exc, rule: alert.rule, matchId: alert.matchId },
