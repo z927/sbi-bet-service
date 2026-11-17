@@ -108,6 +108,16 @@ const captureEnv = (...keys: string[]): void => {
 
 let captured: { url: string; init?: RequestInit } | null = null;
 let nextResponse: Response = makeResponse("{}");
+let mockedNow: number | null = null;
+const originalDateNow = Date.now;
+const setNow = (ms: number | null): void => {
+  mockedNow = ms;
+  Object.defineProperty(Date, "now", {
+    configurable: true,
+    writable: true,
+    value: () => (ms ?? originalDateNow()),
+  });
+};
 
 const mockFetch = (async (url: string, init?: RequestInit) => {
   captured = { url: String(url), init };
@@ -118,12 +128,14 @@ beforeEach(() => {
   globalThis.fetch = mockFetch;
   captured = null;
   nextResponse = makeResponse("{}");
+  setNow(null);
   captureEnv(TELEGRAM_BOT_TOKEN_ENV, TELEGRAM_CHAT_ID_ENV, WIN_RATE_ENV, GOAL_RATIO_ENV);
   resetSignalState();
 });
 
 after(() => {
   globalThis.fetch = originalFetch;
+  setNow(null);
   for (const [key, value] of Object.entries(savedEnv)) {
     if (value === undefined) {
       delete process.env[key];
@@ -480,23 +492,134 @@ test("evaluateSignalsWithPreAlert does not emit a normal signal while a pre-aler
   const match = goalMatch({
     id: "shpa",
     stage_id: 13,
-    stage_start: now - 240,
-    minute: "50",
+    stage_start: now - 10 * 60,
+    minute: "55",
   });
   const stats = {
     all: {},
     first_half: {},
     second_half: {
-      attack: [{ id: 1, name: "Palloni toccati nell'area avversaria", home: "4", away: "4" }],
+      attack: [{ id: 1, name: "Palloni toccati nell'area avversaria", home: "40", away: "40" }],
     },
   };
 
   const first = await evaluateSignalsWithPreAlert(match, stats);
   assert.equal(first.length, 1);
   assert.equal(first[0]!.type, "pre-alert");
+  assert.equal(first[0]!.minute, 55);
   assert.equal(first[0]!.text, "Alert Goal Over 0.5 FT");
 
   const second = await evaluateSignalsWithPreAlert(match, stats);
+  assert.equal(second.length, 0);
+});
+
+test("evaluateSignalsWithPreAlert emits a first-half pre-alert at the 10th minute", async () => {
+  const match = goalMatch({
+    id: "fhpa",
+    stage_id: 12,
+    minute: "10",
+  });
+  const stats = touchStats("15", "10");
+
+  const alerts = await evaluateSignalsWithPreAlert(match, stats);
+  assert.equal(alerts.length, 1);
+  assert.equal(alerts[0]!.type, "pre-alert");
+  assert.equal(alerts[0]!.minute, 10);
+  assert.equal(alerts[0]!.text, "Alert Goal Over 0.5 HT");
+});
+
+test("evaluateSignalsWithPreAlert confirms a first-half pre-alert into a signal at the 15th minute", async () => {
+  const stats = touchStats("15", "10");
+
+  const first = await evaluateSignalsWithPreAlert(
+    goalMatch({ id: "fhconf", stage_id: 12, minute: "10" }),
+    stats,
+  );
+  assert.equal(first.length, 1);
+  assert.equal(first[0]!.type, "pre-alert");
+
+  setNow(originalDateNow() + 6 * 60 * 1000);
+  const confirmed = await evaluateSignalsWithPreAlert(
+    goalMatch({ id: "fhconf", stage_id: 12, minute: "15" }),
+    stats,
+  );
+  assert.equal(confirmed.length, 1);
+  assert.equal(confirmed[0]!.type, "signal");
+  assert.equal(confirmed[0]!.minute, 15);
+  assert.equal(confirmed[0]!.text, "Alert Goal Over 0.5 HT");
+});
+
+test("evaluateSignalsWithPreAlert emits a second-half pre-alert at the 55th minute", async () => {
+  const match = goalMatch({
+    id: "shpa2",
+    stage_id: 13,
+    minute: "55",
+  });
+  const stats = touchStatsSecondHalf("40", "40");
+
+  const alerts = await evaluateSignalsWithPreAlert(match, stats);
+  assert.equal(alerts.length, 1);
+  assert.equal(alerts[0]!.type, "pre-alert");
+  assert.equal(alerts[0]!.minute, 55);
+  assert.equal(alerts[0]!.text, "Alert Goal Over 0.5 FT");
+});
+
+test("evaluateSignalsWithPreAlert confirms a second-half pre-alert into a signal at the 60th minute", async () => {
+  const stats = touchStatsSecondHalf("40", "40");
+
+  const first = await evaluateSignalsWithPreAlert(
+    goalMatch({ id: "shconf", stage_id: 13, minute: "55" }),
+    stats,
+  );
+  assert.equal(first.length, 1);
+  assert.equal(first[0]!.type, "pre-alert");
+
+  setNow(originalDateNow() + 6 * 60 * 1000);
+  const confirmed = await evaluateSignalsWithPreAlert(
+    goalMatch({ id: "shconf", stage_id: 13, minute: "60" }),
+    stats,
+  );
+  assert.equal(confirmed.length, 1);
+  assert.equal(confirmed[0]!.type, "signal");
+  assert.equal(confirmed[0]!.minute, 60);
+  assert.equal(confirmed[0]!.text, "Alert Goal Over 0.5 FT");
+});
+
+test("evaluateSignalsWithPreAlert emits a standalone signal when entering after the pre-alert window", async () => {
+  const stats = touchStats("15", "10");
+
+  const first = await evaluateSignalsWithPreAlert(
+    goalMatch({ id: "standalone1", stage_id: 12, minute: "15" }),
+    stats,
+  );
+  assert.equal(first.length, 1);
+  assert.equal(first[0]!.type, "signal");
+  assert.equal(first[0]!.minute, 15);
+  assert.equal(first[0]!.text, "Alert Goal Over 0.5 HT");
+
+  const second = await evaluateSignalsWithPreAlert(
+    goalMatch({ id: "standalone1", stage_id: 12, minute: "15" }),
+    stats,
+  );
+  assert.equal(second.length, 0);
+});
+
+test("evaluateSignalsWithPreAlert emits a standalone second-half signal when entering after the pre-alert window", async () => {
+  const stats = touchStatsSecondHalf("40", "40");
+
+  const first = await evaluateSignalsWithPreAlert(
+    goalMatch({ id: "standalone2", stage_id: 13, minute: "60" }),
+    stats,
+  );
+  assert.equal(first.length, 1);
+  assert.equal(first[0]!.type, "signal");
+  assert.equal(first[0]!.minute, 60);
+  assert.equal(first[0]!.text, "Alert Goal Over 0.5 FT");
+
+  const second = await evaluateSignalsWithPreAlert(
+    goalMatch({ id: "standalone2", stage_id: 13, minute: "60" }),
+    stats,
+  );
   assert.equal(second.length, 0);
 });
 
