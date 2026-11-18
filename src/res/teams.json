@@ -3276,6 +3276,48 @@
     "country": "Spain"
   },
   {
+    "diretta": "Portugalete",
+    "apifootball": 9408,
+    "apifootballLeague": 143,
+    "apifootballTeamName": "Portugalete",
+    "country": "Spain"
+  },
+  {
+    "diretta": "R. Union",
+    "apifootball": 9586,
+    "apifootballLeague": 143,
+    "apifootballTeamName": "Real Unión",
+    "country": "Spain"
+  },
+  {
+    "diretta": "Deportiva Minera",
+    "apifootball": 9811,
+    "apifootballLeague": 143,
+    "apifootballTeamName": "Deportiva Minera",
+    "country": "Spain"
+  },
+  {
+    "diretta": "Cartagena",
+    "apifootball": 5262,
+    "apifootballLeague": 143,
+    "apifootballTeamName": "FC Cartagena",
+    "country": "Spain"
+  },
+  {
+    "diretta": "Barakaldo",
+    "apifootball": 5251,
+    "apifootballLeague": 143,
+    "apifootballTeamName": "Barakaldo",
+    "country": "Spain"
+  },
+  {
+    "diretta": "Reus FCR",
+    "apifootball": 22136,
+    "apifootballLeague": 143,
+    "apifootballTeamName": "Reddis",
+    "country": "Spain"
+  },
+  {
     "diretta": "Kauno Zalgiris",
     "apifootball": 3872,
     "apifootballLeague": 848,
