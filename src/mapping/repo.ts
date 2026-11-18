@@ -532,9 +532,29 @@ export const upsertLeagueLink = async (input: UpsertLeagueLinkInput): Promise<Le
     memory.leagues.set(key, link);
     return link;
   }
-  const { data, error } = await getClient()
+  const supabase = getClient();
+
+  const { data: existing } = await supabase
     .from("league_links")
-    .upsert(values, { onConflict: "api_football_league_id,diretta_tournament_id" })
+    .select("*")
+    .eq("api_football_league_id", input.apiFootballLeagueId)
+    .eq("diretta_tournament_id", input.direttaTournamentId ?? null)
+    .maybeSingle();
+
+  if (existing) {
+    const { data, error } = await supabase
+      .from("league_links")
+      .update(values)
+      .eq("id", (existing as LeagueRow).id)
+      .select("*")
+      .single();
+    if (error) throw error;
+    return toLeague(data as LeagueRow);
+  }
+
+  const { data, error } = await supabase
+    .from("league_links")
+    .insert(values)
     .select("*")
     .single();
   if (error) throw error;
