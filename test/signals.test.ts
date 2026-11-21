@@ -487,14 +487,8 @@ test("goalOverSignal stays silent at the 5th minute of the second half (outside 
   assert.equal(goalOverSignal.evaluate(match, touchStatsSecondHalf("4", "4")), null);
 });
 
-test("evaluateSignalsWithPreAlert does not emit a normal signal while a pre-alert is pending", async () => {
+test("evaluateSignalsWithPreAlert emits a normal signal right after a pre-alert", async () => {
   const now = Math.floor(Date.now() / 1000);
-  const match = goalMatch({
-    id: "shpa",
-    stage_id: 13,
-    stage_start: now - 10 * 60,
-    minute: "55",
-  });
   const stats = {
     all: {},
     first_half: {},
@@ -503,14 +497,23 @@ test("evaluateSignalsWithPreAlert does not emit a normal signal while a pre-aler
     },
   };
 
-  const first = await evaluateSignalsWithPreAlert(match, stats);
+  const first = await evaluateSignalsWithPreAlert(
+    goalMatch({ id: "shpa", stage_id: 13, stage_start: now - 10 * 60, minute: "55" }),
+    stats,
+  );
   assert.equal(first.length, 1);
   assert.equal(first[0]!.type, "pre-alert");
   assert.equal(first[0]!.minute, 55);
   assert.equal(first[0]!.text, "Alert Goal Over 0.5 FT");
 
-  const second = await evaluateSignalsWithPreAlert(match, stats);
-  assert.equal(second.length, 0);
+  const second = await evaluateSignalsWithPreAlert(
+    goalMatch({ id: "shpa", stage_id: 13, stage_start: now - 10 * 60, minute: "60" }),
+    stats,
+  );
+  assert.equal(second.length, 1);
+  assert.equal(second[0]!.type, "signal");
+  assert.equal(second[0]!.minute, 60);
+  assert.equal(second[0]!.text, "Alert Goal Over 0.5 FT");
 });
 
 test("evaluateSignalsWithPreAlert emits a first-half pre-alert at the 10th minute", async () => {
