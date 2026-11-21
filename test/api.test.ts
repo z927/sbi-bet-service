@@ -120,7 +120,7 @@ test("GET /api/v1/monitor runs the live strategy and returns BaseResponse", asyn
 
   const monitored = await app.inject({ method: "GET", url: "/api/v1/monitored" });
   assert.equal(monitored.statusCode, 200);
-  assert.deepEqual(monitored.json(), []);
+  assert.deepEqual(monitored.json(), {});
 });
 
 test("GET /api/v1/monitored returns today's scheduled fixtures mapped to MonitoredFixture", async () => {
@@ -158,10 +158,13 @@ test("GET /api/v1/monitored returns today's scheduled fixtures mapped to Monitor
   const monitored = await app.inject({ method: "GET", url: "/api/v1/monitored" });
   assert.equal(monitored.statusCode, 200);
   const body = monitored.json();
-  assert.equal(Array.isArray(body), true);
-  assert.equal(body.length, 1, "only today's fixture should be returned");
+  assert.equal(typeof body, "object");
+  assert.equal(Array.isArray(body), false);
+  assert.equal(Object.keys(body).length, 1, "only Serie A should be returned");
+  assert.equal(Array.isArray(body["Serie A"]), true);
+  assert.equal(body["Serie A"].length, 1, "only today's fixture should be returned");
 
-  const [dto] = body;
+  const [dto] = body["Serie A"];
   assert.equal(dto.fixtureId, 42);
   assert.equal(dto.league, "Serie A");
   assert.equal(dto.homeTeam, "Inter");

@@ -652,7 +652,9 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["MonitoredFixture"][];
+                    "application/json": {
+                        [key: string]: components["schemas"]["MonitoredFixture"][];
+                    };
                 };
             };
         };
