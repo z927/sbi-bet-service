@@ -51,9 +51,17 @@ const toMonitoredFixture = (f: ScheduledFixture): MonitoredFixture => ({
   info: f.status,
 });
 
-export const getMonitoredFixtures = async (): Promise<MonitoredFixture[]> => {
+export const getMonitoredFixtures = async (): Promise<Record<string, MonitoredFixture[]>> => {
   const fixtures = await getScheduledFixtures();
-  return fixtures.filter((f) => isToday(f.kickoff_time)).map(toMonitoredFixture);
+  const today = fixtures.filter((f) => isToday(f.kickoff_time)).map(toMonitoredFixture);
+  const grouped = new Map<string, MonitoredFixture[]>();
+  for (const f of today) {
+    const league = f.league ?? "";
+    const arr = grouped.get(league) ?? [];
+    arr.push(f);
+    grouped.set(league, arr);
+  }
+  return Object.fromEntries(grouped);
 }
 
 export const reset = (): void => {

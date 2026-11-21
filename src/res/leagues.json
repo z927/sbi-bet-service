@@ -1,7 +1,7 @@
 [
   {
     "leagueId": 218,
-    "direttaLeagueId": "GbYvzOTG",
+    "direttaLeagueId": "rJg7S7Me",
     "name": "Bundesliga",
     "type": "League",
     "logo": "https://media.api-sports.io/football/leagues/218.png",
@@ -46,7 +46,7 @@
   },
   {
     "leagueId": 39,
-    "direttaLeagueId": "CfoA8Dmm",
+    "direttaLeagueId": "dYlOSQOD",
     "name": "Premier League",
     "type": "League",
     "logo": "https://media.api-sports.io/football/leagues/39.png",
@@ -163,7 +163,7 @@
   },
   {
     "leagueId": 135,
-    "direttaLeagueId": "CfujcOgK",
+    "direttaLeagueId": "COuk57Ci",
     "name": "Serie A",
     "type": "League",
     "logo": "https://media.api-sports.io/football/leagues/135.png",
@@ -208,7 +208,7 @@
   },
   {
     "leagueId": 88,
-    "direttaLeagueId": "zm1be8bD",
+    "direttaLeagueId": "Or1bBrWD",
     "name": "Eredivisie",
     "type": "League",
     "logo": "https://media.api-sports.io/football/leagues/88.png",
@@ -244,7 +244,7 @@
   },
   {
     "leagueId": 179,
-    "direttaLeagueId": "KEufRGVb",
+    "direttaLeagueId": "tGwiyvJ1",
     "name": "Premiership",
     "type": "League",
     "logo": "https://media.api-sports.io/football/leagues/179.png",
@@ -289,7 +289,7 @@
   },
   {
     "leagueId": 207,
-    "direttaLeagueId": "8xZTDSnQ",
+    "direttaLeagueId": "KAjTCI1l",
     "name": "Super League",
     "type": "League",
     "logo": "https://media.api-sports.io/football/leagues/207.png",
@@ -340,6 +340,15 @@
     "logo": "https://media.api-sports.io/football/leagues/5.png",
     "countryName": "World",
     "countryFlag": null
+  },
+  {
+    "leagueId": 203,
+    "direttaLeagueId": "Opdcd08Q",
+    "name": "Süper Lig",
+    "type": "League",
+    "logo": "https://media.api-sports.io/football/leagues/203.png",
+    "countryName": "Turkey",
+    "countryFlag": "https://media.api-sports.io/flags/tr.svg"
   },
   {
     "leagueId": 204,

@@ -110,9 +110,11 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/MonitoredFixture'
+                type: object
+                additionalProperties:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/MonitoredFixture'
   /api/v1/matches:
     get:
       tags:
