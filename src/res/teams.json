@@ -3932,5 +3932,61 @@
     "apifootballTeamName": "Netherlands",
     "country": "World",
     "diretta": "Olanda"
+  },
+  {
+    "diretta": "Amedspor",
+    "apifootball": 3579,
+    "apifootballLeague": 203,
+    "apifootballTeamName": "Amed",
+    "country": "Turkey"
+  },
+  {
+    "diretta": "Fenerbahce",
+    "apifootball": 611,
+    "apifootballLeague": 203,
+    "apifootballTeamName": "Fenerbahçe",
+    "country": "Turkey"
+  },
+  {
+    "diretta": "Galatasaray",
+    "apifootball": 645,
+    "apifootballLeague": 203,
+    "apifootballTeamName": "Galatasaray",
+    "country": "Turkey"
+  },
+  {
+    "diretta": "Gaziantep",
+    "apifootball": 3573,
+    "apifootballLeague": 203,
+    "apifootballTeamName": "Gaziantep FK",
+    "country": "Turkey"
+  },
+  {
+    "diretta": "Genclerbirligi",
+    "apifootball": 997,
+    "apifootballLeague": 203,
+    "apifootballTeamName": "Gençlerbirliği S.K.",
+    "country": "Turkey"
+  },
+  {
+    "diretta": "Kocaelispor",
+    "apifootball": 7411,
+    "apifootballLeague": 203,
+    "apifootballTeamName": "Kocaelispor",
+    "country": "Turkey"
+  },
+  {
+    "diretta": "Rizespor",
+    "apifootball": 1007,
+    "apifootballLeague": 203,
+    "apifootballTeamName": "Rizespor",
+    "country": "Turkey"
+  },
+  {
+    "diretta": "Samsunspor",
+    "apifootball": 3603,
+    "apifootballLeague": 203,
+    "apifootballTeamName": "Samsunspor",
+    "country": "Turkey"
   }
 ]
