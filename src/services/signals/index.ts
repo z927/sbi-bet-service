@@ -244,9 +244,6 @@ export const evaluateSignalsWithPreAlert = async (
   if (preAlerts.length > 0) {
     return preAlerts;
   }
-  if (preAlerted.has(key)) {
-    return [];
-  }
   const preAlert = await maybeSendPreAlert(match, statistics);
   if (preAlert !== null) {
     return [preAlert];
