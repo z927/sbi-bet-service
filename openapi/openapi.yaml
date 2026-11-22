@@ -165,6 +165,15 @@ paths:
             type: string
             format: date
           description: ISO date (YYYY-MM-DD), inclusive upper bound for matchDate
+        - name: type
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - pre-alert
+              - signal
+          description: Filter by signal type ("pre-alert" or "signal")
       responses:
         '200':
           description: OK

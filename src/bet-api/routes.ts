@@ -64,6 +64,7 @@ const dateQuerySchema = {
 
 const signalListQuerySchema = {
   type: "object",
+  required: ["type"],
   properties: {
     from: { type: "string" },
     to: { type: "string" },
