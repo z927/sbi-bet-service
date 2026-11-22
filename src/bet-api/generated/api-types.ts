@@ -683,11 +683,13 @@ export interface operations {
     };
     getSignals: {
         parameters: {
-            query?: {
+            query: {
                 /** @description ISO date (YYYY-MM-DD), inclusive lower bound for matchDate */
                 from?: string;
                 /** @description ISO date (YYYY-MM-DD), inclusive upper bound for matchDate */
                 to?: string;
+                /** @description Filter by signal type ("pre-alert" or "signal") */
+                type: "pre-alert" | "signal";
             };
             header?: never;
             path?: never;

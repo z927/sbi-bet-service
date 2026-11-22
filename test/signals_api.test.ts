@@ -43,7 +43,7 @@ beforeEach(() => {
 });
 
 test("GET /api/v1/signals returns 200 with empty recap and signals", async () => {
-  const response = await app.inject({ method: "GET", url: "/api/v1/signals" });
+  const response = await app.inject({ method: "GET", url: "/api/v1/signals?type=signal" });
   assert.equal(response.statusCode, 200);
   const body = response.json() as SignalsResponse;
   assert.ok(body.recap);
@@ -63,7 +63,7 @@ test("GET /api/v1/signals returns list with required fields including matchDate"
     makeSignal({ id: "s2", home: "Juventus", away: "Roma", matchId: "m2", win: false }),
   ]);
 
-  const response = await app.inject({ method: "GET", url: "/api/v1/signals" });
+  const response = await app.inject({ method: "GET", url: "/api/v1/signals?type=signal" });
   assert.equal(response.statusCode, 200);
   const body = response.json() as SignalsResponse;
   assert.ok(body.recap);
@@ -96,7 +96,7 @@ test("GET /api/v1/signals returns list with required fields including matchDate"
 
 test("GET /api/v1/signals exposes all wire fields", async () => {
   signals.setSignals([makeSignal()]);
-  const response = await app.inject({ method: "GET", url: "/api/v1/signals" });
+  const response = await app.inject({ method: "GET", url: "/api/v1/signals?type=signal" });
   assert.equal(response.statusCode, 200);
   const body = response.json() as SignalsResponse;
   assert.ok(Array.isArray(body.signals));
@@ -125,12 +125,17 @@ test("GET /api/v1/signals items carry the type field", async () => {
     makeSignal({ id: "s2", home: "Juventus", away: "Roma", matchId: "m2", type: "signal" }),
   ]);
 
-  const response = await app.inject({ method: "GET", url: "/api/v1/signals" });
-  assert.equal(response.statusCode, 200);
-  const body = response.json() as SignalsResponse;
-  assert.equal(body.signals.length, 2);
-  assert.equal(body.signals[0]!.type, "pre-alert");
-  assert.equal(body.signals[1]!.type, "signal");
+  const preAlert = await app.inject({ method: "GET", url: "/api/v1/signals?type=pre-alert" });
+  assert.equal(preAlert.statusCode, 200);
+  const preAlertBody = preAlert.json() as SignalsResponse;
+  assert.equal(preAlertBody.signals.length, 1);
+  assert.equal(preAlertBody.signals[0]!.type, "pre-alert");
+
+  const signal = await app.inject({ method: "GET", url: "/api/v1/signals?type=signal" });
+  assert.equal(signal.statusCode, 200);
+  const signalBody = signal.json() as SignalsResponse;
+  assert.equal(signalBody.signals.length, 1);
+  assert.equal(signalBody.signals[0]!.type, "signal");
 });
 
 test("GET /api/v1/signals items carry the text field", async () => {
@@ -145,7 +150,7 @@ test("GET /api/v1/signals items carry the text field", async () => {
     }),
   ]);
 
-  const response = await app.inject({ method: "GET", url: "/api/v1/signals" });
+  const response = await app.inject({ method: "GET", url: "/api/v1/signals?type=signal" });
   assert.equal(response.statusCode, 200);
   const body = response.json() as SignalsResponse;
   assert.equal(body.signals.length, 1);
@@ -165,7 +170,7 @@ test("GET /api/v1/signals items carry the odds field", async () => {
     }),
   ]);
 
-  const response = await app.inject({ method: "GET", url: "/api/v1/signals" });
+  const response = await app.inject({ method: "GET", url: "/api/v1/signals?type=signal" });
   assert.equal(response.statusCode, 200);
   const body = response.json() as SignalsResponse;
   assert.equal(body.signals.length, 1);
@@ -175,11 +180,11 @@ test("GET /api/v1/signals items carry the odds field", async () => {
 
 test("GET /api/v1/signals reset clears the list", async () => {
   signals.setSignals([makeSignal()]);
-  let response = await app.inject({ method: "GET", url: "/api/v1/signals" });
+  let response = await app.inject({ method: "GET", url: "/api/v1/signals?type=signal" });
   assert.equal((response.json() as SignalsResponse).signals.length, 1);
 
   signals.reset();
-  response = await app.inject({ method: "GET", url: "/api/v1/signals" });
+  response = await app.inject({ method: "GET", url: "/api/v1/signals?type=signal" });
   assert.equal((response.json() as SignalsResponse).signals.length, 0);
   const body = response.json() as SignalsResponse;
   assert.equal(body.recap.totalCount, 0);
@@ -189,7 +194,7 @@ test("GET /api/v1/signals with from/to returns empty when in-memory signals have
   signals.setSignals([makeSignal()]);
   const response = await app.inject({
     method: "GET",
-    url: "/api/v1/signals?from=2026-01-01&to=2026-12-31",
+    url: "/api/v1/signals?from=2026-01-01&to=2026-12-31&type=signal",
   });
   assert.equal(response.statusCode, 200);
   const body = response.json() as SignalsResponse;
@@ -199,7 +204,7 @@ test("GET /api/v1/signals with from/to returns empty when in-memory signals have
 
 test("GET /api/v1/signals without from/to returns all in-memory signals", async () => {
   signals.setSignals([makeSignal(), makeSignal({ id: "s2", matchId: "m2" })]);
-  const response = await app.inject({ method: "GET", url: "/api/v1/signals" });
+  const response = await app.inject({ method: "GET", url: "/api/v1/signals?type=signal" });
   assert.equal(response.statusCode, 200);
   const body = response.json() as SignalsResponse;
   assert.equal(body.signals.length, 2);
@@ -209,7 +214,7 @@ test("GET /api/v1/signals without from/to returns all in-memory signals", async 
 test("GET /api/v1/signals returns 422 on invalid from date", async () => {
   const response = await app.inject({
     method: "GET",
-    url: "/api/v1/signals?from=not-a-date",
+    url: "/api/v1/signals?from=not-a-date&type=signal",
   });
   assert.equal(response.statusCode, 422);
 });
@@ -217,8 +222,13 @@ test("GET /api/v1/signals returns 422 on invalid from date", async () => {
 test("GET /api/v1/signals returns 422 on invalid to date", async () => {
   const response = await app.inject({
     method: "GET",
-    url: "/api/v1/signals?to=not-a-date",
+    url: "/api/v1/signals?to=not-a-date&type=signal",
   });
+  assert.equal(response.statusCode, 422);
+});
+
+test("GET /api/v1/signals returns 422 when type is missing", async () => {
+  const response = await app.inject({ method: "GET", url: "/api/v1/signals" });
   assert.equal(response.statusCode, 422);
 });
 
