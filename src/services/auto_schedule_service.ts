@@ -12,6 +12,7 @@ import { upsertScheduledFixtures, initScheduledFixturesRepo } from "./scheduled_
 import { getTeams } from "../services/teams_repo.ts";
 import { listLeagueLinks } from "../mapping/repo.ts";
 import type { LeagueLink } from "../mapping/models.ts";
+import { settleSignals } from "../services/signals/settle_service.ts";
 
 const SPORT_CALCIO = 1;
 const FALLBACK_END_OFFSET_SECONDS = 2 * 60 * 60;
@@ -102,6 +103,9 @@ export const autoScheduleEvents = async (
   const now = new Date();
   const nowEpoch = Math.floor(now.getTime() / 1000);
   const today = now.toISOString().slice(0, 10); // YYYY-MM-DD
+  const yesterday = new Date(now);
+  yesterday.setUTCDate(yesterday.getUTCDate() - 1);
+  const yesterdayStr = yesterday.toISOString().slice(0, 10); // YYYY-MM-DD
 
   log.info(
     {
@@ -593,8 +597,27 @@ export const autoScheduleEvents = async (
       );
       await scheduler.createJob(settings.gcpJobId, input);
     }
+    // 9. Chiude i segnali del giorno prima (settle automatico per tenere tutto allineato).
+    let settleResult = { settled: 0, preAlertsSettled: 0, signalsSettled: 0, skipped: 0 };
+    try {
+      settleResult = await settleSignals({ from: yesterdayStr, to: yesterdayStr });
+    } catch (exc) {
+      getLogger().error({ err: exc, component: "settle_signals", date: yesterdayStr }, "settle dei segnali del giorno prima fallito");
+    }
+    log.info(
+      {
+        component: "settle_signals",
+        date: yesterdayStr,
+        settled: settleResult.settled,
+        preAlertsSettled: settleResult.preAlertsSettled,
+        signalsSettled: settleResult.signalsSettled,
+        skipped: settleResult.skipped,
+      },
+      "signali del giorno prima: settle completato",
+    );
+
     const response = baseResponse(
-      `Auto-schedule completed: ${validFixtures.length} fixtures monitored, job ${settings.gcpJobId} scheduled at ${cron}`,
+      `Auto-schedule completed: ${validFixtures.length} fixtures monitored, signals settled=${settleResult.settled} (pre-alert=${settleResult.preAlertsSettled}, signal=${settleResult.signalsSettled}) skipped=${settleResult.skipped} for ${yesterdayStr}, job ${settings.gcpJobId} scheduled at ${cron}`,
       200,
     );
     log.info({ statusCode: response.statusCode, message: response.message }, "auto-schedule completed");

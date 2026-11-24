@@ -78,6 +78,24 @@ export const getLiveOdds = async (fixtureId: number): Promise<ApiFootballOdd[]> 
   }
 };
 
+export interface ApiFootballEvent {
+  time: { elapsed: number | null; extra: number | null };
+  team: { id: number; name: string };
+  player: { id: number | null; name: string | null };
+  assist: { id: number | null; name: string | null };
+  type: string;
+  detail: string;
+}
+
+export const getFixtureEvents = async (fixtureId: number): Promise<ApiFootballEvent[]> => {
+  try {
+    const data = (await httpGet(`/fixtures/events?fixture=${fixtureId}`)) as { response?: ApiFootballEvent[] };
+    return data.response ?? [];
+  } catch {
+    return [];
+  }
+};
+
 export const listLiveFixtures = async (): Promise<ApiFootballFixture[]> => {
   try {
     const data = (await httpGet("/fixtures?live=all")) as { response?: ApiFootballFixture[] };
