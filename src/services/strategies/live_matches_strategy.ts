@@ -13,6 +13,7 @@ import {
 } from "../signals/index.ts";
 import { touchSnapshot } from "../signals/touch_stats.ts";
 import { matchPeriod } from "../signals/match_minutes.ts";
+import { fetchAndSaveFulltimeOdds } from "../odds_service.ts";
 import type {
   Strategy,
   StrategyContext,
@@ -211,6 +212,9 @@ const runMatch = async (
       await attachLiveOdds(alerts, oddsResolver);
     }
     await dispatchAlerts(alerts, undefined, { match, statistics, fixtureId });
+    if (period === "first_half" && fixtureId != null) {
+      await fetchAndSaveFulltimeOdds(fixtureId, match.id);
+    }
     log.info({ alerts: alerts.length }, "match strategy completed");
     return { statistics, alerts, error: null };
   } catch (exc) {

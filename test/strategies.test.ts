@@ -205,7 +205,7 @@ test("strategy enriches live fixtures whose league is monitored via league_links
   assert.equal(result.results[0]!.error, null);
   assert.equal(result.results[0]!.statistics?.all["top"]?.length, 1);
   assert.equal(statsCalls, 1);
-  assert.equal(oddsCalls, 0); // no alert => no odds lookup
+  assert.equal(oddsCalls, 1); // fulltime over 1.5/2.5 lookup for 0-0 HT match (no alert)
 });
 
 test("strategy skips live fixtures not monitored by league_links", async () => {
@@ -313,7 +313,7 @@ test("strategy dispatches a pre-alert through Telegram with live odds from API-F
     assert.equal(alert.type, "pre-alert");
     assert.equal(alert.text, "Alert Goal Over 0.5 HT");
     assert.equal(alert.odds, 1.8);
-    assert.equal(oddsCalls, 1);
+    assert.equal(oddsCalls, 2); // alert odds + fulltime over 1.5/2.5 lookup
     assert.equal(telegramCalls, 1);
     const minute = 10;
     assert.deepEqual(telegramBodies[0], {
