@@ -1,7 +1,8 @@
 import { client } from "../../clients/diretta/index.ts";
 import type { Match, OddsMarketSelector, Statistics } from "../../scraper/models.ts";
 import { getStrategyLogger, runWithLogContext, runWithNewLogTrace } from "../../logger.ts";
-import { getLiveOdds, listLiveFixtures } from "../api_football.ts";
+import { getLiveOdds, listLiveFixtures, sleep } from "../api_football.ts";
+import { getSettings } from "../../config.ts";
 import { listLeagueLinks } from "../../mapping/repo.ts";
 import { getScheduledFixture } from "../scheduled_fixtures_repo.ts";
 import {
@@ -151,6 +152,16 @@ const resolveApiFootballOdds = async (
 ): Promise<number | null> => {
   if (!oddsMarket || oddsMarket.betType !== "OVER_UNDER" || oddsMarket.selection !== "OVER") {
     return null;
+  }
+  if (oddsMarket.scope === "FIRST_HALF") {
+    const delayMs = getSettings().oddsHtDelayMinutes * 60 * 1000;
+    if (delayMs > 0) {
+      getStrategyLogger().info(
+        { fixtureId, delayMinutes: getSettings().oddsHtDelayMinutes, scope: oddsMarket.scope },
+        "delaying HT odds fetch",
+      );
+      await sleep(delayMs);
+    }
   }
   const odds = await getLiveOdds(fixtureId);
   getStrategyLogger().info(
