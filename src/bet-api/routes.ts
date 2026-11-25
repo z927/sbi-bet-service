@@ -161,9 +161,11 @@ export const apiRoutes = (app: FastifyInstance): void => {
       const result = await settle.settleSignals({ from, to });
       return {
         settled: result.settled,
+        preAlertsSettled: result.preAlertsSettled,
+        signalsSettled: result.signalsSettled,
         skipped: result.skipped,
         skippedDetails: result.skippedDetails,
-        message: `Settled ${result.settled} signal(s), skipped ${result.skipped}`,
+        message: `Settled ${result.settled} signal(s) (pre-alert=${result.preAlertsSettled}, signal=${result.signalsSettled}), skipped ${result.skipped}`,
       };
     },
   );

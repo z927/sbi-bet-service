@@ -43,6 +43,7 @@ export interface UnsettledSignal {
   fixture_id: number | null;
   home_score_ht: number | null;
   away_score_ht: number | null;
+  type: string | null;
 }
 
 export const getUnsettledSignals = async (): Promise<UnsettledSignal[] | null> => {
@@ -53,7 +54,7 @@ export const getUnsettledSignals = async (): Promise<UnsettledSignal[] | null> =
     getStrategyLogger().error({ err: exc, component: "signals_repo" }, "getUnsettledSignals client failed");
     return null;
   }
-  const { data, error } = await supabase.from("signals").select("match_id, home, away, rule, text, created_at, fixture_id, home_score_ht, away_score_ht").is("win", null);
+  const { data, error } = await supabase.from("signals").select("match_id, home, away, rule, text, created_at, fixture_id, home_score_ht, away_score_ht, type").is("win", null);
   if (error) {
     getStrategyLogger().error({ err: error, component: "signals_repo" }, "getUnsettledSignals failed");
     return null;
@@ -63,10 +64,10 @@ export const getUnsettledSignals = async (): Promise<UnsettledSignal[] | null> =
 
 export const updateSignalResult = async (
   matchId: string,
-  patch: { homeScore: number; awayScore: number; win?: boolean; homeScoreHt?: number | null; awayScoreHt?: number | null },
+  patch: { homeScore: number; awayScore: number; win?: boolean; homeScoreHt?: number | null; awayScoreHt?: number | null; goalMinute?: number | null },
 ): Promise<void> => {
   const supabase = getClient();
-  const update: { home_score: number; away_score: number; win?: boolean; home_score_ht?: number | null; away_score_ht?: number | null } = {
+  const update: { home_score: number; away_score: number; win?: boolean; home_score_ht?: number | null; away_score_ht?: number | null; first_goal_minute?: number | null } = {
     home_score: patch.homeScore,
     away_score: patch.awayScore,
   };
@@ -78,6 +79,9 @@ export const updateSignalResult = async (
   }
   if (patch.awayScoreHt !== undefined) {
     update.away_score_ht = patch.awayScoreHt;
+  }
+  if (patch.goalMinute !== undefined) {
+    update.first_goal_minute = patch.goalMinute;
   }
   const { error } = await supabase.from("signals").update(update).eq("match_id", matchId);
   if (error) {
