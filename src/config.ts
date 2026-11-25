@@ -23,6 +23,7 @@ export interface Settings {
   supabaseServiceRoleKey: string;
   apiFootballBaseUrl: string;
   apiFootballKey: string;
+    oddsHtDelayMinutes: number;
 }
 
 const DEFAULT_UPSTREAM = "https://bet-service-658489904938.europe-west6.run.app";
@@ -94,5 +95,6 @@ export const getSettings = (env: NodeJS.ProcessEnv = process.env): Settings => {
     supabaseServiceRoleKey: env.SUPABASE_SERVICE_ROLE_KEY ?? "",
     apiFootballBaseUrl: env.API_FOOTBALL_BASE_URL ?? "https://v3.football.api-sports.io",
     apiFootballKey: env.API_FOOTBALL_KEY ?? "",
+    oddsHtDelayMinutes: Number.isNaN(Number.parseInt(env.ODDS_HT_DELAY_MINUTES ?? "0", 10)) || Number.parseInt(env.ODDS_HT_DELAY_MINUTES ?? "0", 10) < 0 ? 0 : Number.parseInt(env.ODDS_HT_DELAY_MINUTES ?? "0", 10),
   };
 }

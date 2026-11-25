@@ -14,7 +14,7 @@ export interface ApiFootballFixture {
 
 const apiKey = (): string => process.env.API_FOOTBALL_KEY ?? "";
 
-const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
+export const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
 
 const httpGet = async (path: string): Promise<unknown> => {
   const maxRetries = 3;
