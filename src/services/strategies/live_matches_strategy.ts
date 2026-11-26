@@ -1,8 +1,7 @@
 import { client } from "../../clients/diretta/index.ts";
 import type { Match, OddsMarketSelector, Statistics } from "../../scraper/models.ts";
 import { getStrategyLogger, runWithLogContext, runWithNewLogTrace } from "../../logger.ts";
-import { getLiveOdds, listLiveFixtures, sleep } from "../api_football.ts";
-import { getSettings } from "../../config.ts";
+import { getLiveOdds, listLiveFixtures } from "../api_football.ts";
 import { listLeagueLinks } from "../../mapping/repo.ts";
 import { getScheduledFixture } from "../scheduled_fixtures_repo.ts";
 import {
@@ -70,6 +69,9 @@ const OVER_UNDER_LINE_SECOND_HALF_ID = 25;
 const OVER_UNDER_LINE_SECOND_HALF_NAME = "Match Goals";
 const OVER_UNDER_LINE_FULL_TIME_ID = 36;
 const OVER_UNDER_LINE_FULL_TIME_NAME = "Over/Under Line";
+
+const SECOND_HALF_ODDS_WINDOW_MIN = 46;
+const SECOND_HALF_ODDS_WINDOW_MAX = 55;
 
 interface OddLookup {
   odd: number | null;
@@ -153,16 +155,6 @@ const resolveApiFootballOdds = async (
   if (!oddsMarket || oddsMarket.betType !== "OVER_UNDER" || oddsMarket.selection !== "OVER") {
     return null;
   }
-  if (oddsMarket.scope === "FIRST_HALF") {
-    const delayMs = getSettings().oddsHtDelayMinutes * 60 * 1000;
-    if (delayMs > 0) {
-      getStrategyLogger().info(
-        { fixtureId, delayMinutes: getSettings().oddsHtDelayMinutes, scope: oddsMarket.scope },
-        "delaying HT odds fetch",
-      );
-      await sleep(delayMs);
-    }
-  }
   const odds = await getLiveOdds(fixtureId);
   getStrategyLogger().info(
     { fixtureId, rawOdds: odds },
@@ -223,8 +215,11 @@ const runMatch = async (
       await attachLiveOdds(alerts, oddsResolver);
     }
     await dispatchAlerts(alerts, undefined, { match, statistics, fixtureId });
-    if (period === "first_half" && fixtureId != null) {
-      await fetchAndSaveFulltimeOdds(fixtureId, match.id);
+    if (period === "second_half" && fixtureId != null) {
+      const minute = match.minute == null ? null : Number.parseInt(match.minute, 10);
+      if (minute !== null && minute >= SECOND_HALF_ODDS_WINDOW_MIN && minute <= SECOND_HALF_ODDS_WINDOW_MAX) {
+        await fetchAndSaveFulltimeOdds(fixtureId, match.id);
+      }
     }
     log.info({ alerts: alerts.length }, "match strategy completed");
     return { statistics, alerts, error: null };
