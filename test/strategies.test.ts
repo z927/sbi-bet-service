@@ -205,7 +205,7 @@ test("strategy enriches live fixtures whose league is monitored via league_links
   assert.equal(result.results[0]!.error, null);
   assert.equal(result.results[0]!.statistics?.all["top"]?.length, 1);
   assert.equal(statsCalls, 1);
-  assert.equal(oddsCalls, 1); // fulltime over 1.5/2.5 lookup for 0-0 HT match (no alert)
+  assert.equal(oddsCalls, 0); // no fulltime lookup in first half (moved to start of second half)
 });
 
 test("strategy skips live fixtures not monitored by league_links", async () => {
@@ -313,7 +313,7 @@ test("strategy dispatches a pre-alert through Telegram with live odds from API-F
     assert.equal(alert.type, "pre-alert");
     assert.equal(alert.text, "Alert Goal Over 0.5 HT");
     assert.equal(alert.odds, 1.8);
-    assert.equal(oddsCalls, 2); // alert odds + fulltime over 1.5/2.5 lookup
+    assert.equal(oddsCalls, 1); // alert odds only (fulltime lookup moved to start of second half)
     assert.equal(telegramCalls, 1);
     const minute = 10;
     assert.deepEqual(telegramBodies[0], {
@@ -381,7 +381,7 @@ test("strategy resolves second-half live odds from bet id 25 Match Goals (Over 0
       selection: "OVER",
     });
     assert.equal(alert.odds, 1.85);
-    assert.equal(oddsCalls, 1);
+    assert.equal(oddsCalls, 2); // alert odds + fulltime over 1.5/2.5 lookup at start of second half
     assert.equal(telegramCalls, 1);
     assert.match(String(telegramBodies[0]?.text), /💶 Quota live: 1\.85/);
   } finally {
@@ -432,7 +432,7 @@ test("strategy falls back to bet id 36 Over/Under Line when id 25 is missing (se
       selection: "OVER",
     });
     assert.equal(alert.odds, 1.9);
-    assert.equal(oddsCalls, 1);
+    assert.equal(oddsCalls, 2); // alert odds + fulltime over 1.5/2.5 lookup at start of second half
     assert.match(String(telegramBodies[0]?.text), /💶 Quota live: 1\.9/);
   } finally {
     restoreEnv(savedEnv);
