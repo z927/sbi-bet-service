@@ -8,6 +8,7 @@ export interface SignalItem {
   rule: string;
   home: string;
   away: string;
+  country: string | null;
   minute: number | null;
   value: number | null;
   result: "win" | "lose" | null;
@@ -24,6 +25,7 @@ export interface SignalListRow {
   away: string;
   matchId: string;
   tournament: string;
+  country: string;
   homeScore: number | null;
   awayScore: number | null;
   homeScoreHt: number | null;
@@ -104,6 +106,7 @@ const toSignalListRow = (row: {
   away?: string | null;
   match_id?: string | null;
   tournament?: string | null;
+  country?: string | null;
   home_score?: number | null;
   away_score?: number | null;
   home_score_ht?: number | null;
@@ -119,6 +122,7 @@ const toSignalListRow = (row: {
   away: row.away ?? "",
   matchId: row.match_id ?? "",
   tournament: row.tournament ?? "",
+  country: row.country ?? "",
   homeScore: row.home_score ?? null,
   awayScore: row.away_score ?? null,
   homeScoreHt: row.home_score_ht ?? null,
@@ -184,6 +188,7 @@ export const getSignalStats = async (filter?: { from?: string; to?: string; type
       away: s.away,
       matchId: s.matchId,
       tournament: "",
+      country: s.country ?? "",
       homeScore: null,
       awayScore: null,
       homeScoreHt: s.homeScoreHt ?? null,
