@@ -1,4 +1,4 @@
-import type { Alert } from "./alert.ts";
+import type { Alert } from "../../models/alert.ts";
 
 export interface TelegramConfig {
   token: string;
@@ -14,42 +14,141 @@ const TELEGRAM_API = "https://api.telegram.org";
 
 export let lastTelegramMessage: string | null = null;
 
-const COUNTRY_FLAGS: Record<string, string> = {
-  italia: "🇮🇹",
-  inghilterra: "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
-  germania: "🇩🇪",
-  austria: "🇦🇹",
-  spagna: "🇪🇸",
-  francia: "🇫🇷",
-  olanda: "🇳🇱",
-  portogallo: "🇵🇹",
-  romania: "🇷🇴",
-  serbia: "🇷🇸",
-  danimarca: "🇩🇰",
-  turchia: "🇹🇷",
-  belgio: "🇧🇪",
-  scozia: "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
-  svizzera: "🇨🇭",
-  grecia: "🇬🇷",
-  croazia: "🇭🇷",
-  polonia: "🇵🇱",
-  ucraina: "🇺🇦",
-  russia: "🇷🇺",
-  svezia: "🇸🇪",
-  norvegia: "🇳🇴",
-  irlanda: "🇮🇪",
-  europa: "🇪🇺",
-  brasile: "🇧🇷",
-  argentina: "🇦🇷",
-  messico: "🇲🇽",
-  "stati uniti": "🇺🇸",
+const COUNTRY_CODES: Record<string, string> = {
+  africa: "",
+  albania: "AL",
+  "arabia saudita": "SA",
+  argentina: "AR",
+  armenia: "AM",
+  australia: "AU",
+  austria: "AT",
+  azerbaigian: "AZ",
+  azerbaijan: "AZ",
+  bahrain: "BH",
+  bangladesh: "BD",
+  belgio: "BE",
+  bolivia: "BO",
+  "bosnia & herzegovina": "BA",
+  brasile: "BR",
+  bulgaria: "BG",
+  "burkina faso": "BF",
+  burundi: "BI",
+  cile: "CL",
+  cipro: "CY",
+  congo: "CG",
+  "congo dr": "CD",
+  croazia: "HR",
+  danimarca: "DK",
+  ecuador: "EC",
+  egitto: "EG",
+  "emirati arabi": "AE",
+  estonia: "EE",
+  eswatini: "SZ",
+  etiopia: "ET",
+  europa: "EU",
+  francia: "FR",
+  galles: "GB",
+  georgia: "GE",
+  germania: "DE",
+  giamaica: "JM",
+  gibilterra: "GI",
+  giordania: "JO",
+  india: "IN",
+  inghilterra: "GB",
+  iran: "IR",
+  iraq: "IQ",
+  "irlanda del nord": "GB",
+  israele: "IL",
+  italia: "IT",
+  kosovo: "XK",
+  libano: "LB",
+  libia: "LY",
+  "macedonia del nord": "MK",
+  malesia: "MY",
+  mali: "ML",
+  malta: "MT",
+  marocco: "MA",
+  mauritius: "MU",
+  messico: "MX",
+  moldavia: "MD",
+  mondo: "",
+  montenegro: "ME",
+  nicaragua: "NI",
+  niger: "NE",
+  nigeria: "NG",
+  olanda: "NL",
+  oman: "OM",
+  paraguay: "PY",
+  polonia: "PL",
+  portogallo: "PT",
+  qatar: "QA",
+  "repubblica ceca": "CZ",
+  romania: "RO",
+  ruanda: "RW",
+  russia: "RU",
+  scozia: "GB",
+  serbia: "RS",
+  seychelles: "SC",
+  "sierra leone": "SL",
+  singapore: "SG",
+  slovenia: "SI",
+  siria: "SY",
+  spagna: "ES",
+  "sri lanka": "LK",
+  sudafrica: "ZA",
+  suriname: "SR",
+  svizzera: "CH",
+  tagikistan: "TJ",
+  tanzania: "TZ",
+  thailandia: "TH",
+  turchia: "TR",
+  ucraina: "UA",
+  ungheria: "HU",
+  uruguay: "UY",
+  uzbekistan: "UZ",
+  vietnam: "VN",
+  grecia: "GR",
+  svezia: "SE",
+  norvegia: "NO",
+  irlanda: "IE",
+  "stati uniti": "US",
 };
+
+const SUBDIVISION_FLAGS: Record<string, string> = {
+  inghilterra: "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
+  scozia: "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
+  galles: "🏴󠁧󠁢󠁷󠁬󠁳󠁿",
+};
+
+export const countryCode = (country: string | undefined): string | undefined => {
+  if (!country) {
+    return undefined;
+  }
+  return COUNTRY_CODES[country.trim().toLowerCase()] ?? undefined;
+}
 
 export const countryFlag = (country: string | undefined): string => {
   if (!country) {
     return "";
   }
-  return COUNTRY_FLAGS[country.trim().toLowerCase()] ?? "";
+  const key = country.trim().toLowerCase();
+  const subdivision = SUBDIVISION_FLAGS[key];
+  if (subdivision !== undefined) {
+    return subdivision;
+  }
+  const code = COUNTRY_CODES[key];
+  if (!code) {
+    return "";
+  }
+  return flagFromCode(code);
+}
+
+const flagFromCode = (code: string): string => {
+  return code
+    .toUpperCase()
+    .split("")
+    .map((ch) => String.fromCodePoint(0x1f1e6 + ch.charCodeAt(0) - 65))
+    .join("");
 }
 
 export const getTelegramConfig = (env: NodeJS.ProcessEnv = process.env): TelegramConfig | null => {

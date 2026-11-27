@@ -1,5 +1,5 @@
 import type { Statistics } from "../../scraper/models.ts";
-import type { Alert } from "../signals/alert.ts";
+import type { Alert } from "../../models/alert.ts";
 
 export interface StrategyContext {
   sport?: number;

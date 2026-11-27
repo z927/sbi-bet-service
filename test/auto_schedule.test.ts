@@ -1,18 +1,18 @@
 import { test, before, after, beforeEach } from "node:test";
 import assert from "node:assert/strict";
 import { autoScheduleEvents } from "../src/services/auto_schedule_service.ts";
-import { buildCron, cronHitsDay } from "../src/services/cron.ts";
+import { buildCron, cronHitsDay } from "../src/utils/cron.ts";
 import type {
   JobScheduleInput,
   SchedulerClient,
   SchedulerJob,
 } from "../src/cloud_scheduler/client.ts";
-import { ConflictError } from "../src/errors.ts";
+import { ConflictError } from "../src/errors/errors.ts";
 import { FeedError } from "../src/clients/diretta/transport.ts";
-import type { AppLogger } from "../src/logger.ts";
+import type { AppLogger } from "../src/config/logger.ts";
 import * as db from "../src/scraper/db.ts";
-import { resetMappingStore, upsertLeagueLink } from "../src/mapping/repo.ts";
-import { upsertTeams, deleteAllTeams, initTeamsRepo } from "../src/services/teams_repo.ts";
+import { resetMappingStore, upsertLeagueLink } from "../src/repositories/repo.ts";
+import { upsertTeams, deleteAllTeams, initTeamsRepo } from "../src/repositories/teams_repo.ts";
 import { removeDb, useTempDb } from "./support.ts";
 
 process.env["LOG_LEVEL"] = "debug";
@@ -285,7 +285,7 @@ test("filters by league_links, persists monitored fixtures with both IDs and cre
   assert.equal((m3 as any)["end_monitoring_time"], fixtureStart2 + 7200);
 
   // Verify scheduled_fixtures has both fixture_id (API Football) and match_id (Diretta)
-  const scheduled = await (await import("../src/services/scheduled_fixtures_repo.ts")).getScheduledFixtures();
+  const scheduled = await (await import("../src/repositories/scheduled_fixtures_repo.ts")).getScheduledFixtures();
   const byFixture = new Map(scheduled.map((s: any) => [s.fixture_id, s]));
   assert.ok(byFixture.has(1001), "fixture 1001 (Inter-Milan) should be in scheduled_fixtures");
   assert.ok(byFixture.has(1003), "fixture 1003 (Arsenal-Chelsea) should be in scheduled_fixtures");
@@ -643,7 +643,7 @@ test("does not match fixtures when teams are missing from the repo (no fuzzy fal
   assert.equal(result.statusCode, 200);
   assert.match(result.message ?? "", /no valid fixtures to schedule/);
 
-  const scheduled = await (await import("../src/services/scheduled_fixtures_repo.ts")).getScheduledFixtures();
+  const scheduled = await (await import("../src/repositories/scheduled_fixtures_repo.ts")).getScheduledFixtures();
   const byFixture = new Map(scheduled.map((s: any) => [s.fixture_id, s]));
   assert.ok(!byFixture.has(2001), "fixture 2001 should not be matched without teams in the repo");
 });

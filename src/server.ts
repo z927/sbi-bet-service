@@ -6,12 +6,12 @@ import cors from "@fastify/cors";
 import swagger from "@fastify/swagger";
 import swaggerUi from "@fastify/swagger-ui";
 import type { FastifyError, FastifyReply, FastifyRequest } from "fastify";
-import { getSettings } from "./config.ts";
-import { ConflictError, ValidationError, baseResponse } from "./errors.ts";
+import { getSettings } from "./config/config.ts";
+import { ConflictError, ValidationError, baseResponse } from "./errors/errors.ts";
 import { apiRoutes } from "./bet-api/routes.ts";
 import { mappingRoutes } from "./mapping/routes.ts";
 import { initDb } from "./scraper/db.ts";
-import { getLogger, runWithLogContext } from "./logger.ts";
+import { getLogger, runWithLogContext } from "./config/logger.ts";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const CONTRACT_PATH = resolve(HERE, "..", "openapi", "openapi.yaml");

@@ -1,7 +1,7 @@
 import type { FastifyInstance } from "fastify";
-import { ValidationError } from "../errors.ts";
-import { isIsoDate } from "../validation.ts";
-import type { ScheduleRequest } from "../types.ts";
+import { ValidationError } from "../errors/errors.ts";
+import { isIsoDate } from "../validator/validation.ts";
+import type { ScheduleRequest } from "../models/types.ts";
 import * as schedule from "../services/schedule_service.ts";
 import * as autoSchedule from "../services/auto_schedule_service.ts";
 import * as monitoring from "../services/monitoring_service.ts";

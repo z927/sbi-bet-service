@@ -54,7 +54,6 @@ export interface Match {
   statistics?: Statistics;
   events?: unknown[];
   lineups?: Record<string, unknown>;
-  odds?: Odds;
   detail?: Record<string, unknown>;
   enrich_error?: string;
   [key: string]: unknown;

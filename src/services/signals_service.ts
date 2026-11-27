@@ -1,6 +1,6 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-import { getSettings } from "../config.ts";
-import { getStrategyLogger } from "../logger.ts";
+import { getSettings } from "../config/config.ts";
+import { getStrategyLogger } from "../config/logger.ts";
 
 export interface SignalItem {
   id: string;

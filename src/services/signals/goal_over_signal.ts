@@ -1,6 +1,6 @@
 import type { Match, Statistics } from "../../scraper/models.ts";
 import type { Signal } from "./signal.ts";
-import type { Alert } from "./alert.ts";
+import type { Alert } from "../../models/alert.ts";
 import { matchMinute, matchPeriod, type MatchPeriod } from "./match_minutes.ts";
 import { touchSnapshot } from "./touch_stats.ts";
 

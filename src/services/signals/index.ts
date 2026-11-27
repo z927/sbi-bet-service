@@ -1,11 +1,11 @@
 import type { Match, Statistics } from "../../scraper/models.ts";
-import type { Alert } from "./alert.ts";
+import type { Alert } from "../../models/alert.ts";
 import type { Signal } from "./signal.ts";
-import { getStrategyLogger } from "../../logger.ts";
+import { getStrategyLogger } from "../../config/logger.ts";
 import { goalOverSignal, GOAL_OVER_SIGNAL, GOAL_RATIO_ENV, DEFAULT_GOAL_RATIO_THRESHOLD, FIRST_HALF_WINDOW, SECOND_HALF_WINDOW } from "./goal_over_signal.ts";
 import { matchMinute, matchPeriod } from "./match_minutes.ts";
 import { sendTelegram, sendPreAlertTelegram } from "./telegram.ts";
-import { saveSignal } from "./repo.ts";
+import { saveSignal } from "../../repositories/signals_repo.ts";
 import { touchSnapshot } from "./touch_stats.ts";
 
 export const SIGNALS: readonly Signal[] = [goalOverSignal];
@@ -299,9 +299,9 @@ export { firstHalfMinutes, matchMinute, matchPeriod, secondHalfMinutes } from ".
 export type { MatchPeriod } from "./match_minutes.ts";
 export { touchSnapshot, TOUCH_STAT_NAME, TOUCH_CATEGORY } from "./touch_stats.ts";
 export type { TouchSnapshot } from "./touch_stats.ts";
-export { getTelegramConfig, sendTelegram, sendPreAlertTelegram, lastTelegramMessage, countryFlag, getWinRate, stripCountryPrefix, TELEGRAM_BOT_TOKEN_ENV, TELEGRAM_CHAT_ID_ENV, WIN_RATE_ENV, DEFAULT_WIN_RATE } from "./telegram.ts";
+export { getTelegramConfig, sendTelegram, sendPreAlertTelegram, lastTelegramMessage, countryFlag, countryCode, getWinRate, stripCountryPrefix, TELEGRAM_BOT_TOKEN_ENV, TELEGRAM_CHAT_ID_ENV, WIN_RATE_ENV, DEFAULT_WIN_RATE } from "./telegram.ts";
 export { attachLiveOdds } from "./live_odds.ts";
 export type { AlertOddsResolver } from "./live_odds.ts";
-export type { Alert } from "./alert.ts";
+export type { Alert } from "../../models/alert.ts";
 export type { Signal } from "./signal.ts";
 export type { TelegramConfig } from "./telegram.ts";

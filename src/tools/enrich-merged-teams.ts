@@ -45,7 +45,6 @@ const LEAGUE_MAP: Record<string, LeagueHint> = {
   "GERMANIA: 2. Bundesliga": { country: "Germany", name: "2. Bundesliga" },
   "FRANCIA: Ligue 1": { country: "France", name: "Ligue 1" },
   "FRANCIA: Ligue 2": { country: "France", name: "Ligue 2" },
-
   "OLANDA: Eredivisie": { country: "Netherlands", name: "Eredivisie" },
   "OLANDA: Eerste Divisie": { country: "Netherlands", name: "Eerste Divisie" },
   "AUSTRIA: Bundesliga": { country: "Austria", name: "Bundesliga" },

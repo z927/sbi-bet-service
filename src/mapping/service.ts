@@ -1,19 +1,18 @@
 import { readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { ValidationError } from "../errors.ts";
-import { isIsoDate } from "../validation.ts";
+import { ValidationError } from "../errors/errors.ts";
+import { isIsoDate } from "../validator/validation.ts";
 import * as af from "../clients/apifootball/client.ts";
 import { client as feedClient } from "../clients/diretta/index.ts";
 import { listMatches } from "../clients/diretta/matches.ts";
 import { configuredMajorLeagues, isMajorLeague } from "../services/strategies/major_leagues.ts";
-import { normalizeTeamName, rankCandidates } from "./normalize.ts";
-import * as repo from "./repo.ts";
+import { normalizeTeamName, rankCandidates } from "../utils/normalize.ts";
+import * as repo from "../repositories/repo.ts";
 import {
   MAPPING_SOURCES,
   MAPPING_STATUSES,
   PROVIDERS,
-  type AutoSyncLeagueCandidate,
   type AutoSyncLeaguesInput,
   type AutoSyncLeaguesReport,
   type CreateTeamInput,
@@ -32,11 +31,10 @@ import {
   type TeamAlias,
   type TeamProviderMapping,
   type UpsertFixtureLinkInput,
-  type UpsertLeagueLinkInput,
   type UpsertMappingInput,
   type MergedTeamEntry,
   type MergedTeamSyncReport,
-} from "./models.ts";
+} from "../models/models.ts";
 
 export const FUZZY_THRESHOLD = 0.82;
 

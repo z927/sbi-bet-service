@@ -1,5 +1,5 @@
-import { getStrategyLogger } from "../../logger.ts";
-import type { Alert } from "./alert.ts";
+import { getStrategyLogger } from "../../config/logger.ts";
+import type { Alert } from "../../models/alert.ts";
 
 export type AlertOddsResolver = (alert: Alert) => Promise<number | null>;
 

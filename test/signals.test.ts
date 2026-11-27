@@ -29,7 +29,7 @@ import {
   type Alert,
   type Signal,
 } from "../src/services/signals/index.ts";
-import type { Match, Odds, Statistics } from "../src/scraper/models.ts";
+import type { Match, Statistics } from "../src/scraper/models.ts";
 
 process.env["LOG_LEVEL"] = "silent";
 

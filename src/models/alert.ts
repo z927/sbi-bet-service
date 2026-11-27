@@ -1,4 +1,4 @@
-import type { OddsMarketSelector } from "../../scraper/models.ts";
+import type { OddsMarketSelector } from "../scraper/models.ts";
 
 export interface Alert {
   rule: string;
