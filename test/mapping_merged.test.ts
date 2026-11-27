@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { writeFileSync, rmSync, mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import * as service from "../src/mapping/service.ts";
+import * as service from "../src/services/mapping_service.ts";
 import * as repo from "../src/repositories/repo.ts";
 import type { MergedTeamEntry } from "../src/models/models.ts";
 

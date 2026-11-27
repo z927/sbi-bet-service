@@ -1,6 +1,6 @@
 import { listTodayFixtures, getFixtureEvents, type ApiFootballFixture } from "../../services/api_football.ts";
 import { getStrategyLogger } from "../../config/logger.ts";
-import { loadTeamMapping } from "../../mapping/team_mapping.ts";
+import { loadTeamMapping } from "../../models/team_mapping.ts";
 import * as signalsRepo from "../../repositories/signals_repo.ts";
 
 export interface SettleResult {
@@ -20,7 +20,7 @@ const GOAL_OVER_SIGNAL = "goal-over-0.5";
 
 const normalizeName = (name: string): string => name.trim().toLowerCase();
 
-type TeamMapping = import("../../mapping/team_mapping.ts").TeamMapping;
+type TeamMapping = import("../../models/team_mapping.ts").TeamMapping;
 
 const addDays = (date: string, days: number): string => {
   const d = new Date(date + "T00:00:00Z");

@@ -6,7 +6,7 @@ import { isIsoDate } from "../validator/validation.ts";
 import * as af from "../clients/apifootball/client.ts";
 import { client as feedClient } from "../clients/diretta/index.ts";
 import { listMatches } from "../clients/diretta/matches.ts";
-import { configuredMajorLeagues, isMajorLeague } from "../services/strategies/major_leagues.ts";
+import { configuredMajorLeagues, isMajorLeague } from "./strategies/major_leagues.ts";
 import { normalizeTeamName, rankCandidates } from "../utils/normalize.ts";
 import * as repo from "../repositories/repo.ts";
 import {

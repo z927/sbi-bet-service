@@ -73,7 +73,6 @@ npm run generate
 | POST | `/api/v1/schedule` | `scheduleEvents` |
 | GET | `/api/v1/auto-schedule` | `autoScheduleEvents` |
 | GET | `/api/v1/monitor` | `monitorFixtures` |
-| GET | `/api/v1/scheduled-fixtures` | `getScheduledFixtures` |
 | GET | `/api/v1/monitored` | `getMonitoredFixtures` |
 | GET | `/api/v1/matches` | `getMatches` |
 
@@ -549,10 +548,9 @@ Dettagli:
 ## Open questions (from AGENTS.md, not guessed)
 
 1. Is this service a drop-in replacement, a façade/proxy, or an independent backend?
-2. Should `/api/v1/scheduled-fixtures` return `BaseResponse`, or an updated contract with fixture data?
-3. What is the expected `BaseResponse` content on success and failure?
-4. Which request fields are semantically required despite not being marked required?
-5. What are the intended scheduling/monitoring rules, duplicate handling and persistence needs?
+2. What is the expected `BaseResponse` content on success and failure?
+3. Which request fields are semantically required despite not being marked required?
+4. What are the intended scheduling/monitoring rules, duplicate handling and persistence needs?
 6. Which upstream integrations are needed, and their timeouts/retries/failure semantics?
 
 Provisional conflict rules currently implemented (pending answers to Q1/Q5):

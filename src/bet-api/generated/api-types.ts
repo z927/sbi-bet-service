@@ -58,26 +58,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/scheduled-fixtures": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get scheduled fixtures
-         * @description Retrieves events from Sofascore and fixtures from API-Football, and saves them. The source contract documents a BaseResponse body despite the description; the documented contract is preserved pending clarification.
-         */
-        get: operations["getScheduledFixtures"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v1/monitored": {
         parameters: {
             query?: never;
@@ -598,26 +578,6 @@ export interface operations {
         };
     };
     monitorFixtures: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BaseResponse"];
-                };
-            };
-        };
-    };
-    getScheduledFixtures: {
         parameters: {
             query?: never;
             header?: never;
