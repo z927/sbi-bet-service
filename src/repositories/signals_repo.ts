@@ -1,8 +1,8 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-import { getSettings } from "../../config.ts";
-import { getStrategyLogger } from "../../logger.ts";
-import type { Alert } from "./alert.ts";
-import type { Match, Statistics } from "../../scraper/models.ts";
+import { getSettings } from "../config/config.ts";
+import { getStrategyLogger } from "../config/logger.ts";
+import type { Alert } from "../models/alert.ts";
+import type { Match, Statistics } from "../scraper/models.ts";
 
 let client: SupabaseClient | null = null;
 

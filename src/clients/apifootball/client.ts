@@ -1,4 +1,4 @@
-import { getSettings } from "../../config.ts";
+import { getSettings } from "../../config/config.ts";
 
 export class ApiFootballError extends Error {
   override readonly name = "ApiFootballError";

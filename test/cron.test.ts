@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { buildCron, cronHitsDay } from "../src/services/cron.ts";
+import { buildCron, cronHitsDay } from "../src/utils/cron.ts";
 
 const NOW = new Date("2026-10-18T10:00:00Z"); // Sunday
 const utc = (iso: string): number => Math.floor(new Date(iso).getTime() / 1000);

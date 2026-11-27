@@ -1,5 +1,5 @@
 import { GoogleAuth } from "google-auth-library";
-import { getSettings, type Settings } from "../config.ts";
+import { getSettings, type Settings } from "../config/config.ts";
 import { FeedError } from "../clients/diretta/transport.ts";
 
 const API_BASE = "https://cloudscheduler.googleapis.com/v1";

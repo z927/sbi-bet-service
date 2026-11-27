@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import packageJson from "../package.json" with { type: "json" };
-import { getSettings } from "../src/config.ts";
+import { getSettings } from "../src/config/config.ts";
 
 test("appVersion defaults to the package.json version", () => {
   assert.equal(getSettings({}).appVersion, packageJson.version);

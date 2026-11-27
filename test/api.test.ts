@@ -5,7 +5,7 @@ import type { FastifyInstance } from "fastify";
 import * as schedule from "../src/services/schedule_service.ts";
 import * as monitoring from "../src/services/monitoring_service.ts";
 import * as matches from "../src/services/matches_service.ts";
-import { upsertScheduledFixtures, deleteAllScheduledFixtures } from "../src/services/scheduled_fixtures_repo.ts";
+import { upsertScheduledFixtures, deleteAllScheduledFixtures } from "../src/repositories/scheduled_fixtures_repo.ts";
 import { removeDb, useTempDb } from "./support.ts";
 
 process.env["LOG_LEVEL"] = "silent";

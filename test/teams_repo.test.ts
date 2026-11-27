@@ -1,7 +1,7 @@
 import { test, beforeEach } from "node:test";
 import assert from "node:assert/strict";
-import * as teamsRepo from "../src/services/teams_repo.ts";
-import type { TeamInput } from "../src/services/teams_repo.ts";
+import * as teamsRepo from "../src/repositories/teams_repo.ts";
+import type { TeamInput } from "../src/repositories/teams_repo.ts";
 
 process.env["LOG_LEVEL"] = "silent";
 process.env["SUPABASE_URL"] = "";

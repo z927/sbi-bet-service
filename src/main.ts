@@ -1,7 +1,7 @@
 import { config as dotenvConfig } from "dotenv";
 import { existsSync } from "node:fs";
 import { buildServer } from "./server.ts";
-import { getSettings } from "./config.ts";
+import { getSettings } from "./config/config.ts";
 
 const envFile = [".env.local", ".env"].find((file) => existsSync(file));
 if (envFile) {

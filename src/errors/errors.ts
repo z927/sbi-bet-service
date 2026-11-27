@@ -1,4 +1,4 @@
-import type { BaseResponse } from "./types.ts";
+import type { BaseResponse } from "../models/types.ts";
 
 export class ConflictError extends Error {
   override readonly name = "ConflictError";

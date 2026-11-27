@@ -1,5 +1,5 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-import { getSettings } from "../config.ts";
+import { getSettings } from "../config/config.ts";
 
 export interface ScheduledFixture {
   id: string;

@@ -1,5 +1,5 @@
 import { readFile } from "node:fs/promises";
-import { upsertLeagueLink } from "../mapping/repo.ts";
+import { upsertLeagueLink } from "../repositories/repo.ts";
 
 const LEAGUES_PATH = "src/res/leagues.json";
 

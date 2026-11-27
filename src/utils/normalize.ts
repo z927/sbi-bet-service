@@ -1,4 +1,4 @@
-import type { Team, TeamCandidate, TeamWithAliases } from "./models.ts";
+import type { Team, TeamCandidate, TeamWithAliases } from "../models/models.ts";
 
 const DIACRITICS = /\p{Diacritic}/gu;
 const NON_ALNUM = /[^a-z0-9]+/g;

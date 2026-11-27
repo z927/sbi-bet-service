@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { getLogContext, runWithLogContext, runWithNewLogTrace } from "../src/logger.ts";
+import { getLogContext, runWithLogContext, runWithNewLogTrace } from "../src/config/logger.ts";
 
 process.env["LOG_LEVEL"] = "silent";
 

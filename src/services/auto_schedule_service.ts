@@ -1,17 +1,17 @@
-import { getSettings, type Settings } from "../config.ts";
-import { ConflictError, baseResponse } from "../errors.ts";
-import type { BaseResponse } from "../types.ts";
+import { getSettings, type Settings } from "../config/config.ts";
+import { ConflictError, baseResponse } from "../errors/errors.ts";
+import type { BaseResponse } from "../models/types.ts";
 import { client as feedClient, FeedError } from "../clients/diretta/index.ts";
 import * as db from "../scraper/db.ts";
 import type { Match } from "../scraper/models.ts";
 import { defaultSchedulerClient, type SchedulerClient } from "../cloud_scheduler/client.ts";
-import { buildCron, cronHitsDay } from "./cron.ts";
-import { getLogger, type AppLogger } from "../logger.ts";
+import { buildCron, cronHitsDay } from "../utils/cron.ts";
+import { getLogger, type AppLogger } from "../config/logger.ts";
 import { listTodayFixtures, type ApiFootballFixture } from "./api_football.ts";
-import { upsertScheduledFixtures, initScheduledFixturesRepo } from "./scheduled_fixtures_repo.ts";
-import { getTeams } from "../services/teams_repo.ts";
-import { listLeagueLinks } from "../mapping/repo.ts";
-import type { LeagueLink } from "../mapping/models.ts";
+import { upsertScheduledFixtures, initScheduledFixturesRepo } from "../repositories/scheduled_fixtures_repo.ts";
+import { getTeams } from "../repositories/teams_repo.ts";
+import { listLeagueLinks } from "../repositories/repo.ts";
+import type { LeagueLink } from "../models/models.ts";
 import { settleSignals } from "../services/signals/settle_service.ts";
 
 const SPORT_CALCIO = 1;

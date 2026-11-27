@@ -4,8 +4,8 @@ import { writeFileSync, rmSync, mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import * as service from "../src/mapping/service.ts";
-import * as repo from "../src/mapping/repo.ts";
-import type { MergedTeamEntry } from "../src/mapping/models.ts";
+import * as repo from "../src/repositories/repo.ts";
+import type { MergedTeamEntry } from "../src/models/models.ts";
 
 process.env["LOG_LEVEL"] = "silent";
 process.env["SUPABASE_URL"] = "";

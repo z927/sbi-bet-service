@@ -1,6 +1,6 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import type { Match } from "./models.ts";
-import { getSettings } from "../config.ts";
+import { getSettings } from "../config/config.ts";
 import { formatDateItalian } from "./date.ts";
 
 let client: SupabaseClient | null = null;

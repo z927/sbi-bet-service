@@ -1,5 +1,5 @@
 import type { Match, Statistics } from "../../scraper/models.ts";
-import type { Alert } from "./alert.ts";
+import type { Alert } from "../../models/alert.ts";
 
 export interface Signal {
   readonly name: string;

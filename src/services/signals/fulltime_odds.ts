@@ -1,5 +1,5 @@
 import { getLiveOdds } from "../api_football.ts";
-import { getStrategyLogger } from "../../logger.ts";
+import { getStrategyLogger } from "../../config/logger.ts";
 
 export interface FulltimeGoalOdds {
   over15: number | null;

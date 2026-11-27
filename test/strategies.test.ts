@@ -18,8 +18,8 @@ import {
   resetMappingStore,
   createTeam,
   upsertLeagueLink,
-} from "../src/mapping/repo.ts";
-import { upsertScheduledFixtures, deleteAllScheduledFixtures } from "../src/services/scheduled_fixtures_repo.ts";
+} from "../src/repositories/repo.ts";
+import { upsertScheduledFixtures, deleteAllScheduledFixtures } from "../src/repositories/scheduled_fixtures_repo.ts";
 
 process.env["LOG_LEVEL"] = "silent";
 

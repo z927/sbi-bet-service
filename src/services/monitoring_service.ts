@@ -1,10 +1,10 @@
-import { baseResponse } from "../errors.ts";
-import type { BaseResponse, MonitoredFixture } from "../types.ts";
+import { baseResponse } from "../errors/errors.ts";
+import type { BaseResponse, MonitoredFixture } from "../models/types.ts";
 import { runLiveMatchesStrategy } from "./strategies/index.ts";
 import {
   getScheduledFixtures,
   type ScheduledFixture,
-} from "./scheduled_fixtures_repo.ts";
+} from "../repositories/scheduled_fixtures_repo.ts";
 
 export const monitorFixtures = async (): Promise<BaseResponse> => {
   const result = await runLiveMatchesStrategy();

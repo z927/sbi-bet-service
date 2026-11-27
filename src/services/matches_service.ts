@@ -1,5 +1,5 @@
-import { baseResponse } from "../errors.ts";
-import type { BaseResponse, MatchModel } from "../types.ts";
+import { baseResponse } from "../errors/errors.ts";
+import type { BaseResponse, MatchModel } from "../models/types.ts";
 
 let matches: MatchModel[] = [];
 

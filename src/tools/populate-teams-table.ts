@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { join, dirname } from "node:path";
-import { upsertTeams, initTeamsRepo } from "../services/teams_repo.ts";
+import { upsertTeams, initTeamsRepo } from "../repositories/teams_repo.ts";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const TEAMS_JSON_PATH = join(__dirname, "..", "res", "teams.json");

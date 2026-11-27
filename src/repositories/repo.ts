@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-import { getSettings } from "../config.ts";
-import { normalizeTeamName } from "./normalize.ts";
+import { getSettings } from "../config/config.ts";
+import { normalizeTeamName } from "../utils/normalize.ts";
 import type {
   FixtureLink,
   LeagueLink,
@@ -15,7 +15,7 @@ import type {
   UpsertFixtureLinkInput,
   UpsertLeagueLinkInput,
   UpsertMappingInput,
-} from "./models.ts";
+} from "../models/models.ts";
 
 interface TeamRow {
   id: string;

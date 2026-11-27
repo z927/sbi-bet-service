@@ -1,9 +1,9 @@
 import { client } from "../../clients/diretta/index.ts";
 import type { Match, OddsMarketSelector, Statistics } from "../../scraper/models.ts";
-import { getStrategyLogger, runWithLogContext, runWithNewLogTrace } from "../../logger.ts";
+import { getStrategyLogger, runWithLogContext, runWithNewLogTrace } from "../../config/logger.ts";
 import { getLiveOdds, listLiveFixtures } from "../api_football.ts";
-import { listLeagueLinks } from "../../mapping/repo.ts";
-import { getScheduledFixture } from "../scheduled_fixtures_repo.ts";
+import { listLeagueLinks } from "../../repositories/repo.ts";
+import { getScheduledFixture } from "../../repositories/scheduled_fixtures_repo.ts";
 import {
   attachLiveOdds,
   dispatchAlerts,
