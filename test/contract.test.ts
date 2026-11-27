@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 import { parse } from "yaml";
 import packageJson from "../package.json" with { type: "json" };
 import { API_ROUTES } from "../src/bet-api/routes.ts";
-import { MAPPING_ROUTES } from "../src/mapping/routes.ts";
+import { MAPPING_ROUTES } from "../src/bet-api/mapping_routes.ts";
 import { buildServer } from "../src/server.ts";
 import { removeDb, useTempDb } from "./support.ts";
 

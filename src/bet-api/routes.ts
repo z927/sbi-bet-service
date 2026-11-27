@@ -19,7 +19,6 @@ export const API_ROUTES: readonly RouteMetadata[] = [
   { method: "POST", path: "/api/v1/schedule", operationId: "scheduleEvents" },
   { method: "GET", path: "/api/v1/auto-schedule", operationId: "autoScheduleEvents" },
   { method: "GET", path: "/api/v1/monitor", operationId: "monitorFixtures" },
-  { method: "GET", path: "/api/v1/scheduled-fixtures", operationId: "getScheduledFixtures" },
   { method: "GET", path: "/api/v1/monitored", operationId: "getMonitoredFixtures" },
   { method: "GET", path: "/api/v1/matches", operationId: "getMatches" },
   { method: "GET", path: "/api/v1/signals", operationId: "getSignals" },
@@ -108,10 +107,6 @@ export const apiRoutes = (app: FastifyInstance): void => {
 
   app.get("/api/v1/monitor", { schema: { operationId: "monitorFixtures" } }, async () =>
     monitoring.monitorFixtures(),
-  );
-
-  app.get("/api/v1/scheduled-fixtures", { schema: { operationId: "getScheduledFixtures" } }, () =>
-    matches.getScheduledFixtures(),
   );
 
   app.get("/api/v1/monitored", { schema: { operationId: "getMonitoredFixtures" } }, () =>

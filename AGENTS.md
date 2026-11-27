@@ -55,7 +55,6 @@ Nested models:
 These properties are not marked required by the supplied schema. Preserve that optionality unless a deliberate, documented contract revision is approved.
 Matches
 Method	Path	Operation ID	Contract
-GET	/api/v1/scheduled-fixtures	getScheduledFixtures	No declared parameters or body; 200 returns BaseResponse. Description says it retrieves events from Sofascore and fixtures from API-Football.
 GET	/api/v1/monitored	getMonitoredFixtures	No declared parameters or body; 200 returns an array of FixtureDto.
 GET	/api/v1/matches	getMatches	Optional query parameter date (date); 200 returns an array of MatchModel.
 
@@ -78,7 +77,7 @@ Contract and compatibility rules
 - Preserve query names and date formats: day on /api/v1/schedule; date on /api/v1/matches. These parameters are optional in the source contract.
 - Preserve the documented response model and status codes. In particular, /api/v1/schedule and /api/v1/auto-schedule document 409 conflicts.
 - BaseResponse has message (string) and statusCode (integer). The OpenAPI schema does not mark either property required.
-- The source contract contains some ambiguities and omissions. For example, it does not define business-level error payloads beyond the listed models, required fields are often omitted, and /api/v1/scheduled-fixtures documents BaseResponse despite a description about retrieving and saving fixtures. Do not infer a richer response from the description alone. Capture these as open questions and preserve the documented contract until clarified.
+- The source contract contains some ambiguities and omissions. For example, it does not define business-level error payloads beyond the listed models, required fields are often omitted. Do not infer a richer response from the description alone. Capture these as open questions and preserve the documented contract until clarified.
 - `/restore` is deprecated in the source specification and is not part of `openapi/openapi.yaml`; it is intentionally not exposed. Keep it in this document as a known gap.
 - The specification's servers URL uses HTTP, while the shared Swagger URL is HTTPS. Keep the base URL configurable and verify the deployed scheme. Never disable TLS certificate verification to work around connection errors.
 - Do not assume that the backend must proxy every upstream route. Clarify whether it is intended to be a compatible replacement, a façade/proxy, or a new implementation before introducing upstream calls or changing persistence behavior.
@@ -147,8 +146,7 @@ A change is complete only when:
 Open questions — do not guess
 Before implementing behavior beyond the documented contract, establish:
 1. Is this service a drop-in replacement, a façade/proxy for the existing service, or an independent backend?
-2. Should /api/v1/scheduled-fixtures return the documented BaseResponse, or is there an updated contract with fixture data?
-3. What is the expected response content for BaseResponse on successful and failed operations?
-4. Which request fields are semantically required even though the schema does not mark them required?
-5. What are the intended scheduling/monitoring business rules, duplicate handling, and persistence requirements?
+2. What is the expected response content for BaseResponse on successful and failed operations?
+3. Which request fields are semantically required even though the schema does not mark them required?
+4. What are the intended scheduling/monitoring business rules, duplicate handling, and persistence requirements?
 6. Which upstream integrations are actually needed, and what are their timeouts, retry policies, and failure semantics?

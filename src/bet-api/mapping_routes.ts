@@ -1,6 +1,6 @@
 import type { FastifyInstance } from "fastify";
-import type { RouteMetadata } from "../bet-api/routes.ts";
-import * as service from "./service.ts";
+import type { RouteMetadata } from "./routes.ts";
+import * as mappingService from "../services/mapping_service.ts";
 import * as syncService from "../services/sync_service.ts";
 
 export const MAPPING_ROUTES: readonly RouteMetadata[] = [
@@ -26,7 +26,7 @@ export const mappingRoutes = (app: FastifyInstance): void => {
         },
       },
     },
-    (request) => service.autoSyncLeaguesFromMonitoring((request.body as Record<string, unknown>) ?? {}),
+    (request) => mappingService.autoSyncLeaguesFromMonitoring((request.body as Record<string, unknown>) ?? {}),
   );
 
   app.post(

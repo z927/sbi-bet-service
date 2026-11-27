@@ -80,24 +80,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BaseResponse'
-  /api/v1/scheduled-fixtures:
-    get:
-      tags:
-        - Monitoring
-      operationId: getScheduledFixtures
-      summary: Get scheduled fixtures
-      description: >-
-        Retrieves events from Sofascore and fixtures from API-Football, and
-        saves them. The source contract documents a BaseResponse body despite
-        the description; the documented contract is preserved pending
-        clarification.
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BaseResponse'
   /api/v1/monitored:
     get:
       tags:

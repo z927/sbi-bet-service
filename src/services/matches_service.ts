@@ -1,11 +1,6 @@
-import { baseResponse } from "../errors/errors.ts";
-import type { BaseResponse, MatchModel } from "../models/types.ts";
+import type { MatchModel } from "../models/types.ts";
 
 let matches: MatchModel[] = [];
-
-export const getScheduledFixtures = (): BaseResponse => {
-  return baseResponse("Scheduled fixtures refresh triggered", 200);
-}
 
 export const getMatches = (day?: string): MatchModel[] => {
   if (day === undefined) {

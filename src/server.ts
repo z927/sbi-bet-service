@@ -9,7 +9,7 @@ import type { FastifyError, FastifyReply, FastifyRequest } from "fastify";
 import { getSettings } from "./config/config.ts";
 import { ConflictError, ValidationError, baseResponse } from "./errors/errors.ts";
 import { apiRoutes } from "./bet-api/routes.ts";
-import { mappingRoutes } from "./mapping/routes.ts";
+import { mappingRoutes } from "./bet-api/mapping_routes.ts";
 import { initDb } from "./scraper/db.ts";
 import { getLogger, runWithLogContext } from "./config/logger.ts";
 

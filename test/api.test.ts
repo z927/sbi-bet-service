@@ -180,12 +180,6 @@ test("POST /api/v1/monitor is not part of the contract", async () => {
   assert.equal(response.statusCode, 404);
 });
 
-test("GET /api/v1/scheduled-fixtures returns BaseResponse", async () => {
-  const response = await app.inject({ method: "GET", url: "/api/v1/scheduled-fixtures" });
-  assert.equal(response.statusCode, 200);
-  assert.equal(response.json().statusCode, 200);
-});
-
 test("GET /api/v1/matches returns MatchModel array respecting date filter", async () => {
   matches.setMatches([
     { id: 1, league: "Serie A", match: "Inter-Milan", startTime: "2026-01-01T12:00:00" },
