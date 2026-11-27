@@ -13,6 +13,7 @@ const makeSignal = (overrides: Partial<SignalItem> = {}): SignalItem => ({
   rule: "goal_over_ht",
   home: "Inter",
   away: "Milan",
+  country: null,
   minute: 15,
   value: 1.67,
   result: "win",
@@ -80,6 +81,7 @@ test("GET /api/v1/signals returns list with required fields including matchDate"
   assert.equal(row.away, "Milan");
   assert.equal(row.matchId, "m1");
   assert.equal(row.tournament, "");
+  assert.equal(row.country, "");
   assert.equal(row.homeScore, null);
   assert.equal(row.awayScore, null);
   assert.equal(row.homeScoreHt, null);
@@ -104,8 +106,9 @@ test("GET /api/v1/signals exposes all wire fields", async () => {
   const row = body.signals[0] as SignalListRow;
   assert.ok("home" in row);
   assert.ok("away" in row);
-  assert.ok("matchId" in row);
-  assert.ok("tournament" in row);
+    assert.ok("matchId" in row);
+    assert.ok("tournament" in row);
+    assert.ok("country" in row);
     assert.ok("homeScore" in row);
     assert.ok("awayScore" in row);
     assert.ok("homeScoreHt" in row);
