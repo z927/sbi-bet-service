@@ -59,10 +59,15 @@ export const fetchFulltimeGoalOdds = async (
   try {
     const odds = await getLiveOdds(fixtureId);
     const allBets = odds.flatMap((o) => o.odds ?? []);
-    return {
+    const result = {
       over15: findOverUnderOdd(allBets, 1.5),
       over25: findOverUnderOdd(allBets, 2.5),
     };
+    getStrategyLogger().info(
+      { fixtureId, over15: result.over15, over25: result.over25 },
+      "fulltime goal odds resolved",
+    );
+    return result;
   } catch (exc) {
     getStrategyLogger().error(
       { err: exc, fixtureId },

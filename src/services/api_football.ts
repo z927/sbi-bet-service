@@ -1,5 +1,7 @@
 const API_FOOTBALL_BASE_URL = "https://v3.football.api-sports.io";
 
+import { getStrategyLogger } from "../config/logger.ts";
+
 export interface ApiFootballFixture {
   fixture: { id: number; date: string; status: { short: string; elapsed?: number | null } };
   league: { id: number; name: string; country: string };
@@ -72,7 +74,12 @@ export interface ApiFootballOdd {
 export const getLiveOdds = async (fixtureId: number): Promise<ApiFootballOdd[]> => {
   try {
     const data = (await httpGet(`/odds/live?fixture=${fixtureId}`)) as { response?: ApiFootballOdd[] };
-    return data.response ?? [];
+    const odds = data.response ?? [];
+    getStrategyLogger().info(
+      { fixtureId, odds },
+      "api-football live odds response",
+    );
+    return odds;
   } catch {
     return [];
   }
