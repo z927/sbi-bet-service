@@ -47,6 +47,15 @@ export const saveOdds = async (record: OddsRecord): Promise<void> => {
     if (error) {
       throw error;
     }
+    getStrategyLogger().info(
+      {
+        fixtureId: record.fixture_id,
+        matchId: record.match_id,
+        over_15_odd: record.over_15_odd,
+        over_25_odd: record.over_25_odd,
+      },
+      "odds saved",
+    );
   } catch (exc) {
     getStrategyLogger().error(
       { err: exc, fixtureId: record.fixture_id },
